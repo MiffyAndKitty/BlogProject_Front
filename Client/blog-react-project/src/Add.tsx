@@ -13,6 +13,7 @@ const Add : React.FC<AddProps> = (props)=>{
     const Result =(event: React.MouseEvent<HTMLButtonElement>)=>{
         event.preventDefault(); // 버튼의 기본 동작 방지
         console.log("숫자 1:", number1, "숫자 2:", number2);
+        console.log("test");
         // 숫자 1과 숫자 2의 값을 계산 또는 처리
     }
     return (
