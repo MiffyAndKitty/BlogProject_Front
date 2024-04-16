@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: 'https://your-api-server.com/api',
+  baseURL: 'http://13.125.96.119:65020',
   headers: {
     'Content-Type': 'application/json',
     // 필요한 경우 추가 헤더 설정

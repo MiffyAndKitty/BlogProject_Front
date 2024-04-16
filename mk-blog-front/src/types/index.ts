@@ -12,3 +12,8 @@ export interface Post {
     content: string;
     authorId: number;
 } 
+
+export interface Numbers {
+    x: number,
+    y: number
+}
