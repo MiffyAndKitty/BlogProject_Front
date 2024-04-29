@@ -14,6 +14,6 @@ export interface Post {
 } 
 
 export interface Numbers {
-    x: number,
-    y: number
+    num1: string,
+    num2: string
 }
