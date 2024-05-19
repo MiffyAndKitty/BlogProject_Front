@@ -1,10 +1,24 @@
 import './App.css';
-import Add from './Add';
+import Login from './login/Login';
+import Dashboard from './Dashboard';
+import SignUp from'./login/Signup';
+import MainPage from './main/MainPage';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes
+} from "react-router-dom";
 
 function App() {
   return (
-    <Add></Add>
-    
+    <Router>
+    <Routes>
+      <Route path={`/`} element={<MainPage></MainPage>}/>
+      <Route path={`/login`} element={<Login></Login>}/>
+      <Route path={`/signup`} element={<SignUp></SignUp>}/>
+      <Route path="/dashboard" element={<Dashboard></Dashboard>} />
+    </Routes>
+    </Router>
   );
 }
 

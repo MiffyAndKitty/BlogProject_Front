@@ -1,0 +1,37 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FFE6FA;
+  }
+  
+  .header__logo h1 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  
+  .header__nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .header__nav a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .header__auth a {
+    text-decoration: none;
+    color: #007bff;
+  }
+  
+  .header__auth a:hover {
+    text-decoration: underline;
+  }
+  .header__logo-img {
+    width: 50px;
+    height: 50px;
+  }
