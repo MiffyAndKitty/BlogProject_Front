@@ -1,5 +1,5 @@
 import React from 'react';
-import './ContactSection.css';
+import './NewPost.css';
 
 const NewPost: React.FC = () => {
   return (

@@ -4,9 +4,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getAnalytics } from "firebase/analytics";
 import React from 'react';
-import Header from '../structure/Header';
-import Footer from '../structure/Footer';
-
+import './Profile.css';
 const firebaseConfig = {
   apiKey: "AIzaSyCfoepTZGKKL7SubUSCy81pHHag-vDSWmY",
   authDomain: "mk-blog-e88c8.firebaseapp.com",
@@ -53,15 +51,13 @@ const Profile: React.FC = () => {
     navigate(`/login`);
   };
   return (
-    <div className="App">
-      <Header/>
-      <main>
+    <section className="profile-section">
+
         <button onClick={goToLogin}>로그인</button>
         <button onClick={goToSignUp}>회원가입</button>
         <button onClick={signInWithGoogle}>구글 로그인</button>
-      </main> 
-      <Footer />
-    </div>
+
+    </section>
   );
 };
 
