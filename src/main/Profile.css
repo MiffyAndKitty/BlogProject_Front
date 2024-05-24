@@ -1,0 +1,27 @@
+.mainCharacter{
+    width: 150px;
+    height: 150px;
+}
+
+.logins{
+    margin-top:40px;
+}
+
+.logins button,span{
+    margin-right:10px;
+    background-color: rgb(255, 255, 255);
+    border:  rgb(255, 255, 255);
+}
+
+.login-button{
+    margin-top:30px;
+    background-color: #FFE6FA;
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 60px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}

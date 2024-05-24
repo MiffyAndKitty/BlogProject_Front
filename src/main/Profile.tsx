@@ -2,8 +2,9 @@
 import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { getAnalytics } from "firebase/analytics";
 import React from 'react';
+import mainCharacterImg from '../img/main_character.png';
+
 import './Profile.css';
 const firebaseConfig = {
   apiKey: "AIzaSyCfoepTZGKKL7SubUSCy81pHHag-vDSWmY",
@@ -18,7 +19,6 @@ console.log(firebaseConfig);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
 // Auth 참조 가져오기
 const auth = getAuth(app);
@@ -50,42 +50,25 @@ const Profile: React.FC = () => {
   const goToLogin = () => {
     navigate(`/login`);
   };
+
+  const goToFindID = () => {
+    navigate(`/findID`);
+  };
   return (
     <section className="profile-section">
-
-        <button onClick={goToLogin}>로그인</button>
-        <button onClick={goToSignUp}>회원가입</button>
-        <button onClick={signInWithGoogle}>구글 로그인</button>
+        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
+        <button className="login-button" onClick={goToLogin}>로그인</button>
+        <div className="logins">
+          <button onClick={goToFindID}>아이디 찾기</button>
+          <span>|</span>
+          <button onClick={signInWithGoogle}>구글 로그인</button>
+          <span>|</span>
+          <button onClick={goToSignUp}>회원가입</button>
+        </div>
+        
 
     </section>
   );
 };
 
 export default Profile;
-
-// export const signInWithGoogle = () => {
-//   const navigate = useNavigate();
-//   signInWithPopup(auth, provider)
-//     .then((result) => {
-//       // Google 로그인 후 credential 추출
-//       const credential = GoogleAuthProvider.credentialFromResult(result);
-//       if (credential) {
-//         // credential이 null이 아닌 경우에만 처리
-//         const accessToken: string | undefined = credential.accessToken;  // accessToken 추출
-//         if (accessToken) {
-//           localStorage.setItem('accessToken', accessToken); // localStorage에 accessToken 저장
-//           console.log(result.user);
-//           navigate(`/dashboard`)
-//         } else {
-//           console.error('No accessToken returned from Google login.');
-//         }
-//       } else {
-//         // credential이 null인 경우
-//         console.error('No credentials returned from Google login.');
-//       }
-//     })
-//     .catch((error) => {
-//       // 에러 처리
-//       console.error(error);
-//     });
-// };

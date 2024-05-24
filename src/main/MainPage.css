@@ -25,6 +25,9 @@
   }
   
   .profile-section {
+    display: flex;
+    flex-direction: column; /* 수직 방향 정렬 */
+    align-items: center; /* 수직 방향 가운데 정렬 */
     border: 2px solid #FF88D7; /* 테두리 추가 */
     padding: 1rem;
     border-radius: 8px;
