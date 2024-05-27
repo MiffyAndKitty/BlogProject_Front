@@ -150,7 +150,7 @@ const SignUp: React.FC = () => {
 
   return (
     <div className="App">
-      <Header />
+      <Header pageType="signup"/>
       <main className="main">
         <div className='signup'>
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />

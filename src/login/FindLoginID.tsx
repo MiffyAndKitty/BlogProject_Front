@@ -5,7 +5,7 @@ import Footer from '../structure/Footer';
 const FindLoginID: React.FC = () => {
   return (
     <div className="App">
-    <Header />
+    <Header pageType="signup"/>
     <main>
       로그인 아이디 찾기
     </main>

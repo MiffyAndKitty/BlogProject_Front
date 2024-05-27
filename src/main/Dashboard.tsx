@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import NewPost from './NewPost';
@@ -7,14 +8,22 @@ import PopularPost from './PopularPost';
 import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
-import './MainPage.css';
+import './Dashboard.css';
 
-const MainPage: React.FC = () => {
+const Dashboard: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
   return (
     <div className="App">
-      <Header pageType="signup"/>
+      <Header pageType="login"/>
       <main className="main-content">
-        <Profile pageType="signup" />
+        <Profile pageType="login" />
         <NewPost />
         <PopularPost/>
         <PopularTags/>
@@ -26,4 +35,4 @@ const MainPage: React.FC = () => {
   );
 };
 
-export default MainPage;
+export default Dashboard;

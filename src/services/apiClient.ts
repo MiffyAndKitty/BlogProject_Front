@@ -6,6 +6,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
     // 필요한 경우 추가 헤더 설정
   },
+  withCredentials : true
 });
 
 export default apiClient;

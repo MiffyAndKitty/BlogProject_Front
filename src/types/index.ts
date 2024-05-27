@@ -28,3 +28,8 @@ export interface CheckDuplicatedData {
     column:string, //user_email, user_nickname 중 하나 
     data:string, //공백 X
 }
+
+export interface loginData {
+    email:string,
+    password:string, 
+}
