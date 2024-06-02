@@ -31,23 +31,7 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
-  const signInWithGoogle = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential && credential.accessToken) {
-        localStorage.setItem('accessToken', credential.accessToken);
-        setUser(result.user);
-        navigate(`/dashboard`);
-      } else {
-        console.error('No accessToken or credential returned from Google login.');
-        setError('No accessToken or credential returned from Google login.');
-      }
-    } catch (error) {
-      console.error(error);
-      setError(error.message);
-    }
-  };
+ 
   const goToSignUp = () => {
     navigate(`/signup`);
   };
@@ -59,6 +43,7 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
     try {
       await getLogoutAuth();  // 로그아웃 API 호출
       localStorage.removeItem('accessToken');  // 토큰 삭제
+      
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -78,7 +63,7 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
           <div className="logins">
             <button onClick={goToFindID}>아이디 찾기</button>
             <span>|</span>
-            <button onClick={signInWithGoogle}>비밀번호 찾기</button>
+            <button>비밀번호 찾기</button>
             <span>|</span>
             <button onClick={goToSignUp}>회원가입</button>
           </div>
@@ -97,7 +82,6 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
         </>
       )}
 
-      {user && <div>Welcome, {user.displayName}</div>}
       {error && <div className="error">{error}</div>}
 
     </section>

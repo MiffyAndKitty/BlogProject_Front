@@ -17,8 +17,9 @@ const Login: React.FC = () => {
   };
   const goToGogleLogin = async() => {
     try {
-      await getGoogleLogin();  // 로그아웃 API 호출
-      navigate(`/dashboard`);
+      window.location.href = 'http://mk-blogservice.site:65020/auth/google';
+      // await getGoogleLogin();  // 로그아웃 API 호출
+      // navigate(`/dashboard`);
     } catch (error) {
       console.error(error);
     }
