@@ -8,7 +8,10 @@ import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
 import './MainPage.css';
-
+/**
+ * 로그인 전의 메인페이지
+ * @returns 
+ */
 const MainPage: React.FC = () => {
   return (
     <div className="App">

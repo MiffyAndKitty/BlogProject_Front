@@ -9,7 +9,10 @@ import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
 import './Dashboard.css';
-
+/**
+ * 로그인 후의 메인페이지
+ * @returns 
+ */
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
 
