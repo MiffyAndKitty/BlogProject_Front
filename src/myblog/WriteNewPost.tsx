@@ -3,24 +3,27 @@ import { Form, Button } from 'react-bootstrap';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import './WriteNewPost.css';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const WriteNewPost: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [category, setCategory] = useState('카테고리 설정');
-  const [tags, setTags] = useState(['IT', 'git', '개발']);
+  const [isComposing, setIsComposing] = useState(false);
+  const [tags, setTags] = useState<string[]>(['IT', 'git', '개발']);
+  const [tagInput, setTagInput] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setContent(e.target.value);
+  const handleContentChange = (value: string) => {
+    setContent(value);
   };
 
   const handlePrivacyChange = () => {
@@ -36,6 +39,24 @@ const WriteNewPost: React.FC = () => {
     if (e.target.files) {
       setImage(e.target.files[0]);
     }
+  };
+
+  const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(e.target.value);
+  };
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && tagInput.trim() && !isComposing) {
+      e.preventDefault();
+      if (!tags.includes(tagInput.trim())) {
+        setTags([...tags, tagInput.trim()]);
+      }
+      setTagInput('');
+    }
+  };
+
+  const handleTagRemove = (tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -63,12 +84,6 @@ const WriteNewPost: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
-  const applyStyle = (style: string, value: string) => {
-    if (contentRef.current) {
-      contentRef.current.style.setProperty(style, value);
-    }
-  };
 
   return (
     <div className="App">
@@ -99,43 +114,68 @@ const WriteNewPost: React.FC = () => {
           </Form.Group>
 
           <div className="separator"></div> {/* 구분선 추가 */}
-          <div className="content-toolbar">
-            <button type="button" onClick={() => applyStyle('font-size', '14px')}>14px</button>
-            <button type="button" onClick={() => applyStyle('font-size', '18px')}>18px</button>
-            <button type="button" onClick={() => applyStyle('font-size', '22px')}>22px</button>
-            <button type="button" onClick={() => applyStyle('font-weight', 'normal')}>normal</button>
-            <button type="button" onClick={() => applyStyle('font-weight', 'bold')}>bold</button>
-          </div>
+
           <Form.Group controlId="formContent">
-            <Form.Control
-              as="textarea"
-              rows={20}
-              placeholder="본문을 입력하세요"
+            <ReactQuill
               value={content}
               onChange={handleContentChange}
-              ref={contentRef}
+              modules={{
+                toolbar: [
+                  [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  ['bold', 'italic', 'underline'],
+                  [{ 'color': [] }, { 'background': [] }],
+                  [{ 'align': [] }],
+                  ['link', 'image'],
+                  ['clean']
+                ],
+              }}
+              formats={[
+                'header', 'font', 'list', 'bullet',
+                'bold', 'italic', 'underline',
+                'color', 'background',
+                'align', 'link', 'image'
+              ]}
+              className="form-control textarea"
             />
           </Form.Group>
-
+     
           <Form.Group controlId="formPrivate">
             <Form.Check
               type="checkbox"
               label="비공개"
               checked={isPrivate}
               onChange={handlePrivacyChange}
+              className="private"
+            />
+          </Form.Group>
+
+          <Form.Group controlId="formTagInput">
+            <Form.Control
+              type="text"
+              placeholder="태그를 입력하고 엔터를 누르세요"
+              value={tagInput}
+              onChange={handleTagInputChange}
+              onKeyDown={handleTagInputKeyDown}
+              onCompositionStart={() => setIsComposing(true)}
+              onCompositionEnd={() => setIsComposing(false)}
+              className="tagInput"
             />
           </Form.Group>
 
           <div className="tags">
             {tags.map(tag => (
-              <span key={tag} className="tag">{tag}</span>
+              <span key={tag} className="tag">
+                {tag}
+                <button type="button" onClick={() => handleTagRemove(tag)}>&times;</button>
+              </span>
             ))}
           </div>
 
-          <Form.Group controlId="formImage">
+          {/* <Form.Group controlId="formImage">
             <Form.Label>사진 첨부</Form.Label>
             <Form.Control type="file" onChange={handleImageUpload} />
-          </Form.Group>
+          </Form.Group> */}
 
           <div className="button-group">
             <Button variant="secondary" type="button">
