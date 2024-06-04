@@ -33,3 +33,9 @@ export interface loginData {
     email:string,
     password:string, 
 }
+
+export interface newPost {
+    title:string,
+    content:string,
+    status:Boolean 
+}

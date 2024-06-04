@@ -8,7 +8,8 @@ import FindLoginID from './login/FindLoginID';
 import MainPage from './main/MainPage';
 import AuthCallback from './login/AuthCallback';
 import MyBlogMainPage from './myblog/MyBlogMainPage';
-import WriteNewPost from './myblog/WriteNewPost';
+import WriteNewPost from './myblog/post/WriteNewPost';
+import GetPost from './myblog/post/GetPost';
 import {
   BrowserRouter as Router,
   Route,
@@ -28,6 +29,7 @@ function App() {
       <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />
       <Route path={`/blogmain`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost`} element={<WriteNewPost></WriteNewPost>} />
+      <Route path={`/getpost`} element={<GetPost></GetPost>} />
     </Routes>
     </Router>
   );

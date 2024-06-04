@@ -11,6 +11,7 @@ const AuthCallback: React.FC = () => {
     const error = searchParams.get('error');
 
     if (token) {
+      console.log("fffffffffffffff")
       // JWT 토큰을 로컬 스토리지에 저장
       localStorage.setItem('accessToken', token);
       // 대시보드로 리다이렉션

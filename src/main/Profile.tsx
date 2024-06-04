@@ -25,7 +25,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 interface ProfileProps {
-  pageType: 'login' | 'signup' ;
+  pageType: 'login' | 'signup' |'myBlog';
 }
 const Profile: React.FC<ProfileProps> = ({pageType}) => {
   const navigate = useNavigate();

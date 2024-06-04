@@ -1,15 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, } from 'react';
+import { useNavigate } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
-import Header from '../structure/Header';
-import Footer from '../structure/Footer';
+import Header from '../../structure/Header';
+import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
+import { newPost } from '../../types';
+import { saveNewPost } from '../../services/postService';
 import 'react-quill/dist/quill.snow.css';
 
 const WriteNewPost: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [isPrivate, setIsPrivate] = useState(false);
+  const [status, setStatus] = useState(true);
   const [category, setCategory] = useState('카테고리 설정');
   const [isComposing, setIsComposing] = useState(false);
   const [tags, setTags] = useState<string[]>(['IT', 'git', '개발']);
@@ -17,6 +20,8 @@ const WriteNewPost: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [newPostResult, setNewPostResult] = useState(''); 
+  const navigate = useNavigate();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -27,7 +32,7 @@ const WriteNewPost: React.FC = () => {
   };
 
   const handlePrivacyChange = () => {
-    setIsPrivate(!isPrivate);
+    setStatus(!status);
   };
 
   const handleCategorySelect = (category: string) => {
@@ -65,13 +70,35 @@ const WriteNewPost: React.FC = () => {
     console.log('Title:', title);
     console.log('Content:', content);
     console.log('Category:', category);
-    console.log('Is Private:', isPrivate);
+    console.log('Is Private:', status);
     console.log('Tags:', tags);
     if (image) {
       console.log('Image:', image);
     }
   };
+  const checkSetLoginResult = async () => {
+    const newPost: newPost = { 
+      title: title,
+      content: content,
+      status:status,
+    };
 
+    try {
+      console.log(newPost);
+      const response = await saveNewPost(newPost);
+      
+      setNewPostResult(response.data.result.toString());
+      
+      console.log(response);
+      if (response.data.result.toString() === 'true') {
+        //alert("글 저장에 성공했습니다.");
+      }
+      return response.data.result;
+    } catch (error) {
+      console.error("글 저장 오류:", error);     
+      return false;
+    }
+  };
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -84,7 +111,16 @@ const WriteNewPost: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+  useEffect(() => {
+    if (newPostResult === 'true') {
+      alert("글 저장에 성공했습니다!!");
+      
+      navigate(`/getpost`);
+      
+    } else if (newPostResult === 'false') {
+      alert("글 저장에 실패했습니다!!");
+    }
+  }, [newPostResult]);
   return (
     <div className="App">
       <Header pageType="login" />
@@ -143,8 +179,8 @@ const WriteNewPost: React.FC = () => {
           <Form.Group controlId="formPrivate">
             <Form.Check
               type="checkbox"
-              label="비공개"
-              checked={isPrivate}
+              label="공개"
+              checked={status}
               onChange={handlePrivacyChange}
               className="private"
             />
@@ -181,7 +217,7 @@ const WriteNewPost: React.FC = () => {
             <Button variant="secondary" type="button">
               임시저장
             </Button>
-            <Button variant="primary" type="submit">
+            <Button onClick={checkSetLoginResult} variant="primary" type="submit">
               저장
             </Button>
           </div>
