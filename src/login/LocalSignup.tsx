@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { setSignUp ,checkDuplicated } from '../services/postService';
 import { SignUpData,CheckDuplicatedData } from '../types';
 import mainCharacterImg from '../img/main_character.png';
-import './Signup.css';
+import './LocalSignup.css';
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -150,60 +150,60 @@ const SignUp: React.FC = () => {
 
   return (
     <div className="App">
-      <Header pageType="signup"/>
+      <Header pageType="login"/>
       <main className="main">
         <div className='signup'>
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
           <h2>회원가입</h2>
           <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>이메일: </Form.Label>
+            <Form.Group className="inputFieldCssForSignUp mb-3">
               <Form.Control 
                 type="email" 
-                placeholder="newE@gmail.com" 
+                placeholder="이메일: newE@gmail.com" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)} 
                 isInvalid={!!errors.email}
+                className="transparent-input"
               />
               <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
             </Form.Group>
             
-            <Form.Group className="mb-3">
-              <Form.Label>비밀번호: </Form.Label>
+            <Form.Group className="inputFieldCssForSignUp mb-3">
               <Form.Control 
                 type="password" 
-                placeholder="newpwd" 
+                placeholder="비밀번호: *******" 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)} 
                 isInvalid={!!errors.password}
+                className="transparent-input"
               />
               <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
             </Form.Group>
             
-            <Form.Group className="mb-3">
-              <Form.Label>비밀번호 확인: </Form.Label>
+            <Form.Group className="inputFieldCssForSignUp mb-3">
               <Form.Control 
                 type="password" 
-                placeholder="confirm password" 
+                placeholder="비밀번호 확인: *******" 
                 value={password2} 
                 onChange={(e) => setPassword2(e.target.value)} 
                 isInvalid={!!errors.password2}
+                className="transparent-input"
               />
               <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label>닉네임: </Form.Label>
+            <Form.Group className="inputFieldCssForSignUp mb-3">
               <Form.Control 
-                placeholder="nickname" 
+                placeholder="닉네임: nickname" 
                 value={nickname} 
                 onChange={(e) => setNickname(e.target.value)} 
                 isInvalid={!!errors.nickname}
+                className="transparent-input"
               />
               <Form.Control.Feedback type="invalid">{errors.nickname}</Form.Control.Feedback>
             </Form.Group>
           </Form>
-          <Button variant="primary" type="button" onClick={handleSignUp}>회원가입하기</Button>
+          <Button variant="primary" type="button" onClick={handleSignUp}>회원가입</Button>
         </div>
       </main>
       <Footer />

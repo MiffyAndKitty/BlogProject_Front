@@ -22,3 +22,25 @@
   .signup button {
     margin: 0 auto; /* 버튼을 중앙에 정렬 */
   }
+  .inputFieldCssForSignUp {
+    margin-bottom: 50px;
+    background-color: #FFF7FD;
+    color: #000;
+    border: none;
+    width: 50%;
+    border-radius: 30px;
+    padding: 10px 60px;
+    margin-bottom: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  .transparent-input {
+    background-color: transparent;
+    border: 0px;
+    color: #000; /* 텍스트 색상 */
+    width: 100%;
+    text-align: center; /* 입력 텍스트를 중앙 정렬 */
+  }

@@ -13,7 +13,7 @@ import './Login.css';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const goToLocalLogin = () => {
-    navigate(`/locallogin`);
+    navigate(`/localsignup`);
   };
   const goToGoogleLogin = async() => {
     try {
@@ -33,12 +33,12 @@ const Login: React.FC = () => {
               <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
             </div>
             <div>
-              <button className="login-button" style={{ marginBottom: '10px' }} onClick={goToLocalLogin}>계정으로 로그인</button>
+              <button className="login-button" style={{ marginBottom: '10px' }} onClick={goToLocalLogin}>계정으로 회원가입</button>
             </div>
             <div>
             <button className="google-login-button" onClick={goToGoogleLogin}>
             <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" className="google-logo" />
-            Google 계정으로 로그인
+            Google 계정으로 회원가입
           </button>
             </div>
         </div>

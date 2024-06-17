@@ -5,7 +5,7 @@ import './Header.css';
 import mainCharacterImg from '../img/main_character.png';
 import SearchBar from './SearchBar';
 interface ProfileProps {
-  pageType: 'login' | 'signup' ;
+  pageType: 'login' | 'signup'|'logout' ;
 }
 const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
@@ -21,14 +21,20 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
 
         </ul>
       </nav>
-      {pageType === 'signup' &&(
+      {pageType === 'login' &&(
         <div className="header__auth">
         <Link to="/login">로그인</Link>
       </div>
       )}
-      {pageType === 'login' &&(
+      {pageType === 'logout' &&(
         <div className="header__auth">
         <Link to="/">로그아웃</Link>
+      </div>
+      )}
+
+      {pageType === 'signup' &&(
+        <div className="header__auth">
+        <Link to="/signup">회원가입</Link>
       </div>
       )}
       
