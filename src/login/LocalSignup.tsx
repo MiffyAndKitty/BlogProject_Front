@@ -23,7 +23,13 @@ const SignUp: React.FC = () => {
     password2: '',
     nickname: '',
   });
-
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+    password2: false,
+    nickname: false,
+  });
+  
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -156,52 +162,57 @@ const SignUp: React.FC = () => {
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
           <h2>회원가입</h2>
           <Form>
-            <Form.Group className="inputFieldCssForSignUp mb-3">
-              <Form.Control 
-                type="email" 
-                placeholder="이메일: newE@gmail.com" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                isInvalid={!!errors.email}
-                className="transparent-input"
-              />
-              <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
-            </Form.Group>
+          <Form.Group className="inputFieldCssForSignUp mb-3">
+            <Form.Control 
+              type="email" 
+              placeholder="이메일: newE@gmail.com" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)} 
+              onBlur={() => setTouched({ ...touched, email: true })}
+              isInvalid={touched.email && !!errors.email}
+              className="transparent-input"
+            />
+            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+          </Form.Group>
             
-            <Form.Group className="inputFieldCssForSignUp mb-3">
-              <Form.Control 
-                type="password" 
-                placeholder="비밀번호: *******" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                isInvalid={!!errors.password}
-                className="transparent-input"
-              />
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-            </Form.Group>
+          <Form.Group className="inputFieldCssForSignUp mb-3">
+            <Form.Control 
+              type="password" 
+              placeholder="비밀번호: *******" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              onBlur={() => setTouched({ ...touched, password: true })}
+              isInvalid={touched.password && !!errors.password}
+              className="transparent-input"
+            />
+            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+          </Form.Group>
             
-            <Form.Group className="inputFieldCssForSignUp mb-3">
-              <Form.Control 
-                type="password" 
-                placeholder="비밀번호 확인: *******" 
-                value={password2} 
-                onChange={(e) => setPassword2(e.target.value)} 
-                isInvalid={!!errors.password2}
-                className="transparent-input"
-              />
-              <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
-            </Form.Group>
+          <Form.Group className="inputFieldCssForSignUp mb-3">
+            <Form.Control 
+              type="password" 
+              placeholder="비밀번호 확인: *******" 
+              value={password2} 
+              onChange={(e) => setPassword2(e.target.value)} 
+              onBlur={() => setTouched({ ...touched, password2: true })}
+              isInvalid={touched.password2 && !!errors.password2}
+              className="transparent-input"
+            />
+            <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
+          </Form.Group>
+            
+          <Form.Group className="inputFieldCssForSignUp mb-3">
+            <Form.Control 
+              placeholder="닉네임: nickname" 
+              value={nickname} 
+              onChange={(e) => setNickname(e.target.value)} 
+              onBlur={() => setTouched({ ...touched, nickname: true })}
+              isInvalid={touched.nickname && !!errors.nickname}
+              className="transparent-input"
+            />
+            <Form.Control.Feedback type="invalid">{errors.nickname}</Form.Control.Feedback>
+          </Form.Group>
 
-            <Form.Group className="inputFieldCssForSignUp mb-3">
-              <Form.Control 
-                placeholder="닉네임: nickname" 
-                value={nickname} 
-                onChange={(e) => setNickname(e.target.value)} 
-                isInvalid={!!errors.nickname}
-                className="transparent-input"
-              />
-              <Form.Control.Feedback type="invalid">{errors.nickname}</Form.Control.Feedback>
-            </Form.Group>
           </Form>
           <Button variant="primary" type="button" onClick={handleSignUp}>회원가입</Button>
         </div>
