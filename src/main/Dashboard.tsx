@@ -8,7 +8,7 @@ import PopularPost from './PopularPost';
 import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
-import './Dashboard.css';
+import './Dashboard.module.css';
 /**
  * 로그인 후의 메인페이지
  * @returns 

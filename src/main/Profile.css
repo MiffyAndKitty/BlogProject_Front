@@ -1,25 +1,35 @@
-.mainCharacter{
+.mainCharacter_profile {
     width: 150px;
     height: 150px;
 }
 
-.logins{
-    margin-top:40px;
+.logins_profile {
+    margin-top: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.logins button,span{
-    margin-right:10px;
+.logins_profile button, .logins_profile span {
+    margin-right: 10px;
     background-color: rgb(255, 255, 255);
-    border:  rgb(255, 255, 255);
+    border: rgb(255, 255, 255);
 }
 
-.login-button{
-    margin-top:30px;
+.login-buttons-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.login-button_profile {
+    margin-top: 30px;
     background-color: #FFE6FA;
     color: #000;
     border: none;
+    padding: 10px 16px;
     border-radius: 30px;
-    padding: 10px 60px;
     font-size: 16px;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

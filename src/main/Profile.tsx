@@ -1,4 +1,3 @@
-// Import the functions you need from the SDKs you need
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
@@ -7,6 +6,7 @@ import mainCharacterImg from '../img/main_character.png';
 import { getLogoutAuth } from '../services/getService';  // 추가된 부분
 
 import './Profile.css';
+
 const firebaseConfig = {
   apiKey: "AIzaSyCfoepTZGKKL7SubUSCy81pHHag-vDSWmY",
   authDomain: "mk-blog-e88c8.firebaseapp.com",
@@ -24,14 +24,16 @@ const app = initializeApp(firebaseConfig);
 // Auth 참조 가져오기
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
 interface ProfileProps {
-  pageType: 'login' | 'signup' |'myBlog';
+  pageType: 'login' | 'signup' | 'myBlog';
 }
-const Profile: React.FC<ProfileProps> = ({pageType}) => {
+
+const Profile: React.FC<ProfileProps> = ({ pageType }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
- 
+
   const goToSignUp = () => {
     navigate(`/signup`);
   };
@@ -39,7 +41,8 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
   const goToLogin = () => {
     navigate(`/login`);
   };
-  const goToLogout = async() => {
+
+  const goToLogout = async () => {
     try {
       await getLogoutAuth();  // 로그아웃 API 호출
       localStorage.removeItem('accessToken');  // 토큰 삭제
@@ -49,30 +52,33 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
       console.error(error);
       setError(error.message);
     }
-
   };
+
   const goToFindID = () => {
     navigate(`/findID`);
   };
+
   /**
    * 새 글 작성하기로 이동하기 위한 메서드
    */
   const goToWritePost = () => {
     navigate(`/writenewpost`);
   };
+
   /**
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
   const goToMyBlog = () => {
     navigate(`/blogmain`);
   };
+
   return (
     <section className="profile-section">
-        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
-        {pageType === 'signup' && (
+      <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile " />
+      {pageType === 'signup' && (
         <>
           <button className="login-button" onClick={goToLogin}>로그인</button>
-          <div className="logins">
+          <div className="logins_profile">
             <button onClick={goToFindID}>아이디 찾기</button>
             <span>|</span>
             <button>비밀번호 찾기</button>
@@ -83,12 +89,11 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
       )}
       {pageType === 'login' && (
         <>
-        <div>
-          <button className="login-button" onClick={goToMyBlog}>내 블로그 가기</button>
-          <button className="login-button" onClick={goToWritePost}>글 작성하기</button>
-        </div>
-          
-          <div className="logins">
+          <div className="login-buttons-container">
+            <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
+            <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
+          </div>
+          <div className="logins_profile">
             <button onClick={goToFindID}>팔로우</button>
             <span>|</span>
             <button>팔로워</button>
@@ -101,7 +106,6 @@ const Profile: React.FC<ProfileProps> = ({pageType}) => {
       )}
 
       {error && <div className="error">{error}</div>}
-
     </section>
   );
 };
