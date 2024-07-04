@@ -18,7 +18,7 @@ const FixPost: React.FC = () => {
   const [status, setStatus] = useState<boolean>(postToEdit?.public !== undefined ? Boolean(postToEdit.public) : true);
   const [category, setCategory] = useState('카테고리 설정');
   const [isComposing, setIsComposing] = useState(false);
-  const [tags, setTags] = useState<string[]>(['IT', 'git', '개발']);
+  const [tags, setTags] = useState<string[]>(postToEdit?.tagNames || []);
   const [tagInput, setTagInput] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);

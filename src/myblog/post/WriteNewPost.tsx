@@ -20,7 +20,7 @@ const WriteNewPost: React.FC = () => {
   const [category, setCategory] = useState<category>({category_name:'카테고리 설정', category_id:"1"});
   const [categories,setCategories]  = useState([]);
   const [isComposing, setIsComposing] = useState(false);
-  const [tags, setTags] = useState<string[]>(['IT', 'git', '개발']);
+  const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);

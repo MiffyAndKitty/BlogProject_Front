@@ -51,7 +51,7 @@ export const getPosts = async (): Promise<newPost[]> => {
 //임시 데이터 반환 (API를 설정하지 않은 경우)
 return [
   {  title: '첫 번째 게시물', content: '<p>첫 번째 게시물 내용입니다.</p>', public:true, categoryId:"1", tagNames:['test'], uploaded_files:null},
-  {  title: '두 번째 게시물', content: '<p>두 번째 게시물 내용입니다.</p>' , public:true,categoryId:"2", tagNames:['test'], uploaded_files:null},
+  {  title: '두 번째 게시물', content: '<p>두 번째 게시물 내용입니다.</p>' , public:false,categoryId:"2", tagNames:['test'], uploaded_files:null},
   { title: '세 번째 게시물', content: '<p>세 번째 게시물 내용입니다.</p>' , public:true,categoryId:"3", tagNames:['test'], uploaded_files:null}
 ];
 };
