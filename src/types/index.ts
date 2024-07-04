@@ -37,5 +37,13 @@ export interface loginData {
 export interface newPost {
     title:string,
     content:string,
-    status:Boolean 
+    public:Boolean,
+    categoryId:string,
+    tagNames:Array<string>,
+    uploaded_files: File
+}
+
+export interface category {
+    category_id:string,
+    category_name:string,
 }

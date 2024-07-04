@@ -4,11 +4,17 @@ import Footer from '../../structure/Footer';
 import './GetPost.css';
 import { newPost } from '../../types';
 import { getPosts } from '../../services/getService';
+import { useNavigate } from "react-router-dom";
 
 const GetPost: React.FC = () => {
   const [posts, setPosts] = useState<newPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const fixPost = (post: newPost) => {
+    navigate("/fixpost", { state: { post } });
+  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -29,38 +35,37 @@ const GetPost: React.FC = () => {
     <>
       <Header pageType="logout" />
       <main>
-      <div className="container">
-        <h1 className="title">블로그 게시글</h1>
-        {loading ? (
-          <p>로딩 중...</p>
-        ) : error ? (
-          <p>{error}</p>
-        ) : (
-          <div className="post-list">
-            {posts.map(post => (
-              <div className="post-card" key={post.title}>
-                <div className="post-header">
-                  <h2 className="post-title">{post.title}</h2>
-                  <div className="post-meta">
-                    <span className="post-date">24.05.25 오후 8:54</span>
-                    <span className="post-stats">
-                      <span className="post-likes">🥕 : 5</span>
-                      <span className="post-comments">댓글: 7</span>
-                    </span>
+        <div className="container">
+          <h1 className="title">블로그 게시글</h1>
+          {loading ? (
+            <p>로딩 중...</p>
+          ) : error ? (
+            <p>{error}</p>
+          ) : (
+            <div className="post-list">
+              {posts.map(post => (
+                <div className="post-card" key={post.title}>
+                  <div className="post-header">
+                    <h2 className="post-title">{post.title}</h2>
+                    <div className="post-meta">
+                      <span className="post-date">24.05.25 오후 8:54</span>
+                      <span className="post-stats">
+                        <span className="post-likes">🥕 : 5</span>
+                        <span className="post-comments">댓글: 7</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="post-content">{post.content}</div>
+                  <div className="post-actions">
+                    <button className="edit-btn" onClick={() => fixPost(post)}>수정</button>
+                    <button className="delete-btn">삭제</button>
                   </div>
                 </div>
-                <div className="post-content">{post.content}</div>
-                <div className="post-actions">
-                  <button className="edit-btn">수정</button>
-                  <button className="delete-btn">삭제</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
       </main>
-      
       <Footer />
     </>
   );

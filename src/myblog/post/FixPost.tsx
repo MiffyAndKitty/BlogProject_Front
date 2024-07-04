@@ -1,24 +1,22 @@
-import React, { useState, useRef, useEffect, } from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
 import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
-import { newPost, category } from '../../types';
+import { newPost } from '../../types';
 import { saveNewPost } from '../../services/postService';
-import { getCategory } from '../../services/getService';
 import 'react-quill/dist/quill.snow.css';
 
-const WriteNewPost: React.FC = () => {
-  const quillRef = useRef<ReactQuill>(null);
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [status, setStatus] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [category, setCategory] = useState<category>({category_name:'카테고리 설정', category_id:"1"});
-  const [categories,setCategories]  = useState([]);
+const FixPost: React.FC = () => {
+  const location = useLocation();
+  const postToEdit = location.state?.post as newPost;
+
+  const [title, setTitle] = useState(postToEdit?.title || '');
+  const [content, setContent] = useState(postToEdit?.content || '');
+  const [status, setStatus] = useState<boolean>(postToEdit?.public !== undefined ? Boolean(postToEdit.public) : true);
+  const [category, setCategory] = useState('카테고리 설정');
   const [isComposing, setIsComposing] = useState(false);
   const [tags, setTags] = useState<string[]>(['IT', 'git', '개발']);
   const [tagInput, setTagInput] = useState('');
@@ -40,11 +38,16 @@ const WriteNewPost: React.FC = () => {
     setStatus(!status);
   };
 
-  const handleCategorySelect = (categoryItem: category) => {
-    setCategory(categoryItem);
+  const handleCategorySelect = (category: string) => {
+    setCategory(category);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
+  };
 
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
@@ -76,27 +79,13 @@ const WriteNewPost: React.FC = () => {
       console.log('Image:', image);
     }
   };
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          const quill = quillRef.current.getEditor();
-          const range = quill.getSelection();
-          quill.insertEmbed(range.index, 'image', reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
   const checkSetLoginResult = async () => {
     const newPost: newPost = { 
       title: title,
       content: content,
       public:status,
-      categoryId:category.category_id,
+      categoryId:category,
       tagNames:tags,
       uploaded_files: image
     };
@@ -118,33 +107,19 @@ const WriteNewPost: React.FC = () => {
     }
   };
 
-  
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
-    const fetchCategories = async () => {
-      try {
-        const fetchedCategories:category[] = await getCategory();
-        setCategories(fetchedCategories);
-        console.log(fetchedCategories)
-      } catch (err) {
-        setError('게시물을 불러오는 중에 오류가 발생했습니다.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-    
   }, []);
+
   useEffect(() => {
     if (newPostResult === 'true') {
       alert("글 저장에 성공했습니다!!");
@@ -155,24 +130,20 @@ const WriteNewPost: React.FC = () => {
       alert("글 저장에 실패했습니다!!");
     }
   }, [newPostResult]);
+
   return (
     <div className="App">
-      <Header pageType="logout" />
+      <Header pageType="login" />
       <main className="write-new-post">
         <div className="dropdown" ref={dropdownRef}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            {category.category_name}
+            {category}
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
-              {categories.map((categoryItem)=>(
-                <button
-                  key={categoryItem.category_id}
-                  className='dropdown-item'
-                  onClick={()=> handleCategorySelect(categoryItem)}>
-                    {categoryItem.category_name}
-                  </button>
-              ))}
+              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 1')}>카테고리 1</button>
+              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 2')}>카테고리 2</button>
+              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 3')}>카테고리 3</button>
             </div>
           )}
         </div>
@@ -192,7 +163,6 @@ const WriteNewPost: React.FC = () => {
 
           <Form.Group controlId="formContent">
             <ReactQuill
-              ref={quillRef}
               value={content}
               onChange={handleContentChange}
               modules={{
@@ -248,11 +218,6 @@ const WriteNewPost: React.FC = () => {
             ))}
           </div>
 
-          {/* <Form.Group controlId="formImage">
-            <Form.Label>사진 첨부</Form.Label>
-            <Form.Control type="file" onChange={handleImageUpload} />
-          </Form.Group> */}
-
           <div className="button-group">
             <Button variant="secondary" type="button">
               임시저장
@@ -268,4 +233,4 @@ const WriteNewPost: React.FC = () => {
   );
 };
 
-export default WriteNewPost;
+export default FixPost;

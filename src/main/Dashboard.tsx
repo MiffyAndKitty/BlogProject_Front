@@ -24,7 +24,7 @@ const Dashboard: React.FC = () => {
   }, [navigate]);
   return (
     <div className="App">
-      <Header pageType="login"/>
+      <Header pageType="logout"/>
       <main className="main-content">
         <Profile pageType="login" />
         <NewPost />
