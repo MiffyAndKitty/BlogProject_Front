@@ -54,6 +54,8 @@
 }
 .mainCharacter{
   margin-bottom: 20px; /* 이미지 아래 여백 추가 */
+  width: 150px;
+  height: 150px;
 }
 .content-wrapper {
   display: flex;

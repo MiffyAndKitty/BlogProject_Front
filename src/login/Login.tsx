@@ -30,7 +30,7 @@ const Login: React.FC = () => {
       <main className="main">
         <div className='signup'>
             <div>
-              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
+              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile" />
             </div>
             <div>
               <button className="login-button" style={{ marginBottom: '10px' }} onClick={goToLocalLogin}>계정으로 로그인</button>

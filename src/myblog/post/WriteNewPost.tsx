@@ -8,6 +8,7 @@ import ReactQuill from 'react-quill';
 import { newPost, category } from '../../types';
 import { saveNewPost } from '../../services/postService';
 import { getCategory } from '../../services/getService';
+import * as ENUMS from  '../../types/enum'
 import 'react-quill/dist/quill.snow.css';
 
 const WriteNewPost: React.FC = () => {
@@ -25,7 +26,7 @@ const WriteNewPost: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [newPostResult, setNewPostResult] = useState(''); 
+  const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
   const navigate = useNavigate();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,22 +77,8 @@ const WriteNewPost: React.FC = () => {
       console.log('Image:', image);
     }
   };
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (reader.result) {
-          const quill = quillRef.current.getEditor();
-          const range = quill.getSelection();
-          quill.insertEmbed(range.index, 'image', reader.result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-  const checkSetLoginResult = async () => {
+
+  const savePost = async () => {
     const newPost: newPost = { 
       title: title,
       content: content,
@@ -105,12 +92,12 @@ const WriteNewPost: React.FC = () => {
       console.log(newPost);
       const response = await saveNewPost(newPost);
       
-      setNewPostResult(response.data.result.toString());
+      setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
       
-      console.log(response);
-      if (response.data.result.toString() === 'true') {
-        //alert("글 저장에 성공했습니다.");
-      }
+      // console.log(response.status === ENUMS.status.SUCCESS);
+      // if (response.status === ENUMS.status.SUCCESS) {
+      //   alert("글 저장에 성공했습니다.");
+      // }
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
@@ -131,7 +118,7 @@ const WriteNewPost: React.FC = () => {
         setCategories(fetchedCategories);
         console.log(fetchedCategories)
       } catch (err) {
-        setError('게시물을 불러오는 중에 오류가 발생했습니다.');
+        setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
@@ -146,15 +133,15 @@ const WriteNewPost: React.FC = () => {
     
   }, []);
   useEffect(() => {
-    if (newPostResult === 'true') {
+    if (newPostResult === true) {
       alert("글 저장에 성공했습니다!!");
       
       navigate(`/getpost`);
       
-    } else if (newPostResult === 'false') {
+    } else if (newPostResult === false) {
       alert("글 저장에 실패했습니다!!");
     }
-  }, [newPostResult]);
+  }, [newPostResult, navigate]);
   return (
     <div className="App">
       <Header pageType="logout" />
@@ -248,16 +235,11 @@ const WriteNewPost: React.FC = () => {
             ))}
           </div>
 
-          {/* <Form.Group controlId="formImage">
-            <Form.Label>사진 첨부</Form.Label>
-            <Form.Control type="file" onChange={handleImageUpload} />
-          </Form.Group> */}
-
           <div className="button-group">
             <Button variant="secondary" type="button">
               임시저장
             </Button>
-            <Button onClick={checkSetLoginResult} variant="primary" type="submit">
+            <Button onClick={savePost} variant="primary" type="submit">
               저장
             </Button>
           </div>
