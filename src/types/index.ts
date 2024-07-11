@@ -44,6 +44,21 @@ export interface newPost {
     uploaded_files: File
 }
 
+export interface getPost{
+    board_content: string
+    board_id: string
+    board_like: number
+    board_order: number
+    board_public: number
+    board_title:string
+    board_view: number
+    category_id: string
+    created_at: string
+    deleted_at: null | string
+    updated_at: string
+    user_id: string
+}
+
 export interface category {
     category_id:string,
     category_name:string,

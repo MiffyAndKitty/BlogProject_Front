@@ -47,6 +47,7 @@ const LocalLogin: React.FC = () => {
       console.log(response);
       if (response.data.result.toString() === 'true' && response.headers['authorization']) {
         localStorage.setItem('accessToken', response.headers['authorization']);
+        localStorage.setItem('nickname', response.data['data']);
       }
       return response.data.result;
     } catch (error) {

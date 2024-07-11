@@ -38,16 +38,16 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 게시글 목록
  * @returns 
  */
-export const getPosts = async (nickname:string): Promise<TYPES.newPost[]> => {
+export const getPosts = async (nickname:string): Promise<any> => {
   const token = getToken();
-  const response = await apiClient.get<TYPES.newPost[]>(`/board/list/${nickname}`,{
+  const response = await apiClient.get<any>(`/board/list/${nickname}`,{
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `${token}`,
     },
   });
   console.log(response);
-  return response.data;
+  return response;
 //임시 데이터 반환 (API를 설정하지 않은 경우)
 // return [
 //   {  title: '첫 번째 게시물', content: '<p>첫 번째 게시물 내용입니다.</p>', public:true, categoryId:"1", tagNames:['test'], uploaded_files:null},
