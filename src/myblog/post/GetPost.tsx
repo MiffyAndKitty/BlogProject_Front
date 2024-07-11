@@ -10,6 +10,7 @@ const GetPost: React.FC = () => {
   const [posts, setPosts] = useState<newPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [nickname, setNickname] = useState<string>('');
   const navigate = useNavigate();
 
   const fixPost = (post: newPost) => {
@@ -17,9 +18,17 @@ const GetPost: React.FC = () => {
   };
 
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    setNickname(localStorage.getItem('nickname'));
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const fetchedPosts = await getPosts();
+        const fetchedPosts = await getPosts(nickname);
         setPosts(fetchedPosts);
       } catch (err) {
         setError('게시물을 불러오는 중에 오류가 발생했습니다.');

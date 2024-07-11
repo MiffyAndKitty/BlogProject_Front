@@ -9,14 +9,14 @@ import './MyBlogMainPage.css';
  * @returns 
  */
 const MyBlogMainPage: React.FC = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   const token = localStorage.getItem('accessToken');
-  //   if (!token) {
-  //     navigate('/');
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
   return (
     <div className="App">
       <Header pageType="logout"/>

@@ -2,7 +2,11 @@
     width: 150px;
     height: 150px;
 }
-
+.mainCharacter_profile_login {
+    width: 150px;
+    height: 150px;
+    
+}
 .logins_profile {
     margin-top: 40px;
     display: flex;

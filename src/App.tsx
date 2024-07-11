@@ -3,6 +3,7 @@ import React from 'react';
 import LocalLogin from './login/LocalLogin';
 import Dashboard from './main/Dashboard';
 import SignUp from'./login/SignUp';
+import GoogleSignUp from './login/GoogleSignUp';
 import LocalSignUp from'./login/LocalSignup';
 import Login from './login/Login';
 import FindLoginID from './login/FindLoginID';
@@ -27,6 +28,7 @@ function App() {
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
       <Route path={`/locallogin`} element={<LocalLogin></LocalLogin>}/>
       <Route path={`/signup`} element={<SignUp></SignUp>}/>
+      <Route path={`/google/signup`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />

@@ -38,9 +38,9 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 게시글 목록
  * @returns 
  */
-export const getPosts = async (): Promise<TYPES.newPost[]> => {
+export const getPosts = async (nickname:string): Promise<TYPES.newPost[]> => {
   const token = getToken();
-  const response = await apiClient.get<TYPES.newPost[]>(`/board/new`,{
+  const response = await apiClient.get<TYPES.newPost[]>(`/board/list/${nickname}`,{
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `${token}`,

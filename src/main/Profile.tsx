@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -31,7 +31,7 @@ interface ProfileProps {
 
 const Profile: React.FC<ProfileProps> = ({ pageType }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<string>("");
   const [error, setError] = useState(null);
 
   const goToSignUp = () => {
@@ -46,7 +46,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
     try {
       await getLogoutAuth();  // 로그아웃 API 호출
       localStorage.removeItem('accessToken');  // 토큰 삭제
-      
+      localStorage.removeItem('nickname');  // 토큰 삭제
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -72,11 +72,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
     navigate(`/blogmain`);
   };
 
+  useEffect(()=>{
+    setUser(localStorage.getItem("nickname"));
+  },[]);
+
   return (
     <section className="profile-section">
-      <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile " />
+      
       {pageType === 'signup' && (
         <>
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile" />
           <button className="login-button" onClick={goToLogin}>로그인</button>
           <div className="logins_profile">
             <button onClick={goToFindID}>아이디 찾기</button>
@@ -89,6 +94,11 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
       )}
       {pageType === 'login' && (
         <>
+          <div>
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
+          <span> {user}</span>
+          </div>
+          
           <div className="login-buttons-container">
             <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
             <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>

@@ -20,7 +20,8 @@
 
 export interface SignUpData {
     email:string,
-    password:string,
+    password?:string,
+    provider?:string,
     nickname:string
 }
 
