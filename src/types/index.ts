@@ -41,7 +41,8 @@ export interface newPost {
     public:Boolean,
     categoryId:string,
     tagNames:Array<string>,
-    uploaded_files: File
+    uploaded_files: File,
+    boardId?: string,
 }
 
 export interface getPost{
@@ -57,8 +58,25 @@ export interface getPost{
     deleted_at: null | string
     updated_at: string
     user_id: string
+    comment_count: number
 }
-
+export interface getPostDetail{
+    
+    isWriter: Boolean
+    board_id: string,
+    user_id: string,
+    category_id: string,
+    board_title: string,
+    board_content: string,
+    board_view: number,
+    board_public : 0 | 1,
+    created_at: string,
+    updated_at:string,
+    deleted_at : null | string,
+    comment_count:number,
+    tags: string[]
+    
+}
 export interface category {
     category_id:string,
     category_name:string,

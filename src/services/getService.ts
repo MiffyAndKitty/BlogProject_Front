@@ -40,7 +40,7 @@ export const getGoogleLogin = async (): Promise<any> => {
  */
 export const getPosts = async (nickname:string): Promise<any> => {
   const token = getToken();
-  const response = await apiClient.get<any>(`/board/list/${nickname}`,{
+  const response = await apiClient.get<any>(`/board/list/:${nickname}`,{
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `${token}`,
@@ -48,25 +48,36 @@ export const getPosts = async (nickname:string): Promise<any> => {
   });
   console.log(response);
   return response;
-//임시 데이터 반환 (API를 설정하지 않은 경우)
-// return [
-//   {  title: '첫 번째 게시물', content: '<p>첫 번째 게시물 내용입니다.</p>', public:true, categoryId:"1", tagNames:['test'], uploaded_files:null},
-//   {  title: '두 번째 게시물', content: '<p>두 번째 게시물 내용입니다.</p>' , public:false,categoryId:"2", tagNames:['test'], uploaded_files:null},
-//   { title: '세 번째 게시물', content: '<p>세 번째 게시물 내용입니다.</p>' , public:true,categoryId:"3", tagNames:['test'], uploaded_files:null}
-// ];
-};
 
+};
+/**
+ * 게시글 상세
+ * @returns 
+ */
+export const getPost = async (boardId:string): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.get<any>(`/board/:${boardId}`,{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response.data);
+  return response.data;
+
+};
 /**
  * 카테고리 조회
  * @returns 
  */
-export const getCategory = async (): Promise<TYPES.category[]> => {
+export const getCategory = async (nickname: string): Promise<TYPES.category[]> => {
   const token = getToken();
-  const response = await apiClient.get(`/category/list`,{
+  const url = `/category/list/:${(nickname)}`;
+  const response = await apiClient.get(url,{
     headers:{
       'Authorization': `${token}`,
     }
   });
-  console.log(response);
+  console.log(response,nickname,url);
   return response.data.data;
 };

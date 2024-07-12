@@ -5,25 +5,31 @@ import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
-import { newPost } from '../../types';
-import { saveNewPost } from '../../services/postService';
+import { newPost, getPostDetail,category } from '../../types';
+import * as ENUMS from  '../../types/enum'
+import { fixPost } from '../../services/putService';
+import { getPost,getCategory } from '../../services/getService';
 import 'react-quill/dist/quill.snow.css';
 
 const FixPost: React.FC = () => {
   const location = useLocation();
-  const postToEdit = location.state?.post as newPost;
-
-  const [title, setTitle] = useState(postToEdit?.title || '');
-  const [content, setContent] = useState(postToEdit?.content || '');
-  const [status, setStatus] = useState<boolean>(postToEdit?.public !== undefined ? Boolean(postToEdit.public) : true);
-  const [category, setCategory] = useState('카테고리 설정');
+  const postID = location.state?.postID;
+  // const postToEdit = location.state?.postID as getPostDetail;
+  // console.log(`postToEdit`,postToEdit);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [status, setStatus] = useState(true);
+  const [category, setCategory] = useState<category>({category_name:'카테고리 설정', category_id:"1"});
+  const [categories,setCategories]  = useState([]);
   const [isComposing, setIsComposing] = useState(false);
-  const [tags, setTags] = useState<string[]>(postToEdit?.tagNames || []);
+  const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [image, setImage] = useState<File | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [newPostResult, setNewPostResult] = useState(''); 
+  const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +44,8 @@ const FixPost: React.FC = () => {
     setStatus(!status);
   };
 
-  const handleCategorySelect = (category: string) => {
-    setCategory(category);
+  const handleCategorySelect = (categoryItem: category) => {
+    setCategory(categoryItem);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
 
@@ -80,40 +86,88 @@ const FixPost: React.FC = () => {
     }
   };
 
-  const checkSetLoginResult = async () => {
+  const fixPosts = async () => {
     const newPost: newPost = { 
       title: title,
       content: content,
       public:status,
-      categoryId:category,
+      categoryId:category.category_id,
       tagNames:tags,
-      uploaded_files: image
+      uploaded_files: image,
+      boardId: postID
     };
 
     try {
       console.log(newPost);
-      const response = await saveNewPost(newPost);
+      const response = await fixPost(newPost);
       
-      setNewPostResult(response.data.result.toString());
+      setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
       
-      console.log(response);
-      if (response.data.result.toString() === 'true') {
-        //alert("글 저장에 성공했습니다.");
-      }
+      // console.log(response);
+      // if (response.data.result.toString() === true) {
+      //   //alert("글 저장에 성공했습니다.");
+      // }
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
       return false;
     }
   };
-
+  /**
+   * 수정할 글 불러오기
+   * @param data 
+   */
+  const setPost = (post: getPostDetail, categories: category[]) => {
+    setTitle(post.board_title);
+    setContent(post.board_content);
+    setStatus(post.board_public === 1);
+    setTags(post.tags);
+    const categoryId = post.category_id;
+    const categoryItem = categories.find(cat => cat.category_id === categoryId);
+    console.log(`
+      
+      
+      categoryItem
+      
+      
+      `,categoryItem)
+    if (categoryItem) {
+      setCategory(categoryItem);
+    }
+  }
   useEffect(() => {
+    const fetchCategoriesAndPost = async () => {
+      try {
+        console.log(`localStorage.getItem("nickname"): `, localStorage.getItem("nickname"))
+        const fetchedCategories: category[] = await getCategory(localStorage.getItem("nickname"));
+        setCategories(fetchedCategories);
+        console.log(`setCategories:`, fetchedCategories);
+  
+        const fetchedPosts = await getPost(postID);
+        console.log(`fetchedPosts`, fetchedPosts.data);
+        setPost(fetchedPosts.data, fetchedCategories); // 카테고리를 함께 전달
+      } catch (err) {
+        setError('데이터를 불러오는 중에 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchCategoriesAndPost();
+  }, [navigate]);
+  useEffect(() => {
+    console.log(`
+      categories
+    `, categories);
+  }, [categories]);
+  useEffect(() => {
+
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
-
+   
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -121,29 +175,34 @@ const FixPost: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (newPostResult === 'true') {
+    if (newPostResult === true) {
       alert("글 저장에 성공했습니다!!");
       
       navigate(`/getpost`);
       
-    } else if (newPostResult === 'false') {
+    } else if (newPostResult === false) {
       alert("글 저장에 실패했습니다!!");
     }
   }, [newPostResult]);
 
   return (
     <div className="App">
-      <Header pageType="login" />
+      <Header pageType="logout" />
       <main className="write-new-post">
         <div className="dropdown" ref={dropdownRef}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            {category}
+            {category.category_name}
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
-              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 1')}>카테고리 1</button>
-              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 2')}>카테고리 2</button>
-              <button className="dropdown-item" onClick={() => handleCategorySelect('카테고리 3')}>카테고리 3</button>
+              {categories.map((categoryItem)=>(
+                <button
+                  key={categoryItem.category_id}
+                  className='dropdown-item'
+                  onClick={()=> handleCategorySelect(categoryItem)}>
+                    {categoryItem.category_name}
+                  </button>
+              ))}
             </div>
           )}
         </div>
@@ -158,7 +217,15 @@ const FixPost: React.FC = () => {
               className="form-control title-input"
             />
           </Form.Group>
-
+          <Form.Group controlId="formPrivate">
+            <Form.Check
+              type="checkbox"
+              label="공개"
+              checked={status}
+              onChange={handlePrivacyChange}
+              className="private"
+            />
+          </Form.Group>
           <div className="separator"></div> {/* 구분선 추가 */}
 
           <Form.Group controlId="formContent">
@@ -186,15 +253,7 @@ const FixPost: React.FC = () => {
             />
           </Form.Group>
      
-          <Form.Group controlId="formPrivate">
-            <Form.Check
-              type="checkbox"
-              label="공개"
-              checked={status}
-              onChange={handlePrivacyChange}
-              className="private"
-            />
-          </Form.Group>
+          
 
           <Form.Group controlId="formTagInput">
             <Form.Control
@@ -222,7 +281,7 @@ const FixPost: React.FC = () => {
             <Button variant="secondary" type="button">
               임시저장
             </Button>
-            <Button onClick={checkSetLoginResult} variant="primary" type="submit">
+            <Button onClick={fixPosts} variant="primary" type="submit">
               저장
             </Button>
           </div>

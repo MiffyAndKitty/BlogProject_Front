@@ -114,7 +114,7 @@ const WriteNewPost: React.FC = () => {
     };
     const fetchCategories = async () => {
       try {
-        const fetchedCategories:category[] = await getCategory();
+        const fetchedCategories:category[] = await getCategory(localStorage.getItem("nickname"));
         setCategories(fetchedCategories);
         console.log(fetchedCategories)
       } catch (err) {

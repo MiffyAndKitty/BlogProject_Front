@@ -13,8 +13,8 @@ const GetPost: React.FC = () => {
   const [nickname, setNickname] = useState<string>('');
   const navigate = useNavigate();
 
-  const fixPost = (post: TYPES.getPost) => {
-    navigate("/fixpost", { state: { post } });
+  const fixPost = (postID: string) => {
+    navigate("/fixpost", { state: { postID } });
   };
   
   /**
@@ -42,7 +42,7 @@ const GetPost: React.FC = () => {
   };
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    setNickname(localStorage.getItem('nickname'));
+   
     if (!token) {
       navigate('/');
     }
@@ -51,6 +51,9 @@ const GetPost: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        const nickname=localStorage.getItem('nickname');
+        setNickname(nickname);
+        console.log(`nickname`,nickname)
         const fetchedPosts = await getPosts(nickname);
         console.log(`fetchedPosts`,fetchedPosts.data.data)
         setPosts(fetchedPosts.data.data);
@@ -80,13 +83,13 @@ const GetPost: React.FC = () => {
                       <span className="post-date">{formatDate(post.created_at)}</span>
                       <span className="post-stats">
                         <span className="post-likes">🥕 : {post.board_like}</span>
-                        <span className="post-comments">댓글: 7</span>
+                        <span className="post-comments">댓글: {post.comment_count}</span>
                       </span>
                     </div>
                   </div>
                   <div className="post-content">{post.board_content}</div>
                   <div className="post-actions">
-                    <button className="edit-btn" onClick={() => fixPost(post)}>수정</button>
+                    <button className="edit-btn" onClick={() => fixPost(post.board_id)}>수정</button>
                     <button className="delete-btn">삭제</button>
                   </div>
                 </div>
