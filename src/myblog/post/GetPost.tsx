@@ -7,6 +7,7 @@ import { getPosts } from '../../services/getService';
 import { useNavigate } from "react-router-dom";
 
 const GetPost: React.FC = () => {
+  const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,7 +15,9 @@ const GetPost: React.FC = () => {
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
-    navigate("/fixpost", { state: { postID } });
+    if(isWriter === true) navigate("/fixpost", { state: { postID } });
+    else alert("수정권한이 없습니다!");
+    
   };
   
   /**
@@ -55,6 +58,10 @@ const GetPost: React.FC = () => {
         setNickname(nickname);
         console.log(`nickname`,nickname)
         const fetchedPosts = await getPosts(nickname);
+        console.log(`fetchedPosts.data.isWriter `, fetchedPosts.data.isWriter)
+        console.log(`fetchedPosts.data`,fetchedPosts.data)
+        setIsWriter(fetchedPosts.data.isWriter);
+        console.log(`isWriter`, isWriter)
         console.log(`fetchedPosts`,fetchedPosts.data.data)
         setPosts(fetchedPosts.data.data);
       } catch (err) {
