@@ -1,0 +1,96 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+    color:  #f0a4d8;
+  }
+  
+  .posts-list {
+    gap: 20px;
+  }
+  
+  .posts-card {
+    background-color: #FFE6FA;
+    border: 0px;
+    border-radius: 10px;
+    padding: 0; /* posts-header와 맞추기 위해 padding을 0으로 설정 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .posts-header {
+    background-color: #f0a4d8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px; /* padding 추가 */
+    border-top-left-radius: 10px; /* 모서리를 posts-card와 맞춤 */
+    border-top-right-radius: 10px; /* 모서리를 posts-card와 맞춤 */
+  }
+  
+  .posts-title {
+    font-size: 20px;
+    margin: 0;
+    color: white; /* 글씨색 흰색으로 설정 */
+  }
+  
+  .posts-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .posts-date {
+    color: white; /* 글씨색 흰색으로 설정 */
+    background-color: #f0a4d8;
+  }
+  
+  .posts-stats {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: #f0a4d8;
+
+  }
+  
+  .posts-likes,
+  .posts-comments {
+    display: flex;
+    align-items: center;
+    color: white; /* 글씨색 흰색으로 설정 */
+    background-color: #f0a4d8;
+  }
+  
+  .posts-content {
+    padding: 20px; /* posts-content에 padding 추가 */
+    margin-top: 10px;
+  }
+  
+  .posts-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 0 20px 20px; /* 좌우 padding 추가, 하단 padding 추가 */
+  }
+  
+  .edit-btn,
+  .delete-btn {
+    background-color: #ff80bf;
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .edit-btn:hover,
+  .delete-btn:hover {
+    background-color: #ff4da6;
+  }
+  

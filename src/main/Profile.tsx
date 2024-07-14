@@ -72,12 +72,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
     navigate(`/blogmain`);
   };
 
+  const goToManagePosts = ()=>{
+    navigate(`/getpost`);
+  }
+
   useEffect(()=>{
     setUser(localStorage.getItem("nickname"));
   },[]);
 
   return (
-    <section className="profile-section">
+    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : ''}`}>
       
       {pageType === 'signup' && (
         <>
@@ -114,7 +118,28 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
           </div>
         </>
       )}
-
+      {pageType === 'myBlog' && (
+        <>
+        <div className="profile-container">
+        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
+        <span className="username"> {user}</span>
+        </div>
+        
+        <div className="login-buttons-container">
+          <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
+          <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
+        </div>
+        <div className="logins_profile">
+          <button onClick={goToFindID}>팔로우</button>
+          <span>|</span>
+          <button>팔로워</button>
+          <span>|</span>
+          <button onClick={goToSignUp}>내소식</button>
+          <span>|</span>
+          <button onClick={goToLogout}>로그아웃 </button>
+        </div>
+      </>
+      )}
       {error && <div className="error">{error}</div>}
     </section>
   );

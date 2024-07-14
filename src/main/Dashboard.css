@@ -34,8 +34,13 @@
     grid-column: 2 / 3;
     grid-row: 1 / 5; /* 1행부터 5행까지 차지 */
     height: 300px; /* 고정 높이 설정 */
+    max-height: 500px;
   }
-  
+  .profile-section.myBlog {
+    grid-column: 1 / 2; /* 왼쪽 열에 배치 */
+    grid-row: 1 / 5; /* 1행부터 5행까지 차지 */
+    
+  }
   .populartags-section {
     padding: 1rem;
     border-radius: 8px;

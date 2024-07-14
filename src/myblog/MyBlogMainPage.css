@@ -1,26 +1,15 @@
-/* .App {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-  
-  .main-content {
-    display: flex;
-    flex: 1;
-  }
-  
-  .sidebar {
-    width: 25%;
-    background-color: #f4f4f4;
-    padding: 20px;
-  }
-  
-  .profile {
-    margin-bottom: 20px;
-  }
-  
-  .content {
-    width: 75%;
-    padding: 20px;
-  }
-  */
+.main-content {
+  display: grid;
+  grid-template-columns: 2.5fr 1fr; /* 두 개의 열 */
+  gap: 20px; /* 요소들 간의 간격 */
+  padding: 20px;
+}
+
+section {
+  margin-bottom: 2rem;
+}
+
+.MainPosts-section {
+  grid-column: 2 /60;
+  grid-row: 1 / 5; /* 1행부터 5행까지 차지 */
+}

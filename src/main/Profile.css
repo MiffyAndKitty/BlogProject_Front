@@ -5,7 +5,15 @@
 .mainCharacter_profile_login {
     width: 150px;
     height: 150px;
+    margin-right: 10px; /* 이미지와 닉네임 사이의 간격 조절 */
     
+}
+.profile-container {
+  display: flex;
+  align-items: center;
+}
+.username {
+    font-size: 1.2em;
 }
 .logins_profile {
     margin-top: 40px;

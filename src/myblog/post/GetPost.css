@@ -1,10 +1,33 @@
+.main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.mainCharacter_profile {
+  max-width: 100%;
+  height: auto;
+}
+
 .container {
+    flex: 2;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
+    border: #ff4da6;
+    border-width: 5px;
   }
-  
+  .login-button_profile {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #ff4da6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   .title {
     text-align: center;
     margin-bottom: 20px;
@@ -95,4 +118,42 @@
   .delete-btn:hover {
     background-color: #ff4da6;
   }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
   
+  .pagination-btn {
+    background-color: #ff4da6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .pagination-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination-info {
+    font-size: 16px;
+    margin: 0 10px;
+  }
+
+  .profile_post_manage{
+    max-width: 300px;
+    border: 2px solid #FF88D7; /* 테두리 추가 */
+    padding: 1rem;
+    border-radius: 8px;
+    height: 300px; /* 고정 높이 설정 */
+    flex: 1;
+    margin-left: 100px;
+    margin-top: 100px;
+    text-align: center;
+  }

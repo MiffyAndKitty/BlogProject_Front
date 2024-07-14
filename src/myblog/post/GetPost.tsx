@@ -3,6 +3,7 @@ import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './GetPost.css';
 import * as TYPES from '../../types/index';
+import mainCharacterImg from '../../img/main_character.png';
 import { getPosts } from '../../services/getService';
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +13,10 @@ const GetPost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [cursor, setCursor] = useState<string>('');
+
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -43,6 +48,23 @@ const GetPost: React.FC = () => {
   
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+    /**
+   * 내 블로그로 가기로 이동하기 위한 메서드
+   */
+    const goToMyBlog = () => {
+      navigate(`/blogmain`);
+    };
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
    
@@ -56,14 +78,12 @@ const GetPost: React.FC = () => {
       try {
         const nickname=localStorage.getItem('nickname');
         setNickname(nickname);
-        console.log(`nickname`,nickname)
+        console.log(`nickname`,nickname);
         const fetchedPosts = await getPosts(nickname);
-        console.log(`fetchedPosts.data.isWriter `, fetchedPosts.data.isWriter)
-        console.log(`fetchedPosts.data`,fetchedPosts.data)
         setIsWriter(fetchedPosts.data.isWriter);
-        console.log(`isWriter`, isWriter)
-        console.log(`fetchedPosts`,fetchedPosts.data.data)
+        console.log(`fetchedPosts`,fetchedPosts.data.data);
         setPosts(fetchedPosts.data.data);
+        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
       } catch (err) {
         setError('게시물을 불러오는 중에 오류가 발생했습니다.');
       } finally {
@@ -74,10 +94,35 @@ const GetPost: React.FC = () => {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    const fetchPosts = async (cursor: string) => {
+      try {
+        const nickname = localStorage.getItem('nickname');
+        setNickname(nickname);
+        const fetchedPosts = await getPosts(nickname, cursor); // 페이지 정보를 전달
+        setIsWriter(fetchedPosts.data.isWriter);
+        setPosts(fetchedPosts.data.data);
+        setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
+        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
+      } catch (err) {
+        setError('게시물을 불러오는 중에 오류가 발생했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchPosts(cursor); // 현재 페이지에 해당하는 게시물 불러오기
+  }, [currentPage]);
+
   return (
     <>
-      <Header pageType="logout" />
-      <main>
+    <Header pageType="logout" />
+    <main>
+      <div className="main-container">
+        <div className="profile_post_manage">
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile" />
+          <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
+        </div>
         <div className="container">
           <h1 className="title">블로그 게시글</h1>
           {!loading && !error && posts.length > 0 && (
@@ -103,10 +148,17 @@ const GetPost: React.FC = () => {
               ))}
             </div>
           )}
+          <div className="pagination">
+            <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>
+            <span className="pagination-info">{currentPage} / {totalPages}</span>
+            <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
+          </div>
         </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
+    <Footer />
+  </>
+  
   );
 };
 
