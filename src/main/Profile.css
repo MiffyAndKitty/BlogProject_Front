@@ -11,6 +11,7 @@
 .profile-container {
   display: flex;
   align-items: center;
+
 }
 .username {
     font-size: 1.2em;

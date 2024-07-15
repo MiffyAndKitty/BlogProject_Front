@@ -16,6 +16,7 @@ const GetPost: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
+  const [isBefore, setIsBefore] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -50,12 +51,16 @@ const GetPost: React.FC = () => {
   };
   const handlePreviousPage = () => {
     if (currentPage > 1) {
+      setCursor(posts[0].board_id);
+      setIsBefore(true);
       setCurrentPage(currentPage - 1);
     }
   };
   
   const handleNextPage = () => {
     if (currentPage < totalPages) {
+      setCursor(posts[posts.length - 1].board_id); 
+      setIsBefore(false);
       setCurrentPage(currentPage + 1);
     }
   };
@@ -99,11 +104,16 @@ const GetPost: React.FC = () => {
       try {
         const nickname = localStorage.getItem('nickname');
         setNickname(nickname);
-        const fetchedPosts = await getPosts(nickname, cursor); // 페이지 정보를 전달
+        const fetchedPosts = await getPosts(nickname, cursor,isBefore); // 페이지 정보를 전달
         setIsWriter(fetchedPosts.data.isWriter);
         setPosts(fetchedPosts.data.data);
         setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
-        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
+        //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
+        if (currentPage === 1) {
+          setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
+        } else if (currentPage === totalPages) {
+          setCursor(fetchedPosts.data.data[0].board_id);
+        }
       } catch (err) {
         setError('게시물을 불러오는 중에 오류가 발생했습니다.');
       } finally {

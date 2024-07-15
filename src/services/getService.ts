@@ -38,11 +38,14 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 게시글 목록
  * @returns 
  */
-export const getPosts = async (nickname:string, cursor?:string): Promise<any> => {
+export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/:${nickname}`;
   if(cursor){
     url  = `/board/list/:${nickname}?cursor=${cursor}`;
+  }
+  if(isBefore){
+    url  = `/board/list/:${nickname}?cursor=${cursor}&isBefore=${isBefore}`;
   }
   const response = await apiClient.get<any>(url,{
     headers: {
