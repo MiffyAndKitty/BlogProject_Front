@@ -1,56 +1,81 @@
+.main-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.mainCharacter_profile {
+  max-width: 100%;
+  height: auto;
+}
+
 .container {
+    flex: 2;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
+    border: #ff4da6;
+    border-width: 5px;
   }
-  
+  .login-button_profile {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #ff4da6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
   .title {
     text-align: center;
     margin-bottom: 20px;
     color:  #f0a4d8;
   }
   
-  .posts-list {
+  .post-list {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
   }
   
-  .posts-card {
+  .post-card {
     background-color: #FFE6FA;
     border: 0px;
     border-radius: 10px;
-    padding: 0; /* posts-header와 맞추기 위해 padding을 0으로 설정 */
+    padding: 0; /* post-header와 맞추기 위해 padding을 0으로 설정 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  .posts-header {
+  .post-header {
     background-color: #f0a4d8;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px; /* padding 추가 */
-    border-top-left-radius: 10px; /* 모서리를 posts-card와 맞춤 */
-    border-top-right-radius: 10px; /* 모서리를 posts-card와 맞춤 */
+    border-top-left-radius: 10px; /* 모서리를 post-card와 맞춤 */
+    border-top-right-radius: 10px; /* 모서리를 post-card와 맞춤 */
   }
   
-  .posts-title {
+  .post-title {
     font-size: 20px;
     margin: 0;
     color: white; /* 글씨색 흰색으로 설정 */
   }
   
-  .posts-meta {
+  .post-meta {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
-  .posts-date {
+  .post-date {
     color: white; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   
-  .posts-stats {
+  .post-stats {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -58,20 +83,20 @@
 
   }
   
-  .posts-likes,
-  .posts-comments {
+  .post-likes,
+  .post-comments {
     display: flex;
     align-items: center;
     color: white; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   
-  .posts-content {
-    padding: 20px; /* posts-content에 padding 추가 */
+  .post-content {
+    padding: 20px; /* post-content에 padding 추가 */
     margin-top: 10px;
   }
   
-  .posts-actions {
+  .post-actions {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -93,4 +118,42 @@
   .delete-btn:hover {
     background-color: #ff4da6;
   }
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
   
+  .pagination-btn {
+    background-color: #ff4da6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+  }
+  
+  .pagination-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination-info {
+    font-size: 16px;
+    margin: 0 10px;
+  }
+
+  .profile_post_manage{
+    max-width: 300px;
+    border: 2px solid #FF88D7; /* 테두리 추가 */
+    padding: 1rem;
+    border-radius: 8px;
+    height: 300px; /* 고정 높이 설정 */
+    flex: 1;
+    margin-left: 100px;
+    margin-top: 100px;
+    text-align: center;
+  }

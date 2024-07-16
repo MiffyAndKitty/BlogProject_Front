@@ -38,7 +38,7 @@
   }
   .profile-section.myBlog {
     grid-column: 1 / 2; /* 왼쪽 열에 배치 */
-    grid-row: 1 / 5; /* 1행부터 5행까지 차지 */
+    grid-row: 1 / 2; /* 1행부터 5행까지 차지 */
     margin-top:40px;
   }
   .populartags-section {

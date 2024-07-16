@@ -88,3 +88,19 @@ export const getCategory = async (nickname: string): Promise<TYPES.category[]> =
   console.log(response,nickname,url);
   return response.data.data;
 };
+
+/**
+ * 카테고리 전체 조회
+ * @returns 
+ */
+export const getCategories = async (nickname: string): Promise<TYPES.categories[]> => {
+  const token = getToken();
+  const url = `/category/list/:${(nickname)}/all`;
+  const response = await apiClient.get(url,{
+    headers:{
+      'Authorization': `${token}`,
+    }
+  });
+  console.log(response,nickname,url);
+  return response.data.data;
+};

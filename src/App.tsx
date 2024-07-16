@@ -13,6 +13,7 @@ import MyBlogMainPage from './myblog/MyBlogMainPage';
 import WriteNewPost from './myblog/post/WriteNewPost';
 import GetPost from './myblog/post/GetPost';
 import FixPost from './myblog/post/FixPost';
+import CategorySettings from './myblog/CategorySetting';
 import {
   BrowserRouter as Router,
   Route,
@@ -36,6 +37,7 @@ function App() {
       <Route path={`/writenewpost`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost`} element={<FixPost></FixPost>} />
+      <Route path={`/categorySetting`} element={<CategorySettings></CategorySettings>} />
     </Routes>
     </Router>
   );

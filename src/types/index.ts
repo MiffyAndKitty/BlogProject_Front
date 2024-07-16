@@ -81,3 +81,14 @@ export interface category {
     category_id:string,
     category_name:string,
 }
+
+export interface categories {
+    category_id: string;
+    category_name: string;
+    subcategories: categories[];
+}
+
+export interface newCategory {
+    categoryName:string,
+    topcategoryId:string,
+}
