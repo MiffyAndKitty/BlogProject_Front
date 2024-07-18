@@ -58,10 +58,10 @@ export interface getPost{
     deleted_at: null | string
     updated_at: string
     user_id: string
-    comment_count: number
+    board_comment: number
 }
 export interface getPostDetail{
-    
+    isLike: string,
     isWriter: Boolean
     board_id: string,
     user_id: string,
@@ -73,7 +73,7 @@ export interface getPostDetail{
     created_at: string,
     updated_at:string,
     deleted_at : null | string,
-    comment_count:number,
+    board_comment:number,
     tags: string[]
     
 }
@@ -91,4 +91,13 @@ export interface categories {
 export interface newCategory {
     categoryName:string,
     topcategoryId:string,
+}
+
+export interface deleteCategory {
+    categoryId:string,
+}
+
+export interface changeCategory {
+    categoryName:string,
+    categoryId: string
 }

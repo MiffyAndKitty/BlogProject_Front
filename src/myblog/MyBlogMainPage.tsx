@@ -8,6 +8,7 @@ import './MyBlogMainPage.css';
 import CategoryList from './CategoryList';
 import { categories as Categories } from '../types/index';
 import { getCategories  } from '../services/getService';
+import CategoryListForMain from './CategoryListForMain';
 
 /**
  * 로그인 후의 메인페이지
@@ -49,7 +50,7 @@ const MyBlogMainPage: React.FC = () => {
       <Header pageType="logout"/>
       <main className="main-content">
         <Profile pageType="myBlog" />
-        <CategoryList categories={categories}></CategoryList>
+        <CategoryListForMain categories={categories}></CategoryListForMain>
         <MainPosts></MainPosts>
       </main>
       <Footer />

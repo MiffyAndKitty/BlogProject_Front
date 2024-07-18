@@ -22,3 +22,20 @@ export const fixPost = async (postData: TYPES.newPost): Promise<any> => {
   return response;
 
 };
+
+/**
+ * 카테고리 수정
+ * @returns 
+ */
+export const updateCategory = async (postData: TYPES.changeCategory): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.put<TYPES.changeCategory>(`/category`,postData,{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response);
+  return response;
+
+};

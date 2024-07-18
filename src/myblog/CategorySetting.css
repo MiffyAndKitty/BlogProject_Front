@@ -1,0 +1,14 @@
+.addCategoryBtn{
+    margin: 10px auto;
+    margin-left: 10px;
+    padding: 10px 20px;
+    background-color: #ff80bf;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.inputNewCategory{
+    padding: 10px 20px;
+}

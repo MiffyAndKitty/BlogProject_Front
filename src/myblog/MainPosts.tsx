@@ -138,7 +138,7 @@ const GetPost: React.FC = () => {
                       <span className="post-date">{formatDate(post.created_at)}</span>
                       <span className="post-stats">
                         <span className="post-likes">🥕 : {post.board_like}</span>
-                        <span className="post-comments">댓글: {post.comment_count}</span>
+                        <span className="post-comments">댓글: {post.board_comment}</span>
                       </span>
                     </div>
                   </div>

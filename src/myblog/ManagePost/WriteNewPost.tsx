@@ -5,7 +5,7 @@ import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
-import { newPost, category } from '../../types';
+import { newPost, category, categories } from '../../types';
 import { saveNewPost } from '../../services/postService';
 import { getCategory } from '../../services/getService';
 import * as ENUMS from  '../../types/enum'
@@ -45,7 +45,19 @@ const WriteNewPost: React.FC = () => {
     setCategory(categoryItem);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
-
+  const renderCategoryMenu = (categories: categories[], level: number = 0) => {
+    return categories.map((categoryItem) => (
+      <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
+        <button
+          className="dropdown-item"
+          onClick={() => handleCategorySelect(categoryItem)}
+        >
+          {categoryItem.category_name}
+        </button>
+        {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+      </div>
+    ));
+  };
 
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
@@ -114,23 +126,22 @@ const WriteNewPost: React.FC = () => {
     };
     const fetchCategories = async () => {
       try {
-        const fetchedCategories:category[] = await getCategory(localStorage.getItem("nickname"));
+        const fetchedCategories: category[] = await getCategory(localStorage.getItem('nickname'));
         setCategories(fetchedCategories);
-        console.log(fetchedCategories)
+        console.log(fetchedCategories);
       } catch (err) {
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchCategories();
-
+  
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-    
   }, []);
   useEffect(() => {
     if (newPostResult === true) {
@@ -152,18 +163,11 @@ const WriteNewPost: React.FC = () => {
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
-              {categories.map((categoryItem)=>(
-                <button
-                  key={categoryItem.category_id}
-                  className='dropdown-item'
-                  onClick={()=> handleCategorySelect(categoryItem)}>
-                    {categoryItem.category_name}
-                  </button>
-              ))}
+              {renderCategoryMenu(categories)}
             </div>
           )}
         </div>
-
+  
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formTitle">
             <Form.Control
@@ -174,9 +178,9 @@ const WriteNewPost: React.FC = () => {
               className="form-control title-input"
             />
           </Form.Group>
-
+  
           <div className="separator"></div> {/* 구분선 추가 */}
-
+  
           <Form.Group controlId="formContent">
             <ReactQuill
               ref={quillRef}
@@ -184,25 +188,33 @@ const WriteNewPost: React.FC = () => {
               onChange={handleContentChange}
               modules={{
                 toolbar: [
-                  [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-                  [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                  [{ header: '1' }, { header: '2' }, { font: [] }],
+                  [{ list: 'ordered' }, { list: 'bullet' }],
                   ['bold', 'italic', 'underline'],
-                  [{ 'color': [] }, { 'background': [] }],
-                  [{ 'align': [] }],
+                  [{ color: [] }, { background: [] }],
+                  [{ align: [] }],
                   ['link', 'image'],
-                  ['clean']
+                  ['clean'],
                 ],
               }}
               formats={[
-                'header', 'font', 'list', 'bullet',
-                'bold', 'italic', 'underline',
-                'color', 'background',
-                'align', 'link', 'image'
+                'header',
+                'font',
+                'list',
+                'bullet',
+                'bold',
+                'italic',
+                'underline',
+                'color',
+                'background',
+                'align',
+                'link',
+                'image',
               ]}
               className="form-control textarea"
             />
           </Form.Group>
-     
+  
           <Form.Group controlId="formPrivate">
             <Form.Check
               type="checkbox"
@@ -212,7 +224,7 @@ const WriteNewPost: React.FC = () => {
               className="private"
             />
           </Form.Group>
-
+  
           <Form.Group controlId="formTagInput">
             <Form.Control
               type="text"
@@ -225,16 +237,18 @@ const WriteNewPost: React.FC = () => {
               className="tagInput"
             />
           </Form.Group>
-
+  
           <div className="tags">
-            {tags.map(tag => (
+            {tags.map((tag) => (
               <span key={tag} className="tag">
                 {tag}
-                <button type="button" onClick={() => handleTagRemove(tag)}>&times;</button>
+                <button type="button" onClick={() => handleTagRemove(tag)}>
+                  &times;
+                </button>
               </span>
             ))}
           </div>
-
+  
           <div className="button-group">
             <Button variant="secondary" type="button">
               임시저장
@@ -248,6 +262,7 @@ const WriteNewPost: React.FC = () => {
       <Footer />
     </div>
   );
+  
 };
 
 export default WriteNewPost;

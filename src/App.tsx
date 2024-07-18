@@ -10,9 +10,9 @@ import FindLoginID from './login/FindLoginID';
 import MainPage from './main/MainPage';
 import AuthCallback from './login/AuthCallback';
 import MyBlogMainPage from './myblog/MyBlogMainPage';
-import WriteNewPost from './myblog/post/WriteNewPost';
-import GetPost from './myblog/post/GetPost';
-import FixPost from './myblog/post/FixPost';
+import WriteNewPost from './myblog/ManagePost/WriteNewPost';
+import GetPost from './myblog/ManagePost/GetPost';
+import FixPost from './myblog/ManagePost/FixPost';
 import CategorySettings from './myblog/CategorySetting';
 import {
   BrowserRouter as Router,

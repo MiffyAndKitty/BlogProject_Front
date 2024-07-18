@@ -1,36 +1,107 @@
 // src/components/CategoryList.tsx
-import React, { useState } from 'react';
-import { categories as Categories } from '../types/index';
-
+import React, { useEffect, useState } from 'react';
+import { categories as Categories, category as Category } from '../types/index';
+import './CategoryList.css';
 interface CategoryListProps {
   categories: Categories[];
   level?: number;
+  onAddSubcategory: (parentCategoryId: string, subcategoryName: string) => void;
+  onEditCategory: (categoryId: string, newCategoryName: string) => void;
+  onDeleteCategory: (categoryId: string) => void;
 }
 
-const CategoryList: React.FC<CategoryListProps> = ({ categories = [], level = 0 }) => {
-  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+const CategoryList: React.FC<CategoryListProps> = ({ categories,level = 0, onAddSubcategory, onEditCategory, onDeleteCategory }) => {
+  const [hoveredCategoryId, setHoveredCategoryId] = useState<string | null>(null);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [newCategoryName, setNewCategoryName] = useState<string>('');
+  const [addingSubcategoryId, setAddingSubcategoryId] = useState<string | null>(null);
+  const [newSubcategoryName, setNewSubcategoryName] = useState<string>('');
 
-  const toggleCategory = (categoryId: string) => {
-    setExpandedCategories((prev) =>
-      prev.includes(categoryId)
-        ? prev.filter((id) => id !== categoryId)
-        : [...prev, categoryId]
-    );
+  const handleMouseEnter = (categoryId: string) => {
+    setHoveredCategoryId(categoryId);
+    console.log(`hoveredCategoryId`,hoveredCategoryId);
+  };
+  
+  const handleMouseLeave = () => {
+    setHoveredCategoryId(null);
+    console.log(`====hoveredCategoryId cancel====`,hoveredCategoryId);
   };
 
+  useEffect( ()=>{
+    console.log(
+      `
+      
+      categories
+      
+      `,categories, 
+    )
+  }, []
+    
+  )
   return (
-    <ul>
-      {categories.map((category) => (
-        <li key={category.category_id}>
-          <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }}>
-            {category.category_name} {expandedCategories.includes(category.category_id) ? '▲' : '▼'}
-          </div>
-          {expandedCategories.includes(category.category_id) && category.subcategories.length > 0 && (
-            <CategoryList categories={category.subcategories} level={level + 1} />
+    <div>
+      {categories.map(category => (
+        <div
+          key={category.category_id}
+          className={`level-${level}`}
+          onMouseEnter={() => handleMouseEnter(category.category_id)  }
+          onMouseLeave={handleMouseLeave}
+        >
+          {editingCategoryId === category.category_id ? (
+            <div>
+              <input
+                type="text"
+                value={newCategoryName}
+                onChange={(e) => setNewCategoryName(e.target.value)}
+                placeholder={category.category_name}
+              />
+              <button className='addChangeDeleteBtn' onClick={() => { onEditCategory(category.category_id, newCategoryName); setEditingCategoryId(null); }}>저장</button>
+              <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(null)}>취소</button>
+            </div>
+          ) : (
+            <div>
+              {category.category_name}
+              {hoveredCategoryId === category.category_id && (
+                <span className='addChangeDeleteBtn'>
+                {level !==2 &&(
+                  <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
+                )}                 
+                <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(category.category_id)}>수정</button>                  
+                <button className='addChangeDeleteBtn' onClick={() => onDeleteCategory(category.category_id)}>삭제</button>
+              </span>
+              )}
+
+              {/* 임시 */}
+              
+              
+            </div>
           )}
-        </li>
+
+          {addingSubcategoryId === category.category_id && (
+            <div>
+              <input
+                type="text"
+                value={newSubcategoryName}
+                onChange={(e) => setNewSubcategoryName(e.target.value)}
+                placeholder="하위 카테고리 이름"
+              />
+              <button className='addChangeDeleteBtn' onClick={() => { onAddSubcategory(category.category_id, newSubcategoryName); setAddingSubcategoryId(null); }}>추가</button>
+              <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(null)}>취소</button>
+            </div>
+          )}
+
+          {category.subcategories && category.subcategories.length > 0 && (
+            <CategoryList
+              level={level + 1}
+              categories={category.subcategories}
+              onAddSubcategory={onAddSubcategory}
+              onEditCategory={onEditCategory}
+              onDeleteCategory={onDeleteCategory}
+            />
+          )}
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 
