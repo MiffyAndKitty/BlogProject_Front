@@ -5,17 +5,15 @@ import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
-import { newPost, getPostDetail,category } from '../../types';
+import { newPost, getPostDetail,category,categories } from '../../types';
 import * as ENUMS from  '../../types/enum'
 import { fixPost } from '../../services/putService';
-import { getPost,getCategory } from '../../services/getService';
+import { getPost,getCategories } from '../../services/getService';
 import 'react-quill/dist/quill.snow.css';
 
 const FixPost: React.FC = () => {
   const location = useLocation();
   const postID = location.state?.postID;
-  // const postToEdit = location.state?.postID as getPostDetail;
-  // console.log(`postToEdit`,postToEdit);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState(true);
@@ -54,7 +52,20 @@ const FixPost: React.FC = () => {
       setImage(e.target.files[0]);
     }
   };
-
+  const renderCategoryMenu = (categories: categories[], level: number = 0) => {
+    return categories.map((categoryItem) => (
+      <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
+        <button
+          className="dropdown-item"
+          onClick={() => handleCategorySelect(categoryItem)}
+        >
+          {level !==0 &&(`- `+categoryItem.category_name)}
+          {level ===0 &&(categoryItem.category_name)}
+        </button>
+        {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+      </div>
+    ));
+  };
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(e.target.value);
   };
@@ -117,32 +128,48 @@ const FixPost: React.FC = () => {
    * 수정할 글 불러오기
    * @param data 
    */
-  const setPost = (post: getPostDetail, categories: category[]) => {
+  const setPost = (post: getPostDetail, categories: categories[]) => {
     setTitle(post.board_title);
     setContent(post.board_content);
     setStatus(post.board_public === 1);
     setTags(post.tags);
     const categoryId = post.category_id;
-    const categoryItem = categories.find(cat => cat.category_id === categoryId);
+    //const categoryItem = categories.find(cat => cat.category_id === categoryId);
+    const categoryItem = findCategoryById(categories, categoryId);
     console.log(`
       
       
-      categoryItem
+      categoryItem categories
       
       
-      `,categoryItem)
+      `,categoryItem,categories)
     if (categoryItem) {
       setCategory(categoryItem);
     }
-  }
+  };
+
+  // 주어진 카테고리 ID를 찾기 위한 재귀 함수
+  const findCategoryById = (categories: categories[], categoryId: string): category | undefined => {
+    for (const category of categories) {
+      if (category.category_id === categoryId) {
+        return category;
+      }
+      if (category.subcategories) {
+        const foundCategory = findCategoryById(category.subcategories, categoryId);
+        if (foundCategory) {
+          return foundCategory;
+        }
+      }
+    }
+    return undefined;
+  };
   useEffect(() => {
     const fetchCategoriesAndPost = async () => {
       try {
         console.log(`localStorage.getItem("nickname"): `, localStorage.getItem("nickname"))
-        const fetchedCategories: category[] = await getCategory(localStorage.getItem("nickname"));
+        const fetchedCategories: categories[] = await getCategories(localStorage.getItem("nickname"));
         setCategories(fetchedCategories);
         console.log(`setCategories:`, fetchedCategories);
-  
         const fetchedPosts = await getPost(postID);
         console.log(`fetchedPosts`, fetchedPosts.data);
         setPost(fetchedPosts.data, fetchedCategories); // 카테고리를 함께 전달
@@ -155,19 +182,19 @@ const FixPost: React.FC = () => {
   
     fetchCategoriesAndPost();
   }, [navigate]);
+
   useEffect(() => {
     console.log(`
       categories
     `, categories);
   }, [categories]);
+  
   useEffect(() => {
-
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
       }
     };
-   
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -195,14 +222,7 @@ const FixPost: React.FC = () => {
           </button>
           {dropdownOpen && (
             <div className="dropdown-menu">
-              {categories.map((categoryItem)=>(
-                <button
-                  key={categoryItem.category_id}
-                  className='dropdown-item'
-                  onClick={()=> handleCategorySelect(categoryItem)}>
-                    {categoryItem.category_name}
-                  </button>
-              ))}
+              {renderCategoryMenu(categories)}
             </div>
           )}
         </div>
