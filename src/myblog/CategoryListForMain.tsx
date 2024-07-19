@@ -1,6 +1,9 @@
 // src/components/CategoryList.tsx
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { categories as Categories } from '../types/index';
+import './CategoryListForMain.css'
+import up_arrow from '../img/up_arrow.png';
+import down_arrow from '../img/down_arrow.png';
 
 interface CategoryListProps {
   categories: Categories[];
@@ -17,20 +20,43 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
         : [...prev, categoryId]
     );
   };
-
+  useEffect(() => {
+    const getAllCategoryIds = (categories: Categories[]): string[] => {
+      let ids: string[] = [];
+      categories.forEach((category) => {
+        ids.push(category.category_id);
+        if (category.subcategories && category.subcategories.length>0) {
+          ids = ids.concat(getAllCategoryIds(category.subcategories));
+        }
+      });
+      return ids;
+    };
+    console.log(`
+      
+      
+      categories
+      
+      
+      
+      
+      `,categories)
+    setExpandedCategories(getAllCategoryIds(categories));
+  }, [categories]);
   return (
-    <ul>
+    <div>
       {categories.map((category) => (
-        <li key={category.category_id}>
+        <div className={`categories level2-${level}`} key={category.category_id}>
           <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }}>
-            {category.category_name} {expandedCategories.includes(category.category_id) ? '▲' : '▼'}
+            {level !==0 && ('- '+ category.category_name)} 
+            {level ===0 && (category.category_name)} 
+            { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='up_arrow' src={up_arrow}></img> : <img className='up_arrow' src={down_arrow}></img> )}
           </div>
-          {expandedCategories.includes(category.category_id) && category.subcategories.length > 0 && (
+          {expandedCategories.includes(category.category_id) && category.subcategories && category.subcategories.length>0&& (
             <CategoryListForMain categories={category.subcategories} level={level + 1} />
           )}
-        </li>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 };
 

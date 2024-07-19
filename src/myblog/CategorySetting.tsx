@@ -15,6 +15,15 @@ const CategorySettings = () => {
   const [parentCategoryId, setParentCategoryId] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
+
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
+  };
 
   const fetchCategories = async () => {
     try {
@@ -32,7 +41,28 @@ const CategorySettings = () => {
       setLoading(false);
     }
   };
-
+  useEffect(() => {
+    const getAllCategoryIds = (categories: Categories[]): string[] => {
+      let ids: string[] = [];
+      categories.forEach((category) => {
+        ids.push(category.category_id);
+        if (category.subcategories && category.subcategories.length>0) {
+          ids = ids.concat(getAllCategoryIds(category.subcategories));
+        }
+      });
+      return ids;
+    };
+    console.log(`
+      
+      
+      categories
+      
+      
+      
+      
+      `,categories)
+    setExpandedCategories(getAllCategoryIds(categories));
+  }, [categories]);
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -115,6 +145,8 @@ const CategorySettings = () => {
     <div>
       <CategoryList
         categories={categories}
+        expandedCategories={expandedCategories} 
+        toggleCategory={toggleCategory} 
         onAddSubcategory={addSubcategory}
         onEditCategory={editCategory}
         onDeleteCategory={removeCategory}

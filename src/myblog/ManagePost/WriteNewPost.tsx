@@ -7,7 +7,7 @@ import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
 import { newPost, category, categories } from '../../types';
 import { saveNewPost } from '../../services/postService';
-import { getCategory } from '../../services/getService';
+import { getCategories } from '../../services/getService';
 import * as ENUMS from  '../../types/enum'
 import 'react-quill/dist/quill.snow.css';
 
@@ -52,7 +52,8 @@ const WriteNewPost: React.FC = () => {
           className="dropdown-item"
           onClick={() => handleCategorySelect(categoryItem)}
         >
-          {categoryItem.category_name}
+          {level !==0 &&(`- `+categoryItem.category_name)}
+          {level ===0 &&(categoryItem.category_name)}
         </button>
         {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
       </div>
@@ -126,9 +127,9 @@ const WriteNewPost: React.FC = () => {
     };
     const fetchCategories = async () => {
       try {
-        const fetchedCategories: category[] = await getCategory(localStorage.getItem('nickname'));
+        const fetchedCategories: category[] = await getCategories(localStorage.getItem('nickname'));
         setCategories(fetchedCategories);
-        console.log(fetchedCategories);
+        console.log(`fetchedCategories`,fetchedCategories);
       } catch (err) {
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
