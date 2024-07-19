@@ -226,9 +226,10 @@ const FixPost: React.FC = () => {
             </div>
           )}
         </div>
-
+        
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formTitle">
+        <div className="title-and-privacy">
+          <Form.Group controlId="formTitle" className="title-input-group">
             <Form.Control
               type="text"
               placeholder="제목을 입력하세요"
@@ -237,7 +238,7 @@ const FixPost: React.FC = () => {
               className="form-control title-input"
             />
           </Form.Group>
-          <Form.Group controlId="formPrivate">
+          <Form.Group controlId="formPrivate" className="privacy-checkbox-group">
             <Form.Check
               type="checkbox"
               label="공개"
@@ -246,6 +247,7 @@ const FixPost: React.FC = () => {
               className="private"
             />
           </Form.Group>
+          </div>
           <div className="separator"></div> {/* 구분선 추가 */}
 
           <Form.Group controlId="formContent">

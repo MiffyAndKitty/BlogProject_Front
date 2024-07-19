@@ -170,7 +170,8 @@ const WriteNewPost: React.FC = () => {
         </div>
   
         <Form onSubmit={handleSubmit}>
-          <Form.Group controlId="formTitle">
+        <div className="title-and-privacy">
+          <Form.Group controlId="formTitle" className="title-input-group">
             <Form.Control
               type="text"
               placeholder="제목을 입력하세요"
@@ -179,6 +180,16 @@ const WriteNewPost: React.FC = () => {
               className="form-control title-input"
             />
           </Form.Group>
+          <Form.Group controlId="formPrivate" className="privacy-checkbox-group">
+            <Form.Check
+              type="checkbox"
+              label="공개"
+              checked={status}
+              onChange={handlePrivacyChange}
+              className="private"
+            />
+          </Form.Group>
+          </div>
   
           <div className="separator"></div> {/* 구분선 추가 */}
   
@@ -215,17 +226,7 @@ const WriteNewPost: React.FC = () => {
               className="form-control textarea"
             />
           </Form.Group>
-  
-          <Form.Group controlId="formPrivate">
-            <Form.Check
-              type="checkbox"
-              label="공개"
-              checked={status}
-              onChange={handlePrivacyChange}
-              className="private"
-            />
-          </Form.Group>
-  
+
           <Form.Group controlId="formTagInput">
             <Form.Control
               type="text"
