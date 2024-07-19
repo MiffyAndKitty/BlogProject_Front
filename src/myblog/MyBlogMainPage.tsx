@@ -17,9 +17,17 @@ import CategoryListForMain from './CategoryListForMain';
 const MyBlogMainPage: React.FC = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Categories[]>([]);
+  const [categoryID, setCategoryID] = useState<string>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  
+  const onCategoryClick = (categoryId: string) =>{
+    console.log('Clicked category ID:', categoryId);
+    setCategoryID(categoryId);
+
+  };
+  const fetchAllPost =()=>{
+    setCategoryID('');
+  }
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -50,8 +58,9 @@ const MyBlogMainPage: React.FC = () => {
       <Header pageType="logout"/>
       <main className="main-content">
         <Profile pageType="myBlog" />
-        <CategoryListForMain categories={categories}></CategoryListForMain>
-        <MainPosts></MainPosts>
+        <div onClick={fetchAllPost}>전체보기</div>
+        <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+        <MainPosts categoryID={categoryID}></MainPosts>
       </main>
       <Footer />
     </div>

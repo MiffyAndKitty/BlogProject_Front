@@ -12,13 +12,15 @@
 
 ul {
     list-style-type: none;
-    
+}   
+.all_level{
+  /* border: 1px solid #fea6d2; */
 }
-  
+
 .level2-0 {
-    
+    margin-left: 8px;
     padding: 5px;
-    font-size: 18px;
+    font-size: 15px;
     border: 1px solid #fea6d2;
     border-radius: 5px;
     margin: 5px 0;
@@ -28,7 +30,7 @@ ul {
   .level2-1 {
     margin-left: 10px;
     padding: 5px;
-    font-size: 15px;
+    font-size: 12px;
 
     margin: 5px 0;
 
@@ -37,7 +39,7 @@ ul {
   .level2-2 {
     margin-left: 20px;
     padding: 5px;
-    font-size: 12px;
+    font-size: 10px;
     margin: 5px 0;
   
   }

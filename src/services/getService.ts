@@ -38,15 +38,26 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 게시글 목록
  * @returns 
  */
-export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean): Promise<any> => {
+export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean, categoryID?:string): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/:${nickname}`;
+  const params: Record<string, any> = {};
+
   if(cursor){
-    url  = `/board/list/:${nickname}?cursor=${cursor}`;
+    params.cursor = cursor;
   }
   if(isBefore){
-    url  = `/board/list/:${nickname}?cursor=${cursor}&isBefore=${isBefore}`;
+    params.isBefore = isBefore;
   }
+  if(categoryID){
+    params['category-id'] = categoryID;
+  }
+
+  const queryString = new URLSearchParams(params).toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
+  
   const response = await apiClient.get<any>(url,{
     headers: {
       'Content-Type': 'application/json',

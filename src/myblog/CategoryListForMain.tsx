@@ -8,9 +8,11 @@ import down_arrow from '../img/down_arrow.png';
 interface CategoryListProps {
   categories: Categories[];
   level?: number;
+  onCategoryClick?: (categoryId: string) => void; // 클릭 핸들러 prop 추가
+
 }
 
-const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], level = 0 }) => {
+const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], level = 0 ,onCategoryClick}) => {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
 
   const toggleCategory = (categoryId: string) => {
@@ -19,6 +21,9 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
         ? prev.filter((id) => id !== categoryId)
         : [...prev, categoryId]
     );
+    if (onCategoryClick) {
+      onCategoryClick(categoryId); // 카테고리를 클릭할 때 클릭 핸들러 호출
+    }
   };
   useEffect(() => {
     const getAllCategoryIds = (categories: Categories[]): string[] => {
@@ -43,7 +48,8 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
     setExpandedCategories(getAllCategoryIds(categories));
   }, [categories]);
   return (
-    <div>
+    <>
+    <div className='all_level'>
       {categories.map((category) => (
         <div className={`categories level2-${level}`} key={category.category_id}>
           <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }}>
@@ -52,11 +58,12 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
             { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='up_arrow' src={up_arrow}></img> : <img className='up_arrow' src={down_arrow}></img> )}
           </div>
           {expandedCategories.includes(category.category_id) && category.subcategories && category.subcategories.length>0&& (
-            <CategoryListForMain categories={category.subcategories} level={level + 1} />
+            <CategoryListForMain categories={category.subcategories} level={level + 1} onCategoryClick={onCategoryClick}/>
           )}
         </div>
       ))}
     </div>
+    </>
   );
 };
 
