@@ -52,16 +52,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
   };
     // 주어진 카테고리 ID를 찾기 위한 재귀 함수
    const findCategoryById = (categories: TYPES.categories[], categoryId: string) => {
-    console.log(`
-      
-      
-      
-      findCategoryById 
-      categories
-      
-      
-      
-      `,categories)
+
     for (const category of categories) {
       if (category.category_id === categoryId) {
         return category.category_name ;
@@ -100,7 +91,9 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       setNickname(nickname);
       const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID);
       setIsWriter(fetchedPosts.data.isWriter);
-      console.log(`fetchedPosts`,fetchedPosts.data.data);
+      console.log(`
+        ====fetchedPosts====
+        `,fetchedPosts.data.data);
       setPosts(fetchedPosts.data.data);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
       const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
@@ -167,10 +160,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
                     </div>
                   </div>
                   <div className="post-content">{post.board_content}</div>
-                  <div className="post-actions">
-                    <button className="edit-btn" onClick={() => fixPost(post.board_id)}>수정</button>
-                    <button className="delete-btn">삭제</button>
-                  </div>
+
                 </div>
               ))}
             </div>

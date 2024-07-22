@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useRef } from 'react';
 import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
 import './GetPost.css';
@@ -20,7 +21,9 @@ const GetPost: React.FC = () => {
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
   const[ managementType, setManagementType] = useState<'post'| 'category'>('post');
-
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -64,16 +67,7 @@ const GetPost: React.FC = () => {
   };
    // 주어진 카테고리 ID를 찾기 위한 재귀 함수
    const findCategoryById = (categories: TYPES.categories[], categoryId: string) => {
-    console.log(`
-      
-      
-      
-      findCategoryById 
-      categories
-      
-      
-      
-      `,categories)
+
     for (const category of categories) {
       if (category.category_id === categoryId) {
         return category.category_name ;
@@ -114,7 +108,9 @@ const GetPost: React.FC = () => {
       setNickname(nickname);
       const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID);
       setIsWriter(fetchedPosts.data.isWriter);
-      console.log(`fetchedPosts`,fetchedPosts.data.data);
+      console.log(`GetPost 
+        ----fetchedPosts----
+        `,fetchedPosts.data.data);
       setPosts(fetchedPosts.data.data);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
       const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
@@ -131,6 +127,33 @@ const GetPost: React.FC = () => {
       setLoading(false);
     }
   };
+  const handleCategorySelect = (categoryItem: TYPES.category) => {
+    setCategory(categoryItem);
+    setDropdownOpen(false); // 드롭다운을 닫음
+  };
+  const renderCategoryMenu = (categories: TYPES.categories[], level: number = 0) => {
+    return (
+      <>
+        {level === 0 && (
+          <div key="none-category" style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect({ category_name: '선택 없음', category_id: '' })}>
+              선택 없음
+            </button>
+          </div>
+        )}
+        {categories.map((categoryItem) => (
+          <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect(categoryItem)}>
+              {level !== 0 && (`- ` + categoryItem.category_name)}
+              {level === 0 && (categoryItem.category_name)}
+            </button>
+            {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+          </div>
+        ))}
+      </>
+    );
+  };
+  
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -139,54 +162,28 @@ const GetPost: React.FC = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // const fetchPosts = async () => {
-    //   try {
-    //     const nickname = localStorage.getItem('nickname');
-    //     setNickname(nickname);
-    //     console.log(`nickname`, nickname);
-    //     const fetchedPosts = await getPosts(nickname);
-    //     setIsWriter(fetchedPosts.data.isWriter);
-    //     console.log(`fetchedPosts`, fetchedPosts.data.data);
-    //     const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
-    //     setPosts(fetchedPosts.data.data);
-    //     setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-    //     setCategories(fetchedCategories);
-        
-
-    //   } catch (err) {
-    //     setError('게시물을 불러오는 중에 오류가 발생했습니다.');
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-
     fetchPosts();
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+    
   }, []);
 
   useEffect(() => {
-    // const fetchPosts = async (cursor: string) => {
-    //   try {
-    //     const nickname = localStorage.getItem('nickname');
-    //     setNickname(nickname);
-    //     const fetchedPosts = await getPosts(nickname, cursor, isBefore);
-    //     setIsWriter(fetchedPosts.data.isWriter);
-    //     setPosts(fetchedPosts.data.data);
-    //     setTotalPages(fetchedPosts.data.total.totalPageCount);
-    //     if (currentPage === 1) {
-    //       setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-    //     } else if (currentPage === totalPages) {
-    //       setCursor(fetchedPosts.data.data[0].board_id);
-    //     }
-    //   } catch (err) {
-    //     setError('게시물을 불러오는 중에 오류가 발생했습니다.');
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
 
-    fetchPosts(cursor);
+    fetchPosts(cursor,category.category_id);
   }, [currentPage]);
 
+  useEffect(() => {
+    setCursor('');
+    fetchPosts(undefined,category.category_id);
+  }, [category]);
   return (
     <>
       <Header pageType="logout" />
@@ -218,6 +215,16 @@ const GetPost: React.FC = () => {
               managementType === 'post' &&(
                 <>
                 <h1 className="title_manage">글 관리</h1>
+                <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
+                  <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                    {category.category_name}
+                  </button>
+                  {dropdownOpen && (
+                    <div className="dropdown-menu">
+                      {renderCategoryMenu(categories)}
+                    </div>
+                  )}
+                </div>
                 {!loading && !error && posts.length > 0 && (
                   <div className="post-list">
                     {posts.map((post) => (

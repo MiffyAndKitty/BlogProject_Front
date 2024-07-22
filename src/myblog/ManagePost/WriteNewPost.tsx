@@ -18,7 +18,7 @@ const WriteNewPost: React.FC = () => {
   const [status, setStatus] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [category, setCategory] = useState<category>({category_name:'카테고리 설정', category_id:"1"});
+  const [category, setCategory] = useState<category>({category_name:'카테고리 설정', category_id:""});
   const [categories,setCategories]  = useState([]);
   const [isComposing, setIsComposing] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
@@ -46,18 +46,26 @@ const WriteNewPost: React.FC = () => {
     setDropdownOpen(false); // 드롭다운을 닫음
   };
   const renderCategoryMenu = (categories: categories[], level: number = 0) => {
-    return categories.map((categoryItem) => (
-      <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
-        <button
-          className="dropdown-item"
-          onClick={() => handleCategorySelect(categoryItem)}
-        >
-          {level !==0 &&(`- `+categoryItem.category_name)}
-          {level ===0 &&(categoryItem.category_name)}
-        </button>
-        {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
-      </div>
-    ));
+    return (
+      <>
+        {level === 0 && (
+          <div key="none-category" style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect({ category_name: '선택 없음', category_id: '' })}>
+              선택 없음
+            </button>
+          </div>
+        )}
+        {categories.map((categoryItem) => (
+          <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect(categoryItem)}>
+              {level !== 0 && (`- ` + categoryItem.category_name)}
+              {level === 0 && (categoryItem.category_name)}
+            </button>
+            {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+          </div>
+        ))}
+      </>
+    );
   };
 
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,8 +75,11 @@ const WriteNewPost: React.FC = () => {
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tagInput.trim() && !isComposing) {
       e.preventDefault();
-      if (!tags.includes(tagInput.trim())) {
+      if (!tags.includes(tagInput.trim())&& tags.length < 10) {
         setTags([...tags, tagInput.trim()]);
+      }
+      if(tags.length===10){
+        alert('최대 태그 수 10개를 넘었습니다!');
       }
       setTagInput('');
     }
@@ -158,7 +169,7 @@ const WriteNewPost: React.FC = () => {
     <div className="App">
       <Header pageType="logout" />
       <main className="write-new-post">
-        <div className="dropdown" ref={dropdownRef}>
+        <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
             {category.category_name}
           </button>

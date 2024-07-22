@@ -36,15 +36,7 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
       });
       return ids;
     };
-    console.log(`
-      
-      
-      categories
-      
-      
-      
-      
-      `,categories)
+
     setExpandedCategories(getAllCategoryIds(categories));
   }, [categories]);
   return (
