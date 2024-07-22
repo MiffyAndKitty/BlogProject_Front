@@ -79,26 +79,22 @@ const SignUp: React.FC = () => {
   useEffect(() => {
     const validateFields = async () => {
       const newErrors = {
-        email: validateEmail(email) ? '' : '유효한 이메일 주소를 입력하세요.',
-        password: validatePassword(password) ? '' : '비밀번호는 8자 이상, 소문자, 숫자, 특수문자를 포함해야 합니다.',
-        password2: password === password2 ? '' : '비밀번호가 일치하지 않습니다.',
-        nickname: validateNickname(nickname) ? '' : '닉네임을 입력하세요.',
+        email: touched.email && !validateEmail(email) ? '유효한 이메일 주소를 입력하세요.' : '',
+        password: touched.password && !validatePassword(password) ? '비밀번호는 8자 이상, 소문자, 숫자, 특수문자를 포함해야 합니다.' : '',
+        password2: touched.password2 && password !== password2 ? '비밀번호가 일치하지 않습니다.' : '',
+        nickname: touched.nickname && !validateNickname(nickname) ? '닉네임을 입력하세요.' : '',
       };
 
-      if (validateEmail(email)) {
+      if (touched.email && validateEmail(email)) {
         const isEmailDuplicate = await checkDuplication('user_email', email);
-        if (isEmailDuplicate) {
-          newErrors.email = '사용 가능한 이메일입니다.';
-        }else{
+        if (!isEmailDuplicate) {
           newErrors.email = '이미 사용 중인 이메일입니다.';
         }
       }
-
-      if (validateNickname(nickname)) {
+  
+      if (touched.nickname && validateNickname(nickname)) {
         const isNicknameDuplicate = await checkDuplication('user_nickname', nickname);
-        if (isNicknameDuplicate) {
-          newErrors.nickname = '사용 가능한 닉네임입니다.';
-        }else{
+        if (!isNicknameDuplicate) {
           newErrors.nickname = '이미 사용 중인 닉네임입니다.';
         }
       }
@@ -107,7 +103,7 @@ const SignUp: React.FC = () => {
     };
 
     validateFields();
-  }, [email, password, password2, nickname]);
+  }, [email, password, password2, nickname,touched]);
 
   const handleSignUp = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // 버튼의 기본 동작 방지
@@ -123,20 +119,7 @@ const SignUp: React.FC = () => {
       nickname: nickname,
     };
     const isSetSignUpResult = await checkSetSignUpResult();
-    // if (isSetSignUpResult === 'true') {
-    //   alert("회원가입에 성공했습니다!!");
-    // } else if (isSetSignUpResult === 'false') {
-    //   alert("회원가입에 실패했습니다!!");
-    // }
-    // try {
-    //   const postData = await checkSetSignUpResult(newPost);
-    //   setSignUpResult(postData.result);  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
-     
-    // } catch (error) {
-    //   console.error("회원가입 오류:", error);
-    //   setSignUpResult('false'); // 오류 발생 시 결과를 'false'로 설정
-    //   alert("회원가입 중 오류가 발생했습니다.");
-    // }
+
   };
 
   useEffect(() => {
@@ -158,10 +141,10 @@ const SignUp: React.FC = () => {
     <div className="App">
       <Header pageType="login"/>
       <main className="main">
-        <div className='signup'>
-          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
-          <h2>회원가입</h2>
-          <Form>
+      
+        <div className='signup2'>
+          <h1 style={{color:"#A9A9A9"}}>회원가입</h1>
+          <Form className='form'>
           <Form.Group className="inputFieldCssForSignUp mb-3">
             <Form.Control 
               type="email" 
@@ -172,7 +155,7 @@ const SignUp: React.FC = () => {
               isInvalid={touched.email && !!errors.email}
               className="transparent-input"
             />
-            <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.email}</Form.Control.Feedback>
           </Form.Group>
             
           <Form.Group className="inputFieldCssForSignUp mb-3">
@@ -185,7 +168,7 @@ const SignUp: React.FC = () => {
               isInvalid={touched.password && !!errors.password}
               className="transparent-input"
             />
-            <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.password}</Form.Control.Feedback>
           </Form.Group>
             
           <Form.Group className="inputFieldCssForSignUp mb-3">
@@ -198,7 +181,7 @@ const SignUp: React.FC = () => {
               isInvalid={touched.password2 && !!errors.password2}
               className="transparent-input"
             />
-            <Form.Control.Feedback type="invalid">{errors.password2}</Form.Control.Feedback>
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.password2}</Form.Control.Feedback>
           </Form.Group>
             
           <Form.Group className="inputFieldCssForSignUp mb-3">
@@ -210,12 +193,13 @@ const SignUp: React.FC = () => {
               isInvalid={touched.nickname && !!errors.nickname}
               className="transparent-input"
             />
-            <Form.Control.Feedback type="invalid">{errors.nickname}</Form.Control.Feedback>
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
           </Form.Group>
 
           </Form>
-          <Button variant="primary" type="button" onClick={handleSignUp}>회원가입</Button>
+          <Button variant="primary" type="button" onClick={handleSignUp} className="loginButton">회원가입</Button>
         </div>
+        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_localsignup" />
       </main>
       <Footer />
     </div>

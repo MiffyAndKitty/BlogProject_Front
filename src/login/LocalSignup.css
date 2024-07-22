@@ -1,46 +1,94 @@
 .main {
-    display: flex;
-    justify-content: center; /* 수평 방향으로 중앙에 정렬 */
-    align-items: center; /* 수직 방향으로 중앙에 정렬 */
-    min-height: 80vh; /* 콘텐츠가 중앙에 오도록 충분한 높이를 설정 */
-  }
-  
-.signup {
-    width: 100%;
-    max-width: 400px; /* 폼의 최대 너비 설정 */
-    padding: 2rem; /* 내부 여백 설정 */
-    border-radius: 8px; /* 모서리를 둥글게 (선택 사항) */
-    border: 2px solid #FF88D7; /* 테두리 추가 */
-    text-align: center; /* 텍스트와 내부 요소 중앙 정렬 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.form-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh; /* 콘텐츠가 중앙에 오도록 충분한 높이를 설정 */
+}
+
+.signup2 {
+  width: 100%;
+  background-color: white;
+  max-width: 500px;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 2px solid #FF88D7;
+  text-align: center;
+  position: relative;
+  z-index: 1; /* 폼을 이미지 위로 가져오기 위해 z-index 추가 */
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputFieldCssForSignUp {
+  margin-bottom: 10px;
+  background-color: #FFF7FD;
+  color: #000;
+  border: none;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 30px;
+  padding: 10px 20px;
+  font-size: 16px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.transparent-input {
+  background-color: transparent;
+  border: 0px;
+  color: #000;
+  width: 100%;
+  text-align: center;
+}
+
+.mainCharacter_localsignup {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  margin-left: -200px; /* 이미지의 왼쪽 몸이 약간 가려지도록 음수 마진 추가 */
+  z-index: 0; /* 이미지가 폼 아래로 배치되도록 z-index 설정 */
+}
+
+/* 화면 크기가 768px 이하일 때 스타일 조정 */
+@media (max-width: 768px) {
+  .form-container {
+    flex-direction: column; /* 화면이 작아질 때 수직 방향 정렬 */
   }
 
-  .signup form {
-    display: flex;
-    flex-direction: column;
+  .signup2 {
+    padding: 1rem;
   }
-  
-  .signup button {
-    margin: 0 auto; /* 버튼을 중앙에 정렬 */
-  }
+
   .inputFieldCssForSignUp {
-    margin-bottom: 50px;
-    background-color: #FFF7FD;
-    color: #000;
-    border: none;
-    width: 50%;
-    border-radius: 30px;
-    padding: 10px 60px;
-    margin-bottom: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+}
+
+/* 화면 크기가 480px 이하일 때 스타일 조정 */
+@media (max-width: 480px) {
+  .signup2 {
+    padding: 0.5rem;
   }
 
-  .transparent-input {
-    background-color: transparent;
-    border: 0px;
-    color: #000; /* 텍스트 색상 */
-    width: 100%;
-    text-align: center; /* 입력 텍스트를 중앙 정렬 */
+  .inputFieldCssForSignUp {
+    padding: 8px 10px;
+    font-size: 12px;
   }
+
+  .mainCharacter_localsignup {
+    max-width: 200px;
+  }
+}

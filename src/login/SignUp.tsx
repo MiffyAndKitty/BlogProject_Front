@@ -8,7 +8,7 @@ import { setLogin } from '../services/postService';
 import { getGoogleLogin } from '../services/getService';  // 추가된 부분
 import { loginData } from '../types';
 import mainCharacterImg from '../img/main_character.png';
-import './Login.css';
+import './SignUp.css';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -28,19 +28,19 @@ const Login: React.FC = () => {
     <div className="App">
       <Header pageType="signup"/>
       <main className="main">
-        <div className='signup'>
-            <div>
-              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
-            </div>
+        <div className='content-wrapper'>
+        <div className='signup1'>
             <div>
               <button className="login-button" style={{ marginBottom: '10px' }} onClick={goToLocalLogin}>계정으로 회원가입</button>
             </div>
             <div>
-            <button className="google-login-button" onClick={goToGoogleLogin}>
-            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" className="google-logo" />
-            Google 계정으로 회원가입
-          </button>
+              <button className="google-login-button" onClick={goToGoogleLogin}>
+                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google logo" className="google-logo" />
+                Google 계정으로 회원가입
+              </button>
             </div>
+        </div>
+        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_signup" />
         </div>
       </main>
       <Footer/>

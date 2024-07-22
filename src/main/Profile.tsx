@@ -85,7 +85,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
       
       {pageType === 'signup' && (
         <>
-          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile" />
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin}>로그인</button>
           <div className="logins_profile">
             <button onClick={goToFindID}>아이디 찾기</button>
