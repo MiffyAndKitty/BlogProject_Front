@@ -23,7 +23,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
-    if(isWriter === true) navigate("/fixpost", { state: { postID } });
+    if(isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
     else alert("수정권한이 없습니다!");
     
   };
@@ -34,20 +34,22 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
    * @returns 변환된 날짜 문자열
    */
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
+    let [datePart, timePart] = dateString.split('T');
+    let [year, month, day] = datePart.split('-');
+    let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
   
-    const year = date.getFullYear().toString().slice(2); // 마지막 두 자리를 사용
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월을 2자리로 변환
-    const day = date.getDate().toString().padStart(2, '0'); // 일을 2자리로 변환
+    // 초에서 소수점 제거
+    seconds = seconds.split('.')[0];
   
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0'); // 분을 2자리로 변환
-    const seconds = date.getSeconds().toString().padStart(2, '0'); // 초를 2자리로 변환
+    // 시간을 숫자로 변환
+    let hourInt = parseInt(hours);
+    let ampm = hourInt >= 12 ? '오후' : '오전';
   
-    const ampm = hours >= 12 ? '오후' : '오전';
-    hours = hours % 12;
-    hours = hours ? hours : 12; // 0을 12로 변환
-    const strHours = hours.toString().padStart(2, '0');
+    // 12시간제로 변환
+    hourInt = hourInt % 12;
+    hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
+  
+    const strHours = hourInt.toString().padStart(2, '0');
   
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
@@ -129,6 +131,10 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
     const goToMyBlog = () => {
       navigate(`/blogmain`);
     };
+
+    const goToDetailPost = ()=>{
+      
+    }
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
    
@@ -146,7 +152,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
   },[categoryID]);
 
   useEffect(() => {
-    fetchPosts(cursor); // 현재 페이지에 해당하는 게시물 불러오기
+    fetchPosts(cursor,categoryID); // 현재 페이지에 해당하는 게시물 불러오기
   }, [currentPage]);
 
   return (
@@ -156,7 +162,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       <div className="main-container">
         <div className="container">
           {!loading && !error && posts.length > 0 && (
-            <div className="post-list">
+            <div className="post-list" onClick={goToDetailPost}>
               {posts.map(post => (
                 <div className="post-card" key={post.board_id}>
                   <div className="post-header">

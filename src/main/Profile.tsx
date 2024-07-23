@@ -33,6 +33,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
   const [error, setError] = useState(null);
+  const [nickname, setNickname] = useState<string>();
 
   const goToSignUp = () => {
     navigate(`/signup`);
@@ -62,21 +63,29 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
    * 새 글 작성하기로 이동하기 위한 메서드
    */
   const goToWritePost = () => {
-    navigate(`/writenewpost`);
+    navigate(`/writenewpost/${nickname}`);
   };
 
   /**
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
   const goToMyBlog = () => {
-    navigate(`/blogmain`);
+    navigate(`/blogmain/${nickname}`);
   };
 
   const goToManagePosts = ()=>{
-    navigate(`/getpost`);
+    navigate(`/getpost/${nickname}`);
   }
 
   useEffect(()=>{
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     setUser(localStorage.getItem("nickname"));
   },[]);
 

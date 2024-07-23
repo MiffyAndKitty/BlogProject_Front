@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LocalLogin from './login/LocalLogin';
 import Dashboard from './main/Dashboard';
 import SignUp from'./login/SignUp';
@@ -21,6 +21,18 @@ import {
 } from "react-router-dom";
 
 function App() {
+  const [nickname, setNickname] = useState<string>();
+
+  useEffect(() => {
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   return (
     <Router>
     <Routes>
@@ -32,12 +44,12 @@ function App() {
       <Route path={`/google/signup`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
-      <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />
-      <Route path={`/blogmain`} element={<MyBlogMainPage></MyBlogMainPage>} />
-      <Route path={`/writenewpost`} element={<WriteNewPost></WriteNewPost>} />
-      <Route path={`/getpost`} element={<GetPost></GetPost>} />
-      <Route path={`/fixpost`} element={<FixPost></FixPost>} />
-      <Route path={`/categorySetting`} element={<CategorySettings></CategorySettings>} />
+      <Route path={`/dashboard/${nickname}`} element={<Dashboard></Dashboard>} />
+      <Route path={`/blogmain/${nickname}`} element={<MyBlogMainPage></MyBlogMainPage>} />
+      <Route path={`/writenewpost/${nickname}`} element={<WriteNewPost></WriteNewPost>} />
+      <Route path={`/getpost/${nickname}`} element={<GetPost></GetPost>} />
+      <Route path={`/fixpost/${nickname}`} element={<FixPost></FixPost>} />
+      <Route path={`/categorySetting/${nickname}`} element={<CategorySettings></CategorySettings>} />
     </Routes>
     </Router>
   );

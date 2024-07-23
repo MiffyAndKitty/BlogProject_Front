@@ -12,6 +12,7 @@ import * as ENUMS from  '../../types/enum'
 import 'react-quill/dist/quill.snow.css';
 
 const WriteNewPost: React.FC = () => {
+  const [nickname, setNickname] = useState<string>();
   const quillRef = useRef<ReactQuill>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -131,6 +132,14 @@ const WriteNewPost: React.FC = () => {
 
   
   useEffect(() => {
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
@@ -159,7 +168,7 @@ const WriteNewPost: React.FC = () => {
     if (newPostResult === true) {
       alert("글 저장에 성공했습니다!!");
       
-      navigate(`/getpost`);
+      navigate(`/getpost/${nickname}`);
       
     } else if (newPostResult === false) {
       alert("글 저장에 실패했습니다!!");

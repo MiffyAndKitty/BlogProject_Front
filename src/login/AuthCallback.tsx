@@ -26,7 +26,7 @@ const AuthCallback: React.FC = () => {
       }
 
       // 대시보드로 리다이렉션
-      navigate('/dashboard');
+      navigate(`/dashboard/${nickname}`);
     } else if (token === 'undefined') {
       navigate('/google/signup');
     } else if (error) {

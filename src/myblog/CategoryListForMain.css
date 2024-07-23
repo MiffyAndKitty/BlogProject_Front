@@ -1,11 +1,15 @@
-.up_arrow{
-    width: 15px;
-    height: 15px;
+.category-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.down_arrow{
-    width: 15px;
-    height: 15px;
+
+.arrow {
+  width: 15px;
+  height: 15px;
 }
+
+
 .categories{
     color: #555555;
 }

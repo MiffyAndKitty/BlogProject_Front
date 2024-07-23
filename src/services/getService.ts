@@ -47,7 +47,7 @@ export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolea
     params.cursor = cursor;
   }
   if(isBefore){
-    params.isBefore = isBefore;
+    params['is-before'] = isBefore;
   }
   if(categoryID){
     params['category-id'] = categoryID;

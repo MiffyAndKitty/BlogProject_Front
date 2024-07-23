@@ -32,28 +32,31 @@ const GetPost: React.FC = () => {
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
-    if (isWriter === true) navigate('/fixpost', { state: { postID } });
+    if (isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
     else alert('수정권한이 없습니다!');
   };
 
   const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-
-    const year = date.getFullYear().toString().slice(2);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-
-    let hours = date.getHours();
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
-
-    const ampm = hours >= 12 ? '오후' : '오전';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    const strHours = hours.toString().padStart(2, '0');
-
+    let [datePart, timePart] = dateString.split('T');
+    let [year, month, day] = datePart.split('-');
+    let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+  
+    // 초에서 소수점 제거
+    seconds = seconds.split('.')[0];
+  
+    // 시간을 숫자로 변환
+    let hourInt = parseInt(hours);
+    let ampm = hourInt >= 12 ? '오후' : '오전';
+  
+    // 12시간제로 변환
+    hourInt = hourInt % 12;
+    hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
+  
+    const strHours = hourInt.toString().padStart(2, '0');
+  
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
+  
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -91,10 +94,10 @@ const GetPost: React.FC = () => {
    * 새 글 작성하기로 이동하기 위한 메서드
    */
    const goToWritePost = () => {
-    navigate(`/writenewpost`);
+    navigate(`/writenewpost/${nickname}`);
   };
   const goToMyBlog = () => {
-    navigate(`/blogmain`);
+    navigate(`/blogmain/${nickname}`);
   };
 
   const goToPostManagement = () => {
@@ -137,11 +140,18 @@ const GetPost: React.FC = () => {
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
+      console.log(`
+        ==================
+        fetchPosts Info 
+        nickname:${nickname}
+        cursor:${cursor}
+        isBefore:${isBefore}
+        categoryID:${categoryID}
+        +++++++++++++++++++
+        `)
       const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID);
       setIsWriter(fetchedPosts.data.isWriter);
-      console.log(`GetPost 
-        ----fetchedPosts----
-        `,fetchedPosts.data.data);
+      
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,
         board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
@@ -156,6 +166,16 @@ const GetPost: React.FC = () => {
       } else if (currentPage === totalPages) {
         setCursor(fetchedPosts.data.data[0].board_id);
       }
+
+
+      console.log(`
+
+
+        GetPost 
+        ----fetchedPosts---- 
+
+
+        `,fetchedPosts.data.data, posts);
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
@@ -195,7 +215,16 @@ const GetPost: React.FC = () => {
       </>
     );
   };
-  
+  useEffect(()=>{
+    console.log(`
+
+
+      GetPost 
+      ----posts---- 
+
+
+      `,posts);
+  },[posts]); 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -218,12 +247,30 @@ const GetPost: React.FC = () => {
   }, []);
 
   useEffect(() => {
-
+    console.log(`
+      
+      
+      
+      페이지가 변경되면서 글 다시 불러오기
+      
+      
+      
+      ${cursor} ${category.category_id}`)
     fetchPosts(cursor,category.category_id);
   }, [currentPage]);
 
   useEffect(() => {
     setCursor('');
+    setCurrentPage(1);
+    console.log(`
+      
+      
+      
+      카테고리가 변경되면서 글 다시 불러오기
+      
+      
+      
+      ${cursor} ${category.category_id}`)
     fetchPosts(undefined,category.category_id);
   }, [category]);
   return (

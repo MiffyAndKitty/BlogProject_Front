@@ -44,10 +44,10 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
     <div className='all_level'>
       {categories.map((category) => (
         <div className={`categories level2-${level}`} key={category.category_id}>
-          <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }}>
+          <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }} className="category-item">
             {level !==0 && ('- '+ category.category_name)} 
             {level ===0 && (category.category_name)} 
-            { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='up_arrow' src={up_arrow}></img> : <img className='up_arrow' src={down_arrow}></img> )}
+            { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='arrow' src={up_arrow}></img> : <img className='arrow' src={down_arrow}></img> )}
           </div>
           {expandedCategories.includes(category.category_id) && category.subcategories && category.subcategories.length>0&& (
             <CategoryListForMain categories={category.subcategories} level={level + 1} onCategoryClick={onCategoryClick}/>

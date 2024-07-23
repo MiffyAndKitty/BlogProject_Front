@@ -12,6 +12,7 @@ import { getPost,getCategories } from '../../services/getService';
 import 'react-quill/dist/quill.snow.css';
 
 const FixPost: React.FC = () => {
+  const [nickname, setNickname] = useState<string>();
   const location = useLocation();
   const postID = location.state?.postID;
   const [title, setTitle] = useState('');
@@ -201,6 +202,14 @@ const FixPost: React.FC = () => {
   }, [categories]);
   
   useEffect(() => {
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
@@ -216,7 +225,7 @@ const FixPost: React.FC = () => {
     if (newPostResult === true) {
       alert("글 저장에 성공했습니다!!");
       
-      navigate(`/getpost`);
+      navigate(`/getpost/${nickname}`);
       
     } else if (newPostResult === false) {
       alert("글 저장에 실패했습니다!!");

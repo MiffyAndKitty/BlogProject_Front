@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState,useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import './Header.css';
@@ -8,6 +8,17 @@ interface ProfileProps {
   pageType: 'login' | 'signup'|'logout' ;
 }
 const Header: React.FC<ProfileProps> = ({pageType}) => {
+  const [nickname, setNickname] = useState<string>();
+  useEffect(() => {
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   return (
     <header className="header">
       
@@ -33,7 +44,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
       {pageType === 'logout' &&(
         <>
           <div className="header__logo">
-            <Link to="/dashboard">
+            <Link to={`/dashboard/${nickname}`}>
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>

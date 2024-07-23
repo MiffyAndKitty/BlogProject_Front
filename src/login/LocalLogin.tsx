@@ -11,6 +11,7 @@ import './LocalLogin.css';
 
 const LocalLogin: React.FC = () => {
   const navigate = useNavigate();
+  const [nickname, setNickname] = useState<string>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginResult, setLoginResult] = useState('');
@@ -76,6 +77,16 @@ const LocalLogin: React.FC = () => {
 
     const isSetSignUpResult = await checkSetLoginResult();
   };
+  useEffect(() => {
+    try {
+      const storedNickname = localStorage.getItem('nickname');
+      if (storedNickname) {
+        setNickname(storedNickname);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
   useEffect(()=>{
     const newErrors = {
       email: touched.email && !validateEmail(email) ? '유효한 이메일 주소를 입력하세요.' : '',
@@ -88,7 +99,7 @@ const LocalLogin: React.FC = () => {
   useEffect(() => {
     if (loginResult === 'true') {
       alert("로그인에 성공했습니다!!");
-      navigate(`/dashboard`);
+      navigate(`/dashboard/${nickname}`);
     } else if (loginResult === 'false') {
       alert("로그인에 실패했습니다!!");
     }
