@@ -5,9 +5,12 @@ import Footer from '../../structure/Footer';
 import './GetPost.css';
 import * as TYPES from '../../types/index';
 import mainCharacterImg from '../../img/main_character.png';
+import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { getPosts,getCategories } from '../../services/getService';
+import { deletePost } from '../../services/deleteService';
 import { useNavigate } from 'react-router-dom';
 import CategorySettings from '../CategorySetting';
+import ConfirmModal from '../ConfirmModal'; // 경로를 맞춰주세요
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -24,6 +27,8 @@ const GetPost: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -99,6 +104,32 @@ const GetPost: React.FC = () => {
   const goToCategoryManagement = () => {
     setManagementType ( 'category');
   };
+  const removePost = async (postId: string) => {
+    try {
+
+      await deletePost(postId);
+      fetchPosts();
+    } catch (err) {
+      console.error(err);
+      alert('글을 삭제하는 중에 오류가 발생했습니다.');
+
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleDelete = (postId: string) => {
+    setSelectedPostId(postId);
+    setIsModalOpen(true);
+  };
+  const confirmDelete = () => {
+    if (selectedPostId) {
+      // 실제 삭제 로직을 여기에 추가
+      removePost(selectedPostId);
+      console.log(`Post ${selectedPostId} deleted`);
+    }
+    setIsModalOpen(false);
+    setSelectedPostId(null);
+  };
   /**
    * 게시글 불러오기
    */
@@ -111,7 +142,11 @@ const GetPost: React.FC = () => {
       console.log(`GetPost 
         ----fetchedPosts----
         `,fetchedPosts.data.data);
-      setPosts(fetchedPosts.data.data);
+      const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
+        ...post,
+        board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
+      }));
+      setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
       const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
       setCategories(fetchedCategories);
@@ -126,6 +161,13 @@ const GetPost: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  };
+  // 불필요한 태그 제거 함수
+  const removeUnwantedTags = (html: string): string => {
+    const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+    const div = document.createElement('div');
+    div.innerHTML = cleanHtml;
+    return div.textContent || div.innerText || '';
   };
   const handleCategorySelect = (categoryItem: TYPES.category) => {
     setCategory(categoryItem);
@@ -191,7 +233,7 @@ const GetPost: React.FC = () => {
         <div className="main-container">
           <div className="profile_post_manage">
             <div>
-              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile" />
+              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_getpost" />
               <button className="login-button_profile" onClick={goToMyBlog}>
                 내 블로그 가기
               </button>
@@ -215,12 +257,13 @@ const GetPost: React.FC = () => {
               managementType === 'post' &&(
                 <>
                 <h1 className="title_manage">글 관리</h1>
-                <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
-                  <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <div className='post-manage'>
+                <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
+                  <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
                     {category.category_name}
                   </button>
                   {dropdownOpen && (
-                    <div className="dropdown-menu">
+                    <div className="dropdown-getpost-menu">
                       {renderCategoryMenu(categories)}
                     </div>
                   )}
@@ -246,7 +289,13 @@ const GetPost: React.FC = () => {
                           <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
                             수정
                           </button>
-                          <button className="delete-btn">삭제</button>
+                          <button className="delete-btn" onClick={() => handleDelete(post.board_id)}>삭제</button>
+                          <ConfirmModal
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            onConfirm={confirmDelete}
+                            message="이 게시물을 삭제하시겠습니까?"
+                          />
                         </div>
                       </div>
                     ))}
@@ -263,6 +312,7 @@ const GetPost: React.FC = () => {
                     다음
                   </button>
                 </div>
+                </div>
                 </>
               )
             }
@@ -270,8 +320,10 @@ const GetPost: React.FC = () => {
             {
               managementType === 'category' &&(
                 <>
+                <div className='post-manage'>
                 <h1 className="title_manage">카테고리 관리</h1>
                 <CategorySettings></CategorySettings>
+                </div>
                 </>
               )
             }

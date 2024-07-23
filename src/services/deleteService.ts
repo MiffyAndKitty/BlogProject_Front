@@ -24,3 +24,17 @@ export const deleteCategory = async (categoryId:string): Promise<any> => {
   console.log(categoryId,response.data)
   return response.data;
 };
+
+export const deletePost = async (boardId:string): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.delete<any>(`/board`, {
+    headers:{
+      'Authorization': `${token}`,
+    },
+    data:{
+      boardId
+    }
+  });
+  console.log(boardId,response.data)
+  return response.data;
+};

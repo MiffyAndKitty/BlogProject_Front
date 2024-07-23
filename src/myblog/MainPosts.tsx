@@ -3,6 +3,7 @@ import './MainPosts.css';
 import * as TYPES from '../types/index';
 import mainCharacterImg from '../img/main_character.png';
 import { getPosts,getCategories } from '../services/getService';
+import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { useNavigate } from "react-router-dom";
 interface MainPostsProps {
   categoryID : string
@@ -82,6 +83,13 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       setCurrentPage(currentPage + 1);
     }
   };
+  // 불필요한 태그 제거 함수
+  const removeUnwantedTags = (html: string): string => {
+    const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
+    const div = document.createElement('div');
+    div.innerHTML = cleanHtml;
+    return div.textContent || div.innerText || '';
+  };
   /**
    * 게시글 불러오기
    */
@@ -94,7 +102,11 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       console.log(`
         ====fetchedPosts====
         `,fetchedPosts.data.data);
-      setPosts(fetchedPosts.data.data);
+      const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
+        ...post,
+        board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
+      }));
+      setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
       const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
       setCategories(fetchedCategories);
