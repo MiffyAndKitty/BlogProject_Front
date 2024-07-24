@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , useParams} from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import Profile from '../main/Profile';
@@ -9,6 +9,7 @@ import CategoryList from './CategoryList';
 import { categories as Categories } from '../types/index';
 import { getCategories  } from '../services/getService';
 import CategoryListForMain from './CategoryListForMain';
+import PostDetail from './PostDetail';
 
 /**
  * 로그인 후의 메인페이지
@@ -16,18 +17,27 @@ import CategoryListForMain from './CategoryListForMain';
  */
 const MyBlogMainPage: React.FC = () => {
   const navigate = useNavigate();
+  const { nickname, postID } = useParams<{ nickname: string; postID?: string }>();
   const [categories, setCategories] = useState<Categories[]>([]);
   const [categoryID, setCategoryID] = useState<string>();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [currentPostID, setCurrentPostID] = useState<string | null>(null);
+
+  const onPostClick = (postID: string) => {
+    setCurrentPostID(postID);
+  };
+
   const onCategoryClick = (categoryId: string) =>{
     console.log('Clicked category ID:', categoryId);
     setCategoryID(categoryId);
 
   };
+
   const fetchAllPost =()=>{
     setCategoryID('');
-  }
+  };
+
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (!token) {
@@ -53,6 +63,7 @@ const MyBlogMainPage: React.FC = () => {
 
     fetchCategories();
   }, [navigate]);
+
   return (
     <div className="App">
       <Header pageType="logout"/>
@@ -60,7 +71,11 @@ const MyBlogMainPage: React.FC = () => {
         <Profile pageType="myBlog" />
         <div onClick={fetchAllPost}>전체보기</div>
         <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-        <MainPosts categoryID={categoryID}></MainPosts>
+        {  postID? (
+        <PostDetail/>
+      ) : (
+        <MainPosts categoryID={categoryID} onPostClick={onPostClick} />
+      )}
       </main>
       <Footer />
     </div>

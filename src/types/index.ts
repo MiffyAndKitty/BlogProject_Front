@@ -69,10 +69,12 @@ export interface getPostDetail{
     board_title: string,
     board_content: string,
     board_view: number,
+    board_like: number
     board_public : 0 | 1,
     created_at: string,
     updated_at:string,
     deleted_at : null | string,
+    user_nickname : string
     board_comment:number,
     tags: string[]
     

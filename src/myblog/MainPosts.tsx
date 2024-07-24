@@ -7,8 +7,9 @@ import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { useNavigate } from "react-router-dom";
 interface MainPostsProps {
   categoryID : string
+  onPostClick: (postID: string) => void;  // 새로운 prop 추가
 }
-const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
+const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -132,8 +133,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       navigate(`/blogmain`);
     };
 
-    const goToDetailPost = ()=>{
-      
+    const goToDetailPost = (postID: string)=>{
+      navigate(`/blogmain/${nickname}/${postID}`, { state: { postID } });
     }
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -162,11 +163,11 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID} ) => {
       <div className="main-container">
         <div className="container">
           {!loading && !error && posts.length > 0 && (
-            <div className="post-list" onClick={goToDetailPost}>
+            <div className="post-list" >
               {posts.map(post => (
-                <div className="post-card" key={post.board_id}>
+                <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id)}>
                   <div className="post-header">
-                    <h2 className="post-title">{post.board_title}</h2>
+                    <h2 className="post-title" >{post.board_title}</h2>
                     
                     <div className="post-meta">
                     <span className="post-category">{ findCategoryById(categories,post.category_id)}</span>

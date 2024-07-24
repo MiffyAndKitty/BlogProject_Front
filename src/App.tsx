@@ -14,6 +14,8 @@ import WriteNewPost from './myblog/ManagePost/WriteNewPost';
 import GetPost from './myblog/ManagePost/GetPost';
 import FixPost from './myblog/ManagePost/FixPost';
 import CategorySettings from './myblog/CategorySetting';
+import PostDetail from './myblog/PostDetail';
+
 import {
   BrowserRouter as Router,
   Route,
@@ -21,18 +23,18 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [nickname, setNickname] = useState<string>();
+  // const [nickname, setNickname] = useState<string>();
 
-  useEffect(() => {
-    try {
-      const storedNickname = localStorage.getItem('nickname');
-      if (storedNickname) {
-        setNickname(storedNickname);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     const storedNickname = localStorage.getItem('nickname');
+  //     if (storedNickname) {
+  //       setNickname(storedNickname);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
   return (
     <Router>
     <Routes>
@@ -44,12 +46,12 @@ function App() {
       <Route path={`/google/signup`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
-      <Route path={`/dashboard/${nickname}`} element={<Dashboard></Dashboard>} />
-      <Route path={`/blogmain/${nickname}`} element={<MyBlogMainPage></MyBlogMainPage>} />
-      <Route path={`/writenewpost/${nickname}`} element={<WriteNewPost></WriteNewPost>} />
-      <Route path={`/getpost/${nickname}`} element={<GetPost></GetPost>} />
-      <Route path={`/fixpost/${nickname}`} element={<FixPost></FixPost>} />
-      <Route path={`/categorySetting/${nickname}`} element={<CategorySettings></CategorySettings>} />
+      <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />
+      <Route path={`/blogmain/:nickname/:postID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
+      <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
+      <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
+      <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
+      <Route path={`/categorySetting/:nickname`} element={<CategorySettings></CategorySettings>} />
     </Routes>
     </Router>
   );
