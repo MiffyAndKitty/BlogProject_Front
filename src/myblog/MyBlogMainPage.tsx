@@ -17,7 +17,7 @@ import PostDetail from './PostDetail';
  */
 const MyBlogMainPage: React.FC = () => {
   const navigate = useNavigate();
-  const { nickname, postID } = useParams<{ nickname: string; postID?: string }>();
+  let { nickname, postID } = useParams<{ nickname: string; postID?: string }>();
   const [categories, setCategories] = useState<Categories[]>([]);
   const [categoryID, setCategoryID] = useState<string>();
   const [error, setError] = useState<string | null>(null);
@@ -31,11 +31,13 @@ const MyBlogMainPage: React.FC = () => {
   const onCategoryClick = (categoryId: string) =>{
     console.log('Clicked category ID:', categoryId);
     setCategoryID(categoryId);
+    navigate(`/blogmain/${nickname}`);
 
   };
 
   const fetchAllPost =()=>{
     setCategoryID('');
+    navigate(`/blogmain/${nickname}`);
   };
 
   useEffect(() => {

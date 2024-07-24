@@ -110,31 +110,31 @@ const FixPost: React.FC = () => {
   };
 
   const fixPosts = async () => {
-    const newPost: newPost = { 
-      title: title,
-      content: content,
-      public:status,
-      categoryId:category.category_id,
-      tagNames:tags,
-      uploaded_files: image,
-      boardId: postID
-    };
+    // const newPost: newPost = { 
+    //   title: title,
+    //   content: content,
+    //   public:status,
+    //   categoryId:category.category_id,
+    //   tagNames:tags,
+    //   uploaded_files: image,
+    //   boardId: postID
+    // };
 
-    try {
-      console.log(newPost);
-      const response = await fixPost(newPost);
+    // try {
+    //   console.log(newPost);
+    //   const response = await fixPost(newPost);
       
-      setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
+    //   setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
       
-      // console.log(response);
-      // if (response.data.result.toString() === true) {
-      //   //alert("글 저장에 성공했습니다.");
-      // }
-      return response.data.result;
-    } catch (error) {
-      console.error("글 저장 오류:", error);     
-      return false;
-    }
+    //   // console.log(response);
+    //   // if (response.data.result.toString() === true) {
+    //   //   //alert("글 저장에 성공했습니다.");
+    //   // }
+    //   return response.data.result;
+    // } catch (error) {
+    //   console.error("글 저장 오류:", error);     
+    //   return false;
+    // }
   };
   /**
    * 수정할 글 불러오기

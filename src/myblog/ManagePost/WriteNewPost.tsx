@@ -35,7 +35,31 @@ const WriteNewPost: React.FC = () => {
   };
 
   const handleContentChange = (value: string) => {
+    
+    const imgTags = quillRef.current?.getEditor().root.querySelectorAll('img');
+    if (imgTags) {
+      imgTags.forEach((img) => {
+        if (img.src.startsWith('data:')) {
+          const blob = dataURLToBlob(img.src);
+          const file = new File([blob], 'image.png', { type: 'image/png' });
+          const newSrc = URL.createObjectURL(file);
+          img.src = newSrc;
+          setImage(file);
+        }
+      });
+    }
     setContent(value);
+  };
+  const dataURLToBlob = (dataURL) => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
   };
 
   const handlePrivacyChange = () => {
@@ -46,6 +70,7 @@ const WriteNewPost: React.FC = () => {
     setCategory(categoryItem);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
+
   const renderCategoryMenu = (categories: categories[], level: number = 0) => {
     return (
       <>
@@ -104,25 +129,32 @@ const WriteNewPost: React.FC = () => {
   };
 
   const savePost = async () => {
-    const newPost: newPost = { 
+    const newPostData: newPost = { 
       title: title,
       content: content,
       public:status,
       categoryId:category.category_id,
       tagNames:tags,
-      uploaded_files: image
+      uploaded_files: image ? [image] : null
     };
-
+    const formData = new FormData();
+    formData.append('title', newPostData.title);
+    formData.append('content', newPostData.content);
+    formData.append('public', newPostData.public.toString());
+    formData.append('categoryId', newPostData.categoryId);
+    newPostData.tagNames.forEach(tag => formData.append('tagNames', tag));
+    
+    if (newPostData.uploaded_files) {
+      newPostData.uploaded_files.forEach((file, index) => {
+        formData.append(`uploaded_files[${index}]`, file);
+      });
+    }
     try {
-      console.log(newPost);
-      const response = await saveNewPost(newPost);
+      console.log(newPostData);
+      const response = await saveNewPost(newPostData);
       
       setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
-      
-      // console.log(response.status === ENUMS.status.SUCCESS);
-      // if (response.status === ENUMS.status.SUCCESS) {
-      //   alert("글 저장에 성공했습니다.");
-      // }
+
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
@@ -164,6 +196,7 @@ const WriteNewPost: React.FC = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
   useEffect(() => {
     if (newPostResult === true) {
       alert("글 저장에 성공했습니다!!");
@@ -174,6 +207,7 @@ const WriteNewPost: React.FC = () => {
       alert("글 저장에 실패했습니다!!");
     }
   }, [newPostResult, navigate]);
+
   return (
     <div className="App">
       <Header pageType="logout" />
@@ -188,7 +222,6 @@ const WriteNewPost: React.FC = () => {
             </div>
           )}
         </div>
-  
         <Form onSubmit={handleSubmit}>
         <div className="title-and-privacy">
           <Form.Group controlId="formTitle" className="title-input-group">

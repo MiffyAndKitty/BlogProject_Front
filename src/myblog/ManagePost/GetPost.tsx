@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
 import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
+import SearchBar from '../../structure/SearchBar';
 import './GetPost.css';
 import * as TYPES from '../../types/index';
 import mainCharacterImg from '../../img/main_character.png';
@@ -10,7 +11,7 @@ import { getPosts,getCategories } from '../../services/getService';
 import { deletePost } from '../../services/deleteService';
 import { useNavigate } from 'react-router-dom';
 import CategorySettings from '../CategorySetting';
-import ConfirmModal from '../ConfirmModal'; // 경로를 맞춰주세요
+import ConfirmModal from '../ConfirmModal'; 
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -29,6 +30,8 @@ const GetPost: React.FC = () => {
   const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -57,6 +60,10 @@ const GetPost: React.FC = () => {
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
   
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    fetchPosts(undefined,null, term);
+  };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
@@ -136,7 +143,7 @@ const GetPost: React.FC = () => {
   /**
    * 게시글 불러오기
    */
-  const fetchPosts = async (cursor?: string, categoryID?: string) => {
+  const fetchPosts = async (cursor?: string, categoryID?: string, query?:string) => {
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
@@ -147,9 +154,10 @@ const GetPost: React.FC = () => {
         cursor:${cursor}
         isBefore:${isBefore}
         categoryID:${categoryID}
+        query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID);
+      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID,query);
       setIsWriter(fetchedPosts.data.isWriter);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -224,6 +232,7 @@ const GetPost: React.FC = () => {
 
 
       `,posts);
+      // setFilteredPosts(posts);
   },[posts]); 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -231,6 +240,10 @@ const GetPost: React.FC = () => {
       navigate('/');
     }
   }, [navigate]);
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm]);
 
   useEffect(() => {
     fetchPosts();
@@ -302,8 +315,9 @@ const GetPost: React.FC = () => {
           <div className="container">
             {
               managementType === 'post' &&(
-                <>
+                <> 
                 <h1 className="title_manage">글 관리</h1>
+                <SearchBar onSearch={handleSearch}/>
                 <div className='post-manage'>
                 <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
                   <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>

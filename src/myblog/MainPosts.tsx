@@ -5,6 +5,8 @@ import mainCharacterImg from '../img/main_character.png';
 import { getPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { useNavigate } from "react-router-dom";
+import SearchBar from '../structure/SearchBar';
+
 interface MainPostsProps {
   categoryID : string
   onPostClick: (postID: string) => void;  // 새로운 prop 추가
@@ -20,7 +22,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
-
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -93,14 +96,20 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
     div.innerHTML = cleanHtml;
     return div.textContent || div.innerText || '';
   };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    fetchPosts(undefined,null, term);
+  };
+
   /**
    * 게시글 불러오기
    */
-  const fetchPosts = async (cursor?: string, categoryID?: string) => {
+  const fetchPosts = async (cursor?: string, categoryID?: string, query?:string) => {
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
-      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID);
+      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID,query);
       setIsWriter(fetchedPosts.data.isWriter);
       console.log(`
         ====fetchedPosts====
@@ -145,6 +154,10 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
   }, [navigate]);
 
   useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm]);
+
+  useEffect(() => {
     fetchPosts();
   }, []);
 
@@ -162,23 +175,24 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
     <main>
       <div className="main-container">
         <div className="container">
+        <SearchBar onSearch={handleSearch} />
           {!loading && !error && posts.length > 0 && (
-            <div className="post-list" >
+            <div className="post-main-main-list" >
               {posts.map(post => (
-                <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id)}>
-                  <div className="post-header">
-                    <h2 className="post-title" >{post.board_title}</h2>
+                <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id)}>
+                  <div className="post-main-header">
+                    <h2 className="post-main-title" >{post.board_title}</h2>
                     
-                    <div className="post-meta">
-                    <span className="post-category">{ findCategoryById(categories,post.category_id)}</span>
-                      <span className="post-date">{formatDate(post.created_at)}</span>
-                      <span className="post-stats">
-                        <span className="post-likes">🥕 : {post.board_like}</span>
-                        <span className="post-comments">댓글: {post.board_comment}</span>
+                    <div className="post-main-meta">
+                    <span className="post-main-category">{ findCategoryById(categories,post.category_id)}</span>
+                      <span className="post-main-date">{formatDate(post.created_at)}</span>
+                      <span className="post-main-stats">
+                        <span className="post-main-likes">🥕 : {post.board_like}</span>
+                        <span className="post-main-comments">댓글: {post.board_comment}</span>
                       </span>
                     </div>
                   </div>
-                  <div className="post-content">{post.board_content}</div>
+                  <div className="post-main-content">{post.board_content}</div>
 
                 </div>
               ))}

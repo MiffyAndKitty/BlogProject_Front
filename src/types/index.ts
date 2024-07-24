@@ -41,7 +41,7 @@ export interface newPost {
     public:Boolean,
     categoryId:string,
     tagNames:Array<string>,
-    uploaded_files: File,
+    uploaded_files: Blob[]| null,
     boardId?: string,
 }
 

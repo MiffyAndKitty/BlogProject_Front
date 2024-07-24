@@ -29,12 +29,12 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          <nav className="header__nav">
+          {/* <nav className="header__nav">
             <ul>
               <SearchBar />
         
             </ul>
-          </nav>
+          </nav> */}
           <div className="header__auth">
             <Link to="/login">로그인</Link>
           </div>
@@ -48,11 +48,11 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          <nav className="header__nav">
+          {/* <nav className="header__nav">
             <ul>
              <SearchBar />
             </ul>
-          </nav>
+          </nav> */}
           <div className="header__auth">
             <Link to="/">로그아웃</Link>
           </div>
@@ -67,11 +67,11 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          <nav className="header__nav">
+          {/* <nav className="header__nav">
             <ul>
              <SearchBar />
             </ul>
-          </nav>
+          </nav> */}
           <div className="header__auth">
             <Link to="/signup">회원가입</Link>
           </div>

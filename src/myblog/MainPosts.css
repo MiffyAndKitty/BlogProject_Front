@@ -34,51 +34,52 @@
     color:  #f0a4d8;
   }
   
-  .post-list {
+  .post-main-main-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
   }
   
-  .post-card {
+  .post-main-card {
     background-color: #FFE6FA;
     border: 0px;
     border-radius: 10px;
-    padding: 0; /* post-header와 맞추기 위해 padding을 0으로 설정 */
+    height: 150px;
+    padding: 0; /* post-main-header와 맞추기 위해 padding을 0으로 설정 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
-  .post-category{
+  .post-main-category{
     color: rgba(245, 245, 245, 0.842); /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
-  .post-header {
+  .post-main-header {
     background-color: #f0a4d8;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px; /* padding 추가 */
-    border-top-left-radius: 10px; /* 모서리를 post-card와 맞춤 */
-    border-top-right-radius: 10px; /* 모서리를 post-card와 맞춤 */
+    border-top-left-radius: 10px; /* 모서리를 post-main-card와 맞춤 */
+    border-top-right-radius: 10px; /* 모서리를 post-main-card와 맞춤 */
   }
   
-  .post-title {
+  .post-main-title {
     font-size: 20px;
     margin: 0;
     color: white; /* 글씨색 흰색으로 설정 */
   }
   
-  .post-meta {
+  .post-main-meta {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   
-  .post-date {
+  .post-main-date {
     color: white; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   
-  .post-stats {
+  .post-main-stats {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -86,20 +87,24 @@
 
   }
   
-  .post-likes,
-  .post-comments {
+  .post-main-likes,
+  .post-main-comments {
     display: flex;
     align-items: center;
     color: white; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   
-  .post-content {
-    padding: 20px; /* post-content에 padding 추가 */
+  .post-main-content {
+    padding: 20px; /* post-main-content에 padding 추가 */
     margin-top: 10px;
+    max-height: 50px; /* 원하는 높이로 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
   }
   
-  .post-actions {
+  .post-main-actions {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
