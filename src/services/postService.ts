@@ -1,6 +1,16 @@
 // services/postService.ts
 import apiClient from './apiClient';
 import * as TYPES from '../types';
+import axios from 'axios';
+
+const multipart = axios.create({
+    baseURL: 'http://158.247.206.80:65020',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      // 필요한 경우 추가 헤더 설정
+    },
+    withCredentials : true
+  });
 
 // 토큰을 저장하는 위치 (예: 로컬 스토리지, 상태 관리 등)
 const getToken = () => {
@@ -29,10 +39,11 @@ export const setLogin = async (postData: TYPES.loginData): Promise<any> => {
  * @param postData 
  * @returns 
  */
-export const saveNewPost = async (postData: TYPES.newPost): Promise<any> => {
+export const saveNewPost = async (postData: FormData): Promise<any> => {
     const token = getToken();
-    const response = await apiClient.post<TYPES.newPost>('/board/new', postData,{
+    const response = await multipart.post<TYPES.newPost>('/board/new', postData,{
         headers: {
+            'Content-Type': 'multipart/form-data',
             'Authorization': `${token}`,
           },
     });

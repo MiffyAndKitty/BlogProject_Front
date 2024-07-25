@@ -24,33 +24,22 @@ const WriteNewPost: React.FC = () => {
   const [isComposing, setIsComposing] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
   const navigate = useNavigate();
+  const newImages: File[] = [];
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
-  const handleContentChange = (value: string) => {
-    
-    const imgTags = quillRef.current?.getEditor().root.querySelectorAll('img');
-    if (imgTags) {
-      imgTags.forEach((img) => {
-        if (img.src.startsWith('data:')) {
-          const blob = dataURLToBlob(img.src);
-          const file = new File([blob], 'image.png', { type: 'image/png' });
-          const newSrc = URL.createObjectURL(file);
-          img.src = newSrc;
-          setImage(file);
-        }
-      });
-    }
+  const handleContentChange = async (value: string) => {
     setContent(value);
   };
-  const dataURLToBlob = (dataURL) => {
+  
+  const dataURLToBlob = (dataURL: string) => {
     const arr = dataURL.split(',');
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
@@ -123,19 +112,45 @@ const WriteNewPost: React.FC = () => {
     console.log('Category:', category);
     console.log('Is Private:', status);
     console.log('Tags:', tags);
-    if (image) {
-      console.log('Image:', image);
+    if (images) {
+      console.log('Images:', images);
     }
   };
 
+  const saveImgs = async()=>{
+    const quillEditor = quillRef.current?.getEditor();
+    if (quillEditor) {
+      const imgTags = quillEditor.root.querySelectorAll('img');
+      // const newImages: File[] = [];
+  
+      Array.from(imgTags).map(async (img) => {
+        if (img.src.startsWith('data:')) {
+          const blob = dataURLToBlob(img.src);
+          const file = new File([blob], `image_${newImages.length}.png`, { type: 'image/png' });
+          const newSrc = URL.createObjectURL(file);
+          img.src = newSrc;
+          newImages.push(file);
+          setImages(newImages); // 상태를 새 배열로 업데이트
+          console.log('Images set in handleContentChange:', newImages);
+          console.log('newSrc, file, newImages', newSrc, file, newImages);
+        }
+      });
+
+      return newImages;
+    }
+    return [];
+  };
   const savePost = async () => {
+    
+    const imagesFromSaveImgs = await saveImgs();
+    console.log('Images in savePost before formData:', imagesFromSaveImgs);
     const newPostData: newPost = { 
       title: title,
       content: content,
-      public:status,
+      public: status, // true/false를 1/0으로 변환
       categoryId:category.category_id,
       tagNames:tags,
-      uploaded_files: image ? [image] : null
+      uploaded_files: imagesFromSaveImgs.length > 0 ? imagesFromSaveImgs : null // 이미지 배열로 설정
     };
     const formData = new FormData();
     formData.append('title', newPostData.title);
@@ -145,16 +160,16 @@ const WriteNewPost: React.FC = () => {
     newPostData.tagNames.forEach(tag => formData.append('tagNames', tag));
     
     if (newPostData.uploaded_files) {
-      newPostData.uploaded_files.forEach((file, index) => {
-        formData.append(`uploaded_files[${index}]`, file);
+      newPostData.uploaded_files.forEach((file) => {
+        formData.append('uploaded_files', file);
       });
     }
+    
     try {
-      console.log(newPostData);
-      const response = await saveNewPost(newPostData);
+      console.log(formData); // FormData 내용을 로그로 출력하여 확인
+      const response = await saveNewPost(formData);
       
-      setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
-
+      setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
@@ -207,6 +222,10 @@ const WriteNewPost: React.FC = () => {
       alert("글 저장에 실패했습니다!!");
     }
   }, [newPostResult, navigate]);
+
+  useEffect(() => {
+    console.log('Updated images in useEffect:', images);
+  }, [images]);
 
   return (
     <div className="App">

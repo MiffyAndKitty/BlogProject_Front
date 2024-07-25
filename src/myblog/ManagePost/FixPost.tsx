@@ -13,6 +13,7 @@ import 'react-quill/dist/quill.snow.css';
 
 const FixPost: React.FC = () => {
   const [nickname, setNickname] = useState<string>();
+  const quillRef = useRef<ReactQuill>(null);
   const location = useLocation();
   const postID = location.state?.postID;
   const [title, setTitle] = useState('');
@@ -23,13 +24,14 @@ const FixPost: React.FC = () => {
   const [isComposing, setIsComposing] = useState(false);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const newImages: File[] = [];
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -48,11 +50,6 @@ const FixPost: React.FC = () => {
     setDropdownOpen(false); // 드롭다운을 닫음
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setImage(e.target.files[0]);
-    }
-  };
   const renderCategoryMenu = (categories: categories[], level: number = 0) => {
     return (
       <>
@@ -104,37 +101,83 @@ const FixPost: React.FC = () => {
     console.log('Category:', category);
     console.log('Is Private:', status);
     console.log('Tags:', tags);
-    if (image) {
-      console.log('Image:', image);
+    if (images) {
+      console.log('Image:', images);
     }
   };
+  const dataURLToBlob = (dataURL: string) => {
+    const arr = dataURL.split(',');
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+  };
+  const saveImgs = async()=>{
+    const quillEditor = quillRef.current?.getEditor();
+    if (quillEditor) {
+      const imgTags = quillEditor.root.querySelectorAll('img');
+      // const newImages: File[] = [];
+  
+      Array.from(imgTags).map(async (img) => {
+        if (img.src.startsWith('data:')) {
+          const blob = dataURLToBlob(img.src);
+          const file = new File([blob], `image_${newImages.length}.png`, { type: 'image/png' });
+          const newSrc = URL.createObjectURL(file);
+          img.src = newSrc;
+          newImages.push(file);
+          setImages(newImages); // 상태를 새 배열로 업데이트
+          console.log('Images set in handleContentChange:', newImages);
+          console.log('newSrc, file, newImages', newSrc, file, newImages);
+        }
+        else{
+          
+        }
+      });
 
+      return newImages;
+    }
+    return [];
+  };
   const fixPosts = async () => {
-    // const newPost: newPost = { 
-    //   title: title,
-    //   content: content,
-    //   public:status,
-    //   categoryId:category.category_id,
-    //   tagNames:tags,
-    //   uploaded_files: image,
-    //   boardId: postID
-    // };
 
-    // try {
-    //   console.log(newPost);
-    //   const response = await fixPost(newPost);
+    const imagesFromSaveImgs = await saveImgs();
+    console.log('Images in savePost before formData:', imagesFromSaveImgs);
+    const newPostData: newPost = { 
+      title: title,
+      content: content,
+      public: status, // true/false를 1/0으로 변환
+      categoryId:category.category_id,
+      tagNames:tags,
+      uploaded_files: imagesFromSaveImgs.length > 0 ? imagesFromSaveImgs : null, // 이미지 배열로 설정
+      boardId: postID
+    };
+    const formData = new FormData();
+    formData.append('title', newPostData.title);
+    formData.append('content', newPostData.content);
+    formData.append('public', newPostData.public.toString());
+    formData.append('categoryId', newPostData.categoryId);
+    formData.append('boardId', newPostData.boardId);
+    newPostData.tagNames.forEach(tag => formData.append('tagNames', tag));
+    
+    if (newPostData.uploaded_files) {
+      newPostData.uploaded_files.forEach((file) => {
+        formData.append('uploaded_files', file);
+      });
+    }
+    
+    try {
+      const response = await fixPost(formData);
       
-    //   setNewPostResult(response.status === ENUMS.status.SUCCESS? true: false);
-      
-    //   // console.log(response);
-    //   // if (response.data.result.toString() === true) {
-    //   //   //alert("글 저장에 성공했습니다.");
-    //   // }
-    //   return response.data.result;
-    // } catch (error) {
-    //   console.error("글 저장 오류:", error);     
-    //   return false;
-    // }
+      setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
+      return response.data.result;
+    } catch (error) {
+      console.error("글 저장 오류:", error);     
+      return false;
+    }
   };
   /**
    * 수정할 글 불러오기
@@ -272,6 +315,7 @@ const FixPost: React.FC = () => {
 
           <Form.Group controlId="formContent">
             <ReactQuill
+              ref={quillRef}
               value={content}
               onChange={handleContentChange}
               modules={{
