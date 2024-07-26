@@ -1,6 +1,5 @@
 .popularpost-section {
     padding: 20px;
-    /* background-color: #f8f9fa; */
   }
   
   .posts {
@@ -28,7 +27,6 @@
     background-color: #FFE6FA;
     border-radius: 10px;
     overflow: hidden;
-    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
