@@ -334,14 +334,17 @@ const GetPost: React.FC = () => {
                     {posts.map((post) => (
                       <div className="post-card" key={post.board_id}>
                         <div className="post-header">
+                        <div className="title-container">
                           <h2 className="post-title">{post.board_title}</h2>
-                          
+                          <span className="user-nickname">{post.user_nickname}</span>
+                        </div>
                           <div className="post-meta">
                           <span className="post-category">{ findCategoryById(categories,post.category_id)}</span>
                             <span className="post-date">{formatDate(post.created_at)}</span>
                             <span className="post-stats">
-                              <span className="post-likes">🥕 : {post.board_like}</span>
-                              <span className="post-comments">댓글: {post.board_comment}</span>
+                              <span className="user-nickname">조회수: {post.board_view}</span>
+                              <span className="user-nickname">🥕 : {post.board_like}</span>
+                              <span className="user-nickname">댓글: {post.board_comment}</span>
                             </span>
                           </div>
                         </div>

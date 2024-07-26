@@ -143,14 +143,6 @@ const CategorySettings = () => {
 
   return (
     <div>
-      <CategoryList
-        categories={categories}
-        expandedCategories={expandedCategories} 
-        toggleCategory={toggleCategory} 
-        onAddSubcategory={addSubcategory}
-        onEditCategory={editCategory}
-        onDeleteCategory={removeCategory}
-      />
       <input
         className='inputNewCategory'
         type="text"
@@ -159,6 +151,14 @@ const CategorySettings = () => {
         placeholder="새 카테고리"
       />
       <button className='addCategoryBtn' onClick={addCategory}>새 카테고리 추가하기</button>
+      <CategoryList
+        categories={categories}
+        expandedCategories={expandedCategories} 
+        toggleCategory={toggleCategory} 
+        onAddSubcategory={addSubcategory}
+        onEditCategory={editCategory}
+        onDeleteCategory={removeCategory}
+      />
     </div>
   );
 };

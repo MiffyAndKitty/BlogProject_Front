@@ -43,7 +43,7 @@ function App() {
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
       <Route path={`/locallogin`} element={<LocalLogin></LocalLogin>}/>
       <Route path={`/signup`} element={<SignUp></SignUp>}/>
-      <Route path={`/google/signup`} element={<GoogleSignUp></GoogleSignUp>}/>
+      <Route path={`/google/signup/:nickname`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />

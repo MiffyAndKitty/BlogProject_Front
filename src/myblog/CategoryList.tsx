@@ -34,7 +34,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
     <div>
       {categories.map(category => (
         <div key={category.category_id} className={`level-${level}`} onMouseEnter={() => handleMouseEnter(category.category_id)} onMouseLeave={handleMouseLeave}>
-          <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }}>
+          <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }} className="category-item">
             {editingCategoryId === category.category_id ? (
               <div>
                 <input
@@ -51,10 +51,10 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
                 {category.category_name}
                 {level !== 2 && (
                   expandedCategories.includes(category.category_id) 
-                    ? <img className='up_arrow' src={up_arrow} alt="up arrow" /> 
-                    : <img className='down_arrow' src={down_arrow} alt="down arrow" />
+                    ? <img className='arrow' src={up_arrow} alt="up arrow" /> 
+                    : <img className='arrow' src={down_arrow} alt="down arrow" />
                 )}
-                {hoveredCategoryId === category.category_id && (
+                {hoveredCategoryId === category.category_id && ( 
                   <span className='addChangeDeleteBtn'>
                     {level !== 2 && (
                       <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>

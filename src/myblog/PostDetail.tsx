@@ -73,12 +73,18 @@ const PostDetail: React.FC = () => {
           <div className="main-container">
             <div className="container">
             <div className="postdetail-detail">
-              <h1>{post.board_title}</h1>
+            <h1>{post.board_title}</h1>
+              
               <div className="postdetail-meta">
-                <span className="postdetail-date">{formatDate(post.created_at)}</span>
-                <span className="postdetail-author">{post.user_nickname}</span>
-                <span className="postdetail-likes">🥕 : {post.board_like}</span>
-                <span className="postdetail-comments">댓글: {post.board_comment}</span>
+              <span className="postdetail-author">작성자: {post.user_nickname}</span>
+                <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
+                <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
+                
+                <div>
+                  <span className="postdetail-likes">🥕 : {post.board_like}</span>
+                  <span className="postdetail-comments">조회수: {post.board_view}</span>
+                  <span className="postdetail-comments">댓글: {post.board_comment}</span>
+                </div>
               </div>
               <div className="separator"></div> {/* 구분선 추가 */}
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />

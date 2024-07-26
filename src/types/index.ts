@@ -55,6 +55,7 @@ export interface getPost{
     board_view: number
     category_id: string
     created_at: string
+    user_nickname : string
     deleted_at: null | string
     updated_at: string
     user_id: string
