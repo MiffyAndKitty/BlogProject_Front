@@ -25,6 +25,7 @@
     width: 300px;
     height: 335px;
     border: 2px solid #FF88D7; /* 테두리 추가 */
+    background-color: #FFE6FA;
     border-radius: 10px;
     overflow: hidden;
     background-color: #fff;
