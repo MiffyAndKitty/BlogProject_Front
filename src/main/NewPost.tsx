@@ -1,5 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import './NewPost.css';
+import { Link } from 'react-router-dom';
 import { getALLPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import * as TYPES from '../types/index';
@@ -121,10 +122,12 @@ const NewPost: React.FC = () => {
               {/* <img src={post.image} alt={post.title} className="post-image" /> */}
               <div className="post-content">{post.board_content}</div>
               <div className="post-popular-content">
-                <p className="post-popular-author">작성자: {post.user_nickname} |{formatDate(post.created_at)}</p>
+              <p className="post-popular-author"><Link to={`/${post.user_nickname}`} className="post-popular-author">작성자: {post.user_nickname}</Link> |{formatDate(post.created_at)}</p>
                 <h3 className="post-popular-title">{post.board_title}</h3>
-                <p className="post-popular-text">조회수: {post.board_view}</p>
+               
                 <div className="post-popular-footer">
+                  <span className="post-popular-likes">카테고리: {post.category_name}</span>
+                  <span className="post-popular-likes">조회수: {post.board_view}</span>
                   <span className="post-popular-likes">🥕: {post.board_like}</span>
                   <span className="post-popular-comments">댓글: {post.board_comment}</span>
                 </div>

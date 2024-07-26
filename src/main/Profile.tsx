@@ -26,10 +26,11 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 interface ProfileProps {
-  pageType: 'login' | 'signup' | 'myBlog';
+  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog';
+  nicknameParam?:string | null
 }
 
-const Profile: React.FC<ProfileProps> = ({ pageType }) => {
+const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
   const [error, setError] = useState(null);
@@ -70,7 +71,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
   const goToMyBlog = () => {
-    navigate(`/blogmain/${nickname}`);
+    navigate(`/${nickname}`);
   };
 
   const goToManagePosts = ()=>{
@@ -90,7 +91,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
   },[]);
 
   return (
-    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : ''}`}>
+    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : (pageType==='otherBlog'?'otherBlog':'')}`}>
       
       {pageType === 'signup' && (
         <>
@@ -146,6 +147,21 @@ const Profile: React.FC<ProfileProps> = ({ pageType }) => {
           <button onClick={goToSignUp}>내소식</button>
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
+        </div>
+      </>
+      )}
+
+      {pageType === 'otherBlog' && (
+        <>
+        <div className="profile-container">
+        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
+        <span className="username"> {nicknameParam}님의 블로그</span>
+        </div>
+        
+        <div className="logins_profile">
+          <button onClick={goToFindID}>팔로우</button>
+          <span>|</span>
+          <button>팔로워</button>
         </div>
       </>
       )}

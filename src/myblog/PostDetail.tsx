@@ -1,6 +1,6 @@
 // src/myblog/ManagePost/PostDetail.tsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { Link,useParams, useLocation } from 'react-router-dom';
 import * as TYPES from '../types/index';
 import { getPost } from '../services/getService';
 import Header from '../structure/Header';
@@ -76,7 +76,7 @@ const PostDetail: React.FC = () => {
             <h1>{post.board_title}</h1>
               
               <div className="postdetail-meta">
-              <span className="postdetail-author">작성자: {post.user_nickname}</span>
+              <Link to={`/${post.user_nickname}`} className="postdetail-author">작성자: {post.user_nickname}</Link>
                 <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
                 <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
                 

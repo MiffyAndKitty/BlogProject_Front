@@ -4,14 +4,15 @@ import * as TYPES from '../types/index';
 import mainCharacterImg from '../img/main_character.png';
 import { getPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchBar from '../structure/SearchBar';
 
 interface MainPostsProps {
+  nicknameParam : string
   categoryID : string
   onPostClick: (postID: string) => void;  // 새로운 prop 추가
 }
-const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
+const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostClick} ) => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -109,7 +110,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
-      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID,query);
+      const fetchedPosts = await getPosts(nicknameParam,cursor,isBefore,categoryID,query);
       setIsWriter(fetchedPosts.data.isWriter);
       console.log(`
         ====fetchedPosts====
@@ -120,7 +121,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
       }));
       setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
-      const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
+      const fetchedCategories: TYPES.categories[] = await getCategories(nicknameParam);
       setCategories(fetchedCategories);
       //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
       if (currentPage === 1) {
@@ -139,11 +140,11 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
     const goToMyBlog = () => {
-      navigate(`/blogmain`);
+      navigate(`/`);
     };
 
     const goToDetailPost = (postID: string)=>{
-      navigate(`/blogmain/${nickname}/${postID}`, { state: { postID } });
+      navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
     }
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -183,7 +184,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({categoryID,onPostClick} ) => {
                   <div className="post-main-header">
                   <div className="title-container">
                     <h2 className="post-title">{post.board_title}</h2>
-                    <span className="user-nickname">{post.user_nickname}</span>
+                    <Link to={`/${post.user_nickname}`} className="user-nickname">{post.user_nickname}</Link>
                   </div>
                     
                     <div className="post-main-meta">

@@ -23,6 +23,8 @@ const MyBlogMainPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPostID, setCurrentPostID] = useState<string | null>(null);
+  const [token, setToken] = useState<string>('');
+  const [localNickName, setLocalNickName] = useState<string>('');
 
   const onPostClick = (postID: string) => {
     setCurrentPostID(postID);
@@ -31,27 +33,38 @@ const MyBlogMainPage: React.FC = () => {
   const onCategoryClick = (categoryId: string) =>{
     console.log('Clicked category ID:', categoryId);
     setCategoryID(categoryId);
-    navigate(`/blogmain/${nickname}`);
+    navigate(`/${nickname}`);
 
   };
 
   const fetchAllPost =()=>{
     setCategoryID('');
-    navigate(`/blogmain/${nickname}`);
+    navigate(`/${nickname}`);
   };
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
-    if (!token) {
-      navigate('/');
-    }
+    setToken(token)
+    // if (!token) {
+    //   navigate('/');
+    // }
 
     const fetchCategories = async () => {
+      console.log(`
+        
+        
+        
+        nicknameParam
+        
+        
+        `,nickname)
       try {
         const nickname = localStorage.getItem("nickname");
         if (!nickname) {
           throw new Error("Nickname not found in localStorage");
         }
+        setLocalNickName(nickname);
+        
         const fetchedCategories: Categories[] = await getCategories(nickname);
         setCategories(fetchedCategories);
         console.log(fetchedCategories);
@@ -66,17 +79,31 @@ const MyBlogMainPage: React.FC = () => {
     fetchCategories();
   }, [navigate]);
 
+  useEffect(()=>{
+    console.log(`
+        
+        
+        
+      localNickName
+      
+      
+      `,localNickName)
+  },[localNickName])
   return (
     <div className="App">
       <Header pageType="logout"/>
       <main className="main-content">
-        <Profile pageType="myBlog" />
+        
+        {(!token && <Profile pageType="signup" />)}
+        {((token && (localNickName === nickname)) &&<Profile pageType="myBlog" nicknameParam={localNickName}/>)}
+        {((token && (localNickName !== nickname)) &&<Profile pageType="otherBlog" nicknameParam={nickname}/>)}
+
         <div onClick={fetchAllPost}>전체보기</div>
         <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
         {  postID? (
         <PostDetail/>
       ) : (
-        <MainPosts categoryID={categoryID} onPostClick={onPostClick} />
+        <MainPosts nicknameParam = {nickname} categoryID={categoryID} onPostClick={onPostClick} />
       )}
       </main>
       <Footer />

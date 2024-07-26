@@ -104,7 +104,7 @@ const GetPost: React.FC = () => {
     navigate(`/writenewpost/${nickname}`);
   };
   const goToMyBlog = () => {
-    navigate(`/blogmain/${nickname}`);
+    navigate(`/${nickname}`);
   };
 
   const goToPostManagement = () => {

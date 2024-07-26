@@ -47,7 +47,7 @@ function App() {
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />
-      <Route path={`/blogmain/:nickname/:postID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
+      <Route path={`/:nickname/:postID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
