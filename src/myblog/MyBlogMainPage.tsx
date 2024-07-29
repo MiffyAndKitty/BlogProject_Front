@@ -43,8 +43,34 @@ const MyBlogMainPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
-    setToken(token)
+    const localStorageToken = localStorage.getItem('accessToken');
+    console.log(`
+      
+      
+      
+      
+      
+      token
+      
+      
+      
+      `,localStorageToken);
+    if(localStorageToken ===null){
+      setToken('');
+    }else{
+      setToken(localStorageToken);
+    }
+    console.log(`
+      
+      
+      
+      
+      
+      token
+      
+      
+      
+      `,token);
     // if (!token) {
     //   navigate('/');
     // }
@@ -59,25 +85,26 @@ const MyBlogMainPage: React.FC = () => {
         
         `,nickname)
       try {
-        const nickname = localStorage.getItem("nickname");
-        if (!nickname) {
-          throw new Error("Nickname not found in localStorage");
-        }
-        setLocalNickName(nickname);
-        
         const fetchedCategories: Categories[] = await getCategories(nickname);
         setCategories(fetchedCategories);
         console.log(fetchedCategories);
+        const localNickname = localStorage.getItem("nickname");
+        if (localNickname) {
+          setLocalNickName(localNickname);
+        }
+        
+        
       } catch (err) {
-        console.error(err);
+        // console.error(err);
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
+        setLocalNickName('');
       } finally {
         setLoading(false);
       }
     };
 
     fetchCategories();
-  }, [navigate]);
+  }, [navigate,nickname]);
 
   useEffect(()=>{
     console.log(`
@@ -94,7 +121,7 @@ const MyBlogMainPage: React.FC = () => {
       <Header pageType="logout"/>
       <main className="main-content">
         
-        {(!token && <Profile pageType="signup" />)}
+        {(!token && <Profile pageType="signup_for_blog" />)}
         {((token && (localNickName === nickname)) &&<Profile pageType="myBlog" nicknameParam={localNickName}/>)}
         {((token && (localNickName !== nickname)) &&<Profile pageType="otherBlog" nicknameParam={nickname}/>)}
 

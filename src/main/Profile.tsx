@@ -26,7 +26,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 interface ProfileProps {
-  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog';
+  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog';
   nicknameParam?:string | null
 }
 
@@ -91,9 +91,22 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   },[]);
 
   return (
-    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : (pageType==='otherBlog'?'otherBlog':'')}`}>
+    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : (pageType==='otherBlog'?'otherBlog':(pageType==='signup_for_blog'?'signup_for_blog':''))}`}>
       
       {pageType === 'signup' && (
+        <>
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
+          <button className="login-button" onClick={goToLogin}>로그인</button>
+          <div className="logins_profile">
+            <button onClick={goToFindID}>아이디 찾기</button>
+            <span>|</span>
+            <button>비밀번호 찾기</button>
+            <span>|</span>
+            <button onClick={goToSignUp}>회원가입</button>
+          </div>
+        </>
+      )}
+       {pageType === 'signup_for_blog' && (
         <>
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin}>로그인</button>

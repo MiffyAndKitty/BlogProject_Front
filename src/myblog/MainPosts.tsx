@@ -136,23 +136,16 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     }
   };
 
-    /**
-   * 내 블로그로 가기로 이동하기 위한 메서드
-   */
-    const goToMyBlog = () => {
-      navigate(`/`);
-    };
-
-    const goToDetailPost = (postID: string)=>{
-      navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
-    }
-  useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+  const goToDetailPost = (postID: string)=>{
+    navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
+  }
+  // useEffect(() => {
+  //   const token = localStorage.getItem('accessToken');
    
-    if (!token) {
-      navigate('/');
-    }
-  }, [navigate]);
+  //   if (!token) {
+  //     navigate('/');
+  //   }
+  // }, [navigate]);
 
   useEffect(() => {
     handleSearch(searchTerm);

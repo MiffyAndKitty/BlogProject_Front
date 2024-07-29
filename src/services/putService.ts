@@ -39,7 +39,7 @@ export const fixPost = async (postData: FormData): Promise<any> => {
  */
 export const updateCategory = async (postData: TYPES.changeCategory): Promise<any> => {
   const token = getToken();
-  const response = await apiClient.put<TYPES.changeCategory>(`/category`,postData,{
+  const response = await apiClient.put<TYPES.changeCategory>(`/category/name`,postData,{
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `${token}`,
