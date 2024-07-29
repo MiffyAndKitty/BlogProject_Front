@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import './PopularPost.Module.css';
 import { getALLPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
+import goLeft from '../img/<.png';
+import goRight from '../img/>.png';
 import * as TYPES from '../types/index';
 
 const PopularPost: React.FC = () => {
   const [posts, setPosts] =  useState([]);
   const [isBefore, setIsBefore] = useState<boolean>(false);
-  const [categories, setCategories] = useState<TYPES.categories[]>();
+  // const [categories, setCategories] = useState<TYPES.categories[]>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const pageSize = 3;
+  const navigate = useNavigate();
+
   // 불필요한 태그 제거 함수
   const removeUnwantedTags = (html: string): string => {
     const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
@@ -35,7 +40,7 @@ const PopularPost: React.FC = () => {
         query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getALLPosts(cursor,isBefore,categoryID,query,sort);
+      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query,sort);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,
@@ -43,9 +48,9 @@ const PopularPost: React.FC = () => {
       }));
       setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
-      //const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
-      //setCategories(fetchedCategories);
-      //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
+      // const fetchedCategories: TYPES.categories[] = await getCategories(postsWithCleanContent.user_nickname);
+      // setCategories(fetchedCategories);
+      setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
       if (currentPage === 1) {
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
       } else if (currentPage === totalPages) {
@@ -71,19 +76,34 @@ const PopularPost: React.FC = () => {
 
     fetchPosts(undefined,undefined,undefined,'view');
   },[]);
-
+  useEffect(() => {
+    console.log(`
+      
+      
+      
+      페이지가 변경되면서 글 다시 불러오기
+      
+      
+      
+      ${cursor}`)
+      fetchPosts(cursor,undefined,undefined,'view');
+  }, [currentPage]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const postsPerPage = 3; // 한번에 보여줄 포스트의 개수
 
   const nextPosts = () => {
-    if (currentIndex < posts.length - postsPerPage) {
-      setCurrentIndex(currentIndex + 1);
+    if (currentPage < totalPages) {
+      setCursor(posts[posts.length - 1].board_id);
+      setIsBefore(false);
+      setCurrentPage(currentPage + 1);
     }
   };
-
+  
   const prevPosts = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
+    if (currentPage > 1) {
+      setCursor(posts[0].board_id);
+      setIsBefore(true);
+      setCurrentPage(currentPage - 1);
     }
   };
   const formatDate = (dateString: string): string => {
@@ -106,15 +126,21 @@ const PopularPost: React.FC = () => {
   
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
+  const goToAllPopularPosts = ()=>{
+    navigate(`/dashboard/all-popular-post`);
+  };
   return (
     <section className="popularpost-section">
-      <h2 style={{marginTop:'-5px'}}>인기글</h2>
+     
       <div className="slider">
-        {currentIndex > 0 && (
-          <button className="slide-button left" onClick={prevPosts}>
-            &lt;
-          </button>
-        )}
+        <h2 style={{marginTop:'-5px', marginLeft:'45px'}}>인기글</h2>
+        <span className="all" onClick={goToAllPopularPosts}>전체보기</span>
+      </div>
+
+      <div className="slider">
+        <button className="slide-button left" onClick={prevPosts} disabled={currentPage === 1}>
+          &lt;
+        </button>
         {!loading && !error && posts.length > 0 && (
         <div className="posts">
           {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => (
@@ -136,11 +162,9 @@ const PopularPost: React.FC = () => {
           ))}
         </div>
         )}
-        {currentIndex < posts.length - postsPerPage && (
-          <button className="slide-button right" onClick={nextPosts}>
+        <button className="slide-button right" onClick={nextPosts} disabled={currentPage === totalPages}>
             &gt;
-          </button>
-        )}
+        </button>
       </div>
     </section>
   );

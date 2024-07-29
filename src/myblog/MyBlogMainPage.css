@@ -10,6 +10,6 @@ section {
 }
 
 .MainPosts-section {
-  grid-column: 2 /45;
+  grid-column: 2 /60;
   grid-row: 1 / 6; /* 1행부터 5행까지 차지 */
 }
