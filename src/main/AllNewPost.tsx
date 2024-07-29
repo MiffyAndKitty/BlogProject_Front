@@ -236,6 +236,10 @@ const AllPopularPost: React.FC = () => {
       fetchPosts(cursor,undefined,undefined);
   }, [currentPage]);
 
+  const goToDetailPost = (postID: string , postAthor:String)=>{
+    navigate(`/${postAthor}/${postID}`, { state: { postID } });
+  }
+
   return (
     <>
       <Header pageType="logout" />
@@ -253,7 +257,7 @@ const AllPopularPost: React.FC = () => {
                 {!loading && !error && posts.length > 0 && (
                   <div className="post-list">
                     {posts.map((post) => (
-                      <div className="post-card" key={post.board_id}>
+                      <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
                         <div className="post-header">
                         <div className="title-container">
                           <h2 className="post-title">{post.board_title}</h2>

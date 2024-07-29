@@ -126,6 +126,9 @@ const NewPost: React.FC = () => {
   const goToAllNewPosts = ()=>{
     navigate(`/dashboard/all-new-post`);
   };
+  const goToDetailPost = (postID: string , postAthor:String)=>{
+    navigate(`/${postAthor}/${postID}`, { state: { postID } });
+  }
   return (
     <section className="newpost-section">
       <div className="slider">
@@ -140,7 +143,7 @@ const NewPost: React.FC = () => {
         {!loading && !error && posts.length > 0 && (
         <div className="posts">
           {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => (
-            <div key={index} className="post-popular">
+            <div key={index} className="post-popular" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
               {/* <img src={post.image} alt={post.title} className="post-image" /> */}
               <div className="post-content">{post.board_content}</div>
               <div className="post-popular-content">

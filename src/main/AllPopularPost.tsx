@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import SearchBar from '../structure/SearchBar';
@@ -11,10 +12,12 @@ import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { getALLPosts,getCategories } from '../services/getService';
 import { deletePost } from '../services/deleteService';
 import { useNavigate } from 'react-router-dom';
+import PostDetail from '../myblog/PostDetail';
 import CategorySettings from '../myblog/CategorySetting';
 import ConfirmModal from '../myblog/ConfirmModal'; 
 
 const AllPopularPost: React.FC = () => {
+  let {  postID } = useParams<{ postID?: string }>();
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -236,6 +239,10 @@ const AllPopularPost: React.FC = () => {
       fetchPosts(cursor,undefined,undefined,'view');
   }, [currentPage]);
 
+  const goToDetailPost = (postID: string , postAthor:String)=>{
+    navigate(`/${postAthor}/${postID}`, { state: { postID } });
+  }
+
   return (
     <>
       <Header pageType="logout" />
@@ -245,7 +252,10 @@ const AllPopularPost: React.FC = () => {
         {(token &&<Profile pageType="login" nicknameParam={localNickName}/>)}
           <div className="container">
             {
-              managementType === 'post' &&(
+              managementType === 'post' && postID?(
+                <PostDetail/>
+              ) : (
+                
                 <> 
                 <h1 className="title_manage">조회수 높은 순으로 전체보기</h1>
                 <SearchBar onSearch={handleSearch}/>
@@ -253,7 +263,7 @@ const AllPopularPost: React.FC = () => {
                 {!loading && !error && posts.length > 0 && (
                   <div className="post-list">
                     {posts.map((post) => (
-                      <div className="post-card" key={post.board_id}>
+                      <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
                         <div className="post-header">
                         <div className="title-container">
                           <h2 className="post-title">{post.board_title}</h2>
@@ -289,7 +299,7 @@ const AllPopularPost: React.FC = () => {
                 </div>
                 </>
               )
-            }
+            } 
 
             
           

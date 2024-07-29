@@ -129,6 +129,9 @@ const PopularPost: React.FC = () => {
   const goToAllPopularPosts = ()=>{
     navigate(`/dashboard/all-popular-post`);
   };
+  const goToDetailPost = (postID: string , postAthor:String)=>{
+    navigate(`/${postAthor}/${postID}`, { state: { postID } });
+  }
   return (
     <section className="popularpost-section">
      
@@ -144,7 +147,7 @@ const PopularPost: React.FC = () => {
         {!loading && !error && posts.length > 0 && (
         <div className="posts">
           {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => (
-            <div key={index} className="post-popular">
+            <div key={index} className="post-popular" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
               {/* <img src={post.image} alt={post.board_title} className="post-image" /> */}
               <div className="post-content">{post.board_content}</div>
               <div className="post-popular-content">
