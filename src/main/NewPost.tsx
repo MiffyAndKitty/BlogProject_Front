@@ -1,6 +1,6 @@
 import React, { useEffect,useState } from 'react';
 import './NewPost.css';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import { getALLPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import * as TYPES from '../types/index';
@@ -15,6 +15,7 @@ const NewPost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const pageSize = 3;
+  const navigate = useNavigate();
 
   // 불필요한 태그 제거 함수
   const removeUnwantedTags = (html: string): string => {
@@ -122,11 +123,14 @@ const NewPost: React.FC = () => {
   
     return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
   };
+  const goToAllNewPosts = ()=>{
+    navigate(`/dashboard/all-new-post`);
+  };
   return (
     <section className="newpost-section">
       <div className="slider">
         <h2 style={{marginTop:'-5px', marginLeft:'45px'}}>최신글</h2>
-        <span className="all">전체보기</span>
+        <span className="all" onClick={goToAllNewPosts}>전체보기</span>
       </div>
       <div className="slider">
         <button className="slide-button left" onClick={prevPosts} disabled={currentPage === 1}>

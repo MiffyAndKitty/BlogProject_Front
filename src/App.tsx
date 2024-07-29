@@ -16,7 +16,7 @@ import FixPost from './myblog/ManagePost/FixPost';
 import CategorySettings from './myblog/CategorySetting';
 import PostDetail from './myblog/PostDetail';
 import AllPopularPost from './main/AllPopularPost';
-
+import AllNewPost from './main/AllNewPost';
 import {
   BrowserRouter as Router,
   Route,
@@ -49,6 +49,7 @@ function App() {
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />
       <Route path={`/dashboard/all-popular-post`} element={<AllPopularPost></AllPopularPost>} />
+      <Route path={`/dashboard/all-new-post`} element={<AllNewPost></AllNewPost>} />
       <Route path={`/:nickname/:postID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />

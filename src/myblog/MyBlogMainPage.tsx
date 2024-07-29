@@ -44,36 +44,11 @@ const MyBlogMainPage: React.FC = () => {
 
   useEffect(() => {
     const localStorageToken = localStorage.getItem('accessToken');
-    console.log(`
-      
-      
-      
-      
-      
-      token
-      
-      
-      
-      `,localStorageToken);
     if(localStorageToken ===null){
       setToken('');
     }else{
       setToken(localStorageToken);
     }
-    console.log(`
-      
-      
-      
-      
-      
-      token
-      
-      
-      
-      `,token);
-    // if (!token) {
-    //   navigate('/');
-    // }
 
     const fetchCategories = async () => {
       console.log(`
@@ -125,7 +100,7 @@ const MyBlogMainPage: React.FC = () => {
         {((token && (localNickName === nickname)) &&<Profile pageType="myBlog" nicknameParam={localNickName}/>)}
         {((token && (localNickName !== nickname)) &&<Profile pageType="otherBlog" nicknameParam={nickname}/>)}
 
-        <div onClick={fetchAllPost}>전체보기</div>
+        <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
         <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
         {  postID? (
         <PostDetail/>

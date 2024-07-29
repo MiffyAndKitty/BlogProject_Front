@@ -15,7 +15,8 @@
     margin-left: 10px;
     font-size: small;
     margin-bottom: 15px;
-    color:rgb(152, 152, 152)
+    color:rgb(152, 152, 152);
+    cursor: pointer;
   }
   .slide-button.left, .slide-button.right {
     width: 50px; /* 버튼의 너비 */

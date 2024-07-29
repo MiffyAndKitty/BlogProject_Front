@@ -65,7 +65,7 @@ const AllPopularPost: React.FC = () => {
   
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    fetchPosts(undefined,null, term,'view');
+    fetchPosts(undefined,null, term);
   };
 
   const handlePreviousPage = () => {
@@ -210,7 +210,7 @@ const AllPopularPost: React.FC = () => {
         setLoading(false);
     }
     
-    fetchPosts(undefined,undefined,undefined,'view');
+    fetchPosts(undefined,undefined,undefined);
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setDropdownOpen(false);
@@ -233,7 +233,7 @@ const AllPopularPost: React.FC = () => {
       
       
       ${cursor}`)
-      fetchPosts(cursor,undefined,undefined,'view');
+      fetchPosts(cursor,undefined,undefined);
   }, [currentPage]);
 
   return (
@@ -247,7 +247,7 @@ const AllPopularPost: React.FC = () => {
             {
               managementType === 'post' &&(
                 <> 
-                <h1 className="title_manage">조회수 높은 순으로 전체보기</h1>
+                <h1 className="title_manage">작성 순으로 전체보기</h1>
                 <SearchBar onSearch={handleSearch}/>
                 <div className='post-manage'>
                 {!loading && !error && posts.length > 0 && (
