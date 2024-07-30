@@ -1,34 +1,35 @@
+/* src/components/CategoryList.css */
+.level-0 {
+  padding: 10px;
+  border: 1px solid #ff80bf;
+  border-radius: 5px;
+  margin: 5px 0;
+  background-color: #f8dbee;
+}
 
-  .level-0 {
-    margin-left: 0px;
-    padding: 10px;
-    border: 1px solid #ff80bf;
-    border-radius: 5px;
-    margin: 5px 0;
-    background-color: #f8dbee;
-  }
-  
-  .level-1 {
-    margin-left: 20px;
-    padding: 10px;
-    border: 1px solid #ff80bf;
-    border-radius: 5px;
-    margin: 5px 0;
-    background-color: #f1bee1;
-  }
-  
-  .level-2 {
-    margin-left: 40px;
-    padding: 10px;
-    border: 1px solid #ff80bf;
-    border-radius: 5px;
-    margin: 5px 0;
-    background-color: #f0a4d8;
-  }
-  
-  .addChangeDeleteBtn{
-    margin-left: 10px;
-    border: none;
-    color:rgb(105, 105, 105);
-    background-color: rgba(255, 255, 255, 0);
-  }
+.level-1 {
+  padding: 10px;
+  border: 1px solid #ff80bf;
+  border-radius: 5px;
+  margin: 5px 0;
+  background-color: #f1bee1;
+}
+
+.level-2 {
+  padding: 10px;
+  border: 1px solid #ff80bf;
+  border-radius: 5px;
+  margin: 5px 0;
+  background-color: #f0a4d8;
+}
+.highlight {
+  background-color: #eee8ec00;
+  font-weight: bold;
+  color: #ff0381; /* 원하는 색상으로 변경 */
+}
+.addChangeDeleteBtn{
+  margin-left: 10px;
+  border: none;
+  color:rgb(105, 105, 105);
+  background-color: rgba(255, 255, 255, 0);
+}

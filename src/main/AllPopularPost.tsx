@@ -86,7 +86,11 @@ const AllPopularPost: React.FC = () => {
       setCurrentPage(currentPage + 1);
     }
   };
-  
+  const highlightKeyword = (text, keyword) => {
+    if (!keyword) return text;
+    const regex = new RegExp(`(${keyword})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  };
   /**
    * 새 글 작성하기로 이동하기 위한 메서드
    */
@@ -262,28 +266,28 @@ const AllPopularPost: React.FC = () => {
                 <div className='post-manage'>
                 {!loading && !error && posts.length > 0 && (
                   <div className="post-list">
-                    {posts.map((post) => (
-                      <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
-                        <div className="post-header">
+                  {posts.map((post) => (
+                    <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                      <div className="post-header">
                         <div className="title-container">
-                          <h2 className="post-title">{post.board_title}</h2>
+                          <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
                           <span className="user-nickname">{post.user_nickname}</span>
                         </div>
-                          <div className="post-meta">
-                          <span className="post-category">{ post.category_name}</span>
-                            <span className="post-date">{formatDate(post.created_at)}</span>
-                            <span className="post-stats">
-                              <span className="user-nickname">조회수: {post.board_view}</span>
-                              <span className="user-nickname">🥕 : {post.board_like}</span>
-                              <span className="user-nickname">댓글: {post.board_comment}</span>
-                            </span>
-                          </div>
+                        <div className="post-meta">
+                          <span className="post-category">{post.category_name}</span>
+                          <span className="post-date">{formatDate(post.created_at)}</span>
+                          <span className="post-stats">
+                            <span className="user-nickname">조회수: {post.board_view}</span>
+                            <span className="user-nickname">🥕 : {post.board_like}</span>
+                            <span className="user-nickname">댓글: {post.board_comment}</span>
+                          </span>
                         </div>
-                        <div className="post-content">{post.board_content}</div>
-      
                       </div>
-                    ))}
-                  </div>
+                      <div className="post-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
+                    </div>
+                  ))}
+                </div>
+                
                 )}
                 <div className="pagination">
                   <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>

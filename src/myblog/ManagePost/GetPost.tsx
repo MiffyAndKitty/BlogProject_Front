@@ -198,6 +198,11 @@ const GetPost: React.FC = () => {
     setCategory(categoryItem);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
+  const highlightKeyword = (text, keyword) => {
+    if (!keyword) return text;
+    const regex = new RegExp(`(${keyword})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  };
   const renderCategoryMenu = (categories: TYPES.categories[], level: number = 0) => {
     return (
       <>
@@ -332,7 +337,7 @@ const GetPost: React.FC = () => {
                       <div className="post-card" key={post.board_id}>
                         <div className="post-header">
                         <div className="title-container">
-                          <h2 className="post-title">{post.board_title}</h2>
+                          <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
                           <span className="user-nickname">{post.user_nickname}</span>
                         </div>
                           <div className="post-meta">
@@ -345,7 +350,7 @@ const GetPost: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="post-content">{post.board_content}</div>
+                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></div>
                         <div className="post-actions">
                           <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
                             수정

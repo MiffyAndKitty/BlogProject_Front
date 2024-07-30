@@ -1,5 +1,5 @@
 // src/components/CategoryList.tsx
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { categories as Categories } from '../types/index';
 import up_arrow from '../img/up_arrow.png';
 import down_arrow from '../img/down_arrow.png';

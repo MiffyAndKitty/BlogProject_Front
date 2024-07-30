@@ -131,6 +131,8 @@ const AllPopularPost: React.FC = () => {
    * 게시글 불러오기
    */
   const fetchPosts = async (cursor?: string, categoryID?: string, query?:string,sort?:string) => {
+    setLoading(true); 
+    setError(null);  
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
@@ -243,7 +245,11 @@ const AllPopularPost: React.FC = () => {
   const goToDetailPost = (postID: string , postAthor:String)=>{
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
   }
-
+  const highlightKeyword = (text, keyword) => {
+    if (!keyword) return text;
+    const regex = new RegExp(`(${keyword})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  };
   return (
     <>
       <Header pageType="logout" />
@@ -264,7 +270,7 @@ const AllPopularPost: React.FC = () => {
                       <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
                         <div className="post-header">
                         <div className="title-container">
-                          <h2 className="post-title">{post.board_title}</h2>
+                        <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
                           <span className="user-nickname">{post.user_nickname}</span>
                         </div>
                           <div className="post-meta">
@@ -277,7 +283,7 @@ const AllPopularPost: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="post-content">{post.board_content}</div>
+                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></div>
       
                       </div>
                     ))}
