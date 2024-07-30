@@ -66,3 +66,35 @@ export const saveNewCategory = async (newCategory: TYPES.newCategory): Promise<a
         console.log(response);
         return response;
 };
+
+/**
+ * 좋아요 추가
+ * @param postData 
+ * @returns 
+ */
+export const addLike = async (boardId: Object): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<TYPES.newCategory>('/board/like', boardId,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
+};
+
+/**
+ * 좋아요 삭제
+ * @param postData 
+ * @returns 
+ */
+export const deleteLike = async (boardId: Object): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<TYPES.newCategory>('/board/unlike', boardId,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
+};

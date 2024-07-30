@@ -5,6 +5,7 @@ import Footer from '../structure/Footer';
 import SearchBar from '../structure/SearchBar';
 import '../myblog/ManagePost/GetPost.css';
 import * as TYPES from '../types/index';
+import filledCarrot from '../img/filledCarrot.png';
 import mainCharacterImg from '../img/main_character.png';
 import Profile from '../main/Profile';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
@@ -278,7 +279,7 @@ const AllPopularPost: React.FC = () => {
                             <span className="post-date">{formatDate(post.created_at)}</span>
                             <span className="post-stats">
                               <span className="user-nickname">조회수: {post.board_view}</span>
-                              <span className="user-nickname">🥕 : {post.board_like}</span>
+                              <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
                               <span className="user-nickname">댓글: {post.board_comment}</span>
                             </span>
                           </div>

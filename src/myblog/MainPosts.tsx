@@ -6,6 +6,7 @@ import { getPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { Link, useNavigate } from "react-router-dom";
 import SearchBar from '../structure/SearchBar';
+import filledCarrot from '../img/filledCarrot.png';
 
 interface MainPostsProps {
   nicknameParam : string
@@ -172,11 +173,12 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     <main>
       <div className="main-container">
         <div className="container">
+        <h1>{nicknameParam}의 블로그</h1>
         <SearchBar onSearch={handleSearch} />
           {!loading && !error && posts.length > 0 && (
             <div style={{marginTop:'15px'}} className="post-main-main-list" >
               {posts.map(post => (
-                <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id)}>
+                <div className="post-main-card" key={post.board_id} >
                   <div className="post-main-header">
                   <div className="title-container">
                     <h2 className="post-title">{post.board_title}</h2>
@@ -188,12 +190,12 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                       <span className="post-main-date">{formatDate(post.created_at)}</span>
                       <span className="post-main-stats">
                         <span className="user-nickname">조회수: {post.board_view}</span>
-                        <span className="user-nickname">🥕 : {post.board_like}</span>
+                        <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
                         <span className="user-nickname">댓글: {post.board_comment}</span>
                       </span>
                     </div>
                   </div>
-                  <div className="post-main-content">{post.board_content}</div>
+                  <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>{post.board_content}</div>
 
                 </div>
               ))}

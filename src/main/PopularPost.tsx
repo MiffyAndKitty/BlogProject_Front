@@ -3,10 +3,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import './PopularPost.Module.css';
 import { getALLPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
-import goLeft from '../img/<.png';
-import goRight from '../img/>.png';
-import * as TYPES from '../types/index';
-
+import filledCarrot from '../img/filledCarrot.png';
 const PopularPost: React.FC = () => {
   const [posts, setPosts] =  useState([]);
   const [isBefore, setIsBefore] = useState<boolean>(false);
@@ -161,7 +158,8 @@ const PopularPost: React.FC = () => {
                 <div className="post-popular-footer">
                   <span className="post-popular-likes">카테고리: {post.category_name}</span>
                   <span className="post-popular-likes">조회수: {post.board_view}</span>
-                  <span className="post-popular-likes">🥕: {post.board_like}</span>
+                  <img style={{width:'15px', height:'15px', marginLeft:'50px'}} src={filledCarrot}></img>
+                  <span className="post-popular-likes">: {post.board_like}</span>
                   <span className="post-popular-comments">댓글: {post.board_comment}</span>
                 </div>
               </div>

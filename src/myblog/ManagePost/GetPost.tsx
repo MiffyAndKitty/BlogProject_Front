@@ -11,6 +11,7 @@ import { getPosts,getCategories } from '../../services/getService';
 import { deletePost } from '../../services/deleteService';
 import { useNavigate } from 'react-router-dom';
 import CategorySettings from '../CategorySetting';
+import filledCarrot from '../../img/filledCarrot.png';
 import ConfirmModal from '../ConfirmModal'; 
 
 const GetPost: React.FC = () => {
@@ -345,7 +346,7 @@ const GetPost: React.FC = () => {
                             <span className="post-date">{formatDate(post.created_at)}</span>
                             <span className="post-stats">
                               <span className="user-nickname">조회수: {post.board_view}</span>
-                              <span className="user-nickname">🥕 : {post.board_like}</span>
+                              <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
                               <span className="user-nickname">댓글: {post.board_comment}</span>
                             </span>
                           </div>

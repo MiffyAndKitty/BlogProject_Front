@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams,Link  } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import SearchBar from '../structure/SearchBar';
@@ -13,6 +13,7 @@ import { getALLPosts,getCategories } from '../services/getService';
 import { deletePost } from '../services/deleteService';
 import { useNavigate } from 'react-router-dom';
 import PostDetail from '../myblog/PostDetail';
+import filledCarrot from '../img/filledCarrot.png'
 import CategorySettings from '../myblog/CategorySetting';
 import ConfirmModal from '../myblog/ConfirmModal'; 
 
@@ -267,23 +268,23 @@ const AllPopularPost: React.FC = () => {
                 {!loading && !error && posts.length > 0 && (
                   <div className="post-list">
                   {posts.map((post) => (
-                    <div className="post-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                    <div className="post-card" key={post.board_id} >
                       <div className="post-header">
                         <div className="title-container">
                           <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                          <span className="user-nickname">{post.user_nickname}</span>
+                          <Link to={`/${post.user_nickname}`} className="user-nickname">{post.user_nickname}</Link>
                         </div>
                         <div className="post-meta">
                           <span className="post-category">{post.category_name}</span>
                           <span className="post-date">{formatDate(post.created_at)}</span>
                           <span className="post-stats">
                             <span className="user-nickname">조회수: {post.board_view}</span>
-                            <span className="user-nickname">🥕 : {post.board_like}</span>
+                            <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
                             <span className="user-nickname">댓글: {post.board_comment}</span>
                           </span>
                         </div>
                       </div>
-                      <div className="post-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
+                      <div className="post-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}></div>
                     </div>
                   ))}
                 </div>

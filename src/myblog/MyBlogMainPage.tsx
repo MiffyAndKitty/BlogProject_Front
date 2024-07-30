@@ -102,7 +102,9 @@ const MyBlogMainPage: React.FC = () => {
 
         <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
         <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+        
         {  postID? (
+          
         <PostDetail/>
       ) : (
         <MainPosts nicknameParam = {nickname} categoryID={categoryID} onPostClick={onPostClick} />
