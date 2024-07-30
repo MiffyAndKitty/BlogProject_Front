@@ -152,7 +152,11 @@ const AllPopularPost: React.FC = () => {
         board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
       }));
       setPosts(postsWithCleanContent);
-      setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
+      if(fetchedPosts.data.total.totalPageCount){
+        setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
+      }else{
+        setTotalPages(1);
+      }
     //   const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
     //   setCategories(fetchedCategories);
       //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);

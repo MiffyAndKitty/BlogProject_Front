@@ -134,6 +134,8 @@ const AllPopularPost: React.FC = () => {
    * 게시글 불러오기
    */
   const fetchPosts = async (cursor?: string, categoryID?: string, query?:string,sort?:string) => {
+    setLoading(true); 
+    setError(null);  
     try {
       const nickname=localStorage.getItem('nickname');
       setNickname(nickname);
@@ -155,14 +157,12 @@ const AllPopularPost: React.FC = () => {
         board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
       }));
       setPosts(postsWithCleanContent);
-      setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
+      setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
     //   const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
     //   setCategories(fetchedCategories);
       //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
-      if (currentPage === 1) {
+      if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-      } else if (currentPage === totalPages) {
-        setCursor(fetchedPosts.data.data[0].board_id);
       }
 
 

@@ -100,41 +100,43 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
+    setCurrentPage(1);
     fetchPosts(undefined,null, term);
   };
 
-  /**
-   * 게시글 불러오기
-   */
-  const fetchPosts = async (cursor?: string, categoryID?: string, query?:string) => {
+  const fetchPosts = async (cursor?: string, categoryID?: string, query?: string) => {
+    setLoading(true); 
+    setError(null);  
+  
     try {
-      const nickname=localStorage.getItem('nickname');
+      const nickname = localStorage.getItem('nickname');
       setNickname(nickname);
-      const fetchedPosts = await getPosts(nicknameParam,cursor,isBefore,categoryID,query);
+  
+      const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query);
       setIsWriter(fetchedPosts.data.isWriter);
-      console.log(`
-        ====fetchedPosts====
-        `,fetchedPosts.data.data);
+  
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,
-        board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
+        board_content: removeUnwantedTags(post.board_content),
       }));
+  
       setPosts(postsWithCleanContent);
-      setTotalPages(fetchedPosts.data.total.totalPageCount); // 전체 페이지 수 설정
+  
+      setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
+  
+      if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
+        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
+      }
+  
       const fetchedCategories: TYPES.categories[] = await getCategories(nicknameParam);
       setCategories(fetchedCategories);
-      //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
-      if (currentPage === 1) {
-        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-      } else if (currentPage === totalPages) {
-        setCursor(fetchedPosts.data.data[0].board_id);
-      }
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);
     }
   };
+  
 
   const goToDetailPost = (postID: string)=>{
     navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
@@ -156,6 +158,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   }, []);
 
   useEffect (()=>{
+    setCurrentPage(1);
     fetchPosts(undefined,  categoryID);
   },[categoryID]);
 
