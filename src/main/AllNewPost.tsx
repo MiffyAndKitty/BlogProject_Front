@@ -240,7 +240,7 @@ const AllPopularPost: React.FC = () => {
       
       
       ${cursor}`)
-      fetchPosts(cursor,undefined,undefined);
+      fetchPosts(cursor,undefined,searchTerm);
   }, [currentPage]);
 
   const goToDetailPost = (postID: string , postAthor:String)=>{
@@ -284,7 +284,7 @@ const AllPopularPost: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></div>
+                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
       
                       </div>
                     ))}

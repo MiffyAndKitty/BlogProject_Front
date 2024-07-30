@@ -13,6 +13,7 @@ import './PostDetail.css';
 
 
 const PostDetail: React.FC = () => {
+  const [token, setToken] = useState<string>('');
   const { postID, nickname } = useParams();
   const [post, setPost] = useState<TYPES.getPostDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -51,6 +52,10 @@ const PostDetail: React.FC = () => {
     }
   };
   useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if(token){
+      setToken(token);
+    }
     const fetchPostDetail = async () => {
       try {
         const fetchedPost = await getPost(postID);
@@ -94,7 +99,7 @@ const PostDetail: React.FC = () => {
                 <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
                 
                 <div>
-                <span className="postdetail-likes"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
+                  <span className="postdetail-likes"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
                   <span className="postdetail-comments">조회수: {post.board_view}</span>
                   <span className="postdetail-comments">댓글: {post.board_comment}</span>
                 </div>
@@ -103,8 +108,9 @@ const PostDetail: React.FC = () => {
               <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />
               
             </div>
-            <button onClick={handleLike} className={`like-button ${liked[postID] ? 'liked' : ''}`}>
-              {liked[postID] ? (
+            {token &&(
+              <button onClick={handleLike} className={`like-button ${liked[postID] ? 'liked' : ''}`}>
+              {(liked[postID]) ? (
                 <>
                   <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
                   <span>:</span>
@@ -118,6 +124,8 @@ const PostDetail: React.FC = () => {
                 </>
               )}
             </button>
+            )}
+            
             </div>
             </div>
         </main>

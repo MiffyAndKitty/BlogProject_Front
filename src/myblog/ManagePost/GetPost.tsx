@@ -272,7 +272,7 @@ const GetPost: React.FC = () => {
       
       
       ${cursor} ${category.category_id}`)
-    fetchPosts(cursor,category.category_id);
+    fetchPosts(cursor,category.category_id,searchTerm);
   }, [currentPage]);
 
   useEffect(() => {
@@ -287,7 +287,8 @@ const GetPost: React.FC = () => {
       
       
       ${cursor} ${category.category_id}`)
-    fetchPosts(undefined,category.category_id);
+      setCursor('');
+      fetchPosts(undefined,category.category_id,searchTerm);
   }, [category]);
   return (
     <>
@@ -351,7 +352,7 @@ const GetPost: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></div>
+                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
                         <div className="post-actions">
                           <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
                             수정

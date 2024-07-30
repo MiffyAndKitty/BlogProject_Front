@@ -142,13 +142,6 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const goToDetailPost = (postID: string)=>{
     navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
   }
-  // useEffect(() => {
-  //   const token = localStorage.getItem('accessToken');
-   
-  //   if (!token) {
-  //     navigate('/');
-  //   }
-  // }, [navigate]);
 
   useEffect(() => {
     handleSearch(searchTerm);
@@ -160,12 +153,19 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   useEffect (()=>{
     setCurrentPage(1);
-    fetchPosts(undefined,  categoryID);
+    setCursor('');
+    fetchPosts(undefined,  categoryID,searchTerm);
   },[categoryID]);
 
   useEffect(() => {
-    fetchPosts(cursor,categoryID); // 현재 페이지에 해당하는 게시물 불러오기
+    fetchPosts(cursor,categoryID,searchTerm);
   }, [currentPage]);
+
+  const highlightKeyword = (text, keyword) => {
+    if (!keyword) return text;
+    const regex = new RegExp(`(${keyword})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
+  };
 
   return (
     <>
@@ -181,7 +181,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 <div className="post-main-card" key={post.board_id} >
                   <div className="post-main-header">
                   <div className="title-container">
-                    <h2 className="post-title">{post.board_title}</h2>
+                  <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
                     <Link to={`/${post.user_nickname}`} className="user-nickname">{post.user_nickname}</Link>
                   </div>
                     
@@ -195,7 +195,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                       </span>
                     </div>
                   </div>
-                  <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>{post.board_content}</div>
+                  <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
 
                 </div>
               ))}

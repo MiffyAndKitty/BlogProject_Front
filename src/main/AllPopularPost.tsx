@@ -241,7 +241,7 @@ const AllPopularPost: React.FC = () => {
       
       
       ${cursor}`)
-      fetchPosts(cursor,undefined,undefined,'view');
+      fetchPosts(cursor,undefined,searchTerm,'view');
   }, [currentPage]);
 
   const goToDetailPost = (postID: string , postAthor:String)=>{

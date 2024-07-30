@@ -30,7 +30,15 @@ const WriteNewPost: React.FC = () => {
   const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
   const navigate = useNavigate();
   const newImages: File[] = [];
-
+  const errorMessage ='제목과 내용을 모두 입력해주세요!';
+  const [errors, setErrors] = useState({
+    title:'',
+    content:''
+  });
+  const [touched, setTouched] = useState({
+    title:'',
+    content:''
+  });
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -141,7 +149,10 @@ const WriteNewPost: React.FC = () => {
     return [];
   };
   const savePost = async () => {
-    
+    if(!title || !content){
+      alert(errorMessage);
+      return;
+    }
     const imagesFromSaveImgs = await saveImgs();
     console.log('Images in savePost before formData:', imagesFromSaveImgs);
     const newPostData: newPost = { 
@@ -227,6 +238,26 @@ const WriteNewPost: React.FC = () => {
     console.log('Updated images in useEffect:', images);
   }, [images]);
 
+  const validateTitle = (title: string) => {
+    return title.trim() !== '';
+  };
+
+  const validateContent = (content: string) => {
+    return content.trim() !== '';
+  };
+  useEffect(() => {
+    const validateFields = async () => {
+      const newErrors = {
+        title: touched.title && !validateTitle(title) ? '제목을 입력해주세요.' : '',
+        content: touched.content && !validateContent(content) ? '내용을 입력해주세요.' : '',
+      };
+
+      setErrors(newErrors);
+    };
+
+    validateFields();
+  }, [title, content]);
+
   return (
     <div className="App">
       <Header pageType="logout" />
@@ -250,7 +281,9 @@ const WriteNewPost: React.FC = () => {
               value={title}
               onChange={handleTitleChange}
               className="form-control title-input"
+              isInvalid={!!errors.title}
             />
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.title}</Form.Control.Feedback>
           </Form.Group>
           <Form.Group controlId="formPrivate" className="privacy-checkbox-group">
             <Form.Check
@@ -297,6 +330,7 @@ const WriteNewPost: React.FC = () => {
               ]}
               className="form-control textarea"
             />
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.content}</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="formTagInput">
