@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 import mainCharacterImg from '../img/main_character.png';
 import SearchBar from './SearchBar';
+import UserProfile from './UserProfile';
+import profileImg from '../img/profileImg.png'
+
 interface ProfileProps {
   pageType: 'login' | 'signup'|'logout' ;
 }
@@ -29,14 +32,11 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          {/* <nav className="header__nav">
-            <ul>
-              <SearchBar />
-        
-            </ul>
-          </nav> */}
+
           <div className="header__auth">
-            <Link to="/login">로그인</Link>
+            <Link to="/login">
+            <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
+            </Link>
           </div>
         </>
       
@@ -48,11 +48,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          {/* <nav className="header__nav">
-            <ul>
-             <SearchBar />
-            </ul>
-          </nav> */}
+
           <div className="header__auth">
             <Link to="/">로그아웃</Link>
           </div>
@@ -67,13 +63,11 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
-          {/* <nav className="header__nav">
-            <ul>
-             <SearchBar />
-            </ul>
-          </nav> */}
+
           <div className="header__auth">
-            <Link to="/signup">회원가입</Link>
+            <Link to="/login">
+            <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
+            </Link>
           </div>
         </>
        
