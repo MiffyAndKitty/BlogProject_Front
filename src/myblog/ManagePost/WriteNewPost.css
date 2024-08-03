@@ -164,3 +164,17 @@
 .privacy-checkbox-group {
   flex-shrink: 0; /* 공개 여부 선택이 너무 작아지지 않도록 */
 }
+/* 글 내용 스타일 */
+.ql-editor {
+  min-height: 300px;
+}
+/* ReactQuill align 모듈 스타일 */
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-align-justify {
+  text-align: justify;
+}

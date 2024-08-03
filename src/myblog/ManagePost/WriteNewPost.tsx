@@ -309,7 +309,7 @@ const WriteNewPost: React.FC = () => {
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   ['bold', 'italic', 'underline'],
                   [{ color: [] }, { background: [] }],
-                  [{ align: [] }],
+                  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
                   ['link', 'image'],
                   ['clean'],
                 ],
