@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import './MainPosts.css';
 import * as TYPES from '../types/index';
 import mainCharacterImg from '../img/main_character.png';
@@ -7,7 +7,8 @@ import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import { Link, useNavigate } from "react-router-dom";
 import SearchBar from '../structure/SearchBar';
 import filledCarrot from '../img/filledCarrot.png';
-
+import  upBtn  from '../img/upToggle.png';
+import  downBtn  from '../img/downToggle.png';
 interface MainPostsProps {
   nicknameParam : string
   categoryID : string
@@ -25,7 +26,11 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
+  const [sortName, setSortName] = useState('최신순'); // 정렬 이름 상태 추가
+  const [sortedPosts, setSortedPosts] = useState(posts); // 정렬된 포스트 상태 추가
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -33,7 +38,12 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     else alert("수정권한이 없습니다!");
     
   };
-
+  const handleSortChange = (option, name) => {
+    setSortOption(option);
+    setDropdownOpen(false); // 드롭다운을 닫음
+    setSortName(name);
+    console.log(option)
+  };
   /**
    * 날짜 문자열을 원하는 형식으로 변환하는 함수
    * @param dateString - ISO 형식의 날짜 문자열
@@ -105,7 +115,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     fetchPosts(undefined,null, term);
   };
 
-  const fetchPosts = async (cursor?: string, categoryID?: string, query?: string) => {
+  const fetchPosts = async (cursor?: string, categoryID?: string, query?: string, sort?:string) => {
     setLoading(true); 
     setError(null);  
   
@@ -113,7 +123,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       const nickname = localStorage.getItem('nickname');
       setNickname(nickname);
   
-      const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query);
+      const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query,sort);
       setIsWriter(fetchedPosts.data.isWriter);
   
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -149,18 +159,33 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   useEffect(() => {
     fetchPosts();
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   useEffect (()=>{
     setCurrentPage(1);
+    setSearchTerm('');
     setCursor('');
     fetchPosts(undefined,  categoryID,searchTerm);
   },[categoryID]);
 
   useEffect(() => {
-    fetchPosts(cursor,categoryID,searchTerm);
+    fetchPosts(cursor,categoryID,searchTerm,sortOption);
   }, [currentPage]);
-
+  useEffect(()=>{
+    setSearchTerm('');
+    setCurrentPage(1);
+    setCursor('');
+    fetchPosts(undefined,categoryID,undefined,sortOption);
+  },[sortOption])
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
     const regex = new RegExp(`(${keyword})`, 'gi');
@@ -174,8 +199,25 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       <div className="main-container">
         <div className="container">
         <h1>{nicknameParam}의 블로그</h1>
-        <SearchBar onSearch={handleSearch} />
+        
           {!loading && !error && posts.length > 0 && (
+            <>
+            <div className="search-and-sort-container">
+            <SearchBar onSearch={handleSearch} />
+            <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px',marginRight: '-200px',fontWeight:'bold' }}>
+                  <button className="dropdown-getpost-toggle" style={{ fontWeight:'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                    {sortName} {dropdownOpen ? <img src={upBtn} style={{width:'15px', height:'15px'}}/>:<img src={downBtn} style={{width:'15px', height:'15px'}}/>}
+                  </button>
+                  {dropdownOpen && (
+                    <div className="dropdown-menu" >
+                      <button className="dropdown-item" onClick={() => handleSortChange('','최신순')}>최신순</button>
+                      <button className="dropdown-item" onClick={() => handleSortChange('like','인기순(당근수)')}>인기순(당근수)</button>
+                      <button className="dropdown-item" onClick={() => handleSortChange('view','조회순')}>조회순</button>
+                    </div>
+                  )}
+                </div>
+            </div>
+            
             <div style={{marginTop:'15px'}} className="post-main-main-list" >
               {posts.map(post => (
                 <div className="post-main-card" key={post.board_id} >
@@ -200,6 +242,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 </div>
               ))}
             </div>
+            </>
           )}
           <div className="pagination">
             <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>

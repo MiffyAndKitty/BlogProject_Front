@@ -8,6 +8,11 @@
   max-width: 100%;
   height: auto;
 }
+.search-and-sort-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .container {
     flex: 2;

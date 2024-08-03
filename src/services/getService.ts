@@ -38,7 +38,7 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 사용자별 게시글 목록 불러오기
  * @returns 
  */
-export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string): Promise<any> => {
+export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string,sort?: string): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/:${nickname}`;
   const params: Record<string, any> = {};
@@ -54,6 +54,9 @@ export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolea
   }
   if(query){
     params.query = query;
+  }
+  if(sort){
+    params.sort = sort;
   }
   const queryString = new URLSearchParams(params).toString();
   if (queryString) {
