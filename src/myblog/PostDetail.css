@@ -14,7 +14,12 @@
     margin-bottom: 20px;
     color: #333;
   }
-  
+  .button-group {
+    display: flex;
+    gap: 10px; /* 버튼 사이의 간격을 조정할 수 있습니다 */
+    margin-top: 10px; /* 버튼 그룹의 상단 마진을 조정할 수 있습니다 */
+  }
+
   .postdetail-meta {
     margin-top: 20px;
     font-size: 0.9em;
@@ -47,4 +52,20 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .tags {
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .tag {
+    font-weight: bold;
+    display: inline-block;
+    background-color: #FFE6FA;
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 14px;
   }

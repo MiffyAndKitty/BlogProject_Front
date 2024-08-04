@@ -81,6 +81,9 @@ const GetPost: React.FC = () => {
       setCurrentPage(currentPage + 1);
     }
   };
+  const goToDetailPost = (postID: string)=>{
+    navigate(`/${nickname}/${postID}`, { state: { postID } });
+  }
    // 주어진 카테고리 ID를 찾기 위한 재귀 함수
    const findCategoryById = (categories: TYPES.categories[], categoryId: string) => {
 
@@ -352,7 +355,7 @@ const GetPost: React.FC = () => {
                             </span>
                           </div>
                         </div>
-                        <div className="post-content"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
+                        <div className="post-content" onClick={() => goToDetailPost(post.board_id)} dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
                         <div className="post-actions">
                           <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
                             수정

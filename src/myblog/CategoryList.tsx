@@ -4,6 +4,7 @@ import { categories as Categories } from '../types/index';
 import up_arrow from '../img/up_arrow.png';
 import down_arrow from '../img/down_arrow.png';
 import './CategoryList.css';
+import ConfirmModal from './ConfirmModal'; 
 
 interface CategoryListProps {
   categories: Categories[];
@@ -21,7 +22,8 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
   const [newCategoryName, setNewCategoryName] = useState<string>('');
   const [addingSubcategoryId, setAddingSubcategoryId] = useState<string | null>(null);
   const [newSubcategoryName, setNewSubcategoryName] = useState<string>('');
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null); 
   const handleMouseEnter = (categoryId: string) => {
     setHoveredCategoryId(categoryId);
   };
@@ -29,7 +31,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
   const handleMouseLeave = () => {
     setHoveredCategoryId(null);
   };
- 
+  const handleDeleteCategory = (categoryId: string) => {
+    setCategoryToDelete(categoryId);
+    setIsModalOpen(true);
+  };
+
+  const confirmDeleteCategory = () => {
+    if (categoryToDelete) {
+      onDeleteCategory(categoryToDelete);
+    }
+    setIsModalOpen(false);
+    setCategoryToDelete(null);
+  };
   return (
     <div>
       {categories.map(category => (
@@ -60,7 +73,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
                       <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
                     )}
                     <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(category.category_id)}>수정</button>
-                    <button className='addChangeDeleteBtn' onClick={() => onDeleteCategory(category.category_id)}>삭제</button>
+                    {(level === 2 ||!category.subcategories ) &&(
+                    <>
+                    <button className='addChangeDeleteBtn' onClick={() => handleDeleteCategory(category.category_id)}>삭제</button>
+                      <ConfirmModal
+                        isOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        onConfirm={confirmDeleteCategory}
+                        message="이 카테고리를 삭제하시겠습니까?"
+                      />
+                  </>
+                    )}
+                   
                   </span>
                 )}
               </div>
@@ -75,8 +99,8 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
                 onChange={(e) => setNewSubcategoryName(e.target.value)}
                 placeholder="하위 카테고리 이름"
               />
-              <button className='addChangeDeleteBtn' onClick={() => { onAddSubcategory(category.category_id, newSubcategoryName); setAddingSubcategoryId(null); }}>추가</button>
-              <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(null)}>취소</button>
+              <button className='addChangeDeleteBtn' onClick={() => { onAddSubcategory(category.category_id, newSubcategoryName); setAddingSubcategoryId(null); setNewSubcategoryName('');}}>추가</button>
+              <button className='addChangeDeleteBtn' onClick={() => {setAddingSubcategoryId(null); setNewSubcategoryName('');}}>취소</button>
             </div>
           )}
 

@@ -101,9 +101,9 @@ const WriteNewPost: React.FC = () => {
       if (!tags.includes(tagInput.trim())&& tags.length < 10) {
         setTags([...tags, tagInput.trim()]);
       }
-      if(tags.length===10){
-        alert('최대 태그 수 10개를 넘었습니다!');
-      }
+      // if(tags.length===10){
+      //   alert('최대 태그 수 10개를 넘었습니다!');
+      // }
       setTagInput('');
     }
   };
@@ -336,7 +336,7 @@ const WriteNewPost: React.FC = () => {
           <Form.Group controlId="formTagInput">
             <Form.Control
               type="text"
-              placeholder="태그를 입력하고 엔터를 누르세요"
+              placeholder="태그를 입력하고 엔터를 누르세요 (최대 10개)"
               value={tagInput}
               onChange={handleTagInputChange}
               onKeyDown={handleTagInputKeyDown}

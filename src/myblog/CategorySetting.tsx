@@ -124,9 +124,6 @@ const CategorySettings = () => {
 
   const removeCategory = async (categoryId: string) => {
     try {
-      // let removeData: TYPES.deleteCategory={
-      //   categoryId: categoryId
-      // }
       await deleteCategory(categoryId);
       fetchCategories();
     } catch (err) {
