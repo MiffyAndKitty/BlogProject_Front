@@ -229,3 +229,30 @@ export const getPopTags = async (): Promise<any> => {
   console.log(response);
   return response.data;
 };
+
+/**
+ * 사용자 프로필 가져오기
+ * @returns 
+ */
+export const getMyProfile = async (nickname: string): Promise<any> => {
+  const token = getToken();
+  const url = `/users/:${nickname}`;
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get(url,{
+      headers:{
+        
+      }
+    });
+  }else{
+    response = await apiClient.get(url,{
+      headers:{
+        'Authorization': `${token}`,
+      }
+    });
+  }
+
+  console.log(response);
+  return response.data;
+};

@@ -34,9 +34,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <Link to="/login">
             <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
-            </Link>
           </div>
         </>
       
@@ -50,7 +48,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <Link to="/">로그아웃</Link>
+            <UserProfile profileType={'logout'} profileImage={profileImg}></UserProfile>
           </div>
         </>
        
@@ -65,9 +63,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <Link to="/login">
             <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
-            </Link>
           </div>
         </>
        

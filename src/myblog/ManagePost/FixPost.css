@@ -110,7 +110,7 @@
     position: relative;
     display: inline-block;
   }
-  
+/*   
   .dropdown-toggle {
     background-color: #ffffff00;
     color: #ff69b4;
@@ -138,7 +138,7 @@
   
   .dropdown-item:hover {
     background-color: #FFE6FA;
-  }
+  } */
 .private{
   margin-top:50px;
 }

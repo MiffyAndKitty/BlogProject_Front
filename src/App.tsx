@@ -17,6 +17,7 @@ import CategorySettings from './myblog/CategorySetting';
 import PostDetail from './myblog/PostDetail';
 import AllPopularPost from './main/AllPopularPost';
 import AllNewPost from './main/AllNewPost';
+import MyProfileSetting from './main/MyProfileSetting';
 import {
   BrowserRouter as Router,
   Route,
@@ -55,6 +56,7 @@ function App() {
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
       <Route path={`/categorySetting/:nickname`} element={<CategorySettings></CategorySettings>} />
+      <Route path={`/myProfileSetting/:nickname`} element={<MyProfileSetting></MyProfileSetting>} />
     </Routes>
     </Router>
   );

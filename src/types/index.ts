@@ -105,3 +105,16 @@ export interface changeCategory {
     categoryName:string,
     categoryId: string
 }
+
+export interface userData{
+    isSelf: Boolean,
+    user_id: string,
+    created_at: string,
+    updated_at:string,
+    user_nickname : string
+    user_email:string
+    user_image:File | null
+    user_message:string | null
+    user_password: string | null
+    user_provider:string | null
+}

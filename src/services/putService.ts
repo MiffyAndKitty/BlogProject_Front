@@ -49,3 +49,20 @@ export const updateCategory = async (postData: TYPES.changeCategory): Promise<an
   return response;
 
 };
+
+/**
+ * 프로필 데이터 수정
+ * @returns 
+ */
+export const updateProfile = async (postData:Object): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.put<any>(`/users`,postData,{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response);
+  return response;
+
+};

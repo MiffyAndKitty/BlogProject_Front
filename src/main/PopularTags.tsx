@@ -12,16 +12,8 @@ const PopularTags: React.FC = () => {
   const fetchTags = async () => {
     try {
       const fetchedTags = await getPopTags();
-      console.log(`
-      
-      
-      
-        fetchedTags
-        
-        
-        `,fetchedTags)
       setTags(fetchedTags.data);
-      console.log('fetchedTags',fetchedTags)
+
     } catch (err) {
       setError('태그들을 불러오는 중에 오류가 발생했습니다.');
     } finally {
