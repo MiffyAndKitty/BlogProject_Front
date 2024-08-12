@@ -216,3 +216,16 @@ export const getCategories = async (nickname: string): Promise<TYPES.categories[
   return response.data.data;
 };
 
+/**
+ * 1시간 내로 업로드 된 게시글에서 사용된 태그들 중 가장 많이 사용된 태그 10개를 조회합니다. 
+ * @returns 
+ */
+export const getPopTags = async (): Promise<any> => {
+  const response = await apiClient.get<any>(`/tag/popularity`,{
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  console.log(response);
+  return response.data;
+};
