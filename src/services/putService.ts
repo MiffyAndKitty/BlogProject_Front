@@ -3,7 +3,7 @@ import * as TYPES from '../types/index';
 import axios from 'axios';
 
 const multipart = axios.create({
-  baseURL: 'http://158.247.206.80:65020',
+  baseURL: 'https://mk-blogservice.site/api',
   headers: {
     'Content-Type': 'multipart/form-data',
     // 필요한 경우 추가 헤더 설정
