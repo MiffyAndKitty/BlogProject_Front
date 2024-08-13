@@ -48,3 +48,28 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
+.profile-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .profile-details {
+    margin-left: 15px;
+  }
+  
+  .username {
+    font-weight: bold;
+    font-size: 18px;
+  }
+  
+  .status-message {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  hr {
+    margin: 5px 0;
+    border: 0;
+    border-top: 1px solid #ccc;
+    width: 100%;
+  }

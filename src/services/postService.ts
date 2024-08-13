@@ -16,19 +16,31 @@ const multipart = axios.create({
 const getToken = () => {
     return sessionStorage.getItem('accessToken');
 };
-
+/**
+ * 회원가입
+ * @param postData 
+ * @returns 
+ */
 export const setSignUp = async (postData: TYPES.SignUpData): Promise<any> => {
     const response = await apiClient.post<TYPES.SignUpData>('/auth/sign', postData);
         console.log(response.data);
         return response.data;
 };
-
+/**
+ * 아이디와 닉네임 중복 확인
+ * @param postData 
+ * @returns 
+ */
 export const checkDuplicated = async (postData: TYPES.CheckDuplicatedData): Promise<any> => {
     const response = await apiClient.post<TYPES.CheckDuplicatedData>('/users/duplication', postData);
         console.log(response.data);
         return response.data;
 };
-
+/**
+ * 로그인
+ * @param postData 
+ * @returns 
+ */
 export const setLogin = async (postData: TYPES.loginData): Promise<any> => {
     const response = await apiClient.post<TYPES.loginData>('/auth/login', postData);
         console.log(response);
@@ -97,4 +109,19 @@ export const deleteLike = async (boardId: Object): Promise<any> => {
     });
         console.log(response);
         return response;
+};
+/**
+ * 
+ * @param postData 
+ * @returns 
+ */
+export const checkPassword = async (password: Object): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<Object>('/users/duplication/password', password,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response.data);
+        return response.data;
 };

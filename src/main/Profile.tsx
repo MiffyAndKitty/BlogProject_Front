@@ -35,6 +35,9 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const [user, setUser] = useState<string>("");
   const [error, setError] = useState(null);
   const [nickname, setNickname] = useState<string>();
+  const [image, setImage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string>('');
+  
 
   const goToSignUp = () => {
     navigate(`/signup`);
@@ -81,6 +84,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   useEffect(()=>{
     try {
       const storedNickname = sessionStorage.getItem('nickname');
+      setImage(sessionStorage.getItem('image'));
+      
+      const storedMessage = sessionStorage.getItem('message');
+
+      if (storedMessage && storedMessage !== 'null' && storedMessage !== '') {
+        setMessage(storedMessage);
+        console.log(`typeof message`, typeof storedMessage, storedMessage);
+      } else {
+        setMessage('상태메시지가 없습니다.');
+      }
       if (storedNickname) {
         setNickname(storedNickname);
       }
@@ -121,9 +134,18 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
       )}
       {pageType === 'login' && (
         <>
-          <div>
-          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
-          <span> {user}</span>
+          <div className="profile-container">
+            <img 
+              src={image || mainCharacterImg} 
+              alt="Main Character" 
+              className="mainCharacter_profile_login" 
+              onError={(e) => { e.currentTarget.src = mainCharacterImg; }}
+            />
+            <div className="profile-details">
+              <span className="username">{user}</span>
+              <hr />
+              <span className="status-message">{message}</span>
+            </div>
           </div>
           
           <div className="login-buttons-container">
@@ -143,12 +165,23 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
       )}
       {pageType === 'myBlog' && (
         <>
-        <div className="profile-container">
-        <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
-        <span className="username"> {user}</span>
-        </div>
+         <div className="profile-container">
+          <img 
+            src={image || mainCharacterImg} 
+            alt="Main Character" 
+            className="mainCharacter_profile_login" 
+            onError={(e) => { e.currentTarget.src = mainCharacterImg; }}
+          />
+
+            <div className="profile-details">
+              <span className="username">{user}</span>
+              <hr />
+              <span className="status-message">{message}</span>
+            </div>
+          </div>
         
         <div className="login-buttons-container">
+        <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
           <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
           <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
         </div>

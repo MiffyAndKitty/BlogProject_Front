@@ -15,7 +15,7 @@ const SignUp: React.FC = () => {
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [nickname, setNickname] = useState('');
-  const [signUpResult, setSignUpResult] = useState('');;
+  const [signUpResult, setSignUpResult] = useState('');
   const [checkDuplicatedResult, setCheckDuplicatedResult] = useState<string | null>(null);
   const [errors, setErrors] = useState({
     email: '',

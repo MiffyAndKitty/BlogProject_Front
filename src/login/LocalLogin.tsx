@@ -16,6 +16,8 @@ const LocalLogin: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginResult, setLoginResult] = useState('');
+  const [message, setMessage] = useState<string>('');
+  const [image, setImage] = useState<string>('');
   const [isProfileFetched, setIsProfileFetched] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     email: '',
@@ -67,7 +69,11 @@ const LocalLogin: React.FC = () => {
       const fetchedProfile = await getMyProfile(email);
       console.log('fetchedProfile.data.user_nickname', fetchedProfile.data.user_nickname);
       setNickname(fetchedProfile.data.user_nickname);
+      setMessage(fetchedProfile.data.user_message);
+      setImage(fetchedProfile.data.user_image);
       sessionStorage.setItem('nickname', fetchedProfile.data.user_nickname);
+      sessionStorage.setItem('image', fetchedProfile.data.user_image);
+      sessionStorage.setItem('message', fetchedProfile.data.user_message);
       setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
     } catch (err) {
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');

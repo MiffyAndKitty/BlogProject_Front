@@ -1,0 +1,115 @@
+.profile-image-container {
+    display: flex;
+    flex-direction: column;
+    
+    margin-bottom: 20px;
+}
+.profile-image-container div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-image-container img {
+    
+    margin-bottom: 10px;
+}
+
+.profile-image-container button {
+    background-color: #FF88D7;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-image-container button:hover {
+    background-color: #FF66C4;
+}
+.field-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.field-container label {
+    font-weight: bold;
+    color: #FF88D7;
+    margin-bottom: 5px;
+}
+
+.field-container div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.field-container span {
+    font-size: 16px;
+}
+
+.field-container button {
+    background-color: #FF88D7;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.field-container button:hover {
+    background-color: #FF66C4;
+}
+
+.separator {
+    border-bottom: 1px solid #FF88D7;
+    margin: 20px 0;
+}
+
+.toGray{
+    color: gray;
+    font-size: 15px;
+}
+
+.password-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 필드 간의 간격을 줌 */
+    margin-bottom: 20px; /* 하단에 여유 공간을 추가 */
+}
+
+.password-fields div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.password-fields label {
+    font-size: 15px;
+    margin-right: 10px;
+    color: #FF88D7; /* 텍스트 색상 */
+}
+
+.password-fields input {
+    flex-grow: 1; /* 입력 필드가 가능한 한 넓게 차지하도록 설정 */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.password-fields button {
+    margin-top: 10px; /* 버튼과 입력 필드 사이의 간격 */
+    padding: 8px 12px;
+    background-color: #FF88D7;
+    color: #fff;
+    border: none;
+    margin-right: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.password-fields button:hover {
+    background-color: #ff69b4; /* 버튼 호버 시 색상 변화 */
+}
