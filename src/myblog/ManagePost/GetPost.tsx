@@ -151,7 +151,7 @@ const GetPost: React.FC = () => {
     setLoading(true); 
     setError(null);   
     try {
-      const nickname=localStorage.getItem('nickname');
+      const nickname=sessionStorage.getItem('nickname');
       setNickname(nickname);
       console.log(`
         ==================
@@ -241,7 +241,7 @@ const GetPost: React.FC = () => {
       // setFilteredPosts(posts);
   },[posts]); 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (!token) {
       navigate('/');
     }

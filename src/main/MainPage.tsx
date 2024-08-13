@@ -17,10 +17,10 @@ import './MainPage.css';
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = sessionStorage.getItem('accessToken');
     if (token) {
-      localStorage.removeItem('accessToken');  // 토큰 삭제
-      localStorage.removeItem('nickname');  // 토큰 삭제
+      sessionStorage.removeItem('accessToken');  // 토큰 삭제
+      sessionStorage.removeItem('nickname');  // 토큰 삭제
     }
   }, [navigate]);
 

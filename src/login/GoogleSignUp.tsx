@@ -106,7 +106,7 @@ const SignUp: React.FC = () => {
   };
 
   useEffect(()=>{
-    setEmail(localStorage.getItem('nickname'));
+    setEmail(sessionStorage.getItem('nickname'));
     setPassword(null);
   },[]);
 
@@ -118,7 +118,7 @@ const SignUp: React.FC = () => {
     `,signUpResult)
     if (signUpResult === 'true') {
       alert("회원가입에 성공했습니다!!");
-      localStorage.setItem('nickname', nickname);
+      sessionStorage.setItem('nickname', nickname);
       navigate(`/login`);
       
     } else if (signUpResult === 'false') {

@@ -13,7 +13,7 @@ const multipart = axios.create({
 
 // 토큰을 저장하는 위치 (예: 로컬 스토리지, 상태 관리 등)
 const getToken = () => {
-  return localStorage.getItem('accessToken');
+  return sessionStorage.getItem('accessToken');
 };
 
 /**
@@ -56,9 +56,9 @@ export const updateCategory = async (postData: TYPES.changeCategory): Promise<an
  */
 export const updateProfile = async (postData:Object): Promise<any> => {
   const token = getToken();
-  const response = await apiClient.put<any>(`/users`,postData,{
+  const response = await multipart.put<any>(`/users`,postData,{
     headers: {
-      'Content-Type': 'application/json',
+      
       'Authorization': `${token}`,
     },
   });

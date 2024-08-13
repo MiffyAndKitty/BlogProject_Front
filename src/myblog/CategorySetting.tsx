@@ -27,9 +27,9 @@ const CategorySettings = () => {
 
   const fetchCategories = async () => {
     try {
-      const nickname = localStorage.getItem("nickname");
+      const nickname = sessionStorage.getItem("nickname");
       if (!nickname) {
-        throw new Error("Nickname not found in localStorage");
+        throw new Error("Nickname not found in sessionStorage");
       }
       const fetchedCategories: Categories[] = await getCategories(nickname);
       setCategories(fetchedCategories);

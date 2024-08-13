@@ -43,7 +43,7 @@ const MyBlogMainPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const localStorageToken = localStorage.getItem('accessToken');
+    const localStorageToken = sessionStorage.getItem('accessToken');
     if(localStorageToken ===null){
       setToken('');
     }else{
@@ -63,7 +63,7 @@ const MyBlogMainPage: React.FC = () => {
         const fetchedCategories: Categories[] = await getCategories(nickname);
         setCategories(fetchedCategories);
         console.log(fetchedCategories);
-        const localNickname = localStorage.getItem("nickname");
+        const localNickname = sessionStorage.getItem("nickname");
         if (localNickname) {
           setLocalNickName(localNickname);
         }

@@ -3,7 +3,7 @@ import * as TYPES from '../types/index';
 
 // 토큰을 저장하는 위치 (예: 로컬 스토리지, 상태 관리 등)
 const getToken = () => {
-  return localStorage.getItem('accessToken');
+  return sessionStorage.getItem('accessToken');
 };
 
 /**

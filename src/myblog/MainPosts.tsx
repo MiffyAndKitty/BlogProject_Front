@@ -120,7 +120,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     setError(null);  
   
     try {
-      const nickname = localStorage.getItem('nickname');
+      const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
   
       const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query,sort);

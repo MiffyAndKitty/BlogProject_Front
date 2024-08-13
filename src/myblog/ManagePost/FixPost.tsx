@@ -221,8 +221,8 @@ const FixPost: React.FC = () => {
   useEffect(() => {
     const fetchCategoriesAndPost = async () => {
       try {
-        console.log(`localStorage.getItem("nickname"): `, localStorage.getItem("nickname"))
-        const fetchedCategories: categories[] = await getCategories(localStorage.getItem("nickname"));
+        console.log(`sessionStorage.getItem("nickname"): `, sessionStorage.getItem("nickname"))
+        const fetchedCategories: categories[] = await getCategories(sessionStorage.getItem("nickname"));
         setCategories(fetchedCategories);
         console.log(`setCategories:`, fetchedCategories);
         const fetchedPosts = await getPost(postID);
@@ -246,7 +246,7 @@ const FixPost: React.FC = () => {
   
   useEffect(() => {
     try {
-      const storedNickname = localStorage.getItem('nickname');
+      const storedNickname = sessionStorage.getItem('nickname');
       if (storedNickname) {
         setNickname(storedNickname);
       }

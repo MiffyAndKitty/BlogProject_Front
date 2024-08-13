@@ -191,7 +191,7 @@ const WriteNewPost: React.FC = () => {
   
   useEffect(() => {
     try {
-      const storedNickname = localStorage.getItem('nickname');
+      const storedNickname = sessionStorage.getItem('nickname');
       if (storedNickname) {
         setNickname(storedNickname);
       }
@@ -205,7 +205,7 @@ const WriteNewPost: React.FC = () => {
     };
     const fetchCategories = async () => {
       try {
-        const fetchedCategories: category[] = await getCategories(localStorage.getItem('nickname'));
+        const fetchedCategories: category[] = await getCategories(sessionStorage.getItem('nickname'));
         setCategories(fetchedCategories);
         console.log(`fetchedCategories`,fetchedCategories);
       } catch (err) {

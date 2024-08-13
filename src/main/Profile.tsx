@@ -47,8 +47,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const goToLogout = async () => {
     try {
       await getLogoutAuth();  // 로그아웃 API 호출
-      localStorage.removeItem('accessToken');  // 토큰 삭제
-      localStorage.removeItem('nickname');  // 토큰 삭제
+      sessionStorage.removeItem('accessToken');  // 토큰 삭제
+      sessionStorage.removeItem('nickname');  // 토큰 삭제
       navigate(`/`);
     } catch (error) {
       console.error(error);
@@ -80,14 +80,14 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
 
   useEffect(()=>{
     try {
-      const storedNickname = localStorage.getItem('nickname');
+      const storedNickname = sessionStorage.getItem('nickname');
       if (storedNickname) {
         setNickname(storedNickname);
       }
     } catch (err) {
       console.log(err);
     }
-    setUser(localStorage.getItem("nickname"));
+    setUser(sessionStorage.getItem("nickname"));
   },[]);
 
   return (

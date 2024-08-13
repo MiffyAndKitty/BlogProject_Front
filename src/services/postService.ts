@@ -14,7 +14,7 @@ const multipart = axios.create({
 
 // 토큰을 저장하는 위치 (예: 로컬 스토리지, 상태 관리 등)
 const getToken = () => {
-    return localStorage.getItem('accessToken');
+    return sessionStorage.getItem('accessToken');
 };
 
 export const setSignUp = async (postData: TYPES.SignUpData): Promise<any> => {

@@ -5,6 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 import { setLogin } from '../services/postService';
+import { getMyProfile } from '../services/getService';
 import { loginData } from '../types';
 import mainCharacterImg from '../img/main_character.png';
 import './LocalLogin.css';
@@ -15,6 +16,7 @@ const LocalLogin: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginResult, setLoginResult] = useState('');
+  const [isProfileFetched, setIsProfileFetched] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -50,8 +52,9 @@ const LocalLogin: React.FC = () => {
       setLoginResult(response.data.result.toString());
       console.log(response);
       if (response.data.result.toString() === 'true' && response.headers['authorization']) {
-        localStorage.setItem('accessToken', response.headers['authorization']);
-        localStorage.setItem('nickname', response.data['data']);
+        sessionStorage.setItem('accessToken', response.headers['authorization']);
+        sessionStorage.setItem('email', response.data['data']);
+        fetchMyProfile(email);
       }
       return response.data.result;
     } catch (error) {
@@ -59,7 +62,17 @@ const LocalLogin: React.FC = () => {
       return false;
     }
   };
-
+  const fetchMyProfile = async (email: string) => {
+    try {
+      const fetchedProfile = await getMyProfile(email);
+      console.log('fetchedProfile.data.user_nickname', fetchedProfile.data.user_nickname);
+      setNickname(fetchedProfile.data.user_nickname);
+      sessionStorage.setItem('nickname', fetchedProfile.data.user_nickname);
+      setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
+    } catch (err) {
+      console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
+    }
+  };
   const handleLogin = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // 버튼의 기본 동작 방지
 
@@ -77,16 +90,16 @@ const LocalLogin: React.FC = () => {
 
     const isSetSignUpResult = await checkSetLoginResult();
   };
-  useEffect(() => {
-    try {
-      const storedNickname = localStorage.getItem('nickname');
-      if (storedNickname) {
-        setNickname(storedNickname);
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  }, []);
+  // useEffect(() => {
+  //   try {
+  //     const storedNickname = sessionStorage.getItem('nickname');
+  //     if (storedNickname) {
+  //       setNickname(storedNickname);
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
   useEffect(()=>{
     const newErrors = {
       email: touched.email && !validateEmail(email) ? '유효한 이메일 주소를 입력하세요.' : '',

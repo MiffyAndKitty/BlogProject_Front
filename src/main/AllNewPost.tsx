@@ -135,7 +135,7 @@ const AllPopularPost: React.FC = () => {
     setLoading(true); 
     setError(null);  
     try {
-      const nickname=localStorage.getItem('nickname');
+      const nickname=sessionStorage.getItem('nickname');
       setNickname(nickname);
       console.log(`
         ==================
@@ -198,7 +198,7 @@ const AllPopularPost: React.FC = () => {
   }, [searchTerm]);
 
   useEffect(() => {
-    const localStorageToken = localStorage.getItem('accessToken');
+    const localStorageToken = sessionStorage.getItem('accessToken');
 
     if(localStorageToken ===null){
       setToken('');
@@ -206,7 +206,7 @@ const AllPopularPost: React.FC = () => {
       setToken(localStorageToken);
     }
     try{
-        const localNickname = localStorage.getItem("nickname");
+        const localNickname = sessionStorage.getItem("nickname");
         if (localNickname) {
           setLocalNickName(localNickname);
         }

@@ -16,7 +16,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
   useEffect(() => {
     try {
-      const nickname = localStorage.getItem('nickname');
+      const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
     }catch (err) {
       console.log('게시물을 불러오는 중에 오류가 발생했습니다.');

@@ -14,7 +14,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   const [nickname, setNickname] = useState<string>();
   useEffect(() => {
     try {
-      const storedNickname = localStorage.getItem('nickname');
+      const storedNickname = sessionStorage.getItem('nickname');
       if (storedNickname) {
         setNickname(storedNickname);
       }

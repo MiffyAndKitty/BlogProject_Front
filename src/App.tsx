@@ -29,7 +29,7 @@ function App() {
 
   // useEffect(() => {
   //   try {
-  //     const storedNickname = localStorage.getItem('nickname');
+  //     const storedNickname = sessionStorage.getItem('nickname');
   //     if (storedNickname) {
   //       setNickname(storedNickname);
   //     }
