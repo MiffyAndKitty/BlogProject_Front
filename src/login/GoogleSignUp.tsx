@@ -128,7 +128,7 @@ const SignUp: React.FC = () => {
 
   return (
     <div className="App">
-      <Header pageType="login"/>
+      <Header pageType="signup"/>
       <main className="main">
         <div className='signup'>
           

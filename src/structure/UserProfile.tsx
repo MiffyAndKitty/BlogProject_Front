@@ -2,10 +2,9 @@
 import React, { useState,useEffect,useRef } from 'react';
 import { Link ,useNavigate } from 'react-router-dom';
 import './UserProfile.css';
-import  signup_img  from '../img/signup_img.png'
 
 interface UserProfileProp  {
-    profileType: 'signup' | 'login' | 'logout';
+    profileType: 'signup' |  'logout' | 'profileSetting';
     profileImage: string;
 }
 const UserProfile = ({ profileType ,profileImage}) => {
@@ -35,7 +34,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
     <>
     {profileType==='logout' &&(
       <div ref={dropdownRef}>
-      <img src={signup_img} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+      <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
       {dropdownOpen && (
                     <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
@@ -49,7 +48,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
     {profileType==='signup' &&(
        <div ref={dropdownRef}>
-       <img src={signup_img} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate("/signup")}>회원가입</button>
@@ -61,13 +60,14 @@ const UserProfile = ({ profileType ,profileImage}) => {
       
     )}
 
-  {profileType==='login' &&(
+    {profileType==='profileSetting' &&(
        <div ref={dropdownRef}>
-       <img src={signup_img} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
-                       <button className="dropdown-item-profile" onClick={() =>navigate("/signup")}>회원가입</button>
-                       <button className="dropdown-item-profile" onClick={() =>navigate("/login")}>로그인</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
+ 
                      </div>
        )}
        </div>

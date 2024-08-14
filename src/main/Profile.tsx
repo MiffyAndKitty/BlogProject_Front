@@ -80,7 +80,9 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const goToManagePosts = ()=>{
     navigate(`/getpost/${nickname}`);
   }
-
+  const goToProfileSetting = ()=>{
+    navigate(`/myProfileSetting/${user}`);
+  }
   useEffect(()=>{
     try {
       const storedNickname = sessionStorage.getItem('nickname');
@@ -142,7 +144,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
               onError={(e) => { e.currentTarget.src = mainCharacterImg; }}
             />
             <div className="profile-details">
-              <span className="username">{user}</span>
+              <span className="username" onClick={goToProfileSetting} style={{cursor:'pointer'}}>{user}</span>
               <hr />
               <span className="status-message">{message}</span>
             </div>
@@ -174,14 +176,13 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
           />
 
             <div className="profile-details">
-              <span className="username">{user}</span>
+              <span className="username" onClick={goToProfileSetting} style={{cursor:'pointer'}}>{user}</span>
               <hr />
               <span className="status-message">{message}</span>
             </div>
           </div>
         
         <div className="login-buttons-container">
-        <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
           <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
           <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
         </div>

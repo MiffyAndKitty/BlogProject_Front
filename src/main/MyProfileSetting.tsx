@@ -17,6 +17,7 @@ const MyProfileSetting: React.FC = () => {
     const [editingField, setEditingField] = useState<string | null>(null);
     const [currentPassword, setCurrentPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
+    const [sendPassword, setSendPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [errors, setErrors] = useState({
         password: '',
@@ -88,10 +89,11 @@ const MyProfileSetting: React.FC = () => {
     };
 
     const handleSubmit = async () => {
+
         const formData = new FormData();
-        formData.append('nickname', newNick);
-        formData.append('password', userData.user_password || '');
-        formData.append('statusMessage', userData.user_message || '');
+        if(newNick) formData.append('nickname', newNick);
+        if(newPassword) formData.append('password',newPassword);
+        if(userData.user_message) formData.append('statusMessage', userData.user_message);
 
         if (saveImage) {
             formData.append('uploaded_files', saveImage);
@@ -103,13 +105,48 @@ const MyProfileSetting: React.FC = () => {
 
             setEditingField(null);
             fetchMyProfile();
-            window.location.reload();
+            
             navigate(`/myProfileSetting/${newNick}`);
+            window.location.reload();
         } catch (err) {
             console.log('프로필 업데이트 중 오류가 발생했습니다.');
         }
     };
+    const handleSubmitPasswd = () =>{
+        submitPasswd(newPassword);
+    };
+    const submitPasswd = async (password:string) => {
 
+        const formData = new FormData();
+        formData.append('password',password);
+
+        try {
+            console.log(`password
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                `,password)
+            await updateProfile(formData);
+            alert('프로필이 성공적으로 업데이트되었습니다.');
+
+            setEditingField(null);
+            fetchMyProfile();
+            
+            navigate(`/myProfileSetting/${newNick}`);
+            window.location.reload();
+        } catch (err) {
+            console.log('프로필 업데이트 중 오류가 발생했습니다.');
+        }
+    };
     const checkPasswordCorrect = async (password: string) => {
         const newData = {
             password: password,
@@ -236,9 +273,9 @@ const MyProfileSetting: React.FC = () => {
             <div>
                 {
                 (isOk.password === true && isOk.newPassword === true &&isOk.newPassword2 === true )?
-                (<button onClick={handleSubmit}>저장</button>)
+                (<button onClick={handleSubmitPasswd}>저장</button>)
                 :
-                <button onClick={handleSubmit} disabled={true} style={{backgroundColor:'gray'}}>저장</button>
+                <button disabled={true} style={{backgroundColor:'gray'}}>저장</button>
                 }
                 
                 <button onClick={() => setEditingField(null)}>취소</button>
@@ -276,7 +313,7 @@ const MyProfileSetting: React.FC = () => {
 
     return (
         <div className="App">
-            <Header pageType="logout" />
+            <Header pageType="profileSetting" />
             <main className="main-content">
                 <Profile pageType="myBlog" nicknameParam={nickname} />
                 <div className="MainPosts-section">

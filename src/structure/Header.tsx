@@ -5,18 +5,24 @@ import './Header.css';
 import mainCharacterImg from '../img/main_character.png';
 import SearchBar from './SearchBar';
 import UserProfile from './UserProfile';
-import profileImg from '../img/profileImg.png'
+
 
 interface ProfileProps {
-  pageType: 'login' | 'signup'|'logout' ;
+  pageType: 'profileSetting'|'signup'|'logout' ;
 }
 const Header: React.FC<ProfileProps> = ({pageType}) => {
   const [nickname, setNickname] = useState<string>();
+  const [message, setMessage] = useState<string>('');
+  const [image, setImage] = useState<string>('');
+
   useEffect(() => {
     try {
       const storedNickname = sessionStorage.getItem('nickname');
+      
       if (storedNickname) {
         setNickname(storedNickname);
+        setMessage(sessionStorage.getItem('message'));
+        setImage(sessionStorage.getItem('image'));
       }
     } catch (err) {
       console.log(err);
@@ -25,20 +31,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
     <header className="header">
       
-      {pageType === 'login' &&(
-        <>
-          <div className="header__logo">
-            <Link to="/">
-              <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
-            </Link>
-          </div>
 
-          <div className="header__auth">
-            <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
-          </div>
-        </>
-      
-      )}
       {pageType === 'logout' &&(
         <>
           <div className="header__logo">
@@ -48,7 +41,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <UserProfile profileType={'logout'} profileImage={profileImg}></UserProfile>
+            <UserProfile profileType={'logout'} profileImage={image}></UserProfile>
           </div>
         </>
        
@@ -63,12 +56,25 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <UserProfile profileType={'signup'} profileImage={profileImg}></UserProfile>
+            <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
           </div>
         </>
        
       )}
-      
+      {pageType === 'profileSetting' &&(
+        <>
+          <div className="header__logo">
+          <Link to={`/dashboard/${nickname}`}>
+              <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+            </Link>
+          </div>
+
+          <div className="header__auth">
+            <UserProfile profileType={'profileSetting'} profileImage={image}></UserProfile>
+          </div>
+        </>
+       
+      )}
     </header>
   );
 };
