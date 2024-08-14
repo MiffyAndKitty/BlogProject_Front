@@ -34,6 +34,7 @@ const AllPopularPost: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [token, setToken] = useState<string>('');
   const [localNickName, setLocalNickName] = useState<string>('');
+
   const pageSize = 10;
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
@@ -246,6 +247,11 @@ const AllPopularPost: React.FC = () => {
   const goToDetailPost = (postID: string , postAthor:String)=>{
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
   }
+  const goToBlog = (nickname:string, email:string)=>{
+    sessionStorage.setItem('other_email',email);
+    navigate(`/${nickname}`);
+  };
+
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
     const regex = new RegExp(`(${keyword})`, 'gi');
@@ -272,7 +278,7 @@ const AllPopularPost: React.FC = () => {
                         <div className="post-header">
                         <div className="title-container">
                         <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                          <span className="user-nickname">{post.user_nickname}</span>
+                        <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className="user-nickname" style={{cursor:'pointer'}}>{post.user_nickname}</span>
                         </div>
                           <div className="post-meta">
                           <span className="post-category">{ post.category_name}</span>

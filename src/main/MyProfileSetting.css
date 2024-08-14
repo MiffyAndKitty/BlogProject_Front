@@ -70,6 +70,7 @@
 .toGray{
     color: gray;
     font-size: 15px;
+    background-color: transparent;
 }
 
 .password-fields {
@@ -113,3 +114,9 @@
 .password-fields button:hover {
     background-color: #ff69b4; /* 버튼 호버 시 색상 변화 */
 }
+.border{
+    border: 2px solid #FF88D7;
+    border-radius: 5px;
+    padding: 10px 20px;
+    background-color: #fef3fc;
+  }

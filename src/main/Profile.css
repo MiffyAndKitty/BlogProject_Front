@@ -1,3 +1,6 @@
+.button{
+  cursor: pointer;
+}
 .mainCharacter_profile_dash {
     width: 150px;
     height: 150px;

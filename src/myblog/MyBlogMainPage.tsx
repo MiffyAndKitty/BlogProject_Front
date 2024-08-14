@@ -12,7 +12,7 @@ import CategoryListForMain from './CategoryListForMain';
 import PostDetail from './PostDetail';
 
 /**
- * 로그인 후의 메인페이지
+ * 블로그 메인 페이지
  * @returns 
  */
 const MyBlogMainPage: React.FC = () => {
@@ -39,6 +39,10 @@ const MyBlogMainPage: React.FC = () => {
 
   const fetchAllPost =()=>{
     setCategoryID('');
+    navigate(`/${nickname}`);
+  };
+  const fetchNullPost =()=>{
+    setCategoryID(null);
     navigate(`/${nickname}`);
   };
 
@@ -101,6 +105,7 @@ const MyBlogMainPage: React.FC = () => {
         {((token && (localNickName !== nickname)) &&<Profile pageType="otherBlog" nicknameParam={nickname}/>)}
 
         <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
+        <div className='mouse_hover' onClick={fetchNullPost}>미분류</div>
         <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
         
         {  postID? (

@@ -23,6 +23,7 @@ const PostDetail: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>([]);
+  const [email, setEmail] = useState<string>('');
 
   const formatDate = (dateString: string): string => {
     let [datePart, timePart] = dateString.split('T');
@@ -60,6 +61,7 @@ const PostDetail: React.FC = () => {
       const fetchedPost = await getPost(postID);
       setLiked(prevState => ({ ...prevState, [postID]: fetchedPost.data.isLike}));
       setPost(fetchedPost.data);
+      setEmail(fetchedPost.data.user_email);
       setIsWriter(fetchedPost.data.isWriter);
       setTags(fetchedPost.data.tags);
     } catch (err) {
@@ -81,6 +83,11 @@ const PostDetail: React.FC = () => {
   const editPost = (postID: string)=>{
     if (isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
     else alert('수정권한이 없습니다!');
+  };
+
+  const goToBlog = (nickname:string)=>{
+    sessionStorage.setItem('other_email',email);
+    navigate(`/${nickname}`);
   };
 
   const deletePostDetail = (postId: string)=>{
@@ -133,7 +140,7 @@ const PostDetail: React.FC = () => {
             <h1>{post.board_title}</h1>
               
               <div className="postdetail-meta">
-              <Link to={`/${post.user_nickname}`} className="postdetail-author">작성자: {post.user_nickname}</Link>
+                <span onClick={() => goToBlog(post.user_nickname)} className="postdetail-author" style={{cursor:'pointer'}}>작성자: {post.user_nickname}</span>
                 <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
                 <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
                 

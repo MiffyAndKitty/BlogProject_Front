@@ -51,11 +51,14 @@ const AuthCallback: React.FC = () => {
       if (token && token !== 'undefined' && nickname) {
         sessionStorage.setItem('accessToken', token);
         sessionStorage.setItem('email', email);
+        sessionStorage.setItem('other_email', email);
         sessionStorage.setItem('nickname', nickname);
         sessionStorage.setItem('image', image);
         sessionStorage.setItem('message', message);
         navigate(`/dashboard/${nickname}`);
       } else if (token === 'undefined' && nickname) {
+        sessionStorage.setItem('email', email);
+        sessionStorage.setItem('other_email', email);
         sessionStorage.setItem('nickname', nickname);
         sessionStorage.setItem('image', image);
         sessionStorage.setItem('message', message);

@@ -224,7 +224,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                   <div className="post-main-header">
                   <div className="title-container">
                   <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                    <Link to={`/${post.user_nickname}`} className="user-nickname">{post.user_nickname}</Link>
+                    <span className="user-nickname">{post.user_nickname}</span>
                   </div>
                     
                     <div className="post-main-meta">

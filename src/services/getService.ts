@@ -256,3 +256,21 @@ export const getMyProfile = async (nickname: string): Promise<any> => {
   console.log(response);
   return response.data;
 };
+/**
+ * 팔로우/팔로워 목록 가져오기
+ * @returns 
+ */
+export const getFollow = async (email: string): Promise<any> => {
+  const token = getToken();
+  const url = `/users/:${email}/follow`;
+  let response;
+
+  response = await apiClient.get(url,{
+    headers:{
+      'Authorization': `${token}`,
+    }
+  });
+
+  console.log(response);
+  return response.data;
+};

@@ -63,6 +63,8 @@
   .post-popular-author {
     font-size: 12px;
     color: #999;
+    background-color: transparent;
+    cursor: pointer;
   }
   
   .post-popular-title {

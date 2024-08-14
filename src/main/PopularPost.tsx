@@ -132,7 +132,11 @@ const PopularPost: React.FC = () => {
   };
   const goToDetailPost = (postID: string , postAthor:String)=>{
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
-  }
+  };
+  const goToBlog = (nickname:string, email:string)=>{
+    sessionStorage.setItem('other_email',email);
+    navigate(`/${nickname}`);
+  };
   return (
     <section className="popularpost-section">
      
@@ -148,12 +152,12 @@ const PopularPost: React.FC = () => {
         {!loading && !error && posts.length > 0 && (
         <div className="posts">
           {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => (
-            <div key={index} className="post-popular" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+            <div key={index} className="post-popular" >
               {/* <img src={post.image} alt={post.board_title} className="post-image" /> */}
-              <div className="post-content">{post.board_content}</div>
+              <div className="post-content" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}> {post.board_content}</div>
               <div className="post-popular-content">
                 
-                <p className="post-popular-author"><Link to={`/${post.user_nickname}`} className="post-popular-author">작성자: {post.user_nickname}</Link> |{formatDate(post.created_at)}</p>
+                <p className="post-popular-author"><span  onClick={() => goToBlog(post.user_nickname , post.user_email)} className="post-popular-author">작성자: {post.user_nickname}</span> |{formatDate(post.created_at)}</p>
                 <h3 className="post-popular-title">{post.board_title}</h3>
                 <div className="post-popular-footer">
                   <span className="post-popular-likes">카테고리: {post.category_name}</span>

@@ -13,7 +13,8 @@ interface ProfileProps {
 const Header: React.FC<ProfileProps> = ({pageType}) => {
   const [nickname, setNickname] = useState<string>();
   const [message, setMessage] = useState<string>('');
-  const [image, setImage] = useState<string>('');
+  const [image, setImage] = useState<string>(mainCharacterImg);
+  const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -22,12 +23,25 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
       if (storedNickname) {
         setNickname(storedNickname);
         setMessage(sessionStorage.getItem('message'));
-        setImage(sessionStorage.getItem('image'));
+        setImage(sessionStorage.getItem('image')?sessionStorage.getItem('image') :  mainCharacterImg);
+        
       }
     } catch (err) {
       console.log(err);
     }
   }, []);
+  useEffect(() => {
+    if (image) {
+      const img = new Image();
+      img.src = image;
+      img.onload = () => setIsImageLoaded(true);
+      img.onerror = () => setIsImageLoaded(false);
+    } else {
+      setIsImageLoaded(false);
+    }
+  }, [image]);
+  
+  const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <header className="header">
       
@@ -41,7 +55,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <UserProfile profileType={'logout'} profileImage={image}></UserProfile>
+            {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
        
@@ -70,7 +84,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
 
           <div className="header__auth">
-            <UserProfile profileType={'profileSetting'} profileImage={image}></UserProfile>
+          {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
        

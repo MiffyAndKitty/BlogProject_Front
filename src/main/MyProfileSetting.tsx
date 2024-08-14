@@ -285,13 +285,14 @@ const MyProfileSetting: React.FC = () => {
 
     const renderField = (label: string, field: string, type: string = "text", isEditable: boolean = true) => (
         <div className="field-container">
-            <label>{label}:</label>
+            <label >{label}:</label>
             {editingField === field && isEditable ? (
                 field === 'user_password' ? (
                     renderPasswordFields()
                 ) : (
                     <div>
                         <input
+                            style={{background:'transparent'}}
                             type={type}
                             name={field}
                             defaultValue={userData ? userData[field] : ''}
@@ -304,7 +305,7 @@ const MyProfileSetting: React.FC = () => {
                 )
             ) : (
                 <div>
-                    <span>{field === 'user_password' ? '********' : userData ? userData[field] : ''}</span>
+                    <span  style={{background:'transparent'}}>{field === 'user_password' ? '********' : userData ? userData[field] : ''}</span>
                     {isEditable && <button onClick={() => setEditingField(field)}>수정</button>}
                 </div>
             )}
@@ -315,14 +316,14 @@ const MyProfileSetting: React.FC = () => {
         <div className="App">
             <Header pageType="profileSetting" />
             <main className="main-content">
-                <Profile pageType="myBlog" nicknameParam={nickname} />
+                <Profile pageType="profileSetting" nicknameParam={nickname} />
                 <div className="MainPosts-section">
                     <div className="main-container">
                         <div className="container">
                             {userData && (
                                 <>
                                     <h1 style={{color:"#FF88D7"}}>{nickname}의 프로필</h1>
-                                    <div>
+                                    <div className='border'>
                                     <div>
                                             <label style={{fontWeight:'bold', color:'#FF88D7', marginBottom:'5px',}}>프로필 이미지:</label>
                                             </div>

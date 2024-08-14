@@ -61,6 +61,7 @@ export interface getPost{
     user_id: string
     board_comment: number
     category_name:string
+    user_email:string
 }
 export interface getPostDetail{
     isLike: string,
