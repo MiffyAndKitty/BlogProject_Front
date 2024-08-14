@@ -111,7 +111,7 @@ export const deleteLike = async (boardId: Object): Promise<any> => {
         return response;
 };
 /**
- * 
+ * 비밀번호 확인
  * @param postData 
  * @returns 
  */
@@ -124,4 +124,20 @@ export const checkPassword = async (password: Object): Promise<any> => {
     });
         console.log(response.data);
         return response.data;
+};
+
+/**
+ * 팔로우 하기
+ * @param postData 
+ * @returns 
+ */
+export const followUser = async (email: Object): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<TYPES.newCategory>('/users/follow', email,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
 };

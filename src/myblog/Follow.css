@@ -1,0 +1,26 @@
+.followers-list {
+    display: flex;
+    flex-wrap: wrap; /* 여러 줄로 넘어갈 수 있도록 설정 */
+    gap: 16px; /* 아이템 간의 간격 */
+}
+
+.follower-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* 부모 요소에 상대적으로 배치 */
+    margin-bottom: 16px;
+}
+
+.follower-image-wrapper {
+    position: relative; /* 삭제 버튼을 이미지 위에 배치 */
+}
+
+.delete-button {
+    position: absolute;
+    top: -3px; /* 이미지의 오른쪽 상단에 배치 */
+    right: -8px;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}

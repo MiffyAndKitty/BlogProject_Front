@@ -97,7 +97,9 @@ const MyBlogMainPage: React.FC = () => {
   },[localNickName])
   return (
     <div className="App">
-      <Header pageType="logout"/>
+      
+      {(localNickName === nickname) && <Header pageType="logout"/>}
+      {(localNickName !== nickname) && <Header pageType="otherblog"/>}
       <main className="main-content">
         
         {(!token && <Profile pageType="signup_for_blog" />)}

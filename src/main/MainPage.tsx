@@ -19,8 +19,11 @@ const MainPage: React.FC = () => {
   useEffect(() => {
     const token = sessionStorage.getItem('accessToken');
     if (token) {
-      sessionStorage.removeItem('accessToken');  // 토큰 삭제
-      sessionStorage.removeItem('nickname');  // 토큰 삭제
+      sessionStorage.removeItem('accessToken');  
+      sessionStorage.removeItem('nickname');  
+      sessionStorage.removeItem('image');  
+      sessionStorage.removeItem('other_email');  
+      sessionStorage.removeItem('message');  
     }
   }, [navigate]);
 

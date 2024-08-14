@@ -8,7 +8,7 @@ import UserProfile from './UserProfile';
 
 
 interface ProfileProps {
-  pageType: 'profileSetting'|'signup'|'logout' ;
+  pageType: 'profileSetting'|'signup'|'logout' | 'otherblog';
 }
 const Header: React.FC<ProfileProps> = ({pageType}) => {
   const [nickname, setNickname] = useState<string>();
@@ -85,6 +85,21 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
 
           <div className="header__auth">
           {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
+          </div>
+        </>
+       
+      )}
+
+      {pageType === 'otherblog' &&(
+        <>
+          <div className="header__logo">
+          <Link to={`/dashboard/${nickname}`}>
+              <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+            </Link>
+          </div>
+
+          <div className="header__auth">
+          {profileImage && <UserProfile profileType={'otherblog'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
        

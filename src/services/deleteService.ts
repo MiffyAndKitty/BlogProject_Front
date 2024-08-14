@@ -25,6 +25,11 @@ export const deleteCategory = async (categoryId:string): Promise<any> => {
   return response.data;
 };
 
+/**
+ * 게시글 삭제
+ * @param boardId 
+ * @returns 
+ */
 export const deletePost = async (boardId:string): Promise<any> => {
   const token = getToken();
   const response = await apiClient.delete<any>(`/board`, {
@@ -36,5 +41,24 @@ export const deletePost = async (boardId:string): Promise<any> => {
     }
   });
   console.log(boardId,response.data)
+  return response.data;
+};
+
+/**
+ * 팔로우 취소
+ * @param boardId 
+ * @returns 
+ */
+export const deleteFollow = async (email:string): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.delete<any>(`/users/follow`, {
+    headers:{
+      'Authorization': `${token}`,
+    },
+    data:{
+      email
+    }
+  });
+  console.log(email,response.data)
   return response.data;
 };

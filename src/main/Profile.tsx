@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import mainCharacterImg from '../img/main_character.png';
-import { getLogoutAuth } from '../services/getService';  // 추가된 부분
-import { getMyProfile } from '../services/getService';
-
+import { getLogoutAuth ,getMyProfile} from '../services/getService';  // 추가된 부분
+import { followUser } from '../services/postService';
+import  nonFriend from '../img/nonFriend.png'
+import  friend from '../img/friend.png'
 import './Profile.css';
 import Cursor from 'quill/blots/cursor';
 
@@ -41,6 +42,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const [otherImage, setOtherImage] = useState<string | null>(null);
   const [otherMessage, setOtherMessage] = useState<string | null>(null);
   const [message, setMessage] = useState<string>('');
+  const [followImg, setFollowImg] = useState<string>(nonFriend);
   
 
   const goToSignUp = () => {
@@ -56,13 +58,37 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
       await getLogoutAuth();  // 로그아웃 API 호출
       sessionStorage.removeItem('accessToken');  // 토큰 삭제
       sessionStorage.removeItem('nickname');  // 토큰 삭제
+      sessionStorage.removeItem('image');  
+      sessionStorage.removeItem('other_email');  
+      sessionStorage.removeItem('message');  
       navigate(`/`);
     } catch (error) {
       console.error(error);
       setError(error.message);
     }
   };
-
+const goToFollow = async()=>{
+  try{
+    const email = sessionStorage.getItem('other_email');
+    console.log(`followUser
+      
+      
+      
+      
+      
+      
+      
+      `,email)
+    const result = await followUser({email:email});
+    if(result) {
+      alert('팔로우 추가에 성공했습니다!');
+      setFollowImg(friend);
+    };
+  }catch(err){
+    alert('팔로우 추가에 실패했습니다! 다시 시도해주세요.');
+  }
+  
+};
   const goToFindID = () => {
     navigate(`/findID`);
   };
@@ -77,7 +103,9 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const goToFollower = ()=>{
     navigate(`/follower/${nickname}`);
   };
-
+  const goToFollowManage = ()=>{
+    navigate(`/follow/${nickname}`);
+  };
   /**
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
@@ -94,10 +122,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
   const fetchMyProfile = async () => {
     try {
         const sessionStorageEmail = sessionStorage.getItem('other_email');
-        if (sessionStorageEmail === null) {
-            alert(`잘못된 접근입니다!`);
-            navigate('/');
-        }
+        // if (sessionStorageEmail === null) {
+        //     alert(`잘못된 접근입니다!`);
+        //     navigate('/');
+        // }
         const fetchedProfile = await getMyProfile(sessionStorageEmail);
         setOtherImage(fetchedProfile.data.user_image);
         setOtherMessage(fetchedProfile.data.user_message);
@@ -179,7 +207,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
             <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
           </div>
           <div className="logins_profile">
-            <button onClick={goToFindID} style={{cursor:'pointer'}}>팔로우</button>
+            <button onClick={goToFollowManage}  style={{cursor:'pointer'}}>팔로우</button>
             <span>|</span>
             <button onClick={goToFollower} style={{cursor:'pointer'}}>팔로워</button>
             <span>|</span>
@@ -211,7 +239,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
           <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
         </div>
         <div className="logins_profile">
-          <button onClick={goToFindID}>팔로우</button>
+          <button onClick={goToFollowManage} >팔로우</button>
           <span>|</span>
           <button onClick={goToFollower}>팔로워</button>
           <span>|</span>
@@ -243,7 +271,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
           <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
         </div>
         <div className="logins_profile">
-          <button onClick={goToFindID}>팔로우</button>
+          <button onClick={goToFollowManage} >팔로우</button>
           <span>|</span>
           <button onClick={goToFollower}>팔로워</button>
           <span>|</span>
@@ -264,9 +292,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType, nicknameParam }) => {
               <span className="status-message">{otherMessage}</span>
             </div>
         </div>
-        
+
+        <div className="login-buttons-container">
+          <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
+            <div>
+              </div><img src={nonFriend} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
+            </div>
+        </div>
+
         <div className="logins_profile">
-          <button onClick={goToFindID}>팔로우</button>
+          <button onClick={goToFollowManage} >팔로우</button>
           <span>|</span>
           <button onClick={goToFollower}>팔로워</button>
         </div>
