@@ -39,7 +39,7 @@
   .profile-section.myBlog {
     grid-column: 1 / 2; /* 왼쪽 열에 배치 */
     grid-row: 1 / 2; /* 1행부터 5행까지 차지 */
-    margin-top:40px;
+    margin-top:110px;
   }
 
   .profile-section.otherBlog {
@@ -57,6 +57,12 @@
     grid-column: 1 / 2; /* 왼쪽 열에 배치 */
     grid-row: 1 / 2; /* 1행부터 5행까지 차지 */
     margin-top:40px;
+  }
+  .profile-section.postManage {
+    grid-column: 1 / 2; /* 왼쪽 열에 배치 */
+    grid-row: 1 / 2; /* 1행부터 5행까지 차지 */
+    margin-top:80px;
+    margin-left: 50px;
   }
   .populartags-section {
     padding: 1rem;

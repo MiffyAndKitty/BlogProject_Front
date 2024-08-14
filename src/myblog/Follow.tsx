@@ -27,15 +27,19 @@ const Follow: React.FC = () => {
 
     const deleteFollowers = async (email:string) => {
         
-      
-        if (email) {
-            const fetchedFollowers = await deleteFollow(email);
-            if(fetchedFollowers){
-                alert('팔로우를 취소했습니다!');
-                navigate(`/follow/${nickname}`);
-            } 
-            else alert('팔로우 취소에 실패했습니다! 다시 시도해주세요.');
+        try{
+            if (email) {
+                const fetchedFollowers = await deleteFollow(email);
+                if(fetchedFollowers){
+                    alert('팔로우를 취소했습니다!');
+                    navigate(`/follow/${nickname}`);
+                } 
+                else alert('팔로우 취소에 실패했습니다! 다시 시도해주세요.');
+            }
+        }catch{
+            
         }
+       
     };
 
     useEffect(() => {

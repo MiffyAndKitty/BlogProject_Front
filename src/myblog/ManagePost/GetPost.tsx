@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import CategorySettings from '../CategorySetting';
 import filledCarrot from '../../img/filledCarrot.png';
 import ConfirmModal from '../ConfirmModal'; 
+import Profile from '../../main/Profile';
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const GetPost: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
-  const[ managementType, setManagementType] = useState<'post'| 'category'>('post');
+  const [managementType, setManagementType] = useState<'post' | 'category'>('post');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
@@ -297,114 +298,135 @@ const GetPost: React.FC = () => {
     <>
       <Header pageType="logout" />
       <main>
+      <span style={{marginBottom:'50px;'}}></span>
         <div className="main-container">
-          <div className="profile_post_manage">
-            <div>
-              <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_getpost" />
-              <button className="login-button_profile" onClick={goToMyBlog}>
-                내 블로그 가기
-              </button>
-            </div>
-            <div className="manage-buttons">
-            <button className="manage-button" onClick={goToWritePost}>
-                글 작성
-              </button>
-              <span>  |</span>
-              <button className="manage-button" onClick={goToPostManagement}>
-                글 관리
-              </button>
-              <span>  |</span>
-              <button className="manage-button" onClick={goToCategoryManagement}>
-                카테고리 관리
-              </button>
-            </div>
-          </div>
-          <div className="container">
-            {
-              managementType === 'post' &&(
-                <> 
-                <h1 className="title_manage">글 관리</h1>
-                <SearchBar onSearch={handleSearch}/>
-                <div className='post-manage'>
-                <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
-                  <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
-                    {category.category_name}
-                  </button>
-                  {dropdownOpen && (
-                    <div className="dropdown-getpost-menu">
-                      {renderCategoryMenu(categories)}
-                    </div>
-                  )}
-                </div>
-                {!loading && !error && posts.length > 0 && (
-                  <div className="post-list">
-                    {posts.map((post) => (
-                      <div className="post-card" key={post.board_id}>
-                        <div className="post-header">
-                        <div className="title-container">
-                          <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                          <span className="user-nickname">{post.user_nickname}</span>
-                        </div>
-                          <div className="post-meta">
-                          <span className="post-category">{ findCategoryById(categories,post.category_id)}</span>
-                            <span className="post-date">{formatDate(post.created_at)}</span>
-                            <span className="post-stats">
-                              <span className="user-nickname">조회수: {post.board_view}</span>
-                              <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
-                              <span className="user-nickname">댓글: {post.board_comment}</span>
-                            </span>
-                          </div>
-                        </div>
-                        <div className="post-content" onClick={() => goToDetailPost(post.board_id)} dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
-                        <div className="post-actions">
-                          <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
-                            수정
-                          </button>
-                          <button className="delete-btn" onClick={() => handleDelete(post.board_id)}>삭제</button>
-                          <ConfirmModal
-                            isOpen={isModalOpen}
-                            onClose={() => setIsModalOpen(false)}
-                            onConfirm={confirmDelete}
-                            message="이 게시물을 삭제하시겠습니까?"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                <div className="pagination">
-                  <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    이전
-                  </button>
-                  <span className="pagination-info">
-                    {currentPage} / {totalPages}
-                  </span>
-                  <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    다음
-                  </button>
-                </div>
-                </div>
-                </>
-              )
-            }
-
-            {
-              managementType === 'category' &&(
-                <>
-                <div className='post-manage'>
-                <h1 className="title_manage">카테고리 관리</h1>
-                <CategorySettings></CategorySettings>
-                </div>
-                </>
-              )
-            }
           
+          <Profile pageType="postManage" nicknameParam={nickname} />
+  
+          <div className="getpost-container">
+            <div>
+              <div className="tabs">
+                <button
+                  className={`tab-button ${managementType === 'post' ? 'active' : ''}`}
+                  onClick={goToPostManagement}
+                >
+                  글 관리
+                </button>
+                <button
+                  className={`tab-button ${managementType === 'category' ? 'active' : ''}`}
+                  onClick={goToCategoryManagement}
+                >
+                  카테고리 관리
+                </button>
+              </div>
+              <div className='border'>
+              {managementType === 'post' && (
+                <>
+                  <SearchBar onSearch={handleSearch} />
+                  <div className="post-manage">
+                    <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
+                      <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        {category.category_name}
+                      </button>
+                      {dropdownOpen && (
+                        <div className="dropdown-getpost-menu">
+                          {renderCategoryMenu(categories)}
+                        </div>
+                      )}
+                    </div>
+                    {!loading && !error && posts.length > 0 && (
+                      <div className="post-list">
+                        {posts.map((post) => (
+                          <div className="post-card" key={post.board_id}>
+                            <div className="post-header">
+                              <div className="title-container">
+                                <h2
+                                  className="post-title"
+                                  dangerouslySetInnerHTML={{
+                                    __html: highlightKeyword(post.board_title, searchTerm),
+                                  }}
+                                ></h2>
+                                <span className="user-nickname">{post.user_nickname}</span>
+                              </div>
+                              <div className="post-meta">
+                                <span className="post-category">
+                                  {findCategoryById(categories, post.category_id)}
+                                </span>
+                                <span className="post-date">{formatDate(post.created_at)}</span>
+                                <span className="post-stats">
+                                  <span className="user-nickname">조회수: {post.board_view}</span>
+                                  <span className="user-nickname">
+                                    <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="Carrot Icon" /> : {post.board_like}
+                                  </span>
+                                  <span className="user-nickname">댓글: {post.board_comment}</span>
+                                </span>
+                              </div>
+                            </div>
+                            <div
+                              className="post-content"
+                              onClick={() => goToDetailPost(post.board_id)}
+                              dangerouslySetInnerHTML={{
+                                __html: highlightKeyword(post.board_content, searchTerm),
+                              }}
+                            ></div>
+                            <div className="post-actions">
+                              <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
+                                수정
+                              </button>
+                              <button className="delete-btn" onClick={() => handleDelete(post.board_id)}>
+                                삭제
+                              </button>
+                              <ConfirmModal
+                                isOpen={isModalOpen}
+                                onClose={() => setIsModalOpen(false)}
+                                onConfirm={confirmDelete}
+                                message="이 게시물을 삭제하시겠습니까?"
+                              />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    <div className="pagination">
+                      <button
+                        className="pagination-btn"
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 1}
+                      >
+                        이전
+                      </button>
+                      <span className="pagination-info">
+                        {currentPage} / {totalPages}
+                      </span>
+                      <button
+                        className="pagination-btn"
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages}
+                      >
+                        다음
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+  
+              {managementType === 'category' && (
+                <>
+                  <div className="post-manage">
+
+                    <CategorySettings />
+                  </div>
+                </>
+              )}
+              </div>
+            </div>
           </div>
         </div>
       </main>
       <Footer />
     </>
   );
+  
 };
 
 export default GetPost;

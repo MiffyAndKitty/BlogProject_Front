@@ -29,7 +29,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 interface ProfileProps {
-  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting';
+  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage';
   nicknameParam?:string | null
 }
 
@@ -129,6 +129,8 @@ const goToFollow = async()=>{
         const fetchedProfile = await getMyProfile(sessionStorageEmail);
         setOtherImage(fetchedProfile.data.user_image);
         setOtherMessage(fetchedProfile.data.user_message);
+        sessionStorage.setItem('isFollowing', fetchedProfile.data.isFollowing);
+        sessionStorage.setItem('isFollowing', fetchedProfile.data.isFollowed);
         
     } catch (err) {
         console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
@@ -158,7 +160,12 @@ const goToFollow = async()=>{
   },[]);
 
   return (
-    <section className={`profile-section ${pageType === 'myBlog' ? 'myBlog' : (pageType==='otherBlog'?'otherBlog':(pageType==='signup_for_blog'?'signup_for_blog':(pageType==='profileSetting'?'profileSetting':'')))}`}>
+    <section className={
+      `profile-section ${pageType === 'myBlog' ? 'myBlog' 
+      : (pageType==='otherBlog'?'otherBlog'
+      :(pageType==='signup_for_blog'?'signup_for_blog'
+      :(pageType==='profileSetting'?'profileSetting'
+      :(pageType==='postManage'?'postManage':''))))}`}>
       
       {pageType === 'signup' && (
         <>
@@ -237,6 +244,38 @@ const goToFollow = async()=>{
         <div className="login-buttons-container">
           <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
           <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
+        </div>
+        <div className="logins_profile">
+          <button onClick={goToFollowManage} >팔로우</button>
+          <span>|</span>
+          <button onClick={goToFollower}>팔로워</button>
+          <span>|</span>
+          <button onClick={goToSignUp}>내소식</button>
+          <span>|</span>
+          <button onClick={goToLogout}>로그아웃 </button>
+        </div>
+      </>
+      )}
+      {pageType === 'postManage' && (
+        <>
+         <div className="profile-container">
+          <img 
+            src={image || mainCharacterImg} 
+            alt="Main Character" 
+            className="mainCharacter_profile_login" 
+            onError={(e) => { e.currentTarget.src = mainCharacterImg; }}
+          />
+
+            <div className="profile-details">
+              <span className="username" onClick={goToProfileSetting} style={{cursor:'pointer'}}>{user}</span>
+              <hr />
+              <span className="status-message">{message}</span>
+            </div>
+          </div>
+        
+        <div className="login-buttons-container">
+          <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
+          <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
         </div>
         <div className="logins_profile">
           <button onClick={goToFollowManage} >팔로우</button>

@@ -51,8 +51,8 @@
 }
 .container {
     flex: 2;
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 10 auto;
     padding: 20px;
     background-color: #ffffff;
     border: #ff4da6;
@@ -226,4 +226,39 @@
     /* border: 2px solid #d4d4d4;
     padding: 10px 20px;
     background-color: #f0f0f0; */
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    background-color: #f1f1f1;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .tab-button.active {
+    background-color: #FF88D7; /* 활성화된 탭 색상 */
+    color: white;
+    font-weight: bold;
+  }
+  
+  .tab-button:not(.active):hover {
+    background-color: #ddd; /* 비활성화된 탭에 마우스를 올렸을 때 색상 */
+  }
+  .getpost-container {
+    flex: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border: #ff4da6;
+    border-width: 5px;
   }

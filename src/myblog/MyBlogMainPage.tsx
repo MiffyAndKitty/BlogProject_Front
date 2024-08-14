@@ -42,7 +42,7 @@ const MyBlogMainPage: React.FC = () => {
     navigate(`/${nickname}`);
   };
   const fetchNullPost =()=>{
-    setCategoryID(null);
+    setCategoryID('default');
     navigate(`/${nickname}`);
   };
 

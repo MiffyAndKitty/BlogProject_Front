@@ -157,7 +157,7 @@ const PopularPost: React.FC = () => {
               <div className="post-content" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}> {post.board_content}</div>
               <div className="post-popular-content">
                 
-                <p className="post-popular-author"><span  onClick={() => goToBlog(post.user_nickname , post.user_email)} className="post-popular-author">작성자: {post.user_nickname}</span> |{formatDate(post.created_at)}</p>
+                <p className="post-popular-author"><span  onClick={() => goToBlog(post.user_nickname , post.user_email)} className="post-popular-author">작성자: {post.user_nickname}</span> |     {formatDate(post.created_at)}</p>
                 <h3 className="post-popular-title">{post.board_title}</h3>
                 <div className="post-popular-footer">
                   <span className="post-popular-likes">카테고리: {post.category_name}</span>

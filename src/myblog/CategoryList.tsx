@@ -24,6 +24,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
   const [newSubcategoryName, setNewSubcategoryName] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null); 
+  
   const handleMouseEnter = (categoryId: string) => {
     setHoveredCategoryId(categoryId);
   };

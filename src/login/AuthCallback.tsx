@@ -9,6 +9,8 @@ const AuthCallback: React.FC = () => {
   const [message, setMessage] = useState<string>('');
   const [image, setImage] = useState<string>('');
   const [isProfileFetched, setIsProfileFetched] = useState<boolean>(false);
+  const [isFollowing, setIsFollowing] = useState<string>('');
+  const [isFollowed, setIsFollowed] = useState<string>('');
 
   const fetchMyProfile = async (email: string) => {
     try {
@@ -16,6 +18,8 @@ const AuthCallback: React.FC = () => {
       console.log('fetchedProfile.data.user_nickname', fetchedProfile.data.user_nickname);
       setNickname(fetchedProfile.data.user_nickname);
       setMessage(fetchedProfile.data.user_message);
+      setIsFollowing(fetchedProfile.data.isFollowing);
+      setIsFollowed(fetchedProfile.data.isFollowed);
       setImage(fetchedProfile.data.user_image);
       setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
     } catch (err) {
@@ -55,6 +59,8 @@ const AuthCallback: React.FC = () => {
         sessionStorage.setItem('nickname', nickname);
         sessionStorage.setItem('image', image);
         sessionStorage.setItem('message', message);
+        sessionStorage.setItem('isFollowing', isFollowing);
+        sessionStorage.setItem('isFollowing', isFollowed);
         navigate(`/dashboard/${nickname}`);
       } else if (token === 'undefined' && nickname) {
         sessionStorage.setItem('email', email);
@@ -62,6 +68,8 @@ const AuthCallback: React.FC = () => {
         sessionStorage.setItem('nickname', nickname);
         sessionStorage.setItem('image', image);
         sessionStorage.setItem('message', message);
+        sessionStorage.setItem('isFollowing', isFollowing);
+        sessionStorage.setItem('isFollowing', isFollowed);
         navigate(`/google/signup/${nickname}`);
       }
     }
