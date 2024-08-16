@@ -16,3 +16,8 @@ section {
 .mouse_hover{
   cursor: pointer;
 }
+
+.categories{
+  margin-left: 90px;
+  margin-right: 50px;
+}

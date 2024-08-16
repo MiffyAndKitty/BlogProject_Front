@@ -48,7 +48,7 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
             {level ===1 && ('- '+ category.category_name)} 
             {level ===2 && ('-- '+ category.category_name)} 
             {level ===0 && (category.category_name)} 
-            { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='arrow' src={up_arrow}></img> : <img className='arrow' src={down_arrow}></img> )}
+            {/* { level !==2 &&(expandedCategories.includes(category.category_id) ? <img className='arrow' src={up_arrow}></img> : <img className='arrow' src={down_arrow}></img> )} */}
           </div>
           {expandedCategories.includes(category.category_id) && category.subcategories && category.subcategories.length>0&& (
             <CategoryListForMain categories={category.subcategories} level={level + 1} onCategoryClick={onCategoryClick}/>

@@ -255,7 +255,7 @@ const AllPopularPost: React.FC = () => {
 
   return (
     <>
-      <Header pageType="logout" />
+      <Header pageType="otherblog" />
       <main>
         <div className="main-container">
         {(!token && <Profile pageType="signup_for_blog" />)}

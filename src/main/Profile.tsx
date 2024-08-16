@@ -256,16 +256,23 @@ const closeModal = () => {
       )}
        {pageType === 'signup_for_blog' && (
         <>
-          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
-          <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
-          <div className="logins_profile">
-            <button onClick={goToFindID}>아이디 찾기</button>
-            <span>|</span>
-            <button>비밀번호 찾기</button>
-            <span>|</span>
-            <button onClick={goToSignUp}>회원가입</button>
-          </div>
-        </>
+        <div className="profile-container">
+        <img src={otherImage|| mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
+        
+        <div className="profile-details">
+        <span className="username"> {nicknameParam}님의 블로그</span>
+              <hr />
+              <span className="status-message">{otherMessage}</span>
+            </div>
+        </div>
+
+        <div className="logins_profile" style={{marginTop:'100px'}}>
+        <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
+        {isModalOpen && <Follow onClose={closeModal} />}
+          <span>|</span>
+          <button onClick={goToFollower}>팔로워</button>
+        </div>
+      </>
       )}
       {pageType === 'login' && (
         <>

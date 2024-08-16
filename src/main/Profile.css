@@ -2,13 +2,15 @@
   cursor: pointer;
 }
 .mainCharacter_profile_dash {
-    width: 150px;
-    height: 150px;
+  width: 100px; /* 원하는 너비로 조정 */
+  height: 100px; /* 원하는 높이로 조정 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞게 조정 */
 }
 .mainCharacter_profile_login {
-    width: 150px;
-    height: 150px;
-    margin-right: 10px; /* 이미지와 닉네임 사이의 간격 조절 */
+  width: 100px; /* 원하는 너비로 조정 */
+  height: 100px; /* 원하는 높이로 조정 */
+  object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞게 조정 */
+  border-radius: 50%; /* 이미지를 원형으로 만들고 싶다면 추가 */
     
 }
 .profile-container {
@@ -20,7 +22,7 @@
     font-size: 1.2em;
 }
 .logins_profile {
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
@@ -33,6 +35,7 @@
 }
 
 .login-buttons-container {
+    margin-top: 30px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;

@@ -296,7 +296,7 @@ const GetPost: React.FC = () => {
   }, [category]);
   return (
     <>
-      <Header pageType="logout" />
+      <Header pageType="otherblog" />
       <main>
       <span style={{marginBottom:'50px;'}}></span>
         <div className="main-container">

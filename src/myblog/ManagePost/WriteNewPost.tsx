@@ -260,7 +260,7 @@ const WriteNewPost: React.FC = () => {
 
   return (
     <div className="App">
-      <Header pageType="logout" />
+      <Header pageType="otherblog" />
       <main className="write-new-post">
         <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>

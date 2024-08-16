@@ -15,9 +15,15 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   const [message, setMessage] = useState<string>('');
   const [image, setImage] = useState<string>(mainCharacterImg);
   const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
-
+  const [token, setToken] = useState<string>('');
   useEffect(() => {
     try {
+      const localStorageToken = sessionStorage.getItem('accessToken');
+      if (localStorageToken === null) {
+        setToken('');
+      } else {
+        setToken(localStorageToken);
+      }
       const storedNickname = sessionStorage.getItem('nickname');
       
       if (storedNickname) {
@@ -45,8 +51,20 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
     <header className="header">
       
+      {!token &&(
+        <>
+        <div className="header__logo">
+          <Link to="/">
+            <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+          </Link>
+        </div>
 
-      {pageType === 'logout' &&(
+        <div className="header__auth">
+          <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
+        </div>
+      </>
+      )}
+      {token &&pageType === 'logout' &&(
         <>
           <div className="header__logo">
             <Link to={`/dashboard/${nickname}`}>
@@ -61,7 +79,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
        
       )}
 
-      {pageType === 'signup' &&(
+      {/* {pageType === 'signup' &&(
         <>
           <div className="header__logo">
             <Link to="/">
@@ -74,8 +92,8 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
         </>
        
-      )}
-      {pageType === 'profileSetting' &&(
+      )} */}
+      {token &&pageType === 'profileSetting' &&(
         <>
           <div className="header__logo">
           <Link to={`/dashboard/${nickname}`}>
@@ -90,7 +108,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
        
       )}
 
-      {pageType === 'otherblog' &&(
+      {token &&pageType === 'otherblog' &&(
         <>
           <div className="header__logo">
           <Link to={`/dashboard/${nickname}`}>

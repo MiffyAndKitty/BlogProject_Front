@@ -101,16 +101,20 @@ const MyBlogMainPage: React.FC = () => {
           {(localNickName === nickname) && <Header pageType="logout" />}
           {(localNickName !== nickname) && <Header pageType="otherblog" />}
           <main className="main-content">
-            {(!token && <Profile pageType="signup_for_blog" />)}
+            {(!token && <Profile pageType="signup_for_blog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing}/>)}
             {(token && localNickName === nickname && <Profile pageType="myBlog" nicknameParam={localNickName} />)}
             {(token && localNickName !== nickname && !profileLoading && (
               <Profile pageType="otherBlog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing} />
             ))}
             {profileLoading && <div>프로필 로딩 중...</div>} {/* 프로필 로딩 상태 시 표시될 내용 */}
 
-            <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
-            <div className='mouse_hover' onClick={fetchNullPost}>미분류</div>
-            <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+
+            <div className='categories'>
+              <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
+              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류</div>
+              <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+            </div>
+            
 
             {postID ? (
               <PostDetail />
