@@ -31,7 +31,7 @@
     border: 2px solid #FF88D7; /* 테두리 추가 */
     padding: 1rem;
     border-radius: 8px;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     grid-row: 4 / 5; /* 1행부터 5행까지 차지 */
     height: 300px; /* 고정 높이 설정 */
     max-height: 700px;
@@ -56,7 +56,7 @@
   .profile-section.profileSetting {
     grid-column: 1 / 2; /* 왼쪽 열에 배치 */
     grid-row: 1 / 2; /* 1행부터 5행까지 차지 */
-    margin-top:40px;
+    margin-top:100px;
   }
   .profile-section.postManage {
     grid-column: 1 / 2; /* 왼쪽 열에 배치 */
@@ -67,7 +67,7 @@
   .populartags-section {
     padding: 1rem;
     border-radius: 8px;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     grid-row: 5 / 6; /* 5행부터 6행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
@@ -75,7 +75,7 @@
   .lotsoffollowerbloger-section {
     padding: 1rem;
     border-radius: 8px;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     grid-row: 6 / 7; /* 6행부터 7행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
@@ -83,7 +83,7 @@
   .carrotbloger-section {
     padding: 1rem;
     border-radius: 8px;
-    grid-column: 2 / 3;
+    grid-column: 3 / 4;
     grid-row: 7 / 8; /* 7행부터 8행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }

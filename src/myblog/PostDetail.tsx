@@ -136,7 +136,7 @@ const PostDetail: React.FC = () => {
         <main>
           <div className="main-container">
             <div className="container">
-            <div className="postdetail-detail">
+            <div style={{marginTop:'70px'}} className="postdetail-detail">
             <h1>{post.board_title}</h1>
               
               <div className="postdetail-meta">

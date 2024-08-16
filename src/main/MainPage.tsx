@@ -9,23 +9,21 @@ import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
 import './MainPage.css';
+
+
 /**
  * 로그인 전의 메인페이지
  * @returns 
  */
-
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = sessionStorage.getItem('accessToken');
     if (token) {
-      sessionStorage.removeItem('accessToken');  
-      sessionStorage.removeItem('nickname');  
-      sessionStorage.removeItem('image');  
-      sessionStorage.removeItem('other_email');  
-      sessionStorage.removeItem('message');  
+      sessionStorage.clear();  // 모든 sessionStorage 항목 제거
     }
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="App">
@@ -38,6 +36,7 @@ const MainPage: React.FC = () => {
         <LotsOfFollowerBloger/>
         <CarrotBloger/>
       </main>
+
       <Footer />
     </div>
   );

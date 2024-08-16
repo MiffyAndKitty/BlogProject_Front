@@ -25,11 +25,13 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null); 
   
-  const handleMouseEnter = (categoryId: string) => {
+  const handleMouseEnter = (event: React.MouseEvent,categoryId: string) => {
+    event.stopPropagation();  // 이벤트 전파 막기
     setHoveredCategoryId(categoryId);
   };
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    event.stopPropagation();  // 이벤트 전파 막기
     setHoveredCategoryId(null);
   };
   const handleDeleteCategory = (categoryId: string) => {
@@ -47,7 +49,12 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0, expa
   return (
     <div>
       {categories.map(category => (
-        <div key={category.category_id} className={`level-${level}`} onMouseEnter={() => handleMouseEnter(category.category_id)} onMouseLeave={handleMouseLeave}>
+         <div 
+         key={category.category_id} 
+         className={`level-${level}`} 
+         onMouseEnter={(e) => handleMouseEnter(e, category.category_id)} 
+         onMouseLeave={(e) => handleMouseLeave(e)}
+       >
           <div onClick={() => toggleCategory(category.category_id)} style={{ cursor: 'pointer' }} className="category-item">
             {editingCategoryId === category.category_id ? (
               <div>

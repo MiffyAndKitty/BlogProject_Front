@@ -18,7 +18,7 @@ import PostDetail from './myblog/PostDetail';
 import AllPopularPost from './main/AllPopularPost';
 import AllNewPost from './main/AllNewPost';
 import MyProfileSetting from './main/MyProfileSetting';
-import Follow from './myblog/Follow';
+import SSEComponent from './main/SSEComponent';
 import {
   BrowserRouter as Router,
   Route,
@@ -30,6 +30,7 @@ function App() {
   return (
     <Router>
     <Routes>
+      {/* <Route path={`/`} element={<MainPage></MainPage>}/> */}
       <Route path={`/`} element={<MainPage></MainPage>}/>
       <Route path={`/login`} element={<Login></Login>}/>
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
@@ -45,7 +46,7 @@ function App() {
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
-      <Route path={`/follow/:nickname`} element={<Follow></Follow>} />
+     
       <Route path={`/categorySetting/:nickname`} element={<CategorySettings></CategorySettings>} />
       <Route path={`/myProfileSetting/:nickname`} element={<MyProfileSetting></MyProfileSetting>} />
     </Routes>
