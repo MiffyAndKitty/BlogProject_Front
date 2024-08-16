@@ -139,8 +139,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
       }
   
-      const fetchedCategories: TYPES.categories[] = await getCategories(nicknameParam);
-      setCategories(fetchedCategories);
+      const fetchedCategories: any = await getCategories(nicknameParam);
+      setCategories(fetchedCategories.hierarchicalCategory);
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {

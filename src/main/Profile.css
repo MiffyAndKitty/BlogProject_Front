@@ -22,7 +22,7 @@
     font-size: 1.2em;
 }
 .logins_profile {
-    margin-top: 20px;
+    margin-top: 40px;
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
@@ -44,8 +44,8 @@
 
 .login-button_profile {
     margin-top: 30px;
-    background-color: #FFE6FA;
-    color: #000;
+    background-color: #f0a4d8;
+    color: #ffffff;
     border: none;
     padding: 10px 16px;
     border-radius: 30px;

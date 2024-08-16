@@ -91,6 +91,7 @@ export interface categories {
     category_id: string;
     category_name: string;
     subcategories: categories[];
+    board_count: number;
 }
 
 export interface newCategory {

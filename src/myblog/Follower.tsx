@@ -2,44 +2,43 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getFollow } from '../services/getService';
 import { deleteFollow } from '../services/deleteService';
-import { followUser } from '../services/postService';
 import mainCharacterImg from '../img/main_character.png';
 import deleteFollowImg from '../img/deleteFollow.png';
+import { followUser } from '../services/postService';
 import './Follow.css';
 import FollowDeleteModal from './FollowDeleteModal'; 
 import bothFriendImg from '../img/both_friend.png';
 import friendImg from '../img/friend.png';
 import nonFriendImg from '../img/nonFriend.png';
 import { set } from 'date-fns';
+
 interface FollowModalProps {
     onClose: () => void;
     isOthers?: boolean
 }
-const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
+
+const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
     const { nickname } = useParams();
     const [followers, setFollowers] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nicknameToDelete, setNicknameToDelete] = useState('');
-    const [hoveredFollower, setHoveredFollower] = useState<string | null>(null);
-    const [isFollow, setIsFollow] = useState(false);
     const [localEmail, setLocalEmail] = useState('');
-    const [manage,setManage] = useState(false);
+    const [hoveredFollower, setHoveredFollower] = useState<string | null>(null);
 
     const fetchFollowers = async () => {
-        if(isOthers ===true){
+        if(isOthers===true){
             const email = sessionStorage.getItem('other_email');
             if (email) {
                 const fetchedFollowers = await getFollow(email);
-                setFollowers(fetchedFollowers.data.followingsList);
+                setFollowers(fetchedFollowers.data.followersList);
             }
         }else{
             const email = sessionStorage.getItem('email');
             if (email) {
                 const fetchedFollowers = await getFollow(email);
-                setFollowers(fetchedFollowers.data.followingsList);
+                setFollowers(fetchedFollowers.data.followersList);
             }
-            
         }
         
     };
@@ -48,33 +47,6 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
         sessionStorage.setItem('other_email', userEmail);
         navigate(`/${userName}`);
     };
-
-    const deleteFollowers = async (email:string) => {
-        
-        try{
-            const fetchedFollowers = await deleteFollow(email);
-            if(fetchedFollowers){
-                alert('팔로우를 취소했습니다!')
-                fetchFollowers();
-            } 
-            else alert('팔로우 취소에 실패했습니다! 다시 시도해주세요.');
-        }catch{
-            
-        }
-       
-      };
-
-    useEffect(() => {
-        fetchFollowers();
-        const email = sessionStorage.getItem('email');
-        setLocalEmail(email);
-    }, [navigate]);
-
-    const handleDelete = (nicknameToDelete: string) => {
-        setNicknameToDelete(nicknameToDelete);
-        setIsModalOpen(true);
-    };
-
     const followUsers = async(email:string)=>{
         try{
           const result = await followUser({email:email});
@@ -87,23 +59,45 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
         }
         
       };
+    const deleteFollowers = async (email: string) => {
+        try {
+            if (email) {
+                const fetchedFollowers = await deleteFollow(email);
+                if (fetchedFollowers) {
+                    alert('팔로워를 취소했습니다!');
+                    setIsModalOpen(false);
+                    fetchFollowers();
+                } else {
+                    alert('팔로워 취소에 실패했습니다! 다시 시도해주세요.');
+                }
+            }
+        } catch (error) {
+            console.error('Failed to delete follow:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchFollowers();
+        const email = sessionStorage.getItem('email');
+        setLocalEmail(email);
+    }, [navigate]);
+
+    const handleDelete = (nicknameToDelete: string) => {
+        setNicknameToDelete(nicknameToDelete);
+        setIsModalOpen(true);
+    };
 
     return (
         <div className="modal-overlay2" onClick={onClose}>
             <div className="modal-content2" onClick={(e) => e.stopPropagation()}>
                 <span className="modal-close2" onClick={onClose}>&times;</span>
-                <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
-                    <h1 style={{ color: "#FF88D7" }}>{nickname}의 팔로우</h1>
-                    {!isOthers && !manage && (<button style={{height:'30px',backgroundColor: '#ff4da6',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}} onClick={()=>{setManage(true)}}>관리하기</button>)}
-                    {!isOthers && manage && (<button style={{height:'30px',backgroundColor: 'grey',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}}   onClick={()=>{setManage(false)}}>관리 끝내기</button>)}
-                </div>
-                
-
+                <h1 style={{ color: "#FF88D7" }}>{nickname}의 팔로워</h1>
                 <div className="border">
                     <div>
                         {followers.length > 0 ? (
                             <div className="followers-list">
                                 {followers.map((follower, index) => (
+                                  
                                     <div
                                         key={follower.user_nickname}
                                         className="follower-item"
@@ -117,15 +111,12 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
                                                 className="heart"
                                                 onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
                                             />
-                                            {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
-                                                <img
+                                            {/* <img
                                                 src={deleteFollowImg}
                                                 className="delete-button"
                                                 onClick={() => handleDelete(follower.user_nickname)}
-                                            />
-                                            )}
-                                           
-                                             {isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                                            /> */}
+                                             {follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
                     
                                                 <div
                                                     className="both-friend-wrapper-follower">
@@ -139,21 +130,8 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
 
 
                                              )}
-                                            {!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
-
-                                                <div
-                                                    className="both-friend-wrapper">
-                                                    <img
-                                                      src={bothFriendImg}
-                                                      className="both-friend"
-                                                      alt="Both Friend"
-                                                    />
-                                                </div>
-
-                                            
-                                            
-                                             )}
-                                              {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
+                                             
+                                              { (follower.user_email !== localEmail) &&follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
                                                      <button onClick={()=>{deleteFollowers(follower.user_email)}}
                                                      className="both-friend-wrapper-dofollow">
                                                      <img
@@ -165,7 +143,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
                                               )}
 
                                               
-                                              {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
+                                              {  (follower.user_email !== localEmail) &&follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
                                                      <button onClick={()=>{followUsers(follower.user_email)}}
                                                      className="both-friend-wrapper-dontfollow">
                                                      <img
@@ -179,21 +157,21 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
                                                 isOpen={isModalOpen}
                                                 onClose={() => setIsModalOpen(false)}
                                                 onConfirm={() => deleteFollowers(follower.user_email)}
-                                                message="해당 팔로우를 삭제하시겠습니까?"
+                                                message="해당 팔로워를 삭제하시겠습니까?"
                                             />
                                         </div>
                                         <div
-                                            style={{ fontWeight: 'bold', fontSize: '12px', cursor:'pointer' }}
+                                            style={{ fontWeight: 'bold', fontSize: '12px',cursor:'pointer' }}
                                             onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
                                         >
                                             {follower.user_nickname}
                                         </div>
                                         {!isOthers &&hoveredFollower === follower.user_nickname && (
                                             <div>
-                                                {follower.areYouFollowed ? (
-                                                    <div className="hover-message">나를 팔로우하는 사용자입니다!</div>
+                                                {follower.areYouFollowing ? (
+                                                    <div className="hover-message">내가 팔로우하는 사용자입니다!</div>
                                                 ) : (
-                                                    <div className="hover-message">나를 팔로우하지 않는 사용자입니다!</div>
+                                                    <div className="hover-message">내가 팔로우하지 않는 사용자입니다!</div>
                                                 )}
                                             </div>
                                         )}
@@ -201,7 +179,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
                                 ))}
                             </div>
                         ) : (
-                            <p>팔로우가 없습니다.</p>
+                            <p>팔로워가 없습니다.</p>
                         )}
                     </div>
                 </div>
@@ -210,4 +188,4 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
     );
 };
 
-export default Follow;
+export default Follower;

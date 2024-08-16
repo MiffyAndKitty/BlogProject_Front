@@ -43,22 +43,30 @@ export const deletePost = async (boardId:string): Promise<any> => {
   console.log(boardId,response.data)
   return response.data;
 };
-
 /**
  * 팔로우 취소
- * @param boardId 
+ * @param email 
  * @returns 
  */
-export const deleteFollow = async (email:string): Promise<any> => {
-  const token = getToken();
-  const response = await apiClient.delete<any>(`/users/follow`, {
-    headers:{
-      'Authorization': `${token}`,
-    },
-    data:{
-      email
-    }
-  });
-  console.log(email,response.data)
-  return response.data;
+export const deleteFollow = async (email: string): Promise<any> => {
+  try {
+    console.log("deleteFollow called with email:", email); // 함수 호출 확인
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/users/follow`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+      data: {
+        email: email
+      }
+    });
+
+    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteFollow:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
 };

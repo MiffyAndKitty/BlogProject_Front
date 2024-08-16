@@ -75,8 +75,9 @@ const MyBlogMainPage: React.FC = () => {
     const fetchCategories = async () => {
       try {
         fetchMyProfile();
-        const fetchedCategories: Categories[] = await getCategories(nickname);
-        setCategories(fetchedCategories);
+        const fetchedCategories:any = await getCategories(nickname);
+        setCategories(fetchedCategories.hierarchicalCategory);
+       
         const localNickname = sessionStorage.getItem("nickname");
         if (localNickname) {
           setLocalNickName(localNickname);

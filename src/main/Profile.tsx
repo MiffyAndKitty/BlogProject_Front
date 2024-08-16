@@ -8,7 +8,8 @@ import { followUser } from '../services/postService';
 import  nonFriend from '../img/nonFriend.png'
 import  friend from '../img/friend.png'
 import './Profile.css';
-import   Follow from '../myblog/Follow'
+import   Follow from '../myblog/Follow';
+import   Follower from '../myblog/Follower';
 import Cursor from 'quill/blots/cursor';
 import { deleteFollow } from '../services/deleteService';
 
@@ -40,26 +41,7 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userMessage, areYouFollowing, }) => {
-  console.log(`
-    
-    
-    
-    
-    
-    areYouFollowing
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    `,areYouFollowing)
+
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
   const [error, setError] = useState(null);
@@ -71,8 +53,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
   const [followImg, setFollowImg] = useState<string>(nonFriend);
   const [isFollow, setIsFollow] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-
+  const [isModalOpenFollower, setIsModalOpenFollower] = useState(false);
   const goToSignUp = () => {
     navigate(`/signup`);
   };
@@ -155,11 +136,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
   // };
   const openModal = () => {
     setIsModalOpen(true);
-};
-
-const closeModal = () => {
+  };
+  const closeModal = () => {
     setIsModalOpen(false);
-};
+  };
+  const openModalFollower = () => {
+    setIsModalOpenFollower(true);
+  };
+  const closeModalFollower = () => {
+    setIsModalOpenFollower(false);
+  };
   /**
    * 내 블로그로 가기로 이동하기 위한 메서드
    */
@@ -231,6 +217,21 @@ const closeModal = () => {
     if(userMessage){
       setOtherMessage(userMessage);
     }
+
+     // ESC 키를 눌렀을 때 모달 닫기
+     const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeModal();
+        closeModalFollower();
+      }
+  };
+
+  document.addEventListener('keydown', handleKeyDown);
+
+  // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+  return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+  };
   },[]);
 
   return (
@@ -270,7 +271,8 @@ const closeModal = () => {
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
         {isModalOpen && <Follow onClose={closeModal} />}
           <span>|</span>
-          <button onClick={goToFollower}>팔로워</button>
+          <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
         </div>
       </>
       )}
@@ -298,7 +300,8 @@ const closeModal = () => {
             <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
             {isModalOpen && <Follow onClose={closeModal} />}
             <span>|</span>
-            <button onClick={goToFollower} style={{cursor:'pointer'}}>팔로워</button>
+            <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+            {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>내소식</button>
             <span>|</span>
@@ -331,7 +334,8 @@ const closeModal = () => {
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
         {isModalOpen && <Follow onClose={closeModal} />}
           <span>|</span>
-          <button onClick={goToFollower}>팔로워</button>
+          <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
           <button onClick={goToSignUp}>내소식</button>
           <span>|</span>
@@ -364,7 +368,8 @@ const closeModal = () => {
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
         {isModalOpen && <Follow onClose={closeModal} />}
           <span>|</span>
-          <button onClick={goToFollower}>팔로워</button>
+          <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
           <button onClick={goToSignUp}>내소식</button>
           <span>|</span>
@@ -397,7 +402,8 @@ const closeModal = () => {
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
         {isModalOpen && <Follow onClose={closeModal} />}
           <span>|</span>
-          <button onClick={goToFollower}>팔로워</button>
+          <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
           <button onClick={goToSignUp}>내소식</button>
           <span>|</span>
@@ -419,16 +425,16 @@ const closeModal = () => {
 
         <div className="login-buttons-container">
           <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
-            <div>
-              </div><img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
+            <img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
             </div>
         </div>
 
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} />}
+        {isModalOpen && <Follow onClose={closeModal} isOthers={true} />}
           <span>|</span>
-          <button onClick={goToFollower}>팔로워</button>
+          <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
+          {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true}/>}
         </div>
       </>
       )}

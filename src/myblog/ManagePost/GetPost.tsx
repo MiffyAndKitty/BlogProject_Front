@@ -173,8 +173,8 @@ const GetPost: React.FC = () => {
       }));
       setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
-      const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
-      setCategories(fetchedCategories);
+      const fetchedCategories: any = await getCategories(nickname);
+      setCategories(fetchedCategories.hierarchicalCategory);
       if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
       }

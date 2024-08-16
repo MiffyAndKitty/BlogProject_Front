@@ -15,7 +15,14 @@ const PopularPost: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const pageSize = 3;
   const navigate = useNavigate();
-
+  const extractFirstImage = (htmlContent: string): string | null => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    console.log(`doc`,doc)
+    const firstImage = doc.querySelector('img'); // 첫 번째 이미지를 선택
+  
+    return firstImage ? firstImage.src : null; // 이미지가 있으면 src 반환, 없으면 null 반환
+  };
   // 불필요한 태그 제거 함수
   const removeUnwantedTags = (html: string): string => {
     const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
@@ -41,7 +48,7 @@ const PopularPost: React.FC = () => {
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,
-        board_content: removeUnwantedTags(post.board_content), // 목록에서만 제거된 내용을 표시
+        board_content:post.board_content, // 목록에서만 제거된 내용을 표시
       }));
       setPosts(postsWithCleanContent);
       if(fetchedPosts.data.total.totalPageCount){
@@ -139,38 +146,50 @@ const PopularPost: React.FC = () => {
   };
   return (
     <section className="popularpost-section">
-     
       <div className="slider">
         <h2 style={{marginTop:'-5px', marginLeft:'45px'}}>인기글</h2>
         <span className="all" onClick={goToAllPopularPosts}>전체보기</span>
       </div>
-
       <div className="slider">
         <button className="slide-button left" onClick={prevPosts} disabled={currentPage === 1}>
-          &lt;
+            &lt;
         </button>
-        {!loading && !error && posts.length > 0 && (
         <div className="posts">
-          {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => (
-            <div key={index} className="post-popular" >
-              {/* <img src={post.image} alt={post.board_title} className="post-image" /> */}
-              <div className="post-content" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}> {post.board_content}</div>
-              <div className="post-popular-content">
+          {!loading && !error && posts.length > 0 && (
+            <div className="posts">
+              {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => {
+                const firstImageSrc = extractFirstImage(post.board_content); // 첫 번째 이미지 추출
+                // 이미지가 있을 경우만 has-image 클래스를 추가
+                const postClassName = firstImageSrc ? 'post-popular has-image' : 'post-popular';
+                return (
+                  <div key={index} className={postClassName} style={{ backgroundImage: firstImageSrc ? `url(${firstImageSrc})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                    <div className={firstImageSrc ? 'post-overlay' : ''}>
+                      <div className="post-content" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                        {removeUnwantedTags(post.board_content)}
+                      </div>
+                      <div className="post-popular-content">
+                        <p className="post-popular-author">
+                          <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className={firstImageSrc ? 'post-popular-author-white' : "post-popular-author"}>
+                            작성자: {post.user_nickname}
+                          </span> | {formatDate(post.created_at)}
+                        </p>
+                        <h3 className="post-popular-title">{post.board_title}</h3>
+                        <div className="post-popular-footer">
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>카테고리: {post.category_name}</span>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>조회수: {post.board_view}</span>
+                          <img style={{ width: '15px', height: '15px', marginLeft: '50px' }} src={filledCarrot}></img>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>: {post.board_like}</span>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>댓글: {post.board_comment}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
                 
-                <p className="post-popular-author"><span  onClick={() => goToBlog(post.user_nickname , post.user_email)} className="post-popular-author">작성자: {post.user_nickname}</span> |     {formatDate(post.created_at)}</p>
-                <h3 className="post-popular-title">{post.board_title}</h3>
-                <div className="post-popular-footer">
-                  <span className="post-popular-likes">카테고리: {post.category_name}</span>
-                  <span className="post-popular-likes">조회수: {post.board_view}</span>
-                  <img style={{width:'15px', height:'15px', marginLeft:'50px'}} src={filledCarrot}></img>
-                  <span className="post-popular-likes">: {post.board_like}</span>
-                  <span className="post-popular-comments">댓글: {post.board_comment}</span>
-                </div>
-              </div>
+              })}
             </div>
-          ))}
+          )}
         </div>
-        )}
         <button className="slide-button right" onClick={nextPosts} disabled={currentPage === totalPages}>
             &gt;
         </button>

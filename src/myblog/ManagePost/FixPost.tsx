@@ -222,12 +222,12 @@ const FixPost: React.FC = () => {
     const fetchCategoriesAndPost = async () => {
       try {
         console.log(`sessionStorage.getItem("nickname"): `, sessionStorage.getItem("nickname"))
-        const fetchedCategories: categories[] = await getCategories(sessionStorage.getItem("nickname"));
-        setCategories(fetchedCategories);
-        console.log(`setCategories:`, fetchedCategories);
+        const fetchedCategories: any= await getCategories(sessionStorage.getItem("nickname"));
+        setCategories(fetchedCategories.hierarchicalCategory);
+        console.log(`setCategories:`, fetchedCategories.hierarchicalCategory);
         const fetchedPosts = await getPost(postID);
         console.log(`fetchedPosts`, fetchedPosts.data);
-        setPost(fetchedPosts.data, fetchedCategories); // 카테고리를 함께 전달
+        setPost(fetchedPosts.data, fetchedCategories.hierarchicalCategory); // 카테고리를 함께 전달
       } catch (err) {
         setError('데이터를 불러오는 중에 오류가 발생했습니다.');
       } finally {

@@ -205,8 +205,8 @@ const WriteNewPost: React.FC = () => {
     };
     const fetchCategories = async () => {
       try {
-        const fetchedCategories: category[] = await getCategories(sessionStorage.getItem('nickname'));
-        setCategories(fetchedCategories);
+        const fetchedCategories: any = await getCategories(sessionStorage.getItem('nickname'));
+        setCategories(fetchedCategories.hierarchicalCategory);
         console.log(`fetchedCategories`,fetchedCategories);
       } catch (err) {
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');

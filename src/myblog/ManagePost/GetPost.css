@@ -58,7 +58,7 @@
     border: #ff4da6;
     border-width: 5px;
   }
-  .login-button_profile {
+  /* .login-button_profile {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
@@ -67,7 +67,7 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-  }
+  } */
   .title_manage {
     margin-bottom: 20px;
     color:  #f0a4d8;
@@ -101,10 +101,14 @@
     align-items: center;
   }
   .post-title {
+    width: 450px;
     font-size: 20px;
     margin: 0;
     color: white; /* 글씨색 흰색으로 설정 */
     margin-right: 10px; /* 제목과 닉네임 사이의 간격을 조절합니다 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
   }
   .user-nickname {
     font-size: 0.9em; /* 닉네임의 크기를 조절합니다 */
@@ -150,7 +154,14 @@
     text-overflow: ellipsis;
     white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
   }
-  
+  .post-content-short {
+    padding: 20px; /* post-main-content에 padding 추가 */
+    margin-top: 10px;
+    max-height: 150px; /* 원하는 높이로 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
+  }
   .post-actions {
     display: flex;
     justify-content: flex-end;

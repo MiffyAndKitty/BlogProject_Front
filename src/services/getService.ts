@@ -212,7 +212,7 @@ export const getCategories = async (nickname: string): Promise<TYPES.categories[
     });
   }
   
-  console.log(response,nickname,url);
+  console.log(response.data.data,nickname,url);
   return response.data.data;
 };
 
@@ -262,7 +262,7 @@ export const getMyProfile = async (nickname: string): Promise<any> => {
  */
 export const getFollow = async (email: string): Promise<any> => {
   const token = getToken();
-  const url = `/users/:${email}/follow`;
+  const url = `/users/:${email}/follow?page=1&pageSize=`;
   let response;
 
   response = await apiClient.get(url,{
