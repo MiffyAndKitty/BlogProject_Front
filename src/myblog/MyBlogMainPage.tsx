@@ -28,7 +28,8 @@ const MyBlogMainPage: React.FC = () => {
   const [otherImage, setOtherImage] = useState<string | null>(null);
   const [otherMessage, setOtherMessage] = useState<string | null>(null);
   const [areYouFollowing, setAreYouFollowing] = useState<boolean>(false);
-
+  const [totalCategories,setTotalCategories] = useState<number>();
+  const [noCategories,setNoCategories] = useState<number>();
   const onPostClick = (postID: string) => {
     setCurrentPostID(postID);
   };
@@ -77,7 +78,8 @@ const MyBlogMainPage: React.FC = () => {
         fetchMyProfile();
         const fetchedCategories:any = await getCategories(nickname);
         setCategories(fetchedCategories.hierarchicalCategory);
-       
+        setTotalCategories(fetchedCategories.totalPostCount);
+        setNoCategories(fetchedCategories.uncategorizedCount);
         const localNickname = sessionStorage.getItem("nickname");
         if (localNickname) {
           setLocalNickName(localNickname);
@@ -111,8 +113,8 @@ const MyBlogMainPage: React.FC = () => {
 
 
             <div className='categories'>
-              <div className='mouse_hover' onClick={fetchAllPost}>전체보기</div>
-              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류</div>
+              <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
               <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
             </div>
             

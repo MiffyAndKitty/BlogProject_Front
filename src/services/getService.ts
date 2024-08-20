@@ -260,9 +260,9 @@ export const getMyProfile = async (nickname: string): Promise<any> => {
  * 팔로우/팔로워 목록 가져오기
  * @returns 
  */
-export const getFollow = async (email: string): Promise<any> => {
+export const getFollow = async (email: string,page: number): Promise<any> => {
   const token = getToken();
-  const url = `/users/:${email}/follow?page=1&pageSize=`;
+  const url = `/users/:${email}/follow?page=${page}&pageSize=`;
   let response;
 
   response = await apiClient.get(url,{
