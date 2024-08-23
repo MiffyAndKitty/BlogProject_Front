@@ -1,19 +1,42 @@
 import React, { useState, useEffect } from 'react';
+import {getNotification}  from '../services/getService';
+import { EventSourcePolyfill, NativeEventSource } from "event-source-polyfill";
+function SSEComponent() {
 
-function App() {
   const [events, setEvents] = useState([]);
+  const [notificationData, setNotificationData] = useState();
 
+  const getNotifications = async (notificationId:string) =>{
+    try{
+      const fetchedNotification = await getNotification(notificationId);
+      if(fetchedNotification.result ===true){
+        setNotificationData(fetchedNotification.data);
+      }
+
+    }catch{
+
+    }
+  }
   useEffect(() => {
     console.log("켜짐");
-    const eventSource = new EventSource('https://mk-blogservice.site/api/event');
+    const EventSource = EventSourcePolyfill || NativeEventSource;
+    /**
+     * 유저의 모든 알림 정보 조회
+     */
+    const eventSource = new EventSource('https://mk-blogservice.site/api/notifications/stream',{ 
+      headers: {
+        Authorization: sessionStorage.getItem('accessToken')
+      },
+      withCredentials: true,
+    
+    });
 
     console.log('EventSource initialized:', eventSource);
 
     eventSource.onmessage = function(event) {
       try {
         console.log('Event received:', event);
-        const newEvent = JSON.parse(event.data);
-        setEvents(prevEvents => [...prevEvents, newEvent]);
+        
       } catch (err) {
         console.error('Error parsing event data:', err);
       }
@@ -32,16 +55,9 @@ function App() {
 
   return (
     <div>
-      <h1>Server-Sent Events</h1>
-      <ul>
-        {events.map((event, index) => (
-          <li key={index}>
-            {event.timestamp}: {event.message}
-          </li>
-        ))}
-      </ul>
+      
     </div>
   );
 }
 
-export default App;
+export default SSEComponent;

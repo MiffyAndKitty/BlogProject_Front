@@ -22,7 +22,11 @@
     text-decoration: none;
     color: #333;
   }
-  
+  .header__auth {
+    display: flex;
+    align-items: center;
+    background-color: #FFE6FA;
+  }
   .header__auth a {
     text-decoration: none;
     color: #007bff;

@@ -131,14 +131,18 @@ const WriteNewPost: React.FC = () => {
       const imgTags = quillEditor.root.querySelectorAll('img');
       // const newImages: File[] = [];
   
-      Array.from(imgTags).map(async (img) => {
+      Array.from(imgTags).map(async (img,index) => {
         if (img.src.startsWith('data:')) {
           const blob = dataURLToBlob(img.src);
-          const file = new File([blob], `image_${newImages.length}.png`, { type: 'image/png' });
-          const newSrc = URL.createObjectURL(file);
+          const file = new File([blob], `image_${index}.png`, { type: 'image/png' });
+          //const newSrc = URL.createObjectURL(file);
+          const newSrc = `image_${index + 1}`;
           img.src = newSrc;
           newImages.push(file);
           setImages(newImages); // 상태를 새 배열로 업데이트
+
+          setContent(quillEditor.root.innerHTML); // content 상태를 수정된 HTML로 업데이트
+
           console.log('Images set in handleContentChange:', newImages);
           console.log('newSrc, file, newImages', newSrc, file, newImages);
         }
@@ -155,6 +159,21 @@ const WriteNewPost: React.FC = () => {
     }
     const imagesFromSaveImgs = await saveImgs();
     console.log('Images in savePost before formData:', imagesFromSaveImgs);
+    console.log(`
+      
+      
+      
+      
+      
+      content
+      
+      
+      
+      
+      
+      
+      
+      `,content)
     const newPostData: newPost = { 
       title: title,
       content: content,

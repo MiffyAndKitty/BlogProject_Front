@@ -49,8 +49,9 @@ const LocalLogin: React.FC = () => {
       email: email,
       password: password,
     };
+    let response:any={};
     try {
-      const response = await setLogin(newPost);
+      response = await setLogin(newPost);
       console.log(`checkSetLoginResult`,response.data.result.toString())
       console.log(`loginResult`,loginResult)
       setLoginResult(response.data.result.toString());
@@ -63,6 +64,18 @@ const LocalLogin: React.FC = () => {
       }
       return response.data.result;
     } catch (error) {
+      //const response = await setLogin(newPost);
+      console.log(`
+        
+        
+        
+        
+        response.data
+        
+        
+        
+        
+        `,response)
      alert(`로그인하는데 오류가 발생했습니다. 오류: ${error}`);     
       return false;
     }

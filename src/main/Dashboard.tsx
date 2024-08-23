@@ -9,6 +9,7 @@ import PopularTags from './PopularTags';
 import LotsOfFollowerBloger from './LotsOfFollowerBloger';
 import CarrotBloger from './CarrotBloger';
 import './Dashboard.css';
+import SSEComponent from './SSEComponent';
 /**
  * 로그인 후의 메인페이지
  * @returns 
@@ -32,6 +33,7 @@ const Dashboard: React.FC = () => {
         <PopularTags/>
         <LotsOfFollowerBloger/>
         <CarrotBloger/>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
     </div>

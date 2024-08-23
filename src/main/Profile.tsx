@@ -224,14 +224,15 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
         closeModal();
         closeModalFollower();
       }
-  };
+    };
 
-  document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
-  // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-  return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-  };
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+    };
+    
   },[]);
 
   return (

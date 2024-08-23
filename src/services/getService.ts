@@ -274,3 +274,22 @@ export const getFollow = async (email: string,page: number): Promise<any> => {
   console.log(response);
   return response.data;
 };
+
+/**
+ * 특정 ID의 알림 정보 조회
+ * @returns 
+ */
+export const getNotification = async (notificationId:string): Promise<any> => {
+  const token = getToken();
+  const url = `/notifications/:${notificationId}`;
+  let response;
+
+  response = await apiClient.get(url,{
+    headers:{
+      'Authorization': `${token}`,
+    }
+  });
+
+  console.log(response);
+  return response.data;
+};
