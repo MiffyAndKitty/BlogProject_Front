@@ -75,7 +75,21 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
     <header className="header">
       
-      {!token &&(
+      {/* {!token &&(
+        <>
+        <div className="header__logo">
+          <Link to="/">
+            <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+          </Link>
+        </div>
+
+        <div className="header__auth">
+        
+          <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
+        </div>
+      </>
+      )} */}
+      {pageType === 'signup' &&(
         <>
         <div className="header__logo">
           <Link to="/">
@@ -89,7 +103,6 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
         </div>
       </>
       )}
-
       {token &&pageType === 'logout' &&(
         <>
           <div className="header__logo">
@@ -98,12 +111,17 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             </Link>
           </div>
 
-          <div>
-            <img src={no_notification}  />
-          </div>
-
+        
           <div className="header__auth">
-          
+          <div 
+          ref={notificationButtonRef}
+          onClick={()=>setOpenNotification(true)}>
+
+            {openNotification && notificationButtonRef.current && (
+              <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
+            )}
+            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+          </div>
             {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
@@ -119,6 +137,15 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
           </div>
           
           <div className="header__auth">
+          <div 
+          ref={notificationButtonRef}
+          onClick={()=>setOpenNotification(true)}>
+
+            {openNotification && notificationButtonRef.current && (
+              <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
+            )}
+            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+          </div>
           {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
         </>

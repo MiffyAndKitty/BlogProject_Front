@@ -35,19 +35,39 @@
   font-size: 24px;
   color: #333;
 }
-.notification-list {
-  margin-top: 20px;
-}
-
 .notification-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 0;
 }
 
-.notification-divider {
-  border: none;
-  border-bottom: 1px solid #ddd;
-  margin: 10px 0;
+.notification-content {
+  display: flex;
+  align-items: center;
 }
+
+.notification-trigger-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.notification-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-text {
+  font-weight: bold;
+}
+
+.notification-time {
+  font-size: 0.85em;
+  color: gray;
+}
+
 .delete-notification-button {
   background: none;
   border: none;
@@ -59,4 +79,10 @@
 
 .delete-notification-button:hover {
   color: darkred;
+}
+
+.notification-divider {
+  border: none;
+  border-bottom: 1px solid #ddd;
+  margin: 10px 0;
 }

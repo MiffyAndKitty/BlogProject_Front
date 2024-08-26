@@ -293,3 +293,22 @@ export const getNotification = async (notificationId:string): Promise<any> => {
   console.log(response);
   return response.data;
 };
+
+/**
+ * 유저의 모든 알림 정보 리스트 조회
+ * @returns 
+ */
+export const getNotificationsList = async (): Promise<any> => {
+  const token = getToken();
+  const url = `/notifications/list`;
+  let response;
+
+  response = await apiClient.get(url,{
+    headers:{
+      'Authorization': `${token}`,
+    }
+  });
+
+  console.log(response);
+  return response.data;
+};
