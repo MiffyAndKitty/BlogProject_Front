@@ -298,9 +298,23 @@ export const getNotification = async (notificationId:string): Promise<any> => {
  * 유저의 모든 알림 정보 리스트 조회
  * @returns 
  */
-export const getNotificationsList = async (): Promise<any> => {
+export const getNotificationsList = async (pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
   const token = getToken();
-  const url = `/notifications/list`;
+  let url = `/notifications/list`;
+  const params: Record<string, any> = {};
+  if(pageSize){
+    params['page-size'] = pageSize;
+  }
+  if(cursor){
+    params.cursor = cursor;
+  }
+  if(isBefore){
+    params['is-before'] = isBefore;
+  }
+  const queryString = new URLSearchParams(params).toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
   let response;
 
   response = await apiClient.get(url,{

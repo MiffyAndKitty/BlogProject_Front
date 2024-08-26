@@ -15,7 +15,7 @@
 .modal-content-notification {
   background-color: white;
   padding: 20px;
-  border:1px solid #FF88D7;
+  border:2px solid #FF88D7;
   border-radius: 5px;
   width: 80%;
   max-width: 600px;
@@ -44,6 +44,7 @@
 
 .notification-content {
   display: flex;
+  background-color: #00000000;
   align-items: center;
 }
 
@@ -52,20 +53,25 @@
   height: 40px;
   border-radius: 50%;
   margin-right: 10px;
+  border:2px solid #FF88D7;
+  background-color: #00000000;
 }
 
 .notification-details {
   display: flex;
   flex-direction: column;
+  background-color: #00000000;
 }
 
 .notification-text {
   font-weight: bold;
+  background-color: #00000000;
 }
 
 .notification-time {
   font-size: 0.85em;
   color: gray;
+  background-color: #00000000;
 }
 
 .delete-notification-button {
@@ -85,4 +91,8 @@
   border: none;
   border-bottom: 1px solid #ddd;
   margin: 10px 0;
+}
+.notification-name{
+  color: #FF6DC6;
+  cursor: pointer;
 }

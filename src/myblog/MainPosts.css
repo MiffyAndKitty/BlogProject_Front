@@ -139,18 +139,18 @@
   }
   
   .pagination-btn {
-    background-color: #ff4da6;
+    background-color: #FF88D7;
     color: white;
     border: none;
     padding: 10px 20px;
     margin: 0 5px;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 8px;
   }
   
   .pagination-btn:disabled {
-    background-color: #ccc;
+    background-color: #ff88d776;
     cursor: not-allowed;
   }
   
@@ -169,4 +169,18 @@
     margin-left: 100px;
     margin-top: 100px;
     text-align: center;
+  }
+
+  .first-image-content img {
+    max-width: 100%; /* 이미지 크기를 콘텐츠 영역에 맞게 조정 */
+    height: auto; /* 비율에 맞게 이미지 높이를 자동 조정 */
+  }
+
+  /* 기존 CSS 파일에 추가 */
+
+  .post-main-content img {
+    max-height: 50px;  /* 이미지의 최대 너비를 부모 요소의 너비에 맞춤 */
+    width: auto;     /* 이미지의 비율을 유지하며 높이를 자동 조정 */
+    display: block;   /* 이미지를 블록 요소로 처리 */
+    
   }

@@ -304,7 +304,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
             <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
             {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
             <span>|</span>
-            <button onClick={goToSignUp} style={{cursor:'pointer'}}>내소식</button>
+            <button onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
             <span>|</span>
             <button onClick={goToLogout} style={{cursor:'pointer'}}>로그아웃 </button>
           </div>
@@ -338,7 +338,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
           {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
-          <button onClick={goToSignUp}>내소식</button>
+          <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
@@ -372,7 +372,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
           {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
-          <button onClick={goToSignUp}>내소식</button>
+          <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
@@ -406,7 +406,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
           {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
           <span>|</span>
-          <button onClick={goToSignUp}>내소식</button>
+          <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>

@@ -109,24 +109,59 @@ const NewPost: React.FC = () => {
     }
   };
   const formatDate = (dateString: string): string => {
-    let [datePart, timePart] = dateString.split('T');
-    let [year, month, day] = datePart.split('-');
-    let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    const inputDate = new Date(dateString); // 입력된 ISO 형식의 날짜를 Date 객체로 변환
+    const currentDate = new Date(); // 현재 시간을 Date 객체로 가져오기
+    const adjustedCurrentDate = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000);
   
-    // 초에서 소수점 제거
-    seconds = seconds.split('.')[0];
+    // 두 날짜의 차이를 밀리초로 계산
+    const timeDifference = adjustedCurrentDate.getTime() - inputDate.getTime();
   
-    // 시간을 숫자로 변환
-    let hourInt = parseInt(hours);
-    let ampm = hourInt >= 12 ? '오후' : '오전';
+    // 밀리초를 시간, 일, 주 단위로 변환
+    const millisecondsInSecond = 1000;
+    const millisecondsInMinute = 1000 * 60;
+    const millisecondsInHour = 1000 * 60 * 60;
+    const millisecondsInDay = millisecondsInHour * 24;
+    const millisecondsInWeek = millisecondsInDay * 7;
   
-    // 12시간제로 변환
-    hourInt = hourInt % 12;
-    hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
   
-    const strHours = hourInt.toString().padStart(2, '0');
-  
-    return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    if (timeDifference < millisecondsInMinute) {
+      // 1분 미만인 경우 (N초 전으로 표시)
+      const secondsDifference = Math.floor(timeDifference / millisecondsInSecond);
+      return `${secondsDifference}초 전`;
+    }
+    else if (timeDifference < millisecondsInHour) {
+      // 1시간 미만인 경우 (N분 전으로 표시)
+      const minutesDifference = Math.floor(timeDifference / millisecondsInMinute);
+      return `${minutesDifference}분 전`;
+    } 
+    else if (timeDifference < millisecondsInDay) {
+      // 하루가 지나지 않은 경우 (N시간 전으로 표시)
+      const hoursDifference = Math.floor(timeDifference / millisecondsInHour);
+      return `${hoursDifference}시간 전`;
+    } else if (timeDifference < millisecondsInWeek) {
+      // 하루에서 일주일 사이인 경우 (N일 전으로 표시)
+      const daysDifference = Math.floor(timeDifference / millisecondsInDay);
+      return `${daysDifference}일 전`;
+    } else {
+      let [datePart, timePart] = dateString.split('T');
+      let [year, month, day] = datePart.split('-');
+      let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    
+      // 초에서 소수점 제거
+      seconds = seconds.split('.')[0];
+    
+      // 시간을 숫자로 변환
+      let hourInt = parseInt(hours);
+      let ampm = hourInt >= 12 ? '오후' : '오전';
+    
+      // 12시간제로 변환
+      hourInt = hourInt % 12;
+      hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
+    
+      const strHours = hourInt.toString().padStart(2, '0');
+    
+      return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    }
   };
   const goToAllNewPosts = ()=>{
     navigate(`/dashboard/all-new-post`);

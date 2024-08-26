@@ -42,24 +42,59 @@ const GetPost: React.FC = () => {
   };
 
   const formatDate = (dateString: string): string => {
-    let [datePart, timePart] = dateString.split('T');
-    let [year, month, day] = datePart.split('-');
-    let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    const inputDate = new Date(dateString); // 입력된 ISO 형식의 날짜를 Date 객체로 변환
+    const currentDate = new Date(); // 현재 시간을 Date 객체로 가져오기
+    const adjustedCurrentDate = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000);
   
-    // 초에서 소수점 제거
-    seconds = seconds.split('.')[0];
+    // 두 날짜의 차이를 밀리초로 계산
+    const timeDifference = adjustedCurrentDate.getTime() - inputDate.getTime();
   
-    // 시간을 숫자로 변환
-    let hourInt = parseInt(hours);
-    let ampm = hourInt >= 12 ? '오후' : '오전';
+    // 밀리초를 시간, 일, 주 단위로 변환
+    const millisecondsInSecond = 1000;
+    const millisecondsInMinute = 1000 * 60;
+    const millisecondsInHour = 1000 * 60 * 60;
+    const millisecondsInDay = millisecondsInHour * 24;
+    const millisecondsInWeek = millisecondsInDay * 7;
   
-    // 12시간제로 변환
-    hourInt = hourInt % 12;
-    hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
   
-    const strHours = hourInt.toString().padStart(2, '0');
-  
-    return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    if (timeDifference < millisecondsInMinute) {
+      // 1분 미만인 경우 (N초 전으로 표시)
+      const secondsDifference = Math.floor(timeDifference / millisecondsInSecond);
+      return `${secondsDifference}초 전`;
+    }
+    else if (timeDifference < millisecondsInHour) {
+      // 1시간 미만인 경우 (N분 전으로 표시)
+      const minutesDifference = Math.floor(timeDifference / millisecondsInMinute);
+      return `${minutesDifference}분 전`;
+    } 
+    else if (timeDifference < millisecondsInDay) {
+      // 하루가 지나지 않은 경우 (N시간 전으로 표시)
+      const hoursDifference = Math.floor(timeDifference / millisecondsInHour);
+      return `${hoursDifference}시간 전`;
+    } else if (timeDifference < millisecondsInWeek) {
+      // 하루에서 일주일 사이인 경우 (N일 전으로 표시)
+      const daysDifference = Math.floor(timeDifference / millisecondsInDay);
+      return `${daysDifference}일 전`;
+    } else {
+      let [datePart, timePart] = dateString.split('T');
+      let [year, month, day] = datePart.split('-');
+      let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    
+      // 초에서 소수점 제거
+      seconds = seconds.split('.')[0];
+    
+      // 시간을 숫자로 변환
+      let hourInt = parseInt(hours);
+      let ampm = hourInt >= 12 ? '오후' : '오전';
+    
+      // 12시간제로 변환
+      hourInt = hourInt % 12;
+      hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
+    
+      const strHours = hourInt.toString().padStart(2, '0');
+    
+      return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    }
   };
   
   const handleSearch = (term: string) => {
@@ -192,12 +227,23 @@ const GetPost: React.FC = () => {
       setLoading(false);
     }
   };
-  // 불필요한 태그 제거 함수
+  // 불필요한 태그 제거 함수 (이미지 태그는 유지)
   const removeUnwantedTags = (html: string): string => {
-    const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-    const div = document.createElement('div');
-    div.innerHTML = cleanHtml;
-    return div.textContent || div.innerText || '';
+    // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
+    const cleanHtml = DOMPurify.sanitize(html, { 
+      USE_PROFILES: { html: true },
+      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'img'], // 허용할 태그들 (img 포함)
+      ALLOWED_ATTR: ['src', 'alt', 'title', 'width', 'height'], // 허용할 속성들
+    });
+    return cleanHtml;
+  };
+  const extractFirstImage = (htmlContent: string): string | null => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+    const firstImage = doc.querySelector('img'); // 첫 번째 이미지를 선택
+    
+    return firstImage ? firstImage.outerHTML : null; // 이미지가 있으면 HTML 태그를 반환, 없으면 null 반환
   };
   const handleCategorySelect = (categoryItem: TYPES.category) => {
     setCategory(categoryItem);
@@ -298,9 +344,8 @@ const GetPost: React.FC = () => {
     <>
       <Header pageType="otherblog" />
       <main>
-      <span style={{marginBottom:'50px;'}}></span>
+        <span style={{ marginBottom: '50px;' }}></span>
         <div className="main-container">
-          
           <Profile pageType="postManage" nicknameParam={nickname} />
   
           <div className="getpost-container">
@@ -319,105 +364,104 @@ const GetPost: React.FC = () => {
                   카테고리 관리
                 </button>
               </div>
-              <div className='border'>
-              {managementType === 'post' && (
-                <>
-                  <SearchBar onSearch={handleSearch} />
-                  <div className="post-manage">
-                    <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
-                      <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
-                        {category.category_name}
-                      </button>
-                      {dropdownOpen && (
-                        <div className="dropdown-getpost-menu">
-                          {renderCategoryMenu(categories)}
+              <div className="border">
+                {managementType === 'post' && (
+                  <>
+                    <SearchBar onSearch={handleSearch} />
+                    <div className="post-manage">
+                      <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
+                        <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                          {category.category_name}
+                        </button>
+                        {dropdownOpen && (
+                          <div className="dropdown-getpost-menu">
+                            {renderCategoryMenu(categories)}
+                          </div>
+                        )}
+                      </div>
+                      {!loading && !error && posts.length > 0 && (
+                        <div className="post-list">
+                          {posts.map((post) => (
+                            <div className="post-card" key={post.board_id}>
+                              <div className="post-header">
+                                <div className="title-container">
+                                  <h2
+                                    className="post-title"
+                                    dangerouslySetInnerHTML={{
+                                      __html: highlightKeyword(post.board_title, searchTerm),
+                                    }}
+                                  ></h2>
+                                  <span className="user-nickname">{post.user_nickname}</span>
+                                </div>
+                                <div className="post-meta">
+                                  <span className="post-category">
+                                    {findCategoryById(categories, post.category_id)}
+                                  </span>
+                                  <span className="post-date">{formatDate(post.created_at)}</span>
+                                  <span className="post-stats">
+                                    <span className="user-nickname">조회수: {post.board_view}</span>
+                                    <span className="user-nickname">
+                                      <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="Carrot Icon" /> : {post.board_like}
+                                    </span>
+                                    <span className="user-nickname">댓글: {post.board_comment}</span>
+                                  </span>
+                                </div>
+                              </div>
+                              <div
+                                className="post-content"
+                                onClick={() => goToDetailPost(post.board_id)}
+                                dangerouslySetInnerHTML={{
+                                  __html: highlightKeyword(post.board_content, searchTerm),
+                                }}
+                              ></div>
+                              <div className="post-actions">
+                                <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
+                                  수정
+                                </button>
+                                <button className="delete-btn" onClick={() => handleDelete(post.board_id)}>
+                                  삭제
+                                </button>
+                                <ConfirmModal
+                                  isOpen={isModalOpen}
+                                  onClose={() => setIsModalOpen(false)}
+                                  onConfirm={confirmDelete}
+                                  message="이 게시물을 삭제하시겠습니까?"
+                                />
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       )}
-                    </div>
-                    {!loading && !error && posts.length > 0 && (
-                      <div className="post-list">
-                        {posts.map((post) => (
-                          <div className="post-card" key={post.board_id}>
-                            <div className="post-header">
-                              <div className="title-container">
-                                <h2
-                                  className="post-title"
-                                  dangerouslySetInnerHTML={{
-                                    __html: highlightKeyword(post.board_title, searchTerm),
-                                  }}
-                                ></h2>
-                                <span className="user-nickname">{post.user_nickname}</span>
-                              </div>
-                              <div className="post-meta">
-                                <span className="post-category">
-                                  {findCategoryById(categories, post.category_id)}
-                                </span>
-                                <span className="post-date">{formatDate(post.created_at)}</span>
-                                <span className="post-stats">
-                                  <span className="user-nickname">조회수: {post.board_view}</span>
-                                  <span className="user-nickname">
-                                    <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="Carrot Icon" /> : {post.board_like}
-                                  </span>
-                                  <span className="user-nickname">댓글: {post.board_comment}</span>
-                                </span>
-                              </div>
-                            </div>
-                            <div
-                              className="post-content"
-                              onClick={() => goToDetailPost(post.board_id)}
-                              dangerouslySetInnerHTML={{
-                                __html: highlightKeyword(post.board_content, searchTerm),
-                              }}
-                            ></div>
-                            <div className="post-actions">
-                              <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
-                                수정
-                              </button>
-                              <button className="delete-btn" onClick={() => handleDelete(post.board_id)}>
-                                삭제
-                              </button>
-                              <ConfirmModal
-                                isOpen={isModalOpen}
-                                onClose={() => setIsModalOpen(false)}
-                                onConfirm={confirmDelete}
-                                message="이 게시물을 삭제하시겠습니까?"
-                              />
-                            </div>
-                          </div>
-                        ))}
+                      <div className="pagination">
+                        <button
+                          className="pagination-btn"
+                          onClick={handlePreviousPage}
+                          disabled={currentPage === 1}
+                        >
+                          이전
+                        </button>
+                        <span className="pagination-info">
+                          {currentPage} / {totalPages}
+                        </span>
+                        <button
+                          className="pagination-btn"
+                          onClick={handleNextPage}
+                          disabled={currentPage === totalPages}
+                        >
+                          다음
+                        </button>
                       </div>
-                    )}
-                    <div className="pagination">
-                      <button
-                        className="pagination-btn"
-                        onClick={handlePreviousPage}
-                        disabled={currentPage === 1}
-                      >
-                        이전
-                      </button>
-                      <span className="pagination-info">
-                        {currentPage} / {totalPages}
-                      </span>
-                      <button
-                        className="pagination-btn"
-                        onClick={handleNextPage}
-                        disabled={currentPage === totalPages}
-                      >
-                        다음
-                      </button>
                     </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
   
-              {managementType === 'category' && (
-                <>
-                  <div className="post-manage">
-
-                    <CategorySettings />
-                  </div>
-                </>
-              )}
+                {managementType === 'category' && (
+                  <>
+                    <div className="post-manage">
+                      <CategorySettings />
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -50,25 +50,63 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
    * @returns 변환된 날짜 문자열
    */
   const formatDate = (dateString: string): string => {
-    let [datePart, timePart] = dateString.split('T');
-    let [year, month, day] = datePart.split('-');
-    let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    const inputDate = new Date(dateString); // 입력된 ISO 형식의 날짜를 Date 객체로 변환
+    const currentDate = new Date(); // 현재 시간을 Date 객체로 가져오기
+    const adjustedCurrentDate = new Date(currentDate.getTime() + 9 * 60 * 60 * 1000);
   
-    // 초에서 소수점 제거
-    seconds = seconds.split('.')[0];
+    // 두 날짜의 차이를 밀리초로 계산
+    const timeDifference = adjustedCurrentDate.getTime() - inputDate.getTime();
   
-    // 시간을 숫자로 변환
-    let hourInt = parseInt(hours);
-    let ampm = hourInt >= 12 ? '오후' : '오전';
+    // 밀리초를 시간, 일, 주 단위로 변환
+    const millisecondsInSecond = 1000;
+    const millisecondsInMinute = 1000 * 60;
+    const millisecondsInHour = 1000 * 60 * 60;
+    const millisecondsInDay = millisecondsInHour * 24;
+    const millisecondsInWeek = millisecondsInDay * 7;
   
-    // 12시간제로 변환
-    hourInt = hourInt % 12;
-    hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
   
-    const strHours = hourInt.toString().padStart(2, '0');
-  
-    return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    if (timeDifference < millisecondsInMinute) {
+      // 1분 미만인 경우 (N초 전으로 표시)
+      const secondsDifference = Math.floor(timeDifference / millisecondsInSecond);
+      return `${secondsDifference}초 전`;
+    }
+    else if (timeDifference < millisecondsInHour) {
+      // 1시간 미만인 경우 (N분 전으로 표시)
+      const minutesDifference = Math.floor(timeDifference / millisecondsInMinute);
+      return `${minutesDifference}분 전`;
+    } 
+    else if (timeDifference < millisecondsInDay) {
+      // 하루가 지나지 않은 경우 (N시간 전으로 표시)
+      const hoursDifference = Math.floor(timeDifference / millisecondsInHour);
+      return `${hoursDifference}시간 전`;
+    } else if (timeDifference < millisecondsInWeek) {
+      // 하루에서 일주일 사이인 경우 (N일 전으로 표시)
+      const daysDifference = Math.floor(timeDifference / millisecondsInDay);
+      return `${daysDifference}일 전`;
+    } else {
+      let [datePart, timePart] = dateString.split('T');
+      let [year, month, day] = datePart.split('-');
+      let [hours, minutes, seconds] = timePart.replace('Z', '').split(':');
+    
+      // 초에서 소수점 제거
+      seconds = seconds.split('.')[0];
+    
+      // 시간을 숫자로 변환
+      let hourInt = parseInt(hours);
+      let ampm = hourInt >= 12 ? '오후' : '오전';
+    
+      // 12시간제로 변환
+      hourInt = hourInt % 12;
+      hourInt = hourInt ? hourInt : 12; // 0이면 12로 설정
+    
+      const strHours = hourInt.toString().padStart(2, '0');
+    
+      return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+    }
   };
+
+
+
     // 주어진 카테고리 ID를 찾기 위한 재귀 함수
    const findCategoryById = (categories: TYPES.categories[], categoryId: string) => {
 
@@ -101,13 +139,17 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       setCurrentPage(currentPage + 1);
     }
   };
-  // 불필요한 태그 제거 함수
+  // 불필요한 태그 제거 함수 (이미지 태그는 유지)
   const removeUnwantedTags = (html: string): string => {
-    const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-    const div = document.createElement('div');
-    div.innerHTML = cleanHtml;
-    return div.textContent || div.innerText || '';
+    // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
+    const cleanHtml = DOMPurify.sanitize(html, { 
+      USE_PROFILES: { html: true },
+      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'img'], // 허용할 태그들 (img 포함)
+      ALLOWED_ATTR: ['src', 'alt', 'title', 'width', 'height'], // 허용할 속성들
+    });
+    return cleanHtml;
   };
+
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -115,6 +157,14 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     fetchPosts(undefined,null, term);
   };
 
+  const extractFirstImage = (htmlContent: string): string | null => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+    const firstImage = doc.querySelector('img'); // 첫 번째 이미지를 선택
+    
+    return firstImage ? firstImage.outerHTML : null; // 이미지가 있으면 HTML 태그를 반환, 없으면 null 반환
+  };
   const fetchPosts = async (cursor?: string, categoryID?: string, query?: string, sort?:string) => {
     setLoading(true); 
     setError(null);  
@@ -194,67 +244,76 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   return (
     <>
-    <section className="MainPosts-section">
-    <main>
-      <div className="main-container">
-        <div className="container">
-        <h1>{nicknameParam}의 블로그</h1>
-        
-          {!loading && !error && posts.length > 0 && (
-            <>
-            <div className="search-and-sort-container">
-            <SearchBar onSearch={handleSearch} />
-            <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px',marginRight: '-200px',fontWeight:'bold' }}>
-                  <button className="dropdown-getpost-toggle" style={{ fontWeight:'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
-                    {sortName} {dropdownOpen ? <img src={upBtn} style={{width:'15px', height:'15px'}}/>:<img src={downBtn} style={{width:'15px', height:'15px'}}/>}
-                  </button>
-                  {dropdownOpen && (
-                    <div className="dropdown-menu" >
-                      <button className="dropdown-item" onClick={() => handleSortChange('','최신순')}>최신순</button>
-                      <button className="dropdown-item" onClick={() => handleSortChange('like','인기순(당근수)')}>인기순(당근수)</button>
-                      <button className="dropdown-item" onClick={() => handleSortChange('view','조회순')}>조회순</button>
-                    </div>
-                  )}
-                </div>
-            </div>
-            
-            <div style={{marginTop:'15px'}} className="post-main-main-list" >
-              {posts.map(post => (
-                <div className="post-main-card" key={post.board_id} >
-                  <div className="post-main-header">
-                  <div className="title-container">
-                  <h2 className="post-title"  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                    <span className="user-nickname">{post.user_nickname}</span>
-                  </div>
-                    
-                    <div className="post-main-meta">
-                    <span className="post-main-category">{ findCategoryById(categories,post.category_id)}</span>
-                      <span className="post-main-date">{formatDate(post.created_at)}</span>
-                      <span className="post-main-stats">
-                        <span className="user-nickname">조회수: {post.board_view}</span>
-                        <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
-                        <span className="user-nickname">댓글: {post.board_comment}</span>
-                      </span>
+      <section className="MainPosts-section">
+        <main>
+          <div className="main-container">
+            <div className="container">
+              <h1>{nicknameParam}의 블로그</h1>
+              
+              {!loading && !error && posts.length > 0 && (
+                <>
+                  <div className="search-and-sort-container">
+                    <SearchBar onSearch={handleSearch} />
+                    <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
+                      <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        {sortName} {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
+                      </button>
+                      {dropdownOpen && (
+                        <div className="dropdown-menu">
+                          <button className="dropdown-item" onClick={() => handleSortChange('', '최신순')}>최신순</button>
+                          <button className="dropdown-item" onClick={() => handleSortChange('like', '인기순(당근수)')}>인기순(당근수)</button>
+                          <button className="dropdown-item" onClick={() => handleSortChange('view', '조회순')}>조회순</button>
+                        </div>
+                      )}
                     </div>
                   </div>
-                  <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}  dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
-
-                </div>
-              ))}
+                  
+                  <div style={{ marginTop: '15px' }} className="post-main-main-list">
+                    {posts.map(post => {
+                      const firstImage = extractFirstImage(post.board_content);
+                      
+                      return (
+                        <div className="post-main-card" key={post.board_id}>
+                          <div className="post-main-header">
+                            <div className="title-container">
+                              <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
+                              <span className="user-nickname">{post.user_nickname}</span>
+                            </div>
+                            
+                            <div className="post-main-meta">
+                              <span className="post-main-category">{findCategoryById(categories, post.category_id)}</span>
+                              <span className="post-main-date">{formatDate(post.created_at)}</span>
+                              <span className="post-main-stats">
+                                <span className="user-nickname">조회수: {post.board_view}</span>
+                                <span className="user-nickname"><img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> : {post.board_like}</span>
+                                <span className="user-nickname">댓글: {post.board_comment}</span>
+                              </span>
+                            </div>
+                          </div>
+                          
+                          <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>
+                            {firstImage ? (
+                              <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
+                            ) : (
+                              <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+              <div className="pagination">
+                <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>
+                <span className="pagination-info">{currentPage} / {totalPages}</span>
+                <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
+              </div>
             </div>
-            </>
-          )}
-          <div className="pagination">
-            <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>
-            <span className="pagination-info">{currentPage} / {totalPages}</span>
-            <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
           </div>
-        </div>
-      </div>
-    </main>
-    </section>
-  </>
-  
+        </main>
+      </section>
+    </>
   );
 };
 

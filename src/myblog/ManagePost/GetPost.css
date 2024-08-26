@@ -184,7 +184,7 @@
   .delete-btn:hover {
     background-color: #ff4da6;
   }
-  .pagination {
+  /* .pagination {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -210,7 +210,7 @@
   .pagination-info {
     font-size: 16px;
     margin: 0 10px;
-  }
+  } */
 
   .profile_post_manage{
     max-width: 300px;
@@ -246,11 +246,13 @@
   }
   
   .tab-button {
-    padding: 10px 20px;
+    padding: 5px 20px;
     margin-right: 10px;
     border: none;
-    background-color: #f1f1f1;
+    border-radius: 10px;
+    background-color: #ff88d776;
     cursor: pointer;
+    color: #ffffff;
     font-size: 16px;
     transition: background-color 0.3s ease;
   }
@@ -262,7 +264,7 @@
   }
   
   .tab-button:not(.active):hover {
-    background-color: #ddd; /* 비활성화된 탭에 마우스를 올렸을 때 색상 */
+    background-color: #ff88d7ac; /* 비활성화된 탭에 마우스를 올렸을 때 색상 */
   }
   .getpost-container {
     flex: 1;
@@ -273,3 +275,10 @@
     border: #ff4da6;
     border-width: 5px;
   }
+
+  .post-content img {
+    max-height: 50px;  /* 이미지의 최대 너비를 부모 요소의 너비에 맞춤 */
+    width: auto;     /* 이미지의 비율을 유지하며 높이를 자동 조정 */
+    display: block;   /* 이미지를 블록 요소로 처리 */
+  }
+  
