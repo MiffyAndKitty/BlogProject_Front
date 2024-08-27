@@ -209,7 +209,7 @@ const NewPost: React.FC = () => {
                         <p className="post-popular-author">
                           <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className={firstImageSrc ? 'post-popular-author-white' : "post-popular-author"}>
                             작성자: {post.user_nickname}
-                          </span> | {formatDate(post.created_at)}
+                          </span> <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>| {formatDate(post.created_at)}</span>
                         </p>
                         <h3 className="post-popular-title">{post.board_title}</h3>
                         <div className="post-popular-footer">

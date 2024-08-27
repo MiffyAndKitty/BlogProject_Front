@@ -120,3 +120,9 @@ export interface userData{
     user_password: string | null
     user_provider:string | null
 }
+
+export interface commentData{
+    boardId:string,
+    parentCommentId:string,
+    commentContent:string
+}

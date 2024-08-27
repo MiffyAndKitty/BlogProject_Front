@@ -11,6 +11,18 @@
   justify-content: center;
   z-index: 1000;
 }
+.modal-header-notification {
+  display: flex;
+  justify-content: space-between; /* 두 요소를 양쪽 끝에 배치 */
+  align-items: center; /* 수직 중앙 정렬 */
+}
+.allLook {
+  cursor: pointer;
+  font-size: 14px;
+  color:rgb(152, 152, 152);
+  margin-left: auto; /* 자동 왼쪽 여백으로 오른쪽 정렬 */
+  margin-right: 450px;
+}
 
 .modal-content-notification {
   background-color: white;
@@ -28,12 +40,11 @@
 }
 
 .modal-close-notification {
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  
   cursor: pointer;
   font-size: 24px;
   color: #333;
+  margin-left: 10px; /* 필요에 따라 여백 조정 */
 }
 .notification-item {
   display: flex;

@@ -179,12 +179,13 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
         style={{ position: 'absolute', ...modalStyle }} // 위치 스타일 적용
         onClick={(e) => e.stopPropagation()}
       >
+        
+        <div className="modal-header-notification">
+        <h3 >새소식</h3>
+        <span className="allLook" onClick={goToAllNewNotification}>전체보기</span>
         <span className="modal-close-notification" onClick={onClose}>
           &times;
         </span>
-        <div className="slider">
-        <h3 style={{marginTop:'-5px'}}>새소식</h3>
-        <span className="all" onClick={goToAllNewNotification}>전체보기</span>
       </div>
         <hr className="notification-divider" />
         <div className="notification-list">

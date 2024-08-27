@@ -35,17 +35,6 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
         try {
           const email = isOthers ? sessionStorage.getItem('other_email') : sessionStorage.getItem('email');
           if (email) {
-
-            console.log(`
-                
-                
-                page = ${page}
-                
-                
-                
-                
-                
-                `)
             const fetchedFollowers = await getFollow(email, page);
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       

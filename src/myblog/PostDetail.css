@@ -70,3 +70,158 @@
     margin-right: 5px;
     font-size: 14px;
   }
+
+
+  .comment-section {
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid #FF88D7;
+    background-color: #fdedf543;
+  }
+  
+  .comment-section h3 {
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .comment-profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .textarea-container {
+    position: relative;
+    width: 90%;
+    margin-left: 10px;
+  }
+  
+  .comment-input {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #FECDF4;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 10px;
+    outline: none;
+    box-sizing: border-box; /* 이 부분 추가 */
+  }
+  
+  .comment-input:focus {
+    border-color: #fe76d1;
+    outline: none;
+  }
+  
+  .comment-submit-button {
+    position: absolute;
+    bottom: 20px;
+    right: 10px;
+    background-color: #FF88D7;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .comment-submit-button:hover {
+    background-color: #fe76d1;
+  }
+  
+  .comment-list {
+    margin-top: 20px;
+    border-top: 1px solid #FECDF4;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+  }
+  
+  .comment-list .comment-item {
+    padding: 10px;
+    border-bottom: 1px solid #FECDF4;
+  }
+  
+  .comment-list .comment-item:last-child {
+    border-bottom: none;
+  }
+
+  .comment-header{
+    margin-left: 8px;
+    display: flex;
+    flex-direction: row;
+    
+  }
+
+  .comment-item-author {
+    font-weight: bold;
+    margin-right: 10px;
+    background-color:transparent;
+  }
+  
+  .comment-item-content {
+    margin-left: 10px;
+    margin-top: 5px;
+    background-color:transparent;
+  }
+
+  .comment-content{
+    margin-top:15px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    background-color:transparent;
+    color: #4d4d4d;
+  }
+  .comment-date{
+    font-size: 12px;
+    background-color:transparent;
+    color: #676767;
+  }
+  .scroll-to-top-button {
+    width: auto; /* 버튼의 너비를 콘텐츠에 맞게 자동 조정 */
+    color: #676767c1;
+    background-color: #FFE6FA;
+    border: none;
+    padding: 10px 20px; /* 좌우 패딩을 추가하여 버튼 크기 조절 */
+    margin-bottom: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center; /* 텍스트를 버튼 중앙에 정렬 */
+  }
+  .scroll-to-top-container {
+    display: flex;
+    justify-content: center; /* 버튼을 가로로 중앙에 배치 */
+    margin-top: 20px; /* 위쪽 여백 추가 */
+  }
+
+  .no-comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 20px;
+    background-color: #fdedf5;
+    border: 1px solid #ff88d769;
+    border-radius: 10px;
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .no-comments-icon {
+    background-color: transparent;
+    font-size: 50px;
+    margin-bottom: 10px;
+    color: #ff88d7;
+  }
+  
+  .no-comments p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+  

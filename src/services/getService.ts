@@ -326,3 +326,41 @@ export const getNotificationsList = async (pageSize?:number, cursor?:string, isB
   console.log(response);
   return response.data;
 };
+
+/**
+ * 특정 게시글의 댓글 조회
+ * @returns 
+ */
+export const getComments = async (boardId:string, sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
+  const token = getToken();
+  let url = `/board/:${boardId}/comments`;
+  const params: Record<string, any> = {};
+
+  if(sort){
+    params['sort'] = sort;
+  }
+
+  if(pageSize){
+    params['page-size'] = pageSize;
+  }
+  if(cursor){
+    params.cursor = cursor;
+  }
+  if(isBefore){
+    params['is-before'] = isBefore;
+  }
+  const queryString = new URLSearchParams(params).toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
+  let response;
+
+  response = await apiClient.get(url,{
+    headers:{
+      'Authorization': `${token}`,
+    }
+  });
+
+  console.log(response);
+  return response.data;
+};

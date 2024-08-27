@@ -141,3 +141,19 @@ export const followUser = async (email: Object): Promise<any> => {
         console.log(response);
         return response;
 };
+
+/**
+ * 댓글 작성하기
+ * @param postData 
+ * @returns 
+ */
+export const newComment = async (commentData: TYPES.commentData): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<TYPES.commentData>('/comment', commentData,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
+};

@@ -40,6 +40,7 @@
     margin-right: 100px;
     margin-top: 15px;
     min-width: 300px; /* 최소 너비 추가 */
+    width: 300px; /* 고정된 너비 설정 */
   }
   .profile-section.myBlog {
     grid-column: 1 / 4; /* 왼쪽 열에 배치 */
@@ -48,6 +49,7 @@
     margin-left: 80px;
     min-width: 300px; /* 최소 너비 추가 */
     max-width: 300px;
+    width: 300px; /* 고정된 너비 설정 */
   }
 
   .profile-section.otherBlog {
@@ -57,6 +59,7 @@
     margin-left: 80px;
     min-width: 300px; /* 최소 너비 추가 */
     max-width: 300px;
+    width: 300px; /* 고정된 너비 설정 */
   }
 
   .profile-section.signup_for_blog {
@@ -66,6 +69,7 @@
     margin-left: 80px;
     min-width: 300px; /* 최소 너비 추가 */
     max-width: 300px;
+    width: 300px; /* 고정된 너비 설정 */
   }
   .profile-section.profileSetting {
     grid-column: 1 / 3; /* 왼쪽 열에 배치 */
@@ -74,7 +78,7 @@
     margin-left: 80px;
     min-width: 300px; /* 최소 너비 추가 */
     max-width: 300px;
-    
+    width: 300px; /* 고정된 너비 설정 */
    
   }
   .profile-section.postManage {
@@ -84,6 +88,7 @@
     margin-left: 80px;
     min-width: 300px; /* 최소 너비 추가 */
     max-width: 300px;
+    width: 300px; /* 고정된 너비 설정 */
   }
   .populartags-section {
     padding: 1rem;

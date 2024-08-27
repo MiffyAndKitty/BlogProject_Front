@@ -60,7 +60,7 @@
   
   .post-popular.has-image .post-overlay {
     background-color: rgba(0, 0, 0, 0.413); /* 반투명한 검은색 오버레이 */
-    padding: 20px;
+    padding-bottom: 40px;
     color: white;
     z-index: 2;
     width: 100%;
