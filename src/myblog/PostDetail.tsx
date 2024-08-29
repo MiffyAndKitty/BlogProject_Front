@@ -46,11 +46,12 @@ const PostDetail: React.FC = () => {
   const [likedCommment, setLikedComment] = useState<{ [key: string]: boolean }>({}); // 각 글의 좋아요 상태 관리
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [tags, setTags] = useState<string[]>([]);
   const [email, setEmail] = useState<string>('');
-  const [image, setImage] = useState<string>('');
+  const [image, setImage] = useState<string>(mainCharacterImg);
   const [comment, setComment] = useState<string>('');
   const [comments, setComments] = useState<CommentData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -82,7 +83,16 @@ const PostDetail: React.FC = () => {
 
     console.log(option)
   };
-
+  useEffect(() => {
+    if (image) {
+      const img = new Image();
+      img.src = image;
+      img.onload = () => setIsImageLoaded(true);
+      img.onerror = () => setIsImageLoaded(false);
+    } else {
+      setIsImageLoaded(false);
+    }
+  }, [image]);
   const writeComment = async()=>{
     try{
       let newData : TYPES.commentData= {
@@ -547,17 +557,17 @@ const PostDetail: React.FC = () => {
     setEditingCommentContent(''); // 수정 취소 시 상태 초기화
   };
 
-  if (loading) {
-    return <div>로딩 중...</div>;
-  }
+  // if (loading) {
+  //   return <div>로딩 중...</div>;
+  // }
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  // if (error) {
+  //   return <div>{error}</div>;
+  // }
 
-  if (!post) {
-    return <div>게시물을 찾을 수 없습니다.</div>;
-  }
+  // if (!post) {
+  //   return <div>게시물을 찾을 수 없습니다.</div>;
+  // }
   const renderComments = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
       <div key={comment.comment_id} className="comment-item" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
@@ -626,8 +636,8 @@ const PostDetail: React.FC = () => {
         {openReplies[comment.comment_id] && (
           <div className="reply-section" style={{ marginLeft: '20px', marginTop: '10px' }}>
             <div className='comment-profile'>
-              <img alt="Profile" className="heart" src={image}></img>
-              <div className="textarea-container">
+              <img alt="Profile" className="heart" src={profileImage}></img>
+              <div className="textarea-container2">
                 <textarea
                   className="comment-input"
                   placeholder="답글을 입력하세요..."
@@ -651,8 +661,8 @@ const PostDetail: React.FC = () => {
   
   const renderReplies = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
-      <div key={comment.comment_id} className="comment-item" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
-        <div className="comment-header">
+      <div key={comment.comment_id} className="comment-item2" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
+        <div className="comment-header2">
           <img style={{width:'15px', height:'15px', marginTop:'10px', marginRight:'5px'}} src={spaceBar} alt="User Profile" />
           <img className='heart' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
@@ -666,7 +676,7 @@ const PostDetail: React.FC = () => {
             />
             ) : (
               // 기본 댓글 내용 표시
-              <div className="comment-content">{comment.comment_content}</div>
+              <div className="comment-content2">{comment.comment_content}</div>
             )}
             
             <div className='flexRow'>
@@ -699,13 +709,13 @@ const PostDetail: React.FC = () => {
             <>
               {editingCommentId === comment.comment_id ? (
                 <>
-                  <button onClick={()=>{handleSaveCommentEdit(false,parentCommentId)}} className="like-button">저장</button>
-                  <button onClick={handleCancelCommentEdit} className="like-button">취소</button>
+                  <button onClick={()=>{handleSaveCommentEdit(false,parentCommentId)}} className="like-button2">저장</button>
+                  <button onClick={handleCancelCommentEdit} className="like-button2">취소</button>
                 </>
               ) : (
                 <>
-                  <button onClick={() => handleEditComment(comment.comment_id, comment.comment_content)} className="like-button">수정</button>
-                  <button onClick={() => handleDeleteComment(comment.comment_id)} className="like-button">삭제</button>
+                  <button onClick={() => handleEditComment(comment.comment_id, comment.comment_content)} className="like-button2">수정</button>
+                  <button onClick={() => handleDeleteComment(comment.comment_id)} className="like-button2">삭제</button>
                 </>
               )}
               <ConfirmModal
@@ -722,145 +732,191 @@ const PostDetail: React.FC = () => {
     ));
   };
   
-  
+  const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <>
-
       <section className="MainPosts-section">
         <main>
           <div className="main-container">
             <div className="container">
-            <div style={{marginTop:'70px'}} className="postdetail-detail">
-            <h1>{post.board_title}</h1>
-              
-              <div className="postdetail-meta">
-                <span onClick={() => goToBlog(post.user_nickname)} className="postdetail-author" style={{cursor:'pointer'}}>작성자: {post.user_nickname}</span>
-                <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
-                <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
-                
-                <div>
-                  <span className="postdetail-likes"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
-                  <span className="postdetail-comments">조회수: {post.board_view}</span>
-                  <span className="postdetail-comments">댓글: {post.board_comment}</span>
-                </div>
-              </div>
-              <div className="separator"></div> {/* 구분선 추가 */}
-              <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />
-              
-            </div>
-            <div className="tags">
-            {tags.map((tag) => (
-              <span key={tag} className="tag">
-                {tag}
-              </span>
-            ))}
-          </div>
-            <div className="button-group">
-            {token &&(
-              <button onClick={handleLike} className={`like-button ${liked[postID] ? 'liked' : ''}`}>
-              {(liked[postID]) ? (
-                <>
-                  <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
-                  <span>:</span>
-                  {post.board_like}
-                </>
-              ) : (
-                <>
-                  <img style={{ width: '15px', height: '15px' }} src={emptyCarrot} alt="empty carrot" />
-                  <span>:</span>
-                  {post.board_like}
-                </>
-              )}
-            </button>
-            )}
-            {!token &&(
-              <button className={`like-button ${liked[postID] ? 'liked' : ''}`}>
-              {(liked[postID]) ? (
-                <>
-                  <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
-                  <span>:</span>
-                  {post.board_like}
-                </>
-              ) : (
-                <>
-                  <img style={{ width: '15px', height: '15px' }} src={emptyCarrot} alt="empty carrot" />
-                  <span>:</span>
-                  {post.board_like}
-                </>
-              )}
-            </button>
-            )}
-            {token && isWriter&&(
-              <>
-              <button onClick={() => editPost(post.board_id)} className={`like-button ${liked[postID] ? 'liked' : ''}`}>수정</button>
-              <button  onClick={() => deletePostDetail(post.board_id)} className={`like-button ${liked[postID] ? 'liked' : ''}`}>삭제</button>
-              <ConfirmModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={confirmDelete}
-                message="이 게시물을 삭제하시겠습니까?"
-              />
-              </>
-            )}
-            </div>
-            <div  ref= {firstCommentRef} className="comment-section">
-
-              <div className='titleSort'>
-                <h3>댓글<span style={{marginLeft:'10px', color:'#FF88D7'}}>{totalComments}</span></h3>
-                <div style={{marginLeft:'30px'}}>
-                  <span onClick={()=>{handleSortChange('')}} className={sortOption===''? 'toggle-sort-comment click': 'toggle-sort-comment'}>등록순</span>
-                  <span onClick={()=>{handleSortChange('like')}} className={sortOption==='like'? 'toggle-sort-comment click': 'toggle-sort-comment'}>인기순</span>
-                </div>
-                
-              </div>
-              
-
-              <div className='comment-profile'>
-                <img alt="Profile" className="heart" src={image}></img>
-                <div className="textarea-container">
-                  <textarea
-                    className="comment-input"
-                    placeholder="댓글을 입력하세요..."
-                    value={comment} // textarea의 value를 상태로 관리
-                    onChange={handleCommentChange} // 댓글 입력 시 상태 업데이트
-                  />
-                  <button className="comment-submit-button" onClick={writeComment}>댓글 등록</button>
-                </div>
-              </div>
-                      
-              <div className="comment-list">
-
-                {isLoading ? (
-                  <div>댓글을 불러오는 중...</div>
-                ) : (
-                  comments.length > 0 ? (
-                    renderComments(comments)  // 댓글 목록 재귀적으로 렌더링
-                  )  : (
-                    <div className="no-comments">
-                    <span className="no-comments-icon">💬</span>
-                    <p>아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+              <div style={{ marginTop: '70px' }} className="postdetail-detail">
+                {loading ?  (
+                  <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555' }}>
+                    <div style={{ marginBottom: '10px' }}>
+                      <img src="https://example.com/loading-spinner.gif" alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                    </div>
+                    로딩 중...
                   </div>
-                  )
+                ) : error ? (
+                  <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: 'red', border: '1px solid red', borderRadius: '5px', backgroundColor: '#ffe6e6' }}>
+                    {error}
+                  </div>
+                ) : !post ? (
+                  <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555', border: '1px solid #ccc', borderRadius: '5px', backgroundColor: '#f9f9f9' }}>
+                    게시물을 찾을 수 없습니다.
+                  </div>
+                ) : (
+                  <>
+                    <h1>{post.board_title}</h1>
+                    <div className="postdetail-meta">
+                      <span
+                        onClick={() => goToBlog(post.user_nickname)}
+                        className="postdetail-author"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        작성자: {post.user_nickname}
+                      </span>
+                      <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
+                      <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
+                      <div>
+                        <span className="postdetail-likes">
+                          <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="likes" /> : {post.board_like}
+                        </span>
+                        <span className="postdetail-comments">조회수: {post.board_view}</span>
+                        <span className="postdetail-comments">댓글: {post.board_comment}</span>
+                      </div>
+                    </div>
+                    <div className="separator"></div> {/* 구분선 추가 */}
+                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />
+                  </>
                 )}
-
-             
-
               </div>
-
-              <div className="scroll-to-top-container">
-                  <button onClick={scrollToFirstComment} className="scroll-to-top-button">
-                    첫 댓글로 이동
-                  </button>
-              </div>
-
-              </div>
-
+              {post && !error && (
+                <>
+                  <div className="tags">
+                    {tags.map((tag) => (
+                      <span key={tag} className="tag">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="button-group">
+                    {token && (
+                      <button onClick={handleLike} className={`like-button ${liked[postID] ? 'liked' : ''}`}>
+                        {liked[postID] ? (
+                          <>
+                            <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
+                            <span>:</span>
+                            {post.board_like}
+                          </>
+                        ) : (
+                          <>
+                            <img style={{ width: '15px', height: '15px' }} src={emptyCarrot} alt="empty carrot" />
+                            <span>:</span>
+                            {post.board_like}
+                          </>
+                        )}
+                      </button>
+                    )}
+                    {!token && (
+                      <button className={`like-button ${liked[postID] ? 'liked' : ''}`}>
+                        {liked[postID] ? (
+                          <>
+                            <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
+                            <span>:</span>
+                            {post.board_like}
+                          </>
+                        ) : (
+                          <>
+                            <img style={{ width: '15px', height: '15px' }} src={emptyCarrot} alt="empty carrot" />
+                            <span>:</span>
+                            {post.board_like}
+                          </>
+                        )}
+                      </button>
+                    )}
+                    {token && isWriter && (
+                      <>
+                        <button
+                          onClick={() => editPost(post.board_id)}
+                          className={`like-button ${liked[postID] ? 'liked' : ''}`}
+                        >
+                          수정
+                        </button>
+                        <button
+                          onClick={() => deletePostDetail(post.board_id)}
+                          className={`like-button ${liked[postID] ? 'liked' : ''}`}
+                        >
+                          삭제
+                        </button>
+                        <ConfirmModal
+                          isOpen={isModalOpen}
+                          onClose={() => setIsModalOpen(false)}
+                          onConfirm={confirmDelete}
+                          message="이 게시물을 삭제하시겠습니까?"
+                        />
+                      </>
+                    )}
+                  </div>
+                  <div ref={firstCommentRef} className="comment-section">
+                    <div className="titleSort">
+                      <h3>
+                        댓글<span style={{ marginLeft: '10px', color: '#FF88D7' }}>{totalComments}</span>
+                      </h3>
+                      <div style={{ marginLeft: '30px' }}>
+                        <span
+                          onClick={() => {
+                            handleSortChange('');
+                          }}
+                          className={sortOption === '' ? 'toggle-sort-comment click' : 'toggle-sort-comment'}
+                        >
+                          등록순
+                        </span>
+                        <span
+                          onClick={() => {
+                            handleSortChange('like');
+                          }}
+                          className={sortOption === 'like' ? 'toggle-sort-comment click' : 'toggle-sort-comment'}
+                        >
+                          인기순
+                        </span>
+                      </div>
+                    </div>
+  
+                    <div className="comment-profile">
+                      <img alt="Profile" className="heart" src={profileImage}></img>
+                      <div className="textarea-container">
+                        <textarea
+                          className="comment-input"
+                          placeholder="댓글을 입력하세요..."
+                          value={comment} // textarea의 value를 상태로 관리
+                          onChange={handleCommentChange} // 댓글 입력 시 상태 업데이트
+                        />
+                        <button className="comment-submit-button" onClick={writeComment}>
+                          댓글 등록
+                        </button>
+                      </div>
+                    </div>
+  
+                    <div className="comment-list">
+                      {isLoading ? (
+                        <div>댓글을 불러오는 중...</div>
+                      ) : comments.length > 0 ? (
+                        renderComments(comments) // 댓글 목록 재귀적으로 렌더링
+                      ) : (
+                        <div className="no-comments">
+                          <span className="no-comments-icon">💬</span>
+                          <p>아직 댓글이 없습니다. 첫 번째 댓글을 남겨보세요!</p>
+                        </div>
+                      )}
+                    </div>
+  
+                    <div className="scroll-to-top-container">
+                      <button onClick={scrollToFirstComment} className="scroll-to-top-button">
+                        첫 댓글로 이동
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </main>
       </section>
     </>
   );
+  
+  
 };
 
 export default PostDetail;

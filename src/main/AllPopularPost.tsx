@@ -16,7 +16,7 @@ import PostDetail from '../myblog/PostDetail';
 import filledCarrot from '../img/filledCarrot.png'
 import CategorySettings from '../myblog/CategorySetting';
 import ConfirmModal from '../myblog/ConfirmModal'; 
-
+import SSEComponent from './SSEComponent';
 const AllPopularPost: React.FC = () => {
   let {  postID } = useParams<{ postID?: string }>();
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -350,6 +350,7 @@ const AllPopularPost: React.FC = () => {
           
           </div>
         </div>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
     </>

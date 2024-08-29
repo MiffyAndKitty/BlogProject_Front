@@ -9,7 +9,7 @@ import CategoryListForMain from './CategoryListForMain';
 import PostDetail from './PostDetail';
 import { categories as Categories } from '../types/index';
 import { getCategories, getMyProfile } from '../services/getService';
-
+import SSEComponent from '../main/SSEComponent';
 /**
  * 블로그 메인 페이지
  * @returns 
@@ -124,6 +124,7 @@ const MyBlogMainPage: React.FC = () => {
             ) : (
               <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
             )}
+            <SSEComponent></SSEComponent>
           </main>
           <Footer />
         </>

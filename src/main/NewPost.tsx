@@ -213,7 +213,7 @@ const NewPost: React.FC = () => {
                         </p>
                         <h3 className="post-popular-title">{post.board_title}</h3>
                         <div className="post-popular-footer">
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>카테고리: {post.category_name}</span>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}> {post.category_name}</span>
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>조회수: {post.board_view}</span>
                           <img style={{ width: '15px', height: '15px', marginLeft: '50px' }} src={filledCarrot}></img>
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>: {post.board_like}</span>

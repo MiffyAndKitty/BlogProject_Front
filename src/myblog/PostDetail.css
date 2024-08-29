@@ -2,6 +2,8 @@
 .postdetail-detail {
     padding: 20px;
     max-width: 1000px;
+    min-width: 1000px;
+    width: 1000px;
     margin: 0 auto;
     background-color: #fff;
     border: 2px solid #ff88d769; /* 테두리 추가 */
@@ -56,6 +58,22 @@
     justify-content: center;
     font-weight: bold;
   }
+
+  .like-button2 {
+    margin-top: 20px;
+    background-color: transparent;
+    border: 2px solid #ff88d769;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+
   .comment-like-button {
     
     background-color: transparent;
@@ -126,6 +144,14 @@
     min-width: 870px; /* 최소 너비 설정 */
     min-height: 100px; /* 최소 높이 설정 */
 }
+  
+.textarea-container2 {
+  position: relative;
+  width: 80%; /* 너비를 100%로 고정 */
+  margin-left: 10px;
+  min-width: 400px; /* 최소 너비 설정 */
+  min-height: 100px; /* 최소 높이 설정 */
+}
 
 .comment-input {
     width: 100%; /* 항상 너비를 100%로 설정 */
@@ -180,7 +206,15 @@
     width: 100%; /* 너비를 100%로 설정해 중앙 정렬 방지 */
     align-items: flex-start;
   }
-  
+  .comment-list .comment-item2 {
+    padding: 10px;
+   
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 90%; /* 너비를 100%로 설정해 중앙 정렬 방지 */
+    align-items: flex-start;
+  }
   .comment-list .comment-item:last-child {
     border-bottom: none;
   }
@@ -196,6 +230,31 @@
     width: 60px;  /* 버튼의 넓이 설정 */
     height: 30px; /* 버튼의 높이 설정 */
     margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
+  }
+  .comment-header button.like-button2 {
+    width: 60px;  /* 버튼의 넓이 설정 */
+    height: 30px; /* 버튼의 높이 설정 */
+    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
+  }
+
+  .comment-header2{
+ 
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    width: 90%; /* 헤더도 너비를 100%로 설정 */
+  }
+  .comment-header2 button.like-button {
+    width: 60px;  /* 버튼의 넓이 설정 */
+    height: 30px; /* 버튼의 높이 설정 */
+    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
+  }
+  .comment-header2 button.like-button2 {
+    width: 60px;  /* 버튼의 넓이 설정 */
+    height: 30px; /* 버튼의 높이 설정 */
+    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
+    flex-direction: row; /* 버튼 내의 내용이 가로로 배치되도록 설정 */
+    white-space: nowrap; /* 텍스트 줄바꿈을 방지 */
   }
   .comment-item-author {
     font-weight: bold;
@@ -222,6 +281,20 @@
     max-height: 500px; /* 최대 높이를 500px로 제한 */
     max-width: 700px;
     width: 700px;
+    overflow-y: auto; /* 내용이 너무 길 경우 스크롤 가능하도록 */
+  }
+  .comment-content2 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-size: 15px;
+    background-color: transparent;
+    color: #4d4d4d;
+    white-space: pre-wrap; /* 줄바꿈을 유지하면서 내용이 자동으로 다음 줄로 넘어가도록 */
+    overflow-wrap: break-word; /* 긴 단어가 있을 때 자동으로 줄바꿈 */
+    word-break: break-word; /* 긴 단어가 박스 밖으로 넘치지 않도록 강제로 줄바꿈 */
+    max-height: 700px; /* 최대 높이를 500px로 제한 */
+    max-width: 500px;
+    width: 500px;
     overflow-y: auto; /* 내용이 너무 길 경우 스크롤 가능하도록 */
   }
   textarea.comment-input {

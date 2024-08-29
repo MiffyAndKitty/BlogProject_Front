@@ -14,7 +14,7 @@ import CategorySettings from '../CategorySetting';
 import filledCarrot from '../../img/filledCarrot.png';
 import ConfirmModal from '../ConfirmModal'; 
 import Profile from '../../main/Profile';
-
+import SSEComponent from '../../main/SSEComponent';
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
@@ -466,6 +466,7 @@ const GetPost: React.FC = () => {
             </div>
           </div>
         </div>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
     </>

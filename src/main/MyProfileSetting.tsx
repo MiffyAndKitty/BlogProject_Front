@@ -7,7 +7,7 @@ import './MyProfileSetting.css';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import Profile from './Profile';
-
+import SSEComponent from './SSEComponent';
 const MyProfileSetting: React.FC = () => {
     const { nickname } = useParams();
     const [newNick, setNewNick] = useState<string>('');
@@ -364,6 +364,7 @@ const MyProfileSetting: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                <SSEComponent></SSEComponent>
             </main>
             <Footer />
         </div>

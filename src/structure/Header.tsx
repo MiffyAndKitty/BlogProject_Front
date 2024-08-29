@@ -75,7 +75,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
     <header className="header">
       
-      {!token &&(
+      {(pageType === 'signup' || !token )&&(
         <>
         <div className="header__logo">
           <Link to="/">

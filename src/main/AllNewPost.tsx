@@ -14,7 +14,7 @@ import { deletePost } from '../services/deleteService';
 import { useNavigate } from 'react-router-dom';
 import CategorySettings from '../myblog/CategorySetting';
 import ConfirmModal from '../myblog/ConfirmModal'; 
-
+import SSEComponent from './SSEComponent';
 const AllPopularPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
@@ -351,6 +351,7 @@ const AllPopularPost: React.FC = () => {
           
           </div>
         </div>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
     </>

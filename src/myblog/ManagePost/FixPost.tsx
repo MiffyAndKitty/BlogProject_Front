@@ -10,7 +10,7 @@ import * as ENUMS from  '../../types/enum'
 import { fixPost } from '../../services/putService';
 import { getPost,getCategories } from '../../services/getService';
 import 'react-quill/dist/quill.snow.css';
-
+import SSEComponent from '../../main/SSEComponent';
 const FixPost: React.FC = () => {
   const [nickname, setNickname] = useState<string>();
   const quillRef = useRef<ReactQuill>(null);
@@ -372,6 +372,7 @@ const FixPost: React.FC = () => {
             </Button>
           </div>
         </Form>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
     </div>

@@ -20,11 +20,17 @@ interface NotificationData {
   trigger_image: string;
   board_title: string | null;
   comment_content: string | null;
+  notification_board:string | null;
+  notification_comment:string | null;
+
+
+
 }
 
 const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
   const [modalStyle, setModalStyle] = useState({});
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
+  const [localNickName, setLocalNickName] = useState<string>('');
   const navigate = useNavigate();
   const getNotifications = async () => {
     try {
@@ -59,34 +65,34 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
     switch (notification.notification_type) {
       case 'new-follower':
         return (
-          <span >
+          <span style={{cursor:'pointer'}}>
             <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신을 팔로우했습니다.
           </span>
         );
       case 'following-new-board':
         return (
-          <span >
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em>
+          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name'>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em>
           </span>
         );
-      case 'board-new-comment':
+      case 'comment-on-board':
         return (
-          <span>ㄱ
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신의 게시글에 댓글을 남겼습니다: <em>{notification.comment_content}</em>
+          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 게시글 "<span style={{fontWeight:'bold'}}>{notification.board_title}</span>"에 댓글을 남겼습니다: <em>{notification.comment_content}</em>
           </span>
         );
-      case 'comment-reply':
+      case 'reply-to-comment':
         return (
-          <span>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}> {notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em>
+          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' > {notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em>
           </span>
         );
       case 'broadcast':
         return <span>새로운 공지가 있습니다.</span>;
       case 'board-new-like':
         return (
-          <span>
-            <strong>{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다.
+          <span onClick={()=>{goToNotificationPost(localNickName,notification.notification_board)}} style={{cursor:'pointer'}}>
+            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다: <em>{notification.board_title}</em>
           </span>
         );
       default:
@@ -98,6 +104,16 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
   };
 
   useEffect(() => {
+    getNotifications();
+    try{
+        const localNickname = sessionStorage.getItem("nickname");
+        if (localNickname) {
+          setLocalNickName(localNickname);
+        }
+    }catch(err){
+       
+        setLocalNickName('');
+    }
     getNotifications();
   }, []);
 
@@ -117,6 +133,11 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
     );
 
   };
+
+  const goToNotificationPost = (name, location)=>{
+    navigate(`/${name}/${location}`);
+    onClose();
+  }
   const formatDate = (dateString: string): string => {
     const inputDate = new Date(dateString); // 입력된 ISO 형식의 날짜를 Date 객체로 변환
     const currentDate = new Date(); // 현재 시간을 Date 객체로 가져오기

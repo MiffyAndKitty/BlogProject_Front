@@ -19,6 +19,7 @@ import AllPopularPost from './main/AllPopularPost';
 import AllNewPost from './main/AllNewPost';
 import MyProfileSetting from './main/MyProfileSetting';
 import AllNewNotification from './main/AllNewNotification';
+import Layout from './main/Layout.js';
 import {
   BrowserRouter as Router,
   Route,
@@ -31,7 +32,8 @@ function App() {
     <Router>
     <Routes>
       {/* <Route path={`/`} element={<MainPage></MainPage>}/> */}
-      <Route path={`/`} element={<MainPage></MainPage>}/>
+      <Route path={`/`} element={<Layout></Layout>}/>
+      <Route index element={<MainPage></MainPage>}/>
       <Route path={`/login`} element={<Login></Login>}/>
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
       <Route path={`/locallogin`} element={<LocalLogin></LocalLogin>}/>

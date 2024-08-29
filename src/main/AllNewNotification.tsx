@@ -9,6 +9,7 @@ import { deleteNotification } from '../services/deleteService';
 import Profile from '../main/Profile';
 import filledCarrot from '../img/filledCarrot.png';
 import mainCharacterImg from '../img/main_character.png';
+import SSEComponent from './SSEComponent';
 interface FollowModalProps {
 
 }
@@ -24,6 +25,8 @@ interface NotificationData {
   trigger_image: string;
   board_title: string | null;
   comment_content: string | null;
+  notification_board:string | null;
+  notification_comment:string | null;
 }
 
 const AllNewNotification: React.FC<FollowModalProps> = () => {
@@ -40,19 +43,35 @@ const AllNewNotification: React.FC<FollowModalProps> = () => {
   const [localNickName, setLocalNickName] = useState<string>('');
   const [managementType, setManagementType] = useState<string>('null');
   const navigate = useNavigate();
-  const getNotifications = async (pageSize?:number, cursor?:string) => {
+
+  const getNotifications = async (pageSize = 10, cursor = '', filterType = null) => {
     try {
-      const fetchedNotification = await getNotificationsList(pageSize,cursor,isBefore);
+      const fetchedNotification = await getNotificationsList(pageSize, cursor, isBefore);
       if (fetchedNotification.result === true) {
-        setNotifications(fetchedNotification.data);
-        setFilteredNotifications(fetchedNotification.data); // 처음에는 전체 알림을 보여줌
-        setTotalPages(fetchedNotification.total.totalPageCount || 1); // 수정된 부분
+        const allNotifications = fetchedNotification.data;
+  
+        let filtered = allNotifications;
+        if (filterType) {
+          filtered = allNotifications.filter(notification => notification.notification_type === filterType);
+          setFilteredNotifications(filtered);
+        } else {
+          setFilteredNotifications(allNotifications);
+        }
+  
+        setNotifications(allNotifications);
+  
+        const totalFilteredCount = filtered.length;
+        setTotalPages(Math.ceil(totalFilteredCount / pageSize));
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
   };
-
+  
+  
+  const goToNotificationPost = (name, location)=>{
+    navigate(`/${name}/${location}`);
+  }
   useEffect(() => {
     getNotifications();
     try{
@@ -97,51 +116,48 @@ const AllNewNotification: React.FC<FollowModalProps> = () => {
     setCurrentPage(1);
     setCursor('');
     setIsBefore(false);
-    if (type === null) {
-      setManagementType('null');
-      setFilteredNotifications(notifications); // 전체 보기
-    } else {
-        setManagementType(type);
-      setFilteredNotifications(notifications.filter(notification => notification.notification_type === type));
-    }
+    setManagementType(type || 'null');
+  
+    getNotifications(10, '', type);
   };
+
 
   const renderNotificationMessage = (notification: NotificationData) => {
     switch (notification.notification_type) {
       case 'new-follower':
         return (
-          <span style={{backgroundColor:'#00000000'}}>
+          <span style={{cursor:'pointer', backgroundColor:'transparent'}}>
             <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신을 팔로우했습니다.
           </span>
         );
       case 'following-new-board':
         return (
-          <span style={{backgroundColor:'#00000000'}}>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em>
+          <span style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name'>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em>
           </span>
         );
-      case 'board-new-comment':
+      case 'comment-on-board':
         return (
-          <span style={{backgroundColor:'#00000000'}}>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신의 게시글에 댓글을 남겼습니다: <em>{notification.comment_content}</em>
+          <span style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 게시글 "<span style={{fontWeight:'bold', backgroundColor:'transparent'}}>{notification.board_title}</span>"에 댓글을 남겼습니다: <em>{notification.comment_content}</em>
           </span>
         );
-      case 'comment-reply':
+      case 'reply-to-comment':
         return (
-          <span style={{backgroundColor:'#00000000'}}>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em>
+          <span style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' > {notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em>
           </span>
         );
       case 'broadcast':
-        return <span style={{backgroundColor:'#00000000'}}>새로운 공지가 있습니다.</span>;
+        return <span>새로운 공지가 있습니다.</span>;
       case 'board-new-like':
         return (
-          <span style={{backgroundColor:'#00000000'}}>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다.
+          <span onClick={()=>{goToNotificationPost(localNickName,notification.notification_board)}} style={{cursor:'pointer'}}>
+            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다: <em>{notification.board_title}</em>
           </span>
         );
       default:
-        return <span style={{backgroundColor:'#00000000'}}>새로운 알림이 있습니다.</span>;
+        return <span>새로운 알림이 있습니다.</span>;
     }
   };
   const formatDate = (dateString: string): string => {
@@ -200,24 +216,33 @@ const AllNewNotification: React.FC<FollowModalProps> = () => {
     }
   };
   useEffect(() => {
-    getNotifications(10,cursor);
-  }, [currentPage]);
+    getNotifications(10, cursor, filterType);
+  }, [currentPage, filterType]);
+  
+  
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-      setCursor(filteredNotifications[0].notification_id);
+      const prevCursor = filteredNotifications[0]?.notification_id || '';
+      setCursor(prevCursor);
       setIsBefore(true);
       setCurrentPage(currentPage - 1);
+  
+      getNotifications(10, prevCursor, filterType);
     }
   };
   
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCursor(filteredNotifications[filteredNotifications.length - 1].notification_id); 
+      const nextCursor = filteredNotifications[filteredNotifications.length - 1]?.notification_id || '';
+      setCursor(nextCursor);
       setIsBefore(false);
       setCurrentPage(currentPage + 1);
+  
+      getNotifications(10, nextCursor, filterType);
     }
   };
+  
   return (
     <>
     <Header pageType="otherblog" />
@@ -234,8 +259,8 @@ const AllNewNotification: React.FC<FollowModalProps> = () => {
           <button className={`tab-button ${managementType === 'null' ? 'active' : ''}`} onClick={() => filterNotifications(null)}>전체 보기</button>
           <button className={`tab-button ${managementType === 'new-follower' ? 'active' : ''}`} onClick={() => filterNotifications('new-follower')}>새 팔로워</button>
           <button className={`tab-button ${managementType ==='following-new-board' ? 'active' : ''}`} onClick={() => filterNotifications('following-new-board')}>새 게시글</button>
-          <button className={`tab-button ${managementType === 'board-new-comment' ? 'active' : ''}`} onClick={() => filterNotifications('board-new-comment')}>새 댓글</button>
-          <button className={`tab-button ${managementType === 'comment-reply' ? 'active' : ''}`} onClick={() => filterNotifications('comment-reply')}>답글</button>
+          <button className={`tab-button ${managementType === 'comment-on-board' ? 'active' : ''}`} onClick={() => filterNotifications('comment-on-board')}>새 댓글</button>
+          <button className={`tab-button ${managementType === 'reply-to-comment' ? 'active' : ''}`} onClick={() => filterNotifications('reply-to-comment')}>답글</button>
           <button className={`tab-button ${managementType === 'board-new-like' ? 'active' : ''}`} onClick={() => filterNotifications('board-new-like')}>
             <img style={{width:'15px', height:'auto'}} src={filledCarrot}></img>
           </button>
@@ -275,6 +300,7 @@ const AllNewNotification: React.FC<FollowModalProps> = () => {
               </div>
         </div>
         </div>
+        <SSEComponent></SSEComponent>
       </main>
       <Footer />
       </>
