@@ -66,3 +66,20 @@ export const updateProfile = async (postData:Object): Promise<any> => {
   return response;
 
 };
+
+/**
+ * 댓글 수정
+ * @returns 
+ */
+export const fixComment = async (postData: object): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.put<any>(`/comment`,postData,{
+    headers: {
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response);
+  return response;
+
+};
+

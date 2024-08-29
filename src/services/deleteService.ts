@@ -97,3 +97,59 @@ export const deleteNotification  = async (notificationId: string): Promise<any> 
     throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
   }
 }; 
+
+/**
+ * 댓글 좋아요/싫어요 삭제
+ * @param email 
+ * @returns 
+ */
+export const deleteCommentLike  = async (commentId: string): Promise<any> => {
+  try {
+    console.log("deleteCommentLike called with commentId:", commentId); // 함수 호출 확인
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/comment/like`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+      data: {
+        commentId: commentId
+      }
+    });
+
+    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteFollow:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
+}; 
+
+/**
+ * 댓글 삭제
+ * @param email 
+ * @returns 
+ */
+export const deleteComment  = async (commentId: string): Promise<any> => {
+  try {
+    console.log("deleteCommentLike called with commentId:", commentId); // 함수 호출 확인
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/comment`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+      data: {
+        commentId: commentId
+      }
+    });
+
+    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteFollow:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
+}; 

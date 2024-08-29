@@ -75,21 +75,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
   return (
     <header className="header">
       
-      {/* {!token &&(
-        <>
-        <div className="header__logo">
-          <Link to="/">
-            <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
-          </Link>
-        </div>
-
-        <div className="header__auth">
-        
-          <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
-        </div>
-      </>
-      )} */}
-      {pageType === 'signup' &&(
+      {!token &&(
         <>
         <div className="header__logo">
           <Link to="/">
@@ -103,6 +89,20 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
         </div>
       </>
       )}
+      {/* {pageType === 'signup' &&(
+        <>
+        <div className="header__logo">
+          <Link to="/">
+            <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+          </Link>
+        </div>
+
+        <div className="header__auth">
+        
+          <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
+        </div>
+      </>
+      )} */}
       {token &&pageType === 'logout' &&(
         <>
           <div className="header__logo">

@@ -56,6 +56,17 @@
     justify-content: center;
     font-weight: bold;
   }
+  .comment-like-button {
+    
+    background-color: transparent;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
   .tags {
     margin-top: 10px;
     margin-bottom: 15px;
@@ -70,7 +81,22 @@
     margin-right: 5px;
     font-size: 14px;
   }
+.titleSort{
+  display: flex;
+  align-items: center;
+}
+.toggle-sort-comment{
+  margin-left: 10px;
+  color: #FFC7E9;
+  font-weight: bold;
+  cursor: pointer;
+}
 
+.toggle-sort-comment.click{
+  margin-left: 10px;
+  color: #FF88D7;
+  font-weight: bold;
+}
 
   .comment-section {
     margin-top: 40px;
@@ -78,7 +104,9 @@
     border-top: 1px solid #FF88D7;
     background-color: #fdedf543;
   }
-  
+  .reply-list{
+    width: 100%;
+  }
   .comment-section h3 {
     margin-bottom: 15px;
     font-size: 18px;
@@ -88,26 +116,29 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
-  }
+    width: 100%; /* 항상 전체 너비를 차지하도록 설정 */
+}
   
   .textarea-container {
     position: relative;
-    width: 90%;
+    width: 90%; /* 너비를 100%로 고정 */
     margin-left: 10px;
-  }
-  
-  .comment-input {
-    width: 100%;
+    min-width: 870px; /* 최소 너비 설정 */
+    min-height: 100px; /* 최소 높이 설정 */
+}
+
+.comment-input {
+    width: 100%; /* 항상 너비를 100%로 설정 */
     height: 100px;
     padding: 10px;
-    border: 1px solid #FECDF4;
+    border: 2px solid #FECDF4;
     border-radius: 5px;
     font-size: 14px;
     resize: none;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     outline: none;
-    box-sizing: border-box; /* 이 부분 추가 */
-  }
+    box-sizing: border-box;
+}
   
   .comment-input:focus {
     border-color: #fe76d1;
@@ -116,7 +147,7 @@
   
   .comment-submit-button {
     position: absolute;
-    bottom: 20px;
+    bottom: -10px;
     right: 10px;
     background-color: #FF88D7;
     color: white;
@@ -137,12 +168,17 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    
-  }
+    min-height: 150px; /* 댓글 리스트의 최소 높이 설정 */
+}
   
   .comment-list .comment-item {
     padding: 10px;
     border-bottom: 1px solid #FECDF4;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%; /* 너비를 100%로 설정해 중앙 정렬 방지 */
+    align-items: flex-start;
   }
   
   .comment-list .comment-item:last-child {
@@ -150,12 +186,17 @@
   }
 
   .comment-header{
-    margin-left: 8px;
+ 
     display: flex;
     flex-direction: row;
-    
+    justify-content: flex-start;
+    width: 100%; /* 헤더도 너비를 100%로 설정 */
   }
-
+  .comment-header button.like-button {
+    width: 60px;  /* 버튼의 넓이 설정 */
+    height: 30px; /* 버튼의 높이 설정 */
+    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
+  }
   .comment-item-author {
     font-weight: bold;
     margin-right: 10px;
@@ -166,20 +207,42 @@
     margin-left: 10px;
     margin-top: 5px;
     background-color:transparent;
+    flex-grow: 1; /* 댓글 내용을 차지하는 공간을 늘려줍니다 */
   }
 
-  .comment-content{
-    margin-top:15px;
+  .comment-content {
+    margin-top: 15px;
     margin-bottom: 15px;
     font-size: 15px;
-    background-color:transparent;
+    background-color: transparent;
     color: #4d4d4d;
+    white-space: pre-wrap; /* 줄바꿈을 유지하면서 내용이 자동으로 다음 줄로 넘어가도록 */
+    overflow-wrap: break-word; /* 긴 단어가 있을 때 자동으로 줄바꿈 */
+    word-break: break-word; /* 긴 단어가 박스 밖으로 넘치지 않도록 강제로 줄바꿈 */
+    max-height: 500px; /* 최대 높이를 500px로 제한 */
+    max-width: 700px;
+    width: 700px;
+    overflow-y: auto; /* 내용이 너무 길 경우 스크롤 가능하도록 */
   }
+  textarea.comment-input {
+    width: 100%; /* 수정 입력창도 100%로 설정 */
+    margin-top: 10px;
+}
   .comment-date{
     font-size: 12px;
     background-color:transparent;
     color: #676767;
   }
+
+  .comment-commentBtn{
+    font-size: 12px;
+    background-color:transparent;
+    color: #FF6DC6;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+
   .scroll-to-top-button {
     width: auto; /* 버튼의 너비를 콘텐츠에 맞게 자동 조정 */
     color: #676767c1;
@@ -224,4 +287,14 @@
     font-size: 16px;
     color: #333;
   }
-  
+  .flexRow{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .comment-content-editDelete{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }

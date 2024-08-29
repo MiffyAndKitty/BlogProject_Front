@@ -80,7 +80,7 @@ export const saveNewCategory = async (newCategory: TYPES.newCategory): Promise<a
 };
 
 /**
- * 좋아요 추가
+ * 글 좋아요 추가
  * @param postData 
  * @returns 
  */
@@ -96,7 +96,7 @@ export const addLike = async (boardId: Object): Promise<any> => {
 };
 
 /**
- * 좋아요 삭제
+ * 글 좋아요 삭제
  * @param postData 
  * @returns 
  */
@@ -157,3 +157,20 @@ export const newComment = async (commentData: TYPES.commentData): Promise<any> =
         console.log(response);
         return response;
 };
+
+/**
+ * 댓글 좋아요/싫어요 추가
+ * @param postData 
+ * @returns 
+ */
+export const addCommentLike = async (comment: Object): Promise<any> => {
+    const token = getToken();
+    const response = await apiClient.post<TYPES.newCategory>('/comment/like', comment,{
+        headers: {
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
+};
+

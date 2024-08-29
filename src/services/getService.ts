@@ -355,11 +355,67 @@ export const getComments = async (boardId:string, sort?:string, pageSize?:number
   }
   let response;
 
-  response = await apiClient.get(url,{
-    headers:{
-      'Authorization': `${token}`,
-    }
-  });
+  if(token ===null ){
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }else{
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+    });
+  }
+
+  console.log(response);
+  return response.data;
+};
+
+/**
+ * 특정 댓글의 답글 조회
+ * @returns 
+ */
+export const getCommentReplies = async (parentCommentId:string, sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
+  const token = getToken();
+  let url = `/comment/:${parentCommentId}/replies`;
+  const params: Record<string, any> = {};
+
+  if(sort){
+    params['sort'] = sort;
+  }
+
+  if(pageSize){
+    params['page-size'] = pageSize;
+  }
+  if(cursor){
+    params.cursor = cursor;
+  }
+  if(isBefore){
+    params['is-before'] = isBefore;
+  }
+  const queryString = new URLSearchParams(params).toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }else{
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+    });
+  }
 
   console.log(response);
   return response.data;

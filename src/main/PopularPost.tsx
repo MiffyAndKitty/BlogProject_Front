@@ -197,9 +197,9 @@ const PopularPost: React.FC = () => {
                 // 이미지가 있을 경우만 has-image 클래스를 추가
                 const postClassName = firstImageSrc ? 'post-popular has-image' : 'post-popular';
                 return (
-                  <div key={index} className={postClassName} style={{ backgroundImage: firstImageSrc ? `url(${firstImageSrc})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                  <div key={index} onClick={() => goToDetailPost(post.board_id, post.user_nickname)} className={postClassName} style={{ backgroundImage: firstImageSrc ? `url(${firstImageSrc})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className={firstImageSrc ? 'post-overlay' : ''}>
-                      <div className="post-content" onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                      <div className="post-content" >
                         {removeUnwantedTags(post.board_content)}
                       </div>
                       <div className="post-popular-content">
