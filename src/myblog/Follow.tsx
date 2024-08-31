@@ -14,8 +14,9 @@ import { set } from 'date-fns';
 interface FollowModalProps {
     onClose: () => void;
     isOthers?: boolean
+    otherEmail? : string 
 }
-const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
+const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => {
     const { nickname } = useParams();
     const [followers, setFollowers] = useState<any[]>([]);
     const navigate = useNavigate();
@@ -33,9 +34,9 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
     const fetchFollowers = async () => {
         setIsLoading(true);
         try {
-          const email = isOthers ? sessionStorage.getItem('other_email') : sessionStorage.getItem('email');
-          if (email) {
-            const fetchedFollowers = await getFollow(email, page);
+        
+          if (otherEmail) {
+            const fetchedFollowers = await getFollow(otherEmail, page);
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       
             if (fetchedFollowers.data.followingsList.length < 10) {
@@ -51,7 +52,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers}) => {
       
 
     const goToBlog = (userName: string, userEmail: string) => {
-        sessionStorage.setItem('other_email', userEmail);
+        
         navigate(`/${userName}`);
     };
 

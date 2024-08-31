@@ -256,6 +256,28 @@ export const getMyProfile = async (nickname: string): Promise<any> => {
   console.log(response);
   return response.data;
 };
+export const getProfiles = async (nickname: string): Promise<any> => {
+  const token = getToken();
+  const url = `/users/nickname/:${nickname}`;
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get(url,{
+      headers:{
+        
+      }
+    });
+  }else{
+    response = await apiClient.get(url,{
+      headers:{
+        'Authorization': `${token}`,
+      }
+    });
+  }
+
+  console.log(response);
+  return response.data;
+};
 /**
  * 팔로우/팔로워 목록 가져오기
  * @returns 

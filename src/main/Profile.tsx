@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import mainCharacterImg from '../img/main_character.png';
-import { getLogoutAuth ,getMyProfile} from '../services/getService';  // 추가된 부분
+import { getLogoutAuth ,getMyProfile,getProfiles} from '../services/getService';  // 추가된 부분
 import { followUser } from '../services/postService';
 import  nonFriend from '../img/nonFriend.png'
 import  friend from '../img/friend.png'
@@ -33,6 +33,7 @@ const provider = new GoogleAuthProvider();
 interface ProfileProps {
   pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage';
   userImg?:string,
+  otherEmail? :string,
   userMessage?: string,
   areYouFollowing?:boolean,
   nicknameParam?:string | null,
@@ -40,7 +41,7 @@ interface ProfileProps {
 
 }
 
-const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userMessage, areYouFollowing,children }) => {
+const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,userImg, userMessage, areYouFollowing,children }) => {
 
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
@@ -69,7 +70,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
       sessionStorage.removeItem('nickname');  
       sessionStorage.removeItem('image');  
       sessionStorage.removeItem('email'); 
-      sessionStorage.removeItem('other_email');  
+     
       sessionStorage.removeItem('message');  
       sessionStorage.removeItem('areYouFollowing');
       sessionStorage.removeItem('areYouFollowed');
@@ -87,8 +88,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
 
   const followUsers = async()=>{
     try{
-      const email = sessionStorage.getItem('other_email');
-      const result = await followUser({email:email});
+      
+      const result = await followUser({email:otherEmail});
       if(result) {
         alert('팔로우 추가에 성공했습니다!');
         setFollowImg(friend);
@@ -102,9 +103,9 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
   const deleteFollowers = async () => {
         
     try{
-      const email = sessionStorage.getItem('other_email');
-        if (email) {
-            const fetchedFollowers = await deleteFollow(email);
+     
+        if (otherEmail) {
+            const fetchedFollowers = await deleteFollow(otherEmail);
             if(fetchedFollowers){
                 alert('팔로우를 취소했습니다!');
                 setFollowImg(nonFriend);
@@ -159,25 +160,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
   const goToProfileSetting = ()=>{
     navigate(`/myProfileSetting/${user}`);
   };
-//   const fetchMyProfile = async () => {
-//     try {
-      
-//         const sessionStorageEmail = sessionStorage.getItem('other_email');
-//         // if (sessionStorageEmail === null) {
-//         //     alert(`잘못된 접근입니다!`);
-//         //     navigate('/');
-//         // }
-//         const fetchedProfile = await getMyProfile(sessionStorageEmail);
-//         setOtherImage(fetchedProfile.data.user_image);
-//         setOtherMessage(fetchedProfile.data.user_message);
 
-//         sessionStorage.setItem('areYouFollowing', fetchedProfile.data.areYouFollowing);
-//         sessionStorage.setItem('areYouFollowed', fetchedProfile.data.areYouFollowed);
-        
-//     } catch (err) {
-//         console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
-//     }
-// };
   useEffect(()=>{
     try {
 
@@ -432,10 +415,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
 
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} isOthers={true} />}
+        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail}/>}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true}/>}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true} otherEmail={otherEmail}/>}
         </div>
       </>
       )}

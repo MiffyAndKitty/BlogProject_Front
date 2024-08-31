@@ -442,7 +442,7 @@ const PostDetail: React.FC = () => {
   };
 
   const goToBlog = (nickname:string)=>{
-    sessionStorage.setItem('other_email',email);
+ 
     navigate(`/${nickname}`);
   };
 

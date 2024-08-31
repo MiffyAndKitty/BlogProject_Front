@@ -59,7 +59,7 @@ const LocalLogin: React.FC = () => {
       if (response.data.result.toString() === 'true' && response.headers['authorization']) {
         sessionStorage.setItem('accessToken', response.headers['authorization']);
         sessionStorage.setItem('email', response.data['data']);
-        sessionStorage.setItem('other_email', response.data['data']);
+     
         fetchMyProfile(email);
       }
       return response.data.result;

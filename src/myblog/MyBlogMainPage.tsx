@@ -8,7 +8,7 @@ import './MyBlogMainPage.css';
 import CategoryListForMain from './CategoryListForMain';
 import PostDetail from './PostDetail';
 import { categories as Categories } from '../types/index';
-import { getCategories, getMyProfile } from '../services/getService';
+import { getCategories, getMyProfile,getProfiles } from '../services/getService';
 import SSEComponent from '../main/SSEComponent';
 /**
  * 블로그 메인 페이지
@@ -30,6 +30,7 @@ const MyBlogMainPage: React.FC = () => {
   const [areYouFollowing, setAreYouFollowing] = useState<boolean>(false);
   const [totalCategories,setTotalCategories] = useState<number>();
   const [noCategories,setNoCategories] = useState<number>();
+  const [otherEmail, setOtherEmail] = useState<string>('');
   const onPostClick = (postID: string) => {
     setCurrentPostID(postID);
   };
@@ -50,11 +51,11 @@ const MyBlogMainPage: React.FC = () => {
     navigate(`/${nickname}`);
   };
 
-  const fetchMyProfile = async () => {
+  const fetchProfile = async () => {
     setProfileLoading(true); // 프로필 로딩 시작
     try {
-      const sessionStorageEmail = sessionStorage.getItem('other_email');
-      const fetchedProfile = await getMyProfile(sessionStorageEmail);
+      const fetchedProfile = await getProfiles(nickname);
+      setOtherEmail(fetchedProfile.data.user_email);
       setOtherImage(fetchedProfile.data.user_image);
       setOtherMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
@@ -64,7 +65,22 @@ const MyBlogMainPage: React.FC = () => {
       setProfileLoading(false); // 프로필 로딩 끝
     }
   };
-
+  const fetchDetailProfile = async () => {
+    setProfileLoading(true); // 프로필 로딩 시작
+    try {
+      const fetchedProfile = await getMyProfile(otherEmail);
+      // setOtherImage(fetchedProfile.data.user_image);
+      // setOtherMessage(fetchedProfile.data.user_message);
+      setAreYouFollowing(fetchedProfile.data.areYouFollowing);
+    } catch (err) {
+      console.log('상세 개인정보를 불러오는 중에 오류가 발생했습니다.');
+    } finally {
+      setProfileLoading(false); // 프로필 로딩 끝
+    }
+  };
+  useEffect(()=>{
+    if(otherEmail !== '') fetchDetailProfile();
+  },[otherEmail])
   useEffect(() => {
     const localStorageToken = sessionStorage.getItem('accessToken');
     if (localStorageToken === null) {
@@ -75,7 +91,8 @@ const MyBlogMainPage: React.FC = () => {
 
     const fetchCategories = async () => {
       try {
-        fetchMyProfile();
+        fetchProfile();
+        
         const fetchedCategories:any = await getCategories(nickname);
         setCategories(fetchedCategories.hierarchicalCategory);
         setTotalCategories(fetchedCategories.totalPostCount);
@@ -93,6 +110,7 @@ const MyBlogMainPage: React.FC = () => {
     };
 
     fetchCategories();
+  
   }, [navigate, nickname]);
 
   return (
@@ -112,6 +130,7 @@ const MyBlogMainPage: React.FC = () => {
                 userImg={otherImage} 
                 userMessage={otherMessage} 
                 areYouFollowing={areYouFollowing} 
+                otherEmail = {otherEmail}
               >
                 {/* Category List for Profile Page */}
                 <div className='categories'>
@@ -134,7 +153,13 @@ const MyBlogMainPage: React.FC = () => {
             ))}
           
             {(token && localNickName !== nickname && !profileLoading && (
-              <Profile pageType="otherBlog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing}>
+              <Profile pageType="otherBlog" 
+                nicknameParam={nickname}
+                userImg={otherImage}
+                userMessage={otherMessage} 
+                areYouFollowing={areYouFollowing}
+                otherEmail = {otherEmail}>
+                  
                 {/* Category List for Profile Page */}
                 <div className='categories'>
                   <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 

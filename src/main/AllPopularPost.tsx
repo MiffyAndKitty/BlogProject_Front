@@ -280,7 +280,7 @@ const AllPopularPost: React.FC = () => {
       fetchPosts(cursor,undefined,searchTerm,'view');
   }, [currentPage]);
   const goToBlog = (nickname:string,email:string)=>{
-    sessionStorage.setItem('other_email',email);
+
     navigate(`/${nickname}`);
   };
 

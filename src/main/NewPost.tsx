@@ -170,7 +170,7 @@ const NewPost: React.FC = () => {
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
   };
   const goToBlog = (nickname:string, email:string)=>{
-    sessionStorage.setItem('other_email',email);
+  
     navigate(`/${nickname}`);
   };
   const extractFirstImage = (htmlContent: string): string | null => {

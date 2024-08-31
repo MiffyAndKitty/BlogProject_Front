@@ -283,7 +283,7 @@ const AllPopularPost: React.FC = () => {
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
   }
   const goToBlog = (nickname:string, email:string)=>{
-    sessionStorage.setItem('other_email',email);
+  
     navigate(`/${nickname}`);
   };
 
