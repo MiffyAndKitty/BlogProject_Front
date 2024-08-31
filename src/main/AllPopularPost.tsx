@@ -294,7 +294,7 @@ const AllPopularPost: React.FC = () => {
       <main>
         <div className="main-container">
         {(!token && <Profile pageType="signup_for_blog" />)}
-        {(token &&<Profile pageType="login" nicknameParam={localNickName}/>)}
+        {(token &&<Profile pageType="profileSetting" nicknameParam={localNickName}/>)}
           <div className="container">
             {
               managementType === 'post' && postID?(

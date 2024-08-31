@@ -341,14 +341,15 @@ const GetPost: React.FC = () => {
       fetchPosts(undefined,category.category_id,searchTerm);
   }, [category]);
   return (
-    <>
+    <div className="App">
+   
       <Header pageType="otherblog" />
-      <main>
+      <main className="main-container">
         <span style={{ marginBottom: '50px;' }}></span>
-        <div className="main-container">
+      
           <Profile pageType="postManage" nicknameParam={nickname} />
   
-          <div className="getpost-container">
+          <div className="container">
             <div>
               <div className="tabs">
                 <button
@@ -465,11 +466,11 @@ const GetPost: React.FC = () => {
               </div>
             </div>
           </div>
-        </div>
+      
         <SSEComponent></SSEComponent>
       </main>
       <Footer />
-    </>
+    </div>
   );
   
 };

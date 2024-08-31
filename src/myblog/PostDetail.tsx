@@ -664,11 +664,11 @@ const PostDetail: React.FC = () => {
       <div key={comment.comment_id} className="comment-item2" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
         <div className="comment-header2">
           <img style={{width:'15px', height:'15px', marginTop:'10px', marginRight:'5px'}} src={spaceBar} alt="User Profile" />
-          <img className='heart' src={comment.user_image || mainCharacterImg} alt="User Profile" />
+          <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
             <span className="comment-item-author">{comment.user_nickname}</span>
             {editingCommentId === comment.comment_id ? (
-              // 댓글 수정 모드일 때
+              // 답글 수정 모드일 때
               <textarea
               className="comment-input"
               value={editingCommentContent}
@@ -735,10 +735,9 @@ const PostDetail: React.FC = () => {
   const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <>
-      <section className="MainPosts-section">
-        <main>
-          <div className="main-container">
-            <div className="container">
+     
+       
+     
               <div style={{ marginTop: '70px' }} className="postdetail-detail">
                 {loading ?  (
                   <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555' }}>
@@ -909,10 +908,8 @@ const PostDetail: React.FC = () => {
                   </div>
                 </>
               )}
-            </div>
-          </div>
-        </main>
-      </section>
+        
+     
     </>
   );
   

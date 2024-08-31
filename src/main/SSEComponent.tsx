@@ -18,7 +18,13 @@ function SSEComponent() {
   const handleEvent = (eventData) => {
     const data = JSON.parse(eventData);
     const { type, trigger, location } = data;
-
+    console.log(`
+      
+      
+      data
+      
+      
+      `,data )
     let notificationMessage = '';
     let notificationType = '';
 
@@ -54,7 +60,9 @@ function SSEComponent() {
     setNotification({
       type: notificationType,
       message: notificationMessage,
-      location: location.boardId,
+      boardTitle: location.boardTitle,
+      boardId: location.boardId,
+      commentId: location.commentId,
       name: trigger.nickname,
       image: trigger.image || '/path/to/default/profile.png' // 기본 이미지 경로를 설정할 수 있습니다.
     });
@@ -96,15 +104,15 @@ function SSEComponent() {
     };
   }, []);
 
-  useEffect(() => {
-    if (notification) {
-      const timer = setTimeout(() => {
-        setNotification(null);
-      }, 10000); // 10초 후에 알림 자동 제거
+  // useEffect(() => {
+  //   if (notification) {
+  //     const timer = setTimeout(() => {
+  //       setNotification(null);
+  //     }, 10000); // 10초 후에 알림 자동 제거
 
-      return () => clearTimeout(timer);
-    }
-  }, [notification]);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [notification]);
 
   return (
     <div className={`notification-SSE ${notification ? 'show' : ''}`}>
@@ -125,7 +133,15 @@ function SSEComponent() {
               <span style={{ color: '#FF6DC6',backgroundColor: 'transparent', fontWeight:'bold'}}>{notification.name}</span>님이 당신을 팔로우했습니다.
             </span>
           )}
-          {(notification.type === writeNewPost || notification.type === newPostLike || notification.type === newComment||notification.type === newReply) && (
+          {( notification.type === newPostLike || notification.type === newComment||notification.type === newReply) && (
+            <span
+              style={{ color: 'white', backgroundColor: 'transparent', cursor: 'pointer' }}
+              onClick={() => navigate(`/${localNickName}/${notification.location}`)}
+            >
+              <span style={{ color: '#FF6DC6' ,backgroundColor: 'transparent', fontWeight:'bold'}}>{notification.name}</span>님이 {notification.message}
+            </span>
+          )}
+          {(notification.type === writeNewPost) && (
             <span
               style={{ color: 'white', backgroundColor: 'transparent', cursor: 'pointer' }}
               onClick={() => navigate(`/${localNickName}/${notification.location}`)}

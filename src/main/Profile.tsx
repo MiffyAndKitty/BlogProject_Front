@@ -36,11 +36,11 @@ interface ProfileProps {
   userMessage?: string,
   areYouFollowing?:boolean,
   nicknameParam?:string | null,
-  
+  children?: React.ReactNode; // children 속성 추가
 
 }
 
-const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userMessage, areYouFollowing, }) => {
+const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userMessage, areYouFollowing,children }) => {
 
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
@@ -236,6 +236,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
   },[]);
 
   return (
+    <>
     <section className={
       `profile-section ${pageType === 'myBlog' ? 'myBlog' 
       : (pageType==='otherBlog'?'otherBlog'
@@ -312,14 +313,12 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
       )}
       {pageType === 'myBlog' && (
         <>
-         <div className="profile-container">
-          <img 
-            src={image || mainCharacterImg} 
-            alt="Main Character" 
-            className="mainCharacter_profile_login" 
-            onError={(e) => { e.currentTarget.src = mainCharacterImg; }}
-          />
-
+          <div className="profile-container">
+            <img 
+              src={image || mainCharacterImg} 
+              alt="Main Character" 
+              className="mainCharacter_profile_login" 
+              onError={(e) => { e.currentTarget.src = mainCharacterImg; }}/>
             <div className="profile-details">
               <span className="username" onClick={goToProfileSetting} style={{cursor:'pointer'}}>{user}</span>
               <hr />
@@ -342,6 +341,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
+        
       </>
       )}
       {pageType === 'postManage' && (
@@ -439,8 +439,17 @@ const Profile: React.FC<ProfileProps> = ({ pageType,nicknameParam,userImg, userM
         </div>
       </>
       )}
-      {error && <div className="error">{error}</div>}
+     {error && <div className="error">{error}</div>}
+     <div style={{
+      marginTop:'400px',
+      position: 'absolute', // 절대 위치로 설정하여 부모 요소와 독립적으로 위치를 조정
+      marginRight: '100px'
+    }}>
+     {children}
+     </div>
     </section>
+     
+     </>
   );
 };
 

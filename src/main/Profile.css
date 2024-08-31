@@ -13,11 +13,7 @@
   border-radius: 50%; /* 이미지를 원형으로 만들고 싶다면 추가 */
     
 }
-.profile-container {
-  display: flex;
-  align-items: center;
 
-}
 .username {
     font-size: 1.2em;
 }

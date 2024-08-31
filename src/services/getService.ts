@@ -298,10 +298,13 @@ export const getNotification = async (notificationId:string): Promise<any> => {
  * 유저의 모든 알림 정보 리스트 조회
  * @returns 
  */
-export const getNotificationsList = async (pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
+export const getNotificationsList = async (sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
   const token = getToken();
   let url = `/notifications/list`;
   const params: Record<string, any> = {};
+  if(sort){
+    params['sort'] = sort;
+  }
   if(pageSize){
     params['page-size'] = pageSize;
   }

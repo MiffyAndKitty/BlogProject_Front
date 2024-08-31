@@ -103,29 +103,60 @@ const MyBlogMainPage: React.FC = () => {
         <>
           {(localNickName === nickname) && <Header pageType="logout" />}
           {(localNickName !== nickname) && <Header pageType="otherblog" />}
-          <main className="main-content">
-            {(!token && <Profile pageType="signup_for_blog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing}/>)}
-            {(token && localNickName === nickname && <Profile pageType="myBlog" nicknameParam={localNickName} />)}
-            {(token && localNickName !== nickname && !profileLoading && (
-              <Profile pageType="otherBlog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing} />
+          <main className="main-container">
+            {/* Profile */}
+            {(!token && (
+              <Profile 
+                pageType="signup_for_blog" 
+                nicknameParam={nickname} 
+                userImg={otherImage} 
+                userMessage={otherMessage} 
+                areYouFollowing={areYouFollowing} 
+              >
+                {/* Category List for Profile Page */}
+                <div className='categories'>
+                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
+                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                </div>
+              </Profile>
             ))}
-            {profileLoading && <div>프로필 로딩 중...</div>} {/* 프로필 로딩 상태 시 표시될 내용 */}
-
-
-            <div className='categories'>
-              <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
-              <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-            </div>
+          
+            {(token && localNickName === nickname && (
+              <Profile pageType="myBlog" nicknameParam={localNickName}>
+                {/* Category List for Profile Page */}
+                <div className='categories'>
+                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
+                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                </div>
+              </Profile>
+            ))}
+          
+            {(token && localNickName !== nickname && !profileLoading && (
+              <Profile pageType="otherBlog" nicknameParam={nickname} userImg={otherImage} userMessage={otherMessage} areYouFollowing={areYouFollowing}>
+                {/* Category List for Profile Page */}
+                <div className='categories'>
+                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
+                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                </div>
+              </Profile>
+            ))}
             
-
-            {postID ? (
-              <PostDetail />
-            ) : (
-              <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
-            )}
-            <SSEComponent></SSEComponent>
+            {profileLoading && <div>프로필 로딩 중...</div>}
+          
+            {/* Main Posts or Post Detail */}
+            <div className="container">
+              {postID ? (
+                <PostDetail />
+              ) : (
+                <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
+              )}
+              <SSEComponent></SSEComponent>
+            </div>
           </main>
+
           <Footer />
         </>
       )}

@@ -315,10 +315,11 @@ const MyProfileSetting: React.FC = () => {
     return (
         <div className="App">
             <Header pageType="profileSetting" />
-            <main className="main-content">
-                <Profile pageType="profileSetting" nicknameParam={nickname} />
-                <div className="MainPosts-section">
-                    <div className="main-container">
+            <main className="main-container">
+               
+                {/* <div className="MainPosts-section"> */}
+                   
+                    <Profile pageType="profileSetting" nicknameParam={nickname} />
                         <div className="container">
                             {userData && (
                                 <>
@@ -362,8 +363,8 @@ const MyProfileSetting: React.FC = () => {
                                 </>
                             )}
                         </div>
-                    </div>
-                </div>
+                   
+                {/* </div> */}
                 <SSEComponent></SSEComponent>
             </main>
             <Footer />

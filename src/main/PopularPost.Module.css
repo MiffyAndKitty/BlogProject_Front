@@ -94,7 +94,16 @@
     line-height: 1.5;
     white-space: pre-wrap;
   }
-  
+  .post-content2{
+    padding: 20px; /* post-main-content에 padding 추가 */
+    margin-top: 20px;
+    min-height: 120px;
+    max-height: 120px; /* 원하는 높이로 설정 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+   
+  }
+
   .post-popular-footer {
     display: flex;
     justify-content: space-between;
@@ -104,10 +113,24 @@
   .post-popular-likes, .post-popular-comments {
     font-size: 12px;
     color: #555;
+    font-weight: bold;
     background-color: transparent;
   }
   .post-popular-likes-white, .post-popular-comments-white {
     font-size: 12px;
     color: #ffffff;
+    font-weight: bold;
+    background-color: transparent;
+  }
+  .post-popular-effect {
+    font-size: 12px;
+    color: #FF6DC6;
+    background-color: transparent;
+    font-weight: bold;
+  }
+  .post-popular-effect-white  {
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: bold;
     background-color: transparent;
   }

@@ -199,7 +199,7 @@ const PopularPost: React.FC = () => {
                 return (
                   <div key={index} onClick={() => goToDetailPost(post.board_id, post.user_nickname)} className={postClassName} style={{ backgroundImage: firstImageSrc ? `url(${firstImageSrc})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                     <div className={firstImageSrc ? 'post-overlay' : ''}>
-                      <div className="post-content" >
+                      <div className="post-content2" >
                         {removeUnwantedTags(post.board_content)}
                       </div>
                       <div className="post-popular-content">
@@ -211,7 +211,10 @@ const PopularPost: React.FC = () => {
                         <h3 className="post-popular-title">{post.board_title}</h3>
                         <div className="post-popular-footer">
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}> {post.category_name}</span>
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>조회수: {post.board_view}</span>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>
+                            조회수
+                             <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_view}</span>
+                          </span>
                           <img style={{ width: '15px', height: '15px', marginLeft: '50px' }} src={filledCarrot}></img>
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>: {post.board_like}</span>
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>댓글: {post.board_comment}</span>

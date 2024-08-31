@@ -40,7 +40,7 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
     setExpandedCategories(getAllCategoryIds(categories));
   }, [categories]);
   return (
-    <>
+    <div > 
     <div className='all_level'>
       {categories.map((category) => (
         <div className={`categories level2-${level}`} key={category.category_id}>
@@ -57,7 +57,7 @@ const CategoryListForMain: React.FC<CategoryListProps> = ({ categories = [], lev
         </div>
       ))}
     </div>
-    </>
+    </div>
   );
 };
 

@@ -245,10 +245,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   return (
     <>
-      <section className="MainPosts-section">
-        <main>
-          <div className="main-container">
-            <div className="container">
+      
               <h1>{nicknameParam}의 블로그</h1>
               
               {!loading && !error && posts.length > 0 ? (
@@ -324,10 +321,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 <span className="pagination-info">{currentPage} / {totalPages}</span>
                 <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
               </div>
-            </div>
-          </div>
-        </main>
-      </section>
+        
     </>
   );
 };

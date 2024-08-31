@@ -52,10 +52,12 @@
 .container {
     flex: 2;
     max-width: 1000px;
+    margin-left: -80px;
     margin: 10 auto;
     padding: 20px;
     background-color: #ffffff;
     border: #ff4da6;
+    min-height: 1000px;
     border-width: 5px;
   }
   /* .login-button_profile {
