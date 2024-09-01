@@ -225,7 +225,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       : (pageType==='otherBlog'?'otherBlog'
       :(pageType==='signup_for_blog'?'signup_for_blog'
       :(pageType==='profileSetting'?'profileSetting'
-      :(pageType==='postManage'?'postManage':''))))}`}>
+      :(pageType==='postManage'?'postManage'
+      :(pageType==='login'?'login': '')))))}`}>
       
       {pageType === 'signup' && (
         <>

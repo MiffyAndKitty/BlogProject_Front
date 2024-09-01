@@ -85,7 +85,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
         if (node) observer.current.observe(node);
       }, [isLoading, hasMore]);
     useEffect(() => {
-       // fetchFollowers();
+       //fetchFollowers();
         const email = sessionStorage.getItem('email');
         setLocalEmail(email);
     }, []);

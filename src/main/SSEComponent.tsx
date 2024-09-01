@@ -104,15 +104,15 @@ function SSEComponent() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   if (notification) {
-  //     const timer = setTimeout(() => {
-  //       setNotification(null);
-  //     }, 10000); // 10초 후에 알림 자동 제거
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 5000); // 5초 후에 알림 자동 제거
 
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [notification]);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
 
   return (
     <div className={`notification-SSE ${notification ? 'show' : ''}`}>
