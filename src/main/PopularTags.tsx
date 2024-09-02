@@ -36,9 +36,9 @@ const PopularTags: React.FC = () => {
     if (index % 5 === 0) {
       return (
         <div key={index} className="tag-row">
-          {tags.slice(index, index + 5).map((subTag) => (
+          {tags.slice(index, index + 5).map((subTag:any) => (
             <span key={subTag} className="tag">
-              {subTag}
+              {subTag.tagName}
             </span>
           ))}
         </div>

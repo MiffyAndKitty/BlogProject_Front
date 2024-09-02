@@ -356,7 +356,35 @@
     font-size: 16px;
     text-align: center;
   }
+  .no-login-comment {
+    width: 100%; /* 항상 너비를 100%로 설정 */
+    height: 100px;
+    padding: 10px;
+    border: 2px solid #FECDF4;
+    border-radius: 5px;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 20px;
+    outline: none;
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   
+    background-color: #fdedf5;
+    color: #666;
+    font-size: 16px;
+    text-align: center;
+  }
+  .no-login-comments-icon {
+    background-color: transparent;
+    font-size: 30px;
+    margin-top: 10px;
+    color: #ff88d7;
+  }
+
   .no-comments-icon {
     background-color: transparent;
     font-size: 50px;

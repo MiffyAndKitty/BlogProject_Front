@@ -638,12 +638,21 @@ const PostDetail: React.FC = () => {
             <div className='comment-profile'>
               <img alt="Profile" className="heart" src={profileImage}></img>
               <div className="textarea-container2">
-                <textarea
+                {token &&(
+                  <textarea
                   className="comment-input"
                   placeholder="답글을 입력하세요..."
                   value={replyInputs[comment.comment_id] || ''} // textarea의 value를 상태로 관리
                   onChange={(e) => handleReplyInputChange(comment.comment_id, e.target.value)}
                 />
+                )}
+                
+                {!token &&(
+                             <div className="no-login-comment">
+                             <span className="no-login-comments-icon">🔒</span>
+                             <p><Link to="/login">로그인</Link> 후 이용해주세요!</p>
+                           </div>
+                 )}
                 <button className="comment-submit-button"  onClick={() => submitReply(comment.comment_id)}>답글 등록</button>
               </div>
             </div>
@@ -808,7 +817,7 @@ const PostDetail: React.FC = () => {
                       </button>
                     )}
                     {!token && (
-                      <button className={`like-button ${liked[postID] ? 'liked' : ''}`}>
+                      <button onClick={()=>{alert('로그인 후 이용해주세요!')}} className={`like-button ${liked[postID] ? 'liked' : ''}`}>
                         {liked[postID] ? (
                           <>
                             <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="liked carrot" />
@@ -875,12 +884,20 @@ const PostDetail: React.FC = () => {
                     <div className="comment-profile">
                       <img alt="Profile" className="heart" src={profileImage}></img>
                       <div className="textarea-container">
-                        <textarea
-                          className="comment-input"
-                          placeholder="댓글을 입력하세요..."
-                          value={comment} // textarea의 value를 상태로 관리
-                          onChange={handleCommentChange} // 댓글 입력 시 상태 업데이트
-                        />
+                        {token &&(
+                             <textarea
+                             className="comment-input"
+                             placeholder="댓글을 입력하세요..."
+                             value={comment} // textarea의 value를 상태로 관리
+                             onChange={handleCommentChange} // 댓글 입력 시 상태 업데이트
+                            />
+                        )}
+                       {!token &&(
+                             <div className="no-login-comment">
+                             <span className="no-login-comments-icon">🔒</span>
+                             <p><Link to="/login">로그인</Link> 후 이용해주세요!</p>
+                           </div>
+                        )}
                         <button className="comment-submit-button" onClick={writeComment}>
                           댓글 등록
                         </button>
