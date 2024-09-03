@@ -49,7 +49,22 @@ export const updateCategory = async (postData: TYPES.changeCategory): Promise<an
   return response;
 
 };
+/**
+ * 카테고리 레벨 수정
+ * @returns 
+ */
+export const updateCategoryLevel = async (postData: Object): Promise<any> => {
+  const token = getToken();
+  const response = await apiClient.put<TYPES.changeCategory>(`/category/Level`,postData,{
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response);
+  return response;
 
+};
 /**
  * 프로필 데이터 수정
  * @returns 

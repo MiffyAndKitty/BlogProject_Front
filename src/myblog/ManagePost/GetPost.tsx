@@ -15,6 +15,9 @@ import filledCarrot from '../../img/filledCarrot.png';
 import ConfirmModal from '../ConfirmModal'; 
 import Profile from '../../main/Profile';
 import SSEComponent from '../../main/SSEComponent';
+import noPosts from '../../img/noPosts.png';
+
+
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
@@ -365,10 +368,13 @@ const GetPost: React.FC = () => {
                   카테고리 관리
                 </button>
               </div>
-              <div className="border">
+              <div >
                 {managementType === 'post' && (
                   <>
-                    <SearchBar onSearch={handleSearch} />
+                    <div className='search-and-sort-container'>
+                      <SearchBar onSearch={handleSearch} />
+                    </div>
+                    
                     <div className="post-manage">
                       <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
                         <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -380,8 +386,22 @@ const GetPost: React.FC = () => {
                           </div>
                         )}
                       </div>
-                      {!loading && !error && posts.length > 0 && (
-                        <div className="post-list">
+                      {loading ? (
+                        <div className="no-posts-message">
+                          <div className="no-posts-container">
+                            <p>로딩중...</p>
+                          </div>
+                        </div>
+                      ) : posts.length === 0 ? (
+                        <div className="no-posts-message">
+                          <div className="no-posts-container">
+                            <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                            <p>게시물이 없습니다.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                            <div className="post-list">
                           {posts.map((post) => (
                             <div className="post-card" key={post.board_id}>
                               <div className="post-header">
@@ -432,7 +452,9 @@ const GetPost: React.FC = () => {
                             </div>
                           ))}
                         </div>
+                        </>
                       )}
+
                       <div className="pagination">
                         <button
                           className="pagination-btn"
@@ -459,7 +481,9 @@ const GetPost: React.FC = () => {
                 {managementType === 'category' && (
                   <>
                     <div className="post-manage">
+                    
                       <CategorySettings />
+                     
                     </div>
                   </>
                 )}

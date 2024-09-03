@@ -1,35 +1,61 @@
 /* src/components/CategoryList.css */
-.level-0 {
-  padding: 10px;
-  border: 1px solid #ff80bf;
+.level-0, .level-1, .level-2 {
+  padding: 15px;
+  
   border-radius: 5px;
   margin: 5px 0;
+}
+
+.level-0 {
   background-color: #f8dbee;
+  
 }
 
 .level-1 {
-  padding: 10px;
-  border: 1px solid #ff80bf;
-  border-radius: 5px;
-  margin: 5px 0;
   background-color: #f1bee1;
+  margin-left:40px;
 }
 
 .level-2 {
-  padding: 10px;
-  border: 1px solid #ff80bf;
-  border-radius: 5px;
-  margin: 5px 0;
   background-color: #f0a4d8;
+  margin-left:80px;
 }
+.level-0:hover, .level-1:hover, .level-2:hover {
+  border: 3px solid #ff80bf;
+}
+.addChangeDeleteBtn {
+  display: none;
+  transition: visibility 0.2s, opacity 0.2s linear;
+  margin-left: 10px;
+  border: none;
+  color: rgb(105, 105, 105);
+  background-color: rgba(255, 255, 255, 0);
+  pointer-events: auto;
+  
+}
+.category-item-list {
+  position: relative;
+  /* 호버 시 하위 요소에 영향을 주지 않도록 하기 위해 pointer-events 설정 */
+  position: relative;
+  pointer-events: auto;
+}
+/* 카테고리 요소의 모든 상태에서 호버 시 버튼이 나타나도록 강화 */
+.category-item-list:hover .addChangeDeleteBtn {
+  display: inline-block;
+  visibility: visible;
+  opacity: 1;
+}
+
 .highlight {
   background-color: #eee8ec00;
   font-weight: bold;
   color: #ff0381; /* 원하는 색상으로 변경 */
 }
-.addChangeDeleteBtn{
+
+.addOrCancelBtn {
   margin-left: 10px;
   border: none;
-  color:rgb(105, 105, 105);
+  color: rgb(105, 105, 105);
   background-color: rgba(255, 255, 255, 0);
 }
+

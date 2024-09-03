@@ -247,8 +247,20 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     <>
       
               <h1>{nicknameParam}의 블로그</h1>
-              
-              {!loading && !error && posts.length > 0 ? (
+              {loading ? (
+                <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <p>로딩중...</p>
+                  </div>
+                </div>
+              ) : posts.length === 0 ? (
+                <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                    <p>게시물이 없습니다.</p>
+                  </div>
+                </div>
+              ) : (
                 <>
                   <div className="search-and-sort-container">
                     <SearchBar onSearch={handleSearch} />
@@ -301,20 +313,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                     })}
                   </div>
                 </>
-              ) :(
-                <div className="no-posts-message">
-                  <div className="no-posts-container">
-                    <img src={noPosts} alt="No posts" className="no-posts-icon" />
-                    <p>게시물이 없습니다.</p>
-                  </div>
-                </div>
-              )
-              
-              
-              
-              
-              
-              }
+              )}
+            
 
               <div className="pagination">
                 <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>

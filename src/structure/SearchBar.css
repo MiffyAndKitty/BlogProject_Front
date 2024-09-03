@@ -2,6 +2,8 @@
 .search-bar {
     display: flex;
     align-items: center;
+    justify-content:flex-end; /* 수평 방향으로 중앙에 정렬 */
+    flex-wrap: nowrap;
     /* width: 100%; */
     min-width: 250px;
     height: 35px;

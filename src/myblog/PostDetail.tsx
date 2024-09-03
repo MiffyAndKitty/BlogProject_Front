@@ -605,6 +605,18 @@ const PostDetail: React.FC = () => {
                   </button>
                 </>
               )}
+               {!token && (
+                <>
+                  <button onClick={() => alert('로그인 후 이용해주세요!')} className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}>
+                    <img style={{ width: '30px', height: '30px' }} src={comment.isLike ? filledLikeComment : emptyLikeComment} alt="like" />
+                    <span>:</span>{comment.likes}
+                  </button>
+                  <button onClick={() => alert('로그인 후 이용해주세요!')} className={`comment-like-button ${comment.isDislike ? 'liked' : ''}`}>
+                    <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
+                    <span>:</span>{comment.dislikes}
+                  </button>
+                </>
+              )}
             </div>
           </div>
           
@@ -703,6 +715,25 @@ const PostDetail: React.FC = () => {
                   </button>
                   <button 
                     onClick={() => handleCommentLike(false, comment.comment_id, false, comment.isDislike, parentCommentId)} 
+                    className={`comment-like-button ${comment.isDislike ? 'liked' : ''}`}
+                  >
+                    <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
+                    <span>:</span>{comment.dislikes}
+                  </button>
+                </>
+              )}
+
+              {!token && (
+                <>
+                  <button 
+                    onClick={() => alert('로그인 후 이용해주세요!')} 
+                    className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}
+                  >
+                    <img style={{ width: '30px', height: '30px' }} src={comment.isLike ? filledLikeComment : emptyLikeComment} alt="like" />
+                    <span>:</span>{comment.likes}
+                  </button>
+                  <button 
+                    onClick={() => alert('로그인 후 이용해주세요!')} 
                     className={`comment-like-button ${comment.isDislike ? 'liked' : ''}`}
                   >
                     <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
