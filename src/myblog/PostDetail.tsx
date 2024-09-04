@@ -188,7 +188,7 @@ const PostDetail: React.FC = () => {
       }
       setTotalPages(fetchedComments.total.totalPageCount || 1);
       setCurrentPage(prevPage => prevPage + 1); // 페이지 증가
-      setTotalComment(fetchedComments.total.totalCount);
+      
     } catch (error) {
       console.error('Failed to load comments:', error);
     } finally {
@@ -417,6 +417,7 @@ const PostDetail: React.FC = () => {
       setEmail(fetchedPost.data.user_email);
       setIsWriter(fetchedPost.data.isWriter);
       setTags(fetchedPost.data.tags);
+      setTotalComment(fetchedPost.data.board_comment);
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {

@@ -17,6 +17,7 @@ const SignUp: React.FC = () => {
   const [nickname, setNickname] = useState('');
   const [signUpResult, setSignUpResult] = useState('');
   const [checkDuplicatedResult, setCheckDuplicatedResult] = useState<string | null>(null);
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -58,6 +59,7 @@ const SignUp: React.FC = () => {
       return false;
     }
   };
+
   const checkSetSignUpResult = async () => {
     const newPost: SignUpData = { 
       email: email,
@@ -67,15 +69,39 @@ const SignUp: React.FC = () => {
 
     try {
       const response = await setSignUp(newPost);
-      console.log(`setSignUpResult`,response.result.toString())
-      console.log(`signUpResult`,signUpResult)
+      console.log(`setSignUpResult`,response.result.toString());
+      console.log(`signUpResult`,signUpResult);
+       // 서버에서 받은 response가 { result: boolean, message: string } 형식일 때
+    if (response.result.toString() ==='true') {
+      setSignUpResult('success');
+      alert("회원가입에 성공했습니다!!");
+      navigate(`/login`);
+    } else {
+      setSignUpResult(`error: ${response.message}`);
+      alert(`회원가입에 실패했습니다: ${response.message.replace('error: ', '')}`);
+    }
       setSignUpResult(response.result.toString());
       return response.result;
     } catch (error) {
-      console.error("회원가입 오류:", error);     
-      return false;
+      // 400 Bad Request 처리
+    if (error.response && error.response.status === 400) {
+      setSignUpResult(`error: ${error.response.data.message}`);
+      alert(`회원가입에 실패했습니다: ${error.response.data.message}`);
     }
+    // 500 Internal Server Error 처리
+    else if (error.response && error.response.status === 500) {
+      setSignUpResult(`error: ${error.response.data.message}`);
+      alert(`회원가입에 실패했습니다: ${error.response.data.message}`);
+    }
+    // 그 외 에러 처리
+    else {
+      setSignUpResult('error: 서버와의 연결에 실패했습니다.');
+      alert(`error: 서버와의 연결에 실패했습니다.`);
+    }
+    console.error("회원가입 오류:", error);
+  }
   };
+  
   useEffect(() => {
     const validateFields = async () => {
       const newErrors = {
@@ -104,7 +130,16 @@ const SignUp: React.FC = () => {
 
     validateFields();
   }, [email, password, password2, nickname,touched]);
-
+  useEffect(() => {
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+    const isPassword2Valid = password === password2;
+    const isNicknameValid = validateNickname(nickname);
+  
+    // 모든 필드가 유효하면 폼이 유효한 상태로 설정
+    setIsFormValid(isEmailValid && isPasswordValid && isPassword2Valid && isNicknameValid && !Object.values(errors).some(error => error !== ''));
+  }, [email, password, password2, nickname, errors]);
+  
   const handleSignUp = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // 버튼의 기본 동작 방지
 
@@ -120,22 +155,8 @@ const SignUp: React.FC = () => {
     };
     const isSetSignUpResult = await checkSetSignUpResult();
 
-  };
 
-  useEffect(() => {
-    console.log(`
-    
-    signUpResult
-    
-    `,signUpResult)
-    if (signUpResult === 'true') {
-      alert("회원가입에 성공했습니다!!");
-      navigate(`/login`);
-      
-    } else if (signUpResult === 'false') {
-      alert("회원가입에 실패했습니다!!");
-    }
-  }, [signUpResult]);
+  };
 
   return (
     <div className="App">
@@ -143,61 +164,66 @@ const SignUp: React.FC = () => {
       <main className="main">
       
         <div className='signup2'>
-          <h1 style={{color:"#A9A9A9"}}>회원가입</h1>
+          <h2 style={{color:"#A9A9A9"}}>회원가입</h2>
           <Form className='form'>
           <Form.Group className="inputFieldCssForSignUp mb-3">
             <Form.Control 
               type="email" 
-              placeholder="이메일: newE@gmail.com" 
+              placeholder="이메일" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               onBlur={() => setTouched({ ...touched, email: true })}
               isInvalid={touched.email && !!errors.email}
               className="transparent-input"
             />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.email}</Form.Control.Feedback>
-          </Form.Group>
             
+          </Form.Group>
+          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
+
           <Form.Group className="inputFieldCssForSignUp mb-3">
             <Form.Control 
               type="password" 
-              placeholder="비밀번호: *******" 
+              placeholder="비밀번호" 
               value={password} 
               onChange={(e) => setPassword(e.target.value)} 
               onBlur={() => setTouched({ ...touched, password: true })}
               isInvalid={touched.password && !!errors.password}
               className="transparent-input"
             />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.password}</Form.Control.Feedback>
-          </Form.Group>
             
+          </Form.Group>
+          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password}</Form.Control.Feedback>
+
           <Form.Group className="inputFieldCssForSignUp mb-3">
             <Form.Control 
               type="password" 
-              placeholder="비밀번호 확인: *******" 
+              placeholder="비밀번호 확인" 
               value={password2} 
               onChange={(e) => setPassword2(e.target.value)} 
               onBlur={() => setTouched({ ...touched, password2: true })}
               isInvalid={touched.password2 && !!errors.password2}
               className="transparent-input"
             />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.password2}</Form.Control.Feedback>
+            
           </Form.Group>
+          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password2}</Form.Control.Feedback>
+
             
           <Form.Group className="inputFieldCssForSignUp mb-3">
             <Form.Control 
-              placeholder="닉네임: nickname" 
+              placeholder="닉네임" 
               value={nickname} 
               onChange={(e) => setNickname(e.target.value)} 
               onBlur={() => setTouched({ ...touched, nickname: true })}
               isInvalid={touched.nickname && !!errors.nickname}
               className="transparent-input"
             />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
+            
           </Form.Group>
+          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
 
           </Form>
-          <Button variant="primary" type="button" onClick={handleSignUp} className="loginButton">회원가입</Button>
+          <Button variant="primary" type="button" onClick={handleSignUp} className={`loginButton ${!isFormValid ? 'disabledButton' : ''}`} disabled={!isFormValid}>회원가입</Button>
         </div>
         <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_localsignup" />
       </main>

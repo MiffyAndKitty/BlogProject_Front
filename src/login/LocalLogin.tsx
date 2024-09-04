@@ -21,14 +21,18 @@ const LocalLogin: React.FC = () => {
   const [isProfileFetched, setIsProfileFetched] = useState<boolean>(false);
   const [areYouFollowing, setAreYouFollowing] = useState<string>('');
   const [areYouFollowed, setAreYouFollowed] = useState<string>('');
+  const [isFormValid, setIsFormValid] = useState<boolean>(false);
+
   const [errors, setErrors] = useState({
     email: '',
     password: '',
   });
+
   const [touched, setTouched] = useState({
     email: false,
     password: false,
   });
+
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -38,12 +42,15 @@ const LocalLogin: React.FC = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return passwordRegex.test(password);
   };
+
   const goToSignUp = () => {
     navigate(`/signup`);
   };
+
   const goToFindID = () => {
-    navigate(`/findID`);
+    // navigate(`/findID`);
   };
+
   const checkSetLoginResult = async () => {
     const newPost: loginData = { 
       email: email,
@@ -52,34 +59,43 @@ const LocalLogin: React.FC = () => {
     let response:any={};
     try {
       response = await setLogin(newPost);
-      console.log(`checkSetLoginResult`,response.data.result.toString())
+      const loginSuccess = response.data.result;
+      const message = response.data.message;
+      console.log(`checkSetLoginResult`,loginSuccess.toString())
       console.log(`loginResult`,loginResult)
-      setLoginResult(response.data.result.toString());
+      setLoginResult(loginSuccess.toString());
       console.log(response);
-      if (response.data.result.toString() === 'true' && response.headers['authorization']) {
+
+      if (loginSuccess.toString() === 'true' && response.headers['authorization']) {
         sessionStorage.setItem('accessToken', response.headers['authorization']);
         sessionStorage.setItem('email', response.data['data']);
-     
         fetchMyProfile(email);
+      } else {
+        // 실패한 경우 메시지 처리
+        alert(message || "로그인에 실패했습니다.");
       }
       return response.data.result;
     } catch (error) {
-      //const response = await setLogin(newPost);
-      console.log(`
-        
-        
-        
-        
-        response.data
-        
-        
-        
-        
-        `,response)
-     alert(`로그인하는데 오류가 발생했습니다. 오류: ${error}`);     
+      // 오류 발생 시 메시지 출력
+      console.log("로그인 오류 발생:", error); 
+      if (error.response && error.response.status === 400) {
+        alert(`로그인 실패했습니다: ${error.response.data.message}`);
+      }
+      // 500 Internal Server Error 처리
+      else if (error.response && error.response.status === 500) {
+
+        alert(`로그인 실패했습니다: ${error.response.data.message}`);
+      }
+      // 그 외 에러 처리
+      else {
+
+        alert(`error: 서버와의 연결에 실패했습니다.`);
+      }
+      // alert(`로그인 오류가 발생했습니다. 오류: ${error.message || error}`);
       return false;
     }
   };
+
   const fetchMyProfile = async (email: string) => {
     try {
       const fetchedProfile = await getMyProfile(email);
@@ -99,6 +115,7 @@ const LocalLogin: React.FC = () => {
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
     }
   };
+
   const handleLogin = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // 버튼의 기본 동작 방지
 
@@ -116,16 +133,7 @@ const LocalLogin: React.FC = () => {
 
     const isSetSignUpResult = await checkSetLoginResult();
   };
-  // useEffect(() => {
-  //   try {
-  //     const storedNickname = sessionStorage.getItem('nickname');
-  //     if (storedNickname) {
-  //       setNickname(storedNickname);
-  //     }
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, []);
+
   useEffect(()=>{
     const newErrors = {
       email: touched.email && !validateEmail(email) ? '유효한 이메일 주소를 입력하세요.' : '',
@@ -134,6 +142,14 @@ const LocalLogin: React.FC = () => {
 
     setErrors(newErrors);
   },[email, password,touched]);
+
+  useEffect(() => {
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+  
+    // 모든 필드가 유효하면 폼이 유효한 상태로 설정
+    setIsFormValid(isEmailValid && isPasswordValid&& !Object.values(errors).some(error => error !== ''));
+  }, [email, password, errors]);
 
   useEffect(() => {
     if (loginResult === 'true') {
@@ -151,43 +167,45 @@ const LocalLogin: React.FC = () => {
         <div className="content-wrapper">
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter" />
           <div className='loginForm'>
-            <h1 style={{color:"#A9A9A9"}}>로그인</h1>
+            <h2 style={{color:"#A9A9A9"}}>로그인</h2>
             <Form>
               <Form.Group className="inputFieldCss mb-3">
                 <Form.Control 
                   type="email" 
-                  placeholder="이메일: newE@gmail.com" 
+                  placeholder="이메일" 
                   value={email} 
                   onChange={(e) => setEmail(e.target.value)} 
                   onBlur={() => setTouched({ ...touched, email: true })}
                   isInvalid={touched.email && !!errors.email}
                   className="transparent-input"
                 />
-                <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.email}</Form.Control.Feedback>
+                
               </Form.Group>
+              <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
 
               <Form.Group className="inputFieldCss mb-3">
                 <Form.Label></Form.Label>
                 <Form.Control 
                   type="password" 
-                  placeholder="비밀번호: ******" 
+                  placeholder="비밀번호" 
                   value={password} 
                   onChange={(e) => setPassword(e.target.value)} 
                   onBlur={() => setTouched({ ...touched, password: true })}
                   isInvalid={touched.password && !!errors.password}
                   className="transparent-input"
                 />
-                <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.password}</Form.Control.Feedback>
+               
               </Form.Group>
+              <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password}</Form.Control.Feedback>
             </Form>
 
-            <Button variant="primary" type="button" className="loginButton" onClick={handleLogin}>로그인</Button>
+            <Button variant="primary" type="button" className={`loginButton ${!isFormValid ? 'disabledButton' : ''}`} onClick={handleLogin} disabled={!isFormValid}>로그인</Button>
             <div className="loginsForLocalLogin">
-            <button onClick={goToFindID}>아이디 찾기</button>
+            <Button onClick={goToFindID}>아이디 찾기</Button>
             <span>|</span>
-            <button>비밀번호 찾기</button>
+            <Button>비밀번호 찾기</Button>
             <span>|</span>
-            <button onClick={goToSignUp}>회원가입</button>
+            <Button onClick={goToSignUp}>회원가입</Button>
           </div>
           </div>
 

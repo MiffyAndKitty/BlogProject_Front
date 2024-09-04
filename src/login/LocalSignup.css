@@ -29,6 +29,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%; /* Form의 전체 너비를 부모 컨테이너에 맞춤 */
 }
 
 .inputFieldCssForSignUp {
@@ -44,7 +45,15 @@
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 }
-
+.disabledButton {
+  background-color: #d3d3d3; /* 연한 회색 */
+  cursor: not-allowed; /* 비활성화된 느낌을 주는 커서 */
+  opacity: 0.6; /* 투명도 추가 */
+}
+/* 버튼 비활성화 시 hover 효과 제거 */
+.disabledButton:hover {
+  background-color: #d3d3d3;
+}
 .transparent-input {
   background-color: transparent;
   border: 0px;
@@ -74,6 +83,7 @@
   .inputFieldCssForSignUp {
     padding: 10px 15px;
     font-size: 14px;
+    max-width: 80%; /* 작은 화면에서는 필드가 최대 너비를 부모 컨테이너에 맞춤 */
   }
 }
 
@@ -86,6 +96,7 @@
   .inputFieldCssForSignUp {
     padding: 8px 10px;
     font-size: 12px;
+    max-width: 80%; /* 더 작은 화면에서는 필드가 전체 너비를 차지하도록 설정 */
   }
 
   .mainCharacter_localsignup {
