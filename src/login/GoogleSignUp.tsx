@@ -137,16 +137,16 @@ const SignUp: React.FC = () => {
 
           <Form.Group className="inputFieldCssForGoogleSignUp mb-3">
             <Form.Control 
-              placeholder="닉네임: nickname" 
+              placeholder="닉네임" 
               value={nickname} 
               onChange={(e) => setNickname(e.target.value)} 
               onBlur={() => setTouched({ ...touched, nickname: true })}
               isInvalid={touched.nickname && !!errors.nickname}
               className="transparent-input"
             />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
+            
           </Form.Group>
-
+          <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
           </Form>
           <Button className={'login-button'} variant="primary" type="button" onClick={handleSignUp}>회원가입</Button>
         </div>

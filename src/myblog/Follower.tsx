@@ -25,6 +25,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nicknameToDelete, setNicknameToDelete] = useState('');
     const [localEmail, setLocalEmail] = useState('');
+    const [useEmail, setUseEmail] = useState('');
     const [hoveredFollower, setHoveredFollower] = useState<string | null>(null);
     const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
@@ -37,6 +38,24 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
           if (otherEmail) {
             const fetchedFollowers = await getFollow(otherEmail, page);
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followersList]);
+      
+            if (fetchedFollowers.data.followingsList.length < 10) {
+              setHasMore(false);
+            }
+          }else{
+            const fetchedFollowers = await getFollow(localEmail, page);
+            console.log(`
+                
+                
+                
+                fetchedFollowers
+                
+                
+                
+                
+                
+                `,fetchedFollowers)
+            setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       
             if (fetchedFollowers.data.followingsList.length < 10) {
               setHasMore(false);
@@ -59,7 +78,14 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
           const result = await followUser({email:email});
           if(result) {
             alert('팔로우 추가에 성공했습니다!');
-            fetchFollowers();
+            setFollowers(prevFollowers =>
+              prevFollowers.map(follower =>
+                  follower.user_email === email
+                      ? { ...follower, areYouFollowing: 1 } // 팔로우 상태로 업데이트
+                      : follower
+              )
+          );
+            //fetchFollowers();
           };
         }catch(err){
           alert('팔로우 추가에 실패했습니다! 다시 시도해주세요.');
@@ -85,7 +111,15 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                 if (fetchedFollowers) {
                     alert('팔로워를 취소했습니다!');
                     setIsModalOpen(false);
-                    fetchFollowers();
+                    // fetchFollowers();
+                    // 상태 업데이트: 팔로우를 취소한 유저의 팔로우 상태 변경
+                    setFollowers(prevFollowers =>
+                      prevFollowers.map(follower =>
+                          follower.user_email === email
+                              ? { ...follower, areYouFollowing: 0 } // 팔로우 취소 상태로 업데이트
+                              : follower
+                      )
+                  );
                 } else {
                     alert('팔로워 취소에 실패했습니다! 다시 시도해주세요.');
                 }
@@ -94,15 +128,32 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
             console.error('Failed to delete follow:', error);
         }
     };
-    useEffect(() => {
-        fetchFollowers();
-    }, [page, navigate]); 
-    useEffect(() => {
-        //fetchFollowers();
-        const email = sessionStorage.getItem('email');
-        setLocalEmail(email);
-    }, []);
 
+    useEffect(() => {
+      if(useEmail ==='')return;
+       // 다른 사람의 블로그로 넘어갈 때 팔로워 리스트와 페이지 초기화
+       setFollowers([]); // 기존 팔로워 리스트 초기화
+       setPage(1); // 페이지 초기화
+        fetchFollowers();
+    }, [useEmail]); 
+
+    useEffect(() => {
+      if (page === 1) return; // 페이지 1에서는 이미 호출되었으므로 중복 호출 방지
+      fetchFollowers();
+  }, [page, navigate]); 
+  
+    useEffect(() => {
+
+      const localNickname  = sessionStorage.getItem('nickname');
+      const email = sessionStorage.getItem('email');
+      setLocalEmail(email);
+      if(nickname === localNickname) {
+          setUseEmail(email);
+      }else{
+          setUseEmail(otherEmail);
+      }
+      
+  }, []);
     const handleDelete = (nicknameToDelete: string) => {
         setNicknameToDelete(nicknameToDelete);
         setIsModalOpen(true);
@@ -114,7 +165,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
             <span className="modal-close2" onClick={onClose}>
               &times;
             </span>
-            <h1 style={{ color: "#FF88D7" }}>{nickname}의 팔로워</h1>
+            <h2 style={{ color: "#FF88D7" }}>{nickname}의 팔로워</h2>
             <div className="border">
               <div>
                 {followers.length > 0 ? (
@@ -160,9 +211,13 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                             </div>
                             <div
                               style={{
+                                maxWidth:'50px',
                                 fontWeight: "bold",
                                 fontSize: "12px",
                                 cursor: "pointer",
+                                overflow:'hidden',
+                                whiteSpace: 'nowrap', // 한 줄로 표시
+                                textOverflow: 'ellipsis', // 길면 점점점 표시
                               }}
                               onClick={() =>
                                 goToBlog(follower.user_nickname, follower.user_email)
@@ -232,6 +287,8 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                                   goToBlog(follower.user_nickname, follower.user_email)
                                 }
                               />
+
+                              
                               {follower.areYouFollowing === 1 &&
                                 follower.areYouFollowed === 1 && (
                                   <div className="both-friend-wrapper-follower">
@@ -252,9 +309,14 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                             </div>
                             <div
                               style={{
+                               
                                 fontWeight: "bold",
                                 fontSize: "12px",
                                 cursor: "pointer",
+                                maxWidth:'50px',
+                                overflow:'hidden',
+                                whiteSpace: 'nowrap', // 한 줄로 표시
+                                textOverflow: 'ellipsis', // 길면 점점점 표시
                               }}
                               onClick={() =>
                                 goToBlog(follower.user_nickname, follower.user_email)

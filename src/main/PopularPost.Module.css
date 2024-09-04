@@ -122,6 +122,18 @@
     font-weight: bold;
     background-color: transparent;
   }
+  .post-popular-category {
+    font-size: 12px;
+    color: #555;
+    font-weight: bold;
+    background-color: transparent;
+  }
+  .post-popular-category-white {
+    font-size: 12px;
+    color: #ffffff;
+    font-weight: bold;
+    background-color: transparent;
+  }
   .post-popular-effect {
     font-size: 12px;
     color: #FF6DC6;
@@ -134,3 +146,228 @@
     font-weight: bold;
     background-color: transparent;
   }
+
+  @media (max-width: 1141px) {
+
+    .popularpost-section {
+      padding: 20px;
+    }
+    
+    .posts {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+    .slider {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .all{
+      margin-left: 10px;
+      font-size: small;
+      margin-bottom: 15px;
+      color:rgb(152, 152, 152);
+      cursor: pointer;
+    }
+    .slide-button.left, .slide-button.right {
+      width: 50px; /* 버튼의 너비 */
+      height: 50px; /* 버튼의 높이 */
+      font-size: 24px; /* 버튼 내 텍스트 크기 */
+      background-color: rgba(255, 255, 255, 0);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+  }
+    .slide-button.left {
+      left: -30px;
+  
+    }
+    
+    .slide-button.right {
+      right: -30px;
+  
+    }
+     /* 각 포스트부분 style */
+    .post-popular {
+      display: flex;
+      flex-direction: column;
+      width: 100%; /* 너비를 항상 100%로 설정 */
+      min-width: 100%; /* 최소 너비도 100%로 설정 */
+      height: 100px; /* 높이는 내용에 따라 자동 */
+      border: 2px solid #FF88D7;
+      background-color: #FFE6FA;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      flex-grow: 1; /* 포스트가 남은 공간을 가득 채우도록 함 */
+      flex-shrink: 0; /* 포스트가 작아지지 않도록 방지 */
+    }
+    /* 기본 스타일 */
+    .post-popular-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    
+    .post-popular.has-image .post-overlay {
+      background-color: rgba(0, 0, 0, 0.413); /* 반투명한 검은색 오버레이 */
+      padding-bottom: 40px;
+      color: white;
+      z-index: 2;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .no-post-overlay{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .post-popular-content {
+      padding: 10px;
+    }
+    
+    .post-popular-author {
+      font-size: 12px;
+      color: #999;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    .post-popular-author-white {
+      font-size: 12px;
+      color: #ffffff;
+      background-color: transparent;
+      cursor: pointer;
+    }
+    .post-popular-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 0;
+      overflow: hidden;
+      max-height: 18px;
+ 
+      text-overflow: ellipsis;
+    }
+    
+    .post-popular-text {
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    /* 각 포스트의 내용부분 style */
+    .post-content2{
+      padding: 20px; /* post-main-content에 padding 추가 */
+      margin-top: 5px;
+      min-height: 30px;
+      max-height: 30px; /* 원하는 높이로 설정 */
+      overflow: hidden;
+      width: 100px;
+      text-overflow: ellipsis;
+     
+    }
+  
+    .post-popular-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+    }
+    
+    .post-popular-likes, .post-popular-comments {
+      font-size: 12px;
+      color: #555;
+      font-weight: bold;
+      background-color: transparent;
+    }
+    .post-popular-likes-white, .post-popular-comments-white {
+      font-size: 12px;
+      color: #ffffff;
+      font-weight: bold;
+      background-color: transparent;
+    }
+    .post-popular-effect {
+      font-size: 12px;
+      color: #FF6DC6;
+      background-color: transparent;
+      font-weight: bold;
+    }
+    .post-popular-effect-white  {
+      font-size: 12px;
+      color: #ffffff;
+      font-weight: bold;
+      background-color: transparent;
+    }
+  }
+
+  @media (max-width: 653px) {
+
+    /* 각 포스트의 내용부분 style */
+    .post-content2{
+      padding: 20px; /* post-main-content에 padding 추가 */
+      margin-top: 5px;
+      min-height: 30px;
+      max-height: 30px; /* 원하는 높이로 설정 */
+      overflow: hidden;
+      width: 0px;
+      display: none;
+      text-overflow: ellipsis;
+     
+    }
+  
+  }
+
+  /*모바일 화면*/
+@media (max-width: 537px){
+  .post-popular-author {
+    display: none;
+  }
+ /* 각 포스트부분 style */
+ .post-popular {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* 너비를 항상 100%로 설정 */
+  min-width: 100%; /* 최소 너비도 100%로 설정 */
+  height: 100px; /* 높이는 내용에 따라 자동 */
+  border: 2px solid #FF88D7;
+  background-color: #FFE6FA;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-grow: 1; /* 포스트가 남은 공간을 가득 채우도록 함 */
+  flex-shrink: 0; /* 포스트가 작아지지 않도록 방지 */
+}
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.post-popular-category {
+  display: none;
+}
+.post-popular-category-white {
+  display: none;
+}
+.post-popular-likes, .post-popular-comments {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #555;
+  font-weight: bold;
+  background-color: transparent;
+}
+.post-popular-likes-white, .post-popular-comments-white {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #ffffff;
+  font-weight: bold;
+  background-color: transparent;
+}
+}

@@ -198,26 +198,35 @@ const PopularPost: React.FC = () => {
                 const postClassName = firstImageSrc ? 'post-popular has-image' : 'post-popular';
                 return (
                   <div key={index} onClick={() => goToDetailPost(post.board_id, post.user_nickname)} className={postClassName} style={{ backgroundImage: firstImageSrc ? `url(${firstImageSrc})` : 'none', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-                    <div className={firstImageSrc ? 'post-overlay' : ''}>
+                    <div className={firstImageSrc ? 'post-overlay' : 'no-post-overlay'} >
                       <div className="post-content2" >
                         {removeUnwantedTags(post.board_content)}
                       </div>
                       <div className="post-popular-content">
+                      <h3 className="post-popular-title">{post.board_title}</h3>
                         <p className="post-popular-author">
                           <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className={firstImageSrc ? 'post-popular-author-white' : "post-popular-author"}>
                             작성자: {post.user_nickname}
                           </span> <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>| {formatDate(post.created_at)}</span>
                         </p>
-                        <h3 className="post-popular-title">{post.board_title}</h3>
+                        
                         <div className="post-popular-footer">
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}> {post.category_name}</span>
+                          <span className={firstImageSrc ? "post-popular-category-white" : "post-popular-category"}> {post.category_name}</span>
+
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>
                             조회수
                              <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_view}</span>
                           </span>
+
+
                           <img style={{ width: '15px', height: '15px', marginLeft: '50px' }} src={filledCarrot}></img>
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>: {post.board_like}</span>
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>댓글: {post.board_comment}</span>
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>
+                            <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_like}</span> 
+                          </span>
+
+                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>댓글
+                          <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}>  {post.board_comment}</span>
+                          </span>
                         </div>
                       </div>
                     </div>

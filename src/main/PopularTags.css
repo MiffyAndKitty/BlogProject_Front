@@ -1,4 +1,35 @@
-.tag-row{
-    margin-top:10px;
-    flex-wrap: nowrap;
-}
+.populartags-section {
+    padding: 20px;
+  }
+  
+  .tags {
+    display: flex;
+    flex-wrap: wrap; /* 줄바꿈이 일어나도록 설정 */
+    gap: 10px; /* 태그 간 간격 */
+  }
+  
+  .tag {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    width: 100px; /* 고정된 너비 */
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .tag-row {
+    display: flex;
+    justify-content: space-between; /* 태그 사이를 일정하게 분배 */
+    width: 100%;
+  }
+  @media (max-width: 768px) {
+    .tag {
+        width: 80px; /* 화면이 작아지면 태그 크기를 줄임 */
+      }
+  }
+  
+  @media (max-width: 537px) {
+    .tag {
+        width: 60px; /* 더 작은 화면에서는 태그 크기를 더 줄임 */
+      }
+  }
+  
