@@ -101,9 +101,9 @@ const WriteNewPost: React.FC = () => {
       if (!tags.includes(tagInput.trim())&& tags.length < 10) {
         setTags([...tags, tagInput.trim()]);
       }
-      // if(tags.length===10){
-      //   alert('최대 태그 수 10개를 넘었습니다!');
-      // }
+      if(tags.length===10){
+        alert('최대 태그 수 10개를 넘었습니다!');
+      }
       setTagInput('');
     }
   };
@@ -115,14 +115,16 @@ const WriteNewPost: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // 여기에 글을 제출하는 로직을 추가하세요 (예: API 호출)
-    console.log('Title:', title);
-    console.log('Content:', content);
-    console.log('Category:', category);
-    console.log('Is Private:', status);
-    console.log('Tags:', tags);
+    console.log('handleSubmit Title:', title);
+    console.log('handleSubmit Content:', content);
+    console.log('handleSubmit Category:', category);
+    console.log('handleSubmit Is Private:', status);
+    console.log('handleSubmit Tags:', tags);
     if (images) {
-      console.log('Images:', images);
+      console.log('handleSubmit Images:', images);
     }
+
+    
   };
 
   const saveImgs = async()=>{
@@ -135,16 +137,18 @@ const WriteNewPost: React.FC = () => {
         if (img.src.startsWith('data:')) {
           const blob = dataURLToBlob(img.src);
           const file = new File([blob], `image_${index}.png`, { type: 'image/png' });
-          //const newSrc = URL.createObjectURL(file);
-          const newSrc = `image_${index + 1}`;
+          //수정 중 (지우면 안됌)
+          const newSrc = URL.createObjectURL(file);
+          //const newSrc = `image_${index + 1}`;
+
           img.src = newSrc;
           newImages.push(file);
           setImages(newImages); // 상태를 새 배열로 업데이트
 
-          setContent(quillEditor.root.innerHTML); // content 상태를 수정된 HTML로 업데이트
+          // setContent(quillEditor.root.innerHTML); // content 상태를 수정된 HTML로 업데이트
 
-          console.log('Images set in handleContentChange:', newImages);
-          console.log('newSrc, file, newImages', newSrc, file, newImages);
+          console.log('Images saveImgs에서 :', newImages);
+          console.log('saveImgs 에서 newSrc, file, newImages', newSrc, file, newImages);
         }
       });
 
@@ -153,40 +157,52 @@ const WriteNewPost: React.FC = () => {
     return [];
   };
   const savePost = async () => {
+    const tagArray = tags.length > 0 ? tags : [];
+    console.log(tagArray)
     if(!title || !content){
       alert(errorMessage);
       return;
     }
     const imagesFromSaveImgs = await saveImgs();
+    
     console.log('Images in savePost before formData:', imagesFromSaveImgs);
-    console.log(`
-      
-      
-      
-      
-      
-      content
-      
-      
-      
-      
-      
-      
-      
-      `,content)
+
+
+    /**
+     * content 영역의 img 태그들을 모두 가져와서 src를 image_${index + 1}로 변경하는 작업 
+     */
+    let newContent =  '';
+    const quillEditor = quillRef.current?.getEditor();
+    if (quillEditor) {
+      // 에디터의 내용을 복사하여 수정
+      const clonedEditor = quillEditor.root.cloneNode(true) as HTMLElement;
+      const imgTags = clonedEditor.querySelectorAll('img'); // img 태그들을 모두 가져옴
+  
+      Array.from(imgTags).forEach((img, index) => {
+        // img 태그의 src를 순서대로 image_1, image_2로 변경
+        const newSrc = `image_${index + 1}`;
+        img.src = newSrc;
+      });
+  
+      // 변경된 content를 다시 업데이트
+      newContent = clonedEditor.innerHTML;
+      console.log('변경된 content:', quillEditor.root.innerHTML);
+    }
+
     const newPostData: newPost = { 
       title: title,
-      content: content,
+      content: newContent,
       public: status, // true/false를 1/0으로 변환
       categoryId:category.category_id,
-      tagNames:tags,
+      tagNames:tagArray,
       uploaded_files: imagesFromSaveImgs.length > 0 ? imagesFromSaveImgs : null // 이미지 배열로 설정
     };
     const formData = new FormData();
     formData.append('title', newPostData.title);
-    formData.append('content', newPostData.content);
+    formData.append('content', newContent);
     formData.append('public', newPostData.public.toString());
     formData.append('categoryId', newPostData.categoryId);
+    // 배열의 각 태그를 FormData에 추가
     newPostData.tagNames.forEach(tag => formData.append('tagNames', tag));
     
     if (newPostData.uploaded_files) {
@@ -197,14 +213,49 @@ const WriteNewPost: React.FC = () => {
     
     try {
       console.log(formData); // FormData 내용을 로그로 출력하여 확인
-      const response = await saveNewPost(formData);
+      console.log(`
       
+      
+      
+      
+      
+        savePost 에서 newPostData
+        
+        
+        
+        
+        
+        
+        
+        `,newPostData)
+      const response = await saveNewPost(formData);
+      if (response.status === ENUMS.status.SUCCESS) {
+        console.log(`
+          
+          
+          
+          response
+          
+          
+          
+          
+          
+          `,response)
+        alert("글 저장에 성공했습니다!!");
+        
+        navigate(`/getpost/${nickname}`);
+        
+      } else if (response === false) {
+        alert("글 저장에 실패했습니다!!");
+      }
       setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
+      alert(`글 저장 오류: ${error.response.data.message}`);
       return false;
     }
+
   };
 
   
@@ -243,14 +294,14 @@ const WriteNewPost: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (newPostResult === true) {
-      alert("글 저장에 성공했습니다!!");
+    // if (newPostResult === true) {
+    //   alert("글 저장에 성공했습니다!!");
       
-      navigate(`/getpost/${nickname}`);
+    //   navigate(`/getpost/${nickname}`);
       
-    } else if (newPostResult === false) {
-      alert("글 저장에 실패했습니다!!");
-    }
+    // } else if (newPostResult === false) {
+    //   alert("글 저장에 실패했습니다!!");
+    // }
   }, [newPostResult, navigate]);
 
   useEffect(() => {

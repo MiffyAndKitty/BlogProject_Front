@@ -146,9 +146,33 @@ const FixPost: React.FC = () => {
 
     const imagesFromSaveImgs = await saveImgs();
     console.log('Images in savePost before formData:', imagesFromSaveImgs);
+
+    /**
+     * content 영역의 img 태그들을 모두 가져와서 src를 image_${index + 1}로 변경하는 작업 
+     */
+    let newContent =  '';
+    const quillEditor = quillRef.current?.getEditor();
+    if (quillEditor) {
+      // 에디터의 내용을 복사하여 수정
+      const clonedEditor = quillEditor.root.cloneNode(true) as HTMLElement;
+      const imgTags = clonedEditor.querySelectorAll('img'); // img 태그들을 모두 가져옴
+    
+      Array.from(imgTags).forEach((img, index) => {
+        if (!img.src.startsWith('https://')) {
+          const newSrc = `image_${index + 1}`;
+          img.src = newSrc;
+        }
+      });
+    
+      // 변경된 content를 다시 업데이트
+      newContent = clonedEditor.innerHTML;
+      console.log('변경된 content:', quillEditor.root.innerHTML);
+    }
+
+
     const newPostData: newPost = { 
       title: title,
-      content: content,
+      content: newContent,
       public: status, // true/false를 1/0으로 변환
       categoryId:category.category_id,
       tagNames:tags,
@@ -157,7 +181,7 @@ const FixPost: React.FC = () => {
     };
     const formData = new FormData();
     formData.append('title', newPostData.title);
-    formData.append('content', newPostData.content);
+    formData.append('content', newContent);
     formData.append('public', newPostData.public.toString());
     formData.append('categoryId', newPostData.categoryId);
     formData.append('boardId', newPostData.boardId);
@@ -170,12 +194,35 @@ const FixPost: React.FC = () => {
     }
     
     try {
-      const response = await fixPost(formData);
+      console.log(`
       
+      
+      
+      
+        fixpost
+        savePost 에서 newPostData
+        
+        
+        
+        
+        
+        
+        
+        `,newPostData)
+      const response = await fixPost(formData);
+      if (response.status === ENUMS.status.SUCCESS) {
+        alert("글 저장에 성공했습니다!!");
+        
+        navigate(`/getpost/${nickname}`);
+        
+      } else if (newPostResult === false) {
+        alert("글 저장에 실패했습니다!!");
+      }
       setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
+      alert(`글 저장 오류: ${error.response.data.message}`);
       return false;
     }
   };
@@ -265,14 +312,14 @@ const FixPost: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (newPostResult === true) {
-      alert("글 저장에 성공했습니다!!");
+    // if (newPostResult === true) {
+    //   alert("글 저장에 성공했습니다!!");
       
-      navigate(`/getpost/${nickname}`);
+    //   navigate(`/getpost/${nickname}`);
       
-    } else if (newPostResult === false) {
-      alert("글 저장에 실패했습니다!!");
-    }
+    // } else if (newPostResult === false) {
+    //   alert("글 저장에 실패했습니다!!");
+    // }
   }, [newPostResult]);
 
   return (
