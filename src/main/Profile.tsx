@@ -220,16 +220,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
   return (
     <>
-    <section className={
+    {/* <section className={
       `profile-section ${pageType === 'myBlog' ? 'myBlog' 
       : (pageType==='otherBlog'?'otherBlog'
       :(pageType==='signup_for_blog'?'signup_for_blog'
       :(pageType==='profileSetting'?'profileSetting'
       :(pageType==='postManage'?'postManage'
       :(pageType==='login'?'login': '')))))}`}>
-      
+       */}
       {pageType === 'signup' && (
-        <>
+        <section className='profile-section'>
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
           <div className="logins_profile">
@@ -239,10 +239,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
           </div>
-        </>
+        </section>
       )}
        {pageType === 'signup_for_blog' && (
-        <>
+        <section className='profile-section-myBlog'>
         <div className="profile-container">
         <img src={otherImage|| mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
         
@@ -260,10 +260,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
           {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
         </div>
-      </>
+      </section>
       )}
       {pageType === 'login' && (
-        <>
+        <section className='profile-section-login'>
           <div className="profile-container">
             <img 
               src={image || mainCharacterImg} 
@@ -293,10 +293,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             <span>|</span>
             <button onClick={goToLogout} style={{cursor:'pointer'}}>로그아웃 </button>
           </div>
-        </>
+        </section>
       )}
       {pageType === 'myBlog' && (
-        <>
+        <section className='profile-section-myBlog'>
           <div className="profile-container">
             <img 
               src={image || mainCharacterImg} 
@@ -311,8 +311,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           </div>
         
         <div className="login-buttons-container">
-          <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
-          <button className="login-button_profile" onClick={goToManagePosts}>글 관리</button>
+          <button className="login-button_profile_myblog" onClick={goToWritePost}>글 작성하기</button>
+          <button className="login-button_profile_myblog" onClick={goToManagePosts}>글 관리</button>
         </div>
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
@@ -326,10 +326,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
         
-      </>
+      </section>
       )}
       {pageType === 'postManage' && (
-        <>
+        <section className='profile-section-postManage'>
          <div className="profile-container">
           <img 
             src={image || mainCharacterImg} 
@@ -360,10 +360,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
-      </>
+      </section>
       )}
     {pageType === 'profileSetting' && (
-        <>
+        <section className='profile-section-profileSetting'>
          <div className="profile-container">
           <img 
             src={image || mainCharacterImg} 
@@ -394,10 +394,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <span>|</span>
           <button onClick={goToLogout}>로그아웃 </button>
         </div>
-      </>
+      </section>
       )}
       {pageType === 'otherBlog' && (
-        <>
+        <section className='profile-section-myBlog'>
         <div className="profile-container">
         <img src={otherImage|| mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
         
@@ -421,17 +421,17 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
           {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true} otherEmail={otherEmail}/>}
         </div>
-      </>
+      </section>
       )}
      {error && <div className="error">{error}</div>}
-     <div style={{
+     {/* <div style={{
       marginTop:'400px',
       position: 'absolute', // 절대 위치로 설정하여 부모 요소와 독립적으로 위치를 조정
       marginRight: '100px'
     }}>
      {children}
-     </div>
-    </section>
+     </div> */}
+    {/* </section> */}
      
      </>
   );

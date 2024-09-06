@@ -1,14 +1,9 @@
-.main-content {
-  display: grid;
-  grid-template-columns: 2.5fr 1fr; /* 두 개의 열 */
-  gap: 20px; /* 요소들 간의 간격 */
-  padding: 20px;
+* {
+  box-sizing: border-box;
 }
-
-section {
-  margin-bottom: 2rem;
+html, body {
+  overflow-x: hidden;
 }
-
 .MainPosts-section {
   grid-column: 2 /45;
   grid-row: 1 / 6; /* 1행부터 5행까지 차지 */
@@ -20,4 +15,107 @@ section {
 .categories{
   margin-left: 90px;
   margin-right: 50px;
+}
+
+.blog-main-container{
+  display: grid;
+  grid-template-columns:  1fr 2.3fr; /* 두 개의 열 */
+}
+.profile-section-myBlog {
+  display: flex;
+  flex-direction: column; /* 수직 방향 정렬 */
+  align-items: center; /* 수직 방향 가운데 정렬 */
+  border: 2px solid #FF88D7; /* 테두리 추가 */
+  border-radius: 8px;
+  padding: 1rem;
+  grid-column: 1 / 2;
+  grid-row: 1/ 2; 
+  margin-right: 50px;
+  margin-top: 100px;
+  margin-left:100px;
+  max-height: 700px;
+  min-width: 350px; /* 최소 너비 추가 */
+
+}
+
+.mobile-category-section{
+  display: none;
+}
+.category-section {
+  margin-left: 50px;
+  grid-column: 1 / 2; /* 첫 번째 열 */
+  grid-row: 2 / 12; /* 두 번째 행 */
+
+}
+.main-blog-posts-section{
+  grid-column: 2 / 3; /* 두 번째 열 */
+  grid-row: 1 / 3; /* 첫 번째 행에서 세 번째 행까지 차지 */
+  margin-right: 100px;
+}
+
+
+@media (max-width: 1130px) {
+  .blog-main-container{
+    display: grid;
+    grid-template-columns:  1fr ; 
+  }
+  .profile-section-myBlog {
+    display: flex;
+    flex-direction: column; /* 수직 방향 정렬 */
+    align-items: center; /* 수직 방향 가운데 정렬 */
+    border: none;
+    padding: 1rem;
+    grid-row: 10/11; 
+    grid-column: 1/2;
+    margin-right: 50px;
+    margin-top: 100px;
+    margin-left:50px;
+    max-height: 700px;
+    min-width: 300px; /* 최소 너비 추가 */
+  
+  }
+  .category-section {
+    display: none;
+  
+  }
+  .mobile-category-section{
+    display:contents;
+  }
+  .main-blog-posts-section{
+    justify-content: center;
+    grid-column: 1/2;
+    grid-row: 1 / 10; /* 첫 번째 행에서 세 번째 행까지 차지 */
+    margin-right: 0px;
+  }
+    
+}
+
+@media (max-width: 522px) {
+  .blog-main-container{
+    display: grid;
+    
+  }
+   .profile-section-myBlog {
+    display: flex;
+    flex-direction: column; /* 수직 방향 정렬 */
+    justify-content: center;
+    align-content: center;
+    align-items: center; /* 수직 방향 가운데 정렬 */
+
+    padding: 1rem;
+    grid-row: 10/11; 
+    grid-column: auto;
+    width: 100%;
+    margin:0px;
+  }
+
+  .main-blog-posts-section{
+    justify-content: center;
+    grid-column: auto;
+    align-content: center;
+    grid-row: 1 / 10; /* 첫 번째 행에서 세 번째 행까지 차지 */
+    margin-left:0px;
+    width: 100%;
+  }
+    
 }

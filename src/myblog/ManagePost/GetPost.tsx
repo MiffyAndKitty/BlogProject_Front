@@ -16,7 +16,8 @@ import ConfirmModal from '../ConfirmModal';
 import Profile from '../../main/Profile';
 import SSEComponent from '../../main/SSEComponent';
 import noPosts from '../../img/noPosts.png';
-
+import  upBtn  from '../../img/upToggle.png';
+import  downBtn  from '../../img/downToggle.png';
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -377,8 +378,10 @@ const GetPost: React.FC = () => {
                     
                     <div className="post-manage">
                       <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
-                        <button className="dropdown-getpost-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                        <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
                           {category.category_name}
+                          {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
+                        : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
                         </button>
                         {dropdownOpen && (
                           <div className="dropdown-getpost-menu">

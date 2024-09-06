@@ -67,6 +67,18 @@ button:active {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
 }
+.login-button_profile_myblog{
+  margin-top: 30px;
+  background-color: #f0a4d8;
+  color: #ffffff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
 .profile-container {
     display: flex;
     align-items: center;
@@ -91,4 +103,10 @@ button:active {
     border: 0;
     border-top: 1px solid #ccc;
     width: 100%;
+  }
+
+  @media (max-width: 1130px) {
+    .login-button_profile_myblog{
+      display: none;
+    }
   }

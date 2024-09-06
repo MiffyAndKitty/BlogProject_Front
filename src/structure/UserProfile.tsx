@@ -4,7 +4,7 @@ import { Link ,useNavigate } from 'react-router-dom';
 import './UserProfile.css';
 
 interface UserProfileProp  {
-    profileType: 'signup' |  'logout' | 'profileSetting' | 'otherblog';
+    profileType: 'signup' |  'logout' | 'profileSetting' | 'otherblog'|'myBlog';
     profileImage: string;
 }
 const UserProfile = ({ profileType ,profileImage}) => {
@@ -80,6 +80,22 @@ const UserProfile = ({ profileType ,profileImage}) => {
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
+ 
+                     </div>
+       )}
+       </div>
+      
+    )}
+
+  {profileType==='myBlog' &&(
+       <div ref={dropdownRef}>
+       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       {dropdownOpen && (
+                     <div className="dropdown-menu-profile" >
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost/${nickname}`)}>글 관리</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
  

@@ -34,8 +34,8 @@ select:focus {
 .loginForm {
   width: 100%;
   background-color: white;
-  max-width: 320px; /* 폼의 최대 너비 설정 */
-  min-width: 320px;
+  max-width:400px; /* 폼의 최대 너비 설정 */
+  min-width: 400px;
   padding: 2rem; /* 내부 여백 설정 */
   border-radius: 8px; /* 모서리를 둥글게 (선택 사항) */
   border: 2px solid #FF88D7; /* 테두리 추가 */
@@ -59,7 +59,7 @@ select:focus {
   background-color: #FFF7FD;
   color: #000;
   border: none;
-  width: 50%;
+  width: 80%;
   border-radius: 30px;
   padding: 10px 60px;
   margin-bottom: 10px;

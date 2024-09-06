@@ -9,7 +9,7 @@ import no_notification from '../img/no_notification.png';
 import has_notification from '../img/has_notification.png';
 import Notification from '../main/Notification';
 interface ProfileProps {
-  pageType: 'profileSetting'|'signup'|'logout' | 'otherblog';
+  pageType: 'profileSetting'|'signup'|'logout' | 'otherblog'| 'myBlog';
 }
 const Header: React.FC<ProfileProps> = ({pageType}) => {
   const notificationButtonRef = useRef<HTMLDivElement>(null); // 알림 버튼 참조
@@ -89,20 +89,7 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
         </div>
       </>
       )}
-      {/* {pageType === 'signup' &&(
-        <>
-        <div className="header__logo">
-          <Link to="/">
-            <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
-          </Link>
-        </div>
 
-        <div className="header__auth">
-        
-          <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
-        </div>
-      </>
-      )} */}
       {token &&pageType === 'logout' &&(
         <>
           <div className="header__logo">
@@ -171,6 +158,30 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
           </div>
           {profileImage && <UserProfile profileType={'otherblog'} profileImage={profileImage}></UserProfile>}
+          </div>
+        </>
+       
+      )}
+
+      {token &&pageType === 'myBlog' &&(
+        <>
+          <div className="header__logo">
+          <Link to={`/dashboard/${nickname}`}>
+              <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
+            </Link>
+          </div>
+
+          <div className="header__auth">
+          <div 
+          ref={notificationButtonRef}
+          onClick={()=>setOpenNotification(true)}>
+
+            {openNotification && notificationButtonRef.current && (
+              <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
+            )}
+            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+          </div>
+          {profileImage && <UserProfile profileType={'myBlog'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
        

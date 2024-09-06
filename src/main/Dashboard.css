@@ -39,11 +39,26 @@
     max-height: 700px;
     margin-right: 100px;
     margin-top: 15px;
-   
     min-width: 300px; /* 최소 너비 추가 */
   
   }
-  .profile-section.profileSetting {
+  .profile-section-login{
+    display: flex;
+    flex-direction: column; /* 수직 방향 정렬 */
+    align-items: center; /* 수직 방향 가운데 정렬 */
+    border: 2px solid #FF88D7; /* 테두리 추가 */
+    padding-top: 1rem;
+    border-radius: 8px;
+    grid-column: 2 / 3;
+    grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
+    height: 300px; /* 고정 높이 설정 */
+    max-height: 700px;
+    margin-right: 100px;
+    margin-top: 15px;
+    min-width: 300px; /* 최소 너비 추가 */
+  
+  }
+  .profile-section-profileSetting {
     display: flex;
     flex-direction: column; /* 수직 방향 정렬 */
     align-items: center; /* 수직 방향 가운데 정렬 */
@@ -59,60 +74,12 @@
     margin-left:70px;
     min-width: 300px; /* 최소 너비 추가 */
   
-  }
-  .profile-section.myBlog {
-    display: flex;
-    flex-direction: column; /* 수직 방향 정렬 */
-    align-items: center; /* 수직 방향 가운데 정렬 */
-    border: 2px solid #FF88D7; /* 테두리 추가 */
-    padding: 1rem;
-    border-radius: 8px;
-    grid-column: 2 / 3;
-    grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-    height: 300px; /* 고정 높이 설정 */
-    max-height: 700px;
-    margin-right: 100px;
-    margin-top: 100px;
-    margin-left:70px;
-    min-width: 300px; /* 최소 너비 추가 */
-  
-  }
- 
-  .profile-section.otherBlog {
-    display: flex;
-    flex-direction: column; /* 수직 방향 정렬 */
-    align-items: center; /* 수직 방향 가운데 정렬 */
-    border: 2px solid #FF88D7; /* 테두리 추가 */
-    padding: 1rem;
-    border-radius: 8px;
-    grid-column: 2 / 3;
-    grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-    height: 300px; /* 고정 높이 설정 */
-    max-height: 700px;
-    margin-right: 100px;
-    margin-top: 100px;
-    margin-left:70px;
-    min-width: 300px; /* 최소 너비 추가 */
   }
 
-  .profile-section.signup_for_blog {
-    display: flex;
-    flex-direction: column; /* 수직 방향 정렬 */
-    align-items: center; /* 수직 방향 가운데 정렬 */
-    border: 2px solid #FF88D7; /* 테두리 추가 */
-    padding: 1rem;
-    border-radius: 8px;
-    grid-column: 2 / 3;
-    grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-    height: 300px; /* 고정 높이 설정 */
-    max-height: 700px;
-    margin-right: 100px;
-    margin-top: 100px;
-    margin-left:70px;
-    min-width: 300px; /* 최소 너비 추가 */
-  }
 
-  .profile-section.postManage {
+
+
+  .profile-section-postManage {
     display: flex;
     flex-direction: column; /* 수직 방향 정렬 */
     align-items: center; /* 수직 방향 가운데 정렬 */
@@ -177,92 +144,25 @@
       min-width: 300px; /* 최소 너비 추가 */
     
     }
-    
-    .profile-section.profileSetting {
+    .profile-section-login {
+      margin-left:10%;
       display: flex;
       flex-direction: column; /* 수직 방향 정렬 */
+      justify-content: center;
       align-items: center; /* 수직 방향 가운데 정렬 */
       border: 2px solid #FF88D7; /* 테두리 추가 */
-      padding: 1rem;
+      padding-top: 1rem;
       border-radius: 8px;
       grid-row: 1/ 2; /* 1행부터 5행까지 차지 */
       grid-column: auto;
       height: 300px; /* 고정 높이 설정 */
       max-height: 700px;
-      margin-right: 100px;
-      margin-top: 100px;
-      margin-left:70px;
+      margin-right:200px;
+      margin-top: 15px;
+      width: 80%; /* 섹션을 가로 전체 차지하게 변경 */
       min-width: 300px; /* 최소 너비 추가 */
     
     }
-    .profile-section.myBlog {
-      display: flex;
-      flex-direction: column; /* 수직 방향 정렬 */
-      align-items: center; /* 수직 방향 가운데 정렬 */
-      border: 2px solid #FF88D7; /* 테두리 추가 */
-      padding: 1rem;
-      border-radius: 8px;
-      grid-column: auto;
-      grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-      height: 300px; /* 고정 높이 설정 */
-      max-height: 700px;
-      margin-right: 100px;
-      margin-top: 100px;
-      margin-left:70px;
-      min-width: 300px; /* 최소 너비 추가 */
-    
-    }
-   
-    .profile-section.otherBlog {
-      display: flex;
-      flex-direction: column; /* 수직 방향 정렬 */
-      align-items: center; /* 수직 방향 가운데 정렬 */
-      border: 2px solid #FF88D7; /* 테두리 추가 */
-      padding: 1rem;
-      border-radius: 8px;
-      grid-column: auto;
-      grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-      height: 300px; /* 고정 높이 설정 */
-      max-height: 700px;
-      margin-right: 100px;
-      margin-top: 100px;
-      margin-left:70px;
-      min-width: 300px; /* 최소 너비 추가 */
-    }
-  
-    .profile-section.signup_for_blog {
-      display: flex;
-      flex-direction: column; /* 수직 방향 정렬 */
-      align-items: center; /* 수직 방향 가운데 정렬 */
-      border: 2px solid #FF88D7; /* 테두리 추가 */
-      padding: 1rem;
-      border-radius: 8px;
-      grid-column: auto;
-      grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-      height: 300px; /* 고정 높이 설정 */
-      max-height: 700px;
-      margin-right: 100px;
-      margin-top: 100px;
-      margin-left:70px;
-      min-width: 300px; /* 최소 너비 추가 */
-    }
-  
-    .profile-section.postManage {
-      display: flex;
-      flex-direction: column; /* 수직 방향 정렬 */
-      align-items: center; /* 수직 방향 가운데 정렬 */
-      border: 2px solid #FF88D7; /* 테두리 추가 */
-      padding: 1rem;
-      border-radius: 8px;
-      grid-column: auto;
-      grid-row: 3/ 4; /* 1행부터 5행까지 차지 */
-      height: 300px; /* 고정 높이 설정 */
-      max-height: 700px;
-      margin-right: 100px;
-      margin-top: 100px;
-      margin-left:70px;
-      min-width: 300px; /* 최소 너비 추가 */
-    }   
      .popularpost-section {
       display: flex;
       flex-direction: column; /* 수직 방향 정렬 */
@@ -281,18 +181,18 @@
       margin-left:50px;
       padding: 1rem;
       border-radius: 8px;
-      grid-row: 6/ 7;
+      grid-row: 7/ 8;
       grid-column: auto;
       height: 300px; /* 고정 높이 설정 */
     }
     
     .populartags-section {
-
+      
       padding: 1rem;
       grid-column: auto;
       border-radius: 8px;
       margin-left:10%;
-      grid-row: 8 / 9; /* 5행부터 6행까지 차지 */
+      grid-row: 11 / 12; /* 5행부터 6행까지 차지 */
       height: 100px; /* 고정 높이 설정 */
     }
     
@@ -302,7 +202,7 @@
       border-radius: 8px;
       margin-left:10%;
       grid-column: auto;
-      grid-row: 9 / 10; /* 6행부터 7행까지 차지 */
+      grid-row:12 / 13; /* 6행부터 7행까지 차지 */
       height: 100px; /* 고정 높이 설정 */
     }
     
@@ -312,7 +212,7 @@
       border-radius: 8px;
       margin-left:10%;
       grid-column: auto;
-      grid-row: 10 / 11; /* 7행부터 8행까지 차지 */
+      grid-row: 13 / 14; /* 7행부터 8행까지 차지 */
       height: 100px; /* 고정 높이 설정 */
     }
   }
@@ -335,7 +235,7 @@
     margin-left:50px;
     padding: 1rem;
     border-radius: 8px;
-    grid-row: 6/ 7;
+    grid-row: 7/ 8;
     grid-column: auto;
     height: 300px; /* 고정 높이 설정 */
   }
@@ -349,7 +249,7 @@
     grid-column: auto;
     border-radius: 8px;
     margin-left:10%;
-    grid-row: 7 / 8; /* 5행부터 6행까지 차지 */
+    grid-row: 10 / 11; /* 5행부터 6행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
   
@@ -361,7 +261,7 @@
     border-radius: 8px;
     margin-left:10%;
     grid-column: auto;
-    grid-row: 8 / 9; /* 6행부터 7행까지 차지 */
+    grid-row: 11 / 12; /* 6행부터 7행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
   
@@ -373,7 +273,7 @@
     border-radius: 8px;
     margin-left:10%;
     grid-column: auto;
-    grid-row: 9 / 10; /* 7행부터 8행까지 차지 */
+    grid-row: 12 / 13; /* 7행부터 8행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
 }
@@ -400,7 +300,7 @@
       min-width: 100%;
       width: 100%;
   }
-  .profile-section.login {
+  .profile-section-login {
 
     display: flex;
     flex-direction: column; /* 수직 방향 정렬 */
@@ -434,7 +334,7 @@
     flex-direction: column; /* 수직 방향 정렬 */
     margin-left: -0px;
     border-radius: 8px;
-    grid-row: 7/ 8;
+    grid-row: 8/ 9;
     grid-column: auto;
     height: 300px; /* 고정 높이 설정 */
   }
@@ -447,7 +347,7 @@
     grid-column: auto;
     border-radius: 8px;
     margin-left: -0px;
-    grid-row: 9/ 10; /* 5행부터 6행까지 차지 */
+    grid-row: 10/ 11; /* 5행부터 6행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
   
@@ -459,7 +359,7 @@
     border-radius: 8px;
     margin-left: -0px;
     grid-column: auto;
-    grid-row: 10 / 11; /* 6행부터 7행까지 차지 */
+    grid-row: 12 / 13; /* 6행부터 7행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
   
@@ -471,7 +371,7 @@
     border-radius: 8px;
     margin-left: -0px;
     grid-column: auto;
-    grid-row: 11 / 12; /* 7행부터 8행까지 차지 */
+    grid-row: 13 /14; /* 7행부터 8행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
 }

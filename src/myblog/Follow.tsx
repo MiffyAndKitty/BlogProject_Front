@@ -201,8 +201,9 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                 <span className="modal-close2" onClick={onClose}>&times;</span>
                 <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                     <h2 style={{ color: "#FF88D7" }}>{nickname}의 팔로우</h2>
-                    {!isOthers && !manage && (<button style={{height:'30px',backgroundColor: '#ff4da6',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}} onClick={()=>{setManage(true)}}>관리하기</button>)}
-                    {!isOthers && manage && (<button style={{height:'30px',backgroundColor: 'grey',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}}   onClick={()=>{setManage(false)}}>관리 끝내기</button>)}
+            
+                    {followers.length > 0 &&!isOthers && !manage && (<button style={{height:'30px',backgroundColor: '#ff4da6',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}} onClick={()=>{setManage(true)}}>관리하기</button>)}
+                    {followers.length > 0 &&!isOthers && manage && (<button style={{height:'30px',backgroundColor: 'grey',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}}   onClick={()=>{setManage(false)}}>관리 끝내기</button>)}
                 </div>
                 
 

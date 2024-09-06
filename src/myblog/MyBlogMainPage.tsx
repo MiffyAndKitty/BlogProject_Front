@@ -115,13 +115,18 @@ const MyBlogMainPage: React.FC = () => {
 
   return (
     <div className="App">
+
       {loading ? (
         <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
       ) : (
         <>
-          {(localNickName === nickname) && <Header pageType="logout" />}
+          {(localNickName === nickname) && <Header pageType="myBlog" />}
           {(localNickName !== nickname) && <Header pageType="otherblog" />}
-          <main className="main-container">
+
+          <main className="">
+            <div className="blog-main-container">
+
+           
             {/* Profile */}
             {(!token && (
               <Profile 
@@ -132,23 +137,11 @@ const MyBlogMainPage: React.FC = () => {
                 areYouFollowing={areYouFollowing} 
                 otherEmail = {otherEmail}
               >
-                {/* Category List for Profile Page */}
-                <div className='categories'>
-                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
-                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-                </div>
               </Profile>
             ))}
           
             {(token && localNickName === nickname && (
               <Profile pageType="myBlog" nicknameParam={localNickName}>
-                {/* Category List for Profile Page */}
-                <div className='categories'>
-                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
-                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-                </div>
               </Profile>
             ))}
           
@@ -159,32 +152,38 @@ const MyBlogMainPage: React.FC = () => {
                 userMessage={otherMessage} 
                 areYouFollowing={areYouFollowing}
                 otherEmail = {otherEmail}>
-                  
-                {/* Category List for Profile Page */}
-                <div className='categories'>
-                  <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-                  <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px'}}>미분류{'  ('+ noCategories+')'}</div>
-                  <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-                </div>
               </Profile>
             ))}
             
             {profileLoading && <div>프로필 로딩 중...</div>}
-          
+
+            {/* category */}
+            <section className='category-section'>
+            <div className='categories'>
+              <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
+              <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+            </div>
+            </section>
+
             {/* Main Posts or Post Detail */}
-            <div className="container">
+            <section className='main-blog-posts-section'>
               {postID ? (
                 <PostDetail />
               ) : (
+
                 <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
               )}
               <SSEComponent></SSEComponent>
+            </section>
             </div>
           </main>
 
-          <Footer />
+         
         </>
       )}
+
+  <Footer />
     </div>
   );
 };

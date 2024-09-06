@@ -29,9 +29,13 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const [searchTerm, setSearchTerm] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownCategoryRef = useRef<HTMLDivElement>(null);
+  const [dropdownCategoryOpen, setDropdownCategoryOpen] = useState(false);
+  const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
   const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
   const [sortName, setSortName] = useState('최신순'); // 정렬 이름 상태 추가
   const [sortedPosts, setSortedPosts] = useState(posts); // 정렬된 포스트 상태 추가
+  const [totalPosts, setTotalPosts] = useState(0);
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
@@ -102,7 +106,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     
       const strHours = hourInt.toString().padStart(2, '0');
     
-      return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
+      return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}`;
     }
   };
 
@@ -144,9 +148,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const removeUnwantedTags = (html: string): string => {
     // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
     const cleanHtml = DOMPurify.sanitize(html, { 
-      USE_PROFILES: { html: true },
-      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'img'], // 허용할 태그들 (img 포함)
-      ALLOWED_ATTR: ['src', 'alt', 'title', 'width', 'height'], // 허용할 속성들
+      ALLOWED_TAGS: ['img'], // 허용할 태그들 (img만 포함)
+      ALLOWED_ATTR: ['src', 'alt', 'width', 'height'], // 허용할 속성들
     });
     return cleanHtml;
   };
@@ -155,7 +158,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const handleSearch = (term: string) => {
     setSearchTerm(term);
     setCurrentPage(1);
-    fetchPosts(undefined,null, term);
+    fetchPosts(undefined,categoryID, term);
   };
 
   const extractFirstImage = (htmlContent: string): string | null => {
@@ -185,6 +188,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       setPosts(postsWithCleanContent);
   
       setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
+      setTotalPosts(fetchedPosts.data.total.totalCount || 0);
   
       if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
@@ -198,8 +202,6 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       setLoading(false);
     }
   };
-  
-
   const goToDetailPost = (postID: string)=>{
     navigate(`/${nicknameParam}/${postID}`, { state: { postID } });
   }
@@ -225,17 +227,23 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     setCurrentPage(1);
     setSearchTerm('');
     setCursor('');
+    setCategory({category_name:'카테고리 설정', category_id:""});
     fetchPosts(undefined,  categoryID,searchTerm);
   },[categoryID]);
 
   useEffect(() => {
-    fetchPosts(cursor,categoryID,searchTerm,sortOption);
+    if(category.category_id) fetchPosts(cursor,category.category_id,searchTerm,sortOption);
+    else fetchPosts(cursor,categoryID,searchTerm,sortOption);
+
   }, [currentPage]);
   useEffect(()=>{
     setSearchTerm('');
     setCurrentPage(1);
     setCursor('');
-    fetchPosts(undefined,categoryID,undefined,sortOption);
+    
+    if(category.category_id) fetchPosts(undefined,category.category_id,undefined,sortOption);
+    else fetchPosts(undefined,categoryID,undefined,sortOption);
+
   },[sortOption])
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
@@ -243,10 +251,61 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
 
+  const fetchAll=()=>{
+    fetchPosts();
+  };
+
+  const renderCategoryMenu = (categories: TYPES.categories[], level: number = 0) => {
+    return (
+      <>
+        {level === 0 && (
+          <div key="none-category" style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect({ category_name: '선택 없음', category_id: '' })}>
+              선택 없음
+            </button>
+          </div>
+        )}
+        {categories.map((categoryItem) => (
+          <div key={categoryItem.category_id} style={{ paddingLeft: `${level * 20}px` }}>
+            <button className="dropdown-item" onClick={() => handleCategorySelect(categoryItem)}>
+              {level !== 0 && (`- ` + categoryItem.category_name)}
+              {level === 0 && (categoryItem.category_name)}
+            </button>
+            {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+          </div>
+        ))}
+      </>
+    );
+  };
+
+  const handleCategorySelect = (categoryItem: TYPES.category) => {
+    setCategory(categoryItem);
+    setDropdownCategoryOpen(false); // 드롭다운을 닫음
+  };
+  useEffect(() => {
+
+    setCurrentPage(1);
+    console.log(`
+      
+      
+      
+      카테고리가 변경되면서 글 다시 불러오기
+      
+      
+      
+      ${cursor} ${category.category_id}`)
+      setCurrentPage(1);
+      setSearchTerm('');
+      setCursor('');
+
+      fetchPosts(undefined,category.category_id,searchTerm,sortOption);
+  }, [category]);
   return (
     <>
       
               <h1>{nicknameParam}의 블로그</h1>
+              <hr className="notification-divider" />
+
               {loading ? (
                 <div className="no-posts-message">
                   <div className="no-posts-container">
@@ -262,22 +321,48 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 </div>
               ) : (
                 <>
+                <div className="search-and-sort-container">
+                  <SearchBar onSearch={handleSearch} />
+                  </div>
+
                   <div className="search-and-sort-container">
-                    <SearchBar onSearch={handleSearch} />
-                    <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
-                      <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
-                        {sortName} {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
-                      </button>
-                      {dropdownOpen && (
-                        <div className="dropdown-menu">
-                          <button className="dropdown-item" onClick={() => handleSortChange('', '최신순')}>최신순</button>
-                          <button className="dropdown-item" onClick={() => handleSortChange('like', '인기순(당근수)')}>인기순(당근수)</button>
-                          <button className="dropdown-item" onClick={() => handleSortChange('view', '조회순')}>조회순</button>
+                    <h3 onClick={fetchAll}  style={{cursor:'pointer'}}>
+                    전체 글<span style={{ marginLeft: '10px', color: '#FF88D7', cursor:'pointer' }}>{totalPosts}</span>
+                  </h3>
+
+                  <div className='category-and-sort'>
+
+                      <section className='mobile-category-section'>
+                        <div className="dropdown-getpost" ref={dropdownCategoryRef} >
+                            <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownCategoryOpen(!dropdownCategoryOpen)}>
+                              {category.category_name}
+                              {dropdownCategoryOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
+                            : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
+                            </button>
+                            {dropdownCategoryOpen && (
+                              <div className="dropdown-getpost-menu">
+                                {renderCategoryMenu(categories)}
+                              </div>
+                            )}
                         </div>
-                      )}
+                      </section>
+                      <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
+                        <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                          {sortName} 
+                          {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
+                          : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
+                        </button>
+                        {dropdownOpen && (
+                          <div className="dropdown-menu">
+                            <button className="dropdown-item" onClick={() => handleSortChange('', '최신순')}>최신순</button>
+                            <button className="dropdown-item" onClick={() => handleSortChange('like', '인기순(당근수)')}>인기순(당근수)</button>
+                            <button className="dropdown-item" onClick={() => handleSortChange('view', '조회순')}>조회순</button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                  
+                 
                   <div style={{ marginTop: '15px' }} className="post-main-main-list">
                     {posts.map(post => {
                       const firstImage = extractFirstImage(post.board_content);
@@ -285,18 +370,19 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                       return (
                         <div className="post-main-card" key={post.board_id}>
                           <div className="post-main-header">
+
                             <div className="title-container">
                               <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                              <span className="user-nickname">{post.user_nickname}</span>
+                              <span className="post-user-nickname">{post.user_nickname}</span>
                             </div>
                             
                             <div className="post-main-meta">
                               <span className="post-main-category">{findCategoryById(categories, post.category_id)}</span>
                               <span className="post-main-date">{formatDate(post.created_at)}</span>
                               <span className="post-main-stats">
-                                <span className="user-nickname">조회수: {post.board_view}</span>
-                                <span className="user-nickname"><img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> : {post.board_like}</span>
-                                <span className="user-nickname">댓글: {post.board_comment}</span>
+                                <span className="post-user-nickname">조회수: {post.board_view}</span>
+                                <span className="post-user-nickname"><img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> : {post.board_like}</span>
+                                <span className="post-user-nickname">댓글: {post.board_comment}</span>
                               </span>
                             </div>
                           </div>
@@ -305,7 +391,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                             {firstImage ? (
                               <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
                             ) : (
-                              <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }}></div>
+                              <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
                             )}
                           </div>
                         </div>
