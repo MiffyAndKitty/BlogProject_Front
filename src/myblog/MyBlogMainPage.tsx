@@ -123,60 +123,118 @@ const MyBlogMainPage: React.FC = () => {
           {(localNickName === nickname) && <Header pageType="myBlog" />}
           {(localNickName !== nickname) && <Header pageType="otherblog" />}
 
-          <main className="">
-            <div className="blog-main-container">
+          <main>
+            
 
            
-            {/* Profile */}
-            {(!token && (
-              <Profile 
-                pageType="signup_for_blog" 
-                nicknameParam={nickname} 
-                userImg={otherImage} 
-                userMessage={otherMessage} 
-                areYouFollowing={areYouFollowing} 
-                otherEmail = {otherEmail}
-              >
-              </Profile>
-            ))}
-          
-            {(token && localNickName === nickname && (
-              <Profile pageType="myBlog" nicknameParam={localNickName}>
-              </Profile>
-            ))}
-          
-            {(token && localNickName !== nickname && !profileLoading && (
-              <Profile pageType="otherBlog" 
-                nicknameParam={nickname}
-                userImg={otherImage}
-                userMessage={otherMessage} 
-                areYouFollowing={areYouFollowing}
-                otherEmail = {otherEmail}>
-              </Profile>
-            ))}
             
-            {profileLoading && <div>프로필 로딩 중...</div>}
-
-            {/* category */}
-            <section className='category-section'>
-            <div className='categories'>
-              <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-              <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
-              <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-            </div>
-            </section>
-
             {/* Main Posts or Post Detail */}
-            <section className='main-blog-posts-section'>
-              {postID ? (
-                <PostDetail />
-              ) : (
+            
+              {postID ? ( //Post Detail
+                <>
+                <div className="blog-main-detail-container">
+                  {/* Profile */}
+                  {(!token && (
+                    <Profile 
+                      pageType="signup_for_blog" 
+                      nicknameParam={nickname} 
+                      userImg={otherImage} 
+                      userMessage={otherMessage} 
+                      areYouFollowing={areYouFollowing} 
+                      otherEmail = {otherEmail}
+                      isDetailPost = {true}
+                    >
+                    </Profile>
+                  ))}
 
-                <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
+                  {(token && localNickName === nickname && (
+                    <Profile 
+                    pageType="myBlog" 
+                    nicknameParam={localNickName}  
+                    isDetailPost = {true}>
+                    </Profile>
+                  ))}
+
+                  {(token && localNickName !== nickname && !profileLoading && (
+                    <Profile pageType="otherBlog" 
+                      nicknameParam={nickname}
+                      userImg={otherImage}
+                      userMessage={otherMessage} 
+                      areYouFollowing={areYouFollowing}
+                      otherEmail = {otherEmail}
+                      isDetailPost = {true}
+                      >
+                    </Profile>
+                  ))}
+
+                  {profileLoading && <div>프로필 로딩 중...</div>}
+                
+                  {/* category */}
+                  <section className='detailPost-category-section'>
+                  <div className='categories'>
+                    <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                    <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
+                    <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                  </div>
+                  </section>
+
+                  <section className='main-blog-detail-posts-section'>
+                  <PostDetail />
+                  </section>
+                  </div>
+                </>
+              ) : (//Main Post
+                <>
+                <div className="blog-main-container">
+                  {/* Profile */}
+                  {(!token && (
+                    <Profile 
+                      pageType="signup_for_blog" 
+                      nicknameParam={nickname} 
+                      userImg={otherImage} 
+                      userMessage={otherMessage} 
+                      areYouFollowing={areYouFollowing} 
+                      otherEmail = {otherEmail}
+                    >
+                    </Profile>
+                  ))}
+
+                  {(token && localNickName === nickname && (
+                    <Profile pageType="myBlog" nicknameParam={localNickName}>
+                    </Profile>
+                  ))}
+
+                  {(token && localNickName !== nickname && !profileLoading && (
+                    <Profile pageType="otherBlog" 
+                      nicknameParam={nickname}
+                      userImg={otherImage}
+                      userMessage={otherMessage} 
+                      areYouFollowing={areYouFollowing}
+                      otherEmail = {otherEmail}>
+                    </Profile>
+                  ))}
+
+                  {profileLoading && <div>프로필 로딩 중...</div>}
+                
+                  {/* category */}
+                  <section className='category-section'>
+                  <div className='categories'>
+                    <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                    <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
+                    <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                  </div>
+                  </section>
+
+                  <section className='main-blog-posts-section'>
+                    <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
+                  </section>
+                  </div>
+                </>
+               
               )}
               <SSEComponent></SSEComponent>
-            </section>
-            </div>
+            
+          
           </main>
 
          

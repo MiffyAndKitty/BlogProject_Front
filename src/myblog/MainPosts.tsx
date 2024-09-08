@@ -303,25 +303,9 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   return (
     <>
       
-              <h1>{nicknameParam}의 블로그</h1>
+              <h1 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h1>
               <hr className="notification-divider" />
-
-              {loading ? (
-                <div className="no-posts-message">
-                  <div className="no-posts-container">
-                    <p>로딩중...</p>
-                  </div>
-                </div>
-              ) : posts.length === 0 ? (
-                <div className="no-posts-message">
-                  <div className="no-posts-container">
-                    <img src={noPosts} alt="No posts" className="no-posts-icon" />
-                    <p>게시물이 없습니다.</p>
-                  </div>
-                </div>
-              ) : (
-                <>
-                <div className="search-and-sort-container">
+              <div className="search-and-sort-container">
                   <SearchBar onSearch={handleSearch} />
                   </div>
 
@@ -346,6 +330,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                             )}
                         </div>
                       </section>
+
                       <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
                         <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
                           {sortName} 
@@ -360,8 +345,25 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                           </div>
                         )}
                       </div>
+                      
                     </div>
                   </div>
+              {loading ? (
+                <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <p>로딩중...</p>
+                  </div>
+                </div>
+              ) : posts.length === 0 ? (
+                <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                    <p>게시물이 없습니다.</p>
+                  </div>
+                </div>
+              ) : (
+                <>
+               
                  
                   <div style={{ marginTop: '15px' }} className="post-main-main-list">
                     {posts.map(post => {
@@ -385,9 +387,11 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                                 <span className="post-user-nickname">댓글: {post.board_comment}</span>
                               </span>
                             </div>
+
                           </div>
                           
                           <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>
+                            
                             {firstImage ? (
                               <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
                             ) : (

@@ -37,11 +37,11 @@ interface ProfileProps {
   userMessage?: string,
   areYouFollowing?:boolean,
   nicknameParam?:string | null,
-  children?: React.ReactNode; // children 속성 추가
+  isDetailPost?:boolean
 
 }
 
-const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,userImg, userMessage, areYouFollowing,children }) => {
+const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,userImg, userMessage, areYouFollowing,isDetailPost }) => {
 
   const navigate = useNavigate();
   const [user, setUser] = useState<string>("");
@@ -242,7 +242,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         </section>
       )}
        {pageType === 'signup_for_blog' && (
-        <section className='profile-section-myBlog'>
+        <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
         <div className="profile-container">
         <img src={otherImage|| mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
         
@@ -296,7 +296,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         </section>
       )}
       {pageType === 'myBlog' && (
-        <section className='profile-section-myBlog'>
+        <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
           <div className="profile-container">
             <img 
               src={image || mainCharacterImg} 
@@ -329,7 +329,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       </section>
       )}
       {pageType === 'postManage' && (
-        <section className='profile-section-postManage'>
+        <section className='profile-section-myBlog'>
          <div className="profile-container">
           <img 
             src={image || mainCharacterImg} 
@@ -397,7 +397,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       </section>
       )}
       {pageType === 'otherBlog' && (
-        <section className='profile-section-myBlog'>
+        <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
         <div className="profile-container">
         <img src={otherImage|| mainCharacterImg} alt="Main Character" className="mainCharacter_profile_login" />
         

@@ -1,20 +1,24 @@
 /* src/myblog/ManagePost/PostDetail.css */
 .postdetail-detail {
     padding: 20px;
-    max-width: 1000px;
-    min-width: 1000px;
-    width: 1000px;
+    width: 100%;
+    height: auto;
     margin: 0 auto;
     background-color: #fff;
     border: 2px solid #ff88d769; /* 테두리 추가 */
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
   }
   
   .postdetail-detail h1 {
     font-size: 2em;
     margin-bottom: 20px;
     color: #333;
+    overflow: hidden; /* 태그 내용이 넘치면 잘림 방지 */
+    box-sizing: border-box;
+    flex-wrap: wrap;
+    text-overflow: ellipsis; /* 넘치는 텍스트는 말줄임표 처리 */
   }
   .button-group {
     display: flex;
@@ -23,12 +27,13 @@
   }
 
   .postdetail-meta {
-    max-width: 1000px;
+    /* max-width: 1000px; */
     margin-top: 50px;
     font-size: 0.9em;
     color: #666;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
   
   .postdetail-meta span {
@@ -44,6 +49,10 @@
     margin-top: 20px;
     line-height: 1.6;
     color: #333;
+    flex-wrap: wrap;
+    white-space: wrap; 
+    width: 100%; 
+    box-sizing: border-box; 
   }
   .like-button {
     margin-top: 20px;
@@ -53,17 +62,32 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 5px 10px;
     cursor: pointer;
+    width: 60px;
+    height: 30px;
+    min-width: 60px; /* 최소 크기 설정 */
+    min-height: 30px; /* 최소 크기 설정 */
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    margin-right: 5px;
   }
-
+.reply-edit-delete-mobile{
+  display: none;
+}
+.reply-edit-delete{
+  display: flex;
+}
   .like-button2 {
     margin-top: 20px;
     background-color: transparent;
     border: 2px solid #ff88d769;
     border-radius: 10px;
+    width: 60px;
+    height: 30px;
+    min-width: 60px; /* 최소 크기 설정 */
+    min-height: 30px; /* 최소 크기 설정 */
+    margin-right: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     padding: 5px 10px;
     cursor: pointer;
@@ -99,28 +123,38 @@
     margin-right: 5px;
     font-size: 14px;
   }
-.titleSort{
-  display: flex;
-  align-items: center;
-}
-.toggle-sort-comment{
-  margin-left: 10px;
-  color: #FFC7E9;
-  font-weight: bold;
-  cursor: pointer;
-}
 
-.toggle-sort-comment.click{
-  margin-left: 10px;
-  color: #FF88D7;
-  font-weight: bold;
-}
+
 
   .comment-section {
     margin-top: 40px;
     padding: 20px;
     border-top: 1px solid #FF88D7;
     background-color: #fdedf543;
+    width: 100%;
+  }
+  .reply-section{
+    width: 100%;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+  .titleSort{
+    display: flex;
+    align-items: center;
+  }
+  .toggle-sort-comment{
+    margin-left: 10px;
+    color: #FFC7E9;
+    background-color: transparent;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .toggle-sort-comment.click{
+    margin-left: 10px;
+    background-color: transparent;
+    color: #FF88D7;
+    font-weight: bold;
   }
   .reply-list{
     width: 100%;
@@ -133,24 +167,24 @@
   .comment-profile {
     display: flex;
     flex-direction: row;
-    justify-content: center;
-    width: 100%; /* 항상 전체 너비를 차지하도록 설정 */
+    justify-content: flex-start;
+    width: 100%; 
 }
   
   .textarea-container {
     position: relative;
-    width: 90%; /* 너비를 100%로 고정 */
+    width: 90%; 
     margin-left: 10px;
-    min-width: 870px; /* 최소 너비 설정 */
-    min-height: 100px; /* 최소 높이 설정 */
+    /* min-width: 870px; 
+    min-height: 100px; */
 }
   
 .textarea-container2 {
   position: relative;
   width: 80%; /* 너비를 100%로 고정 */
   margin-left: 10px;
-  min-width: 400px; /* 최소 너비 설정 */
-  min-height: 100px; /* 최소 높이 설정 */
+  /* min-width: 400px; 
+  min-height: 100px; */
 }
 
 .comment-input {
@@ -194,7 +228,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 150px; /* 댓글 리스트의 최소 높이 설정 */
+    width: 100%;
+    /* min-height: 150px;  */
 }
   
   .comment-list .comment-item {
@@ -226,16 +261,6 @@
     justify-content: flex-start;
     width: 100%; /* 헤더도 너비를 100%로 설정 */
   }
-  .comment-header button.like-button {
-    width: 60px;  /* 버튼의 넓이 설정 */
-    height: 30px; /* 버튼의 높이 설정 */
-    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
-  }
-  .comment-header button.like-button2 {
-    width: 60px;  /* 버튼의 넓이 설정 */
-    height: 30px; /* 버튼의 높이 설정 */
-    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
-  }
 
   .comment-header2{
  
@@ -244,18 +269,12 @@
     justify-content: flex-start;
     width: 90%; /* 헤더도 너비를 100%로 설정 */
   }
-  .comment-header2 button.like-button {
-    width: 60px;  /* 버튼의 넓이 설정 */
-    height: 30px; /* 버튼의 높이 설정 */
-    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
-  }
-  .comment-header2 button.like-button2 {
-    width: 60px;  /* 버튼의 넓이 설정 */
-    height: 30px; /* 버튼의 높이 설정 */
-    margin-left: 10px; /* 댓글 내용과 버튼 사이의 간격을 추가 */
-    flex-direction: row; /* 버튼 내의 내용이 가로로 배치되도록 설정 */
-    white-space: nowrap; /* 텍스트 줄바꿈을 방지 */
-  }
+.spaceBar{
+  width:15px;
+  height: 15px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
   .comment-item-author {
     font-weight: bold;
     margin-right: 10px;
@@ -270,18 +289,21 @@
   }
 
   .comment-content {
-    margin-top: 15px;
-    margin-bottom: 15px;
-    font-size: 15px;
+    margin-top: 5px;
     background-color: transparent;
     color: #4d4d4d;
     white-space: pre-wrap; /* 줄바꿈을 유지하면서 내용이 자동으로 다음 줄로 넘어가도록 */
     overflow-wrap: break-word; /* 긴 단어가 있을 때 자동으로 줄바꿈 */
     word-break: break-word; /* 긴 단어가 박스 밖으로 넘치지 않도록 강제로 줄바꿈 */
-    max-height: 500px; /* 최대 높이를 500px로 제한 */
-    max-width: 700px;
-    width: 700px;
+    /* max-height: 500px; 
+    width: 700px; */
     overflow-y: auto; /* 내용이 너무 길 경우 스크롤 가능하도록 */
+
+    width: 100%; /* 항상 너비를 100%로 설정 */
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 20px;
+    box-sizing: border-box;
   }
   .heart2 {
     width: 50px;
@@ -301,9 +323,9 @@
     white-space: pre-wrap; /* 줄바꿈을 유지하면서 내용이 자동으로 다음 줄로 넘어가도록 */
     overflow-wrap: break-word; /* 긴 단어가 있을 때 자동으로 줄바꿈 */
     word-break: break-word; /* 긴 단어가 박스 밖으로 넘치지 않도록 강제로 줄바꿈 */
-    max-height: 700px; /* 최대 높이를 500px로 제한 */
+    /* max-height: 700px; 
     max-width: 500px;
-    width: 500px;
+    width: 500px; */
     overflow-y: auto; /* 내용이 너무 길 경우 스크롤 가능하도록 */
   }
   textarea.comment-input {
@@ -363,7 +385,7 @@
     border: 2px solid #FECDF4;
     border-radius: 5px;
     font-size: 14px;
-    resize: none;
+    /* resize: none; */
     margin-bottom: 20px;
     outline: none;
     box-sizing: border-box;
@@ -401,10 +423,154 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-wrap: wrap;
   }
-
+  .flexRow-reply{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .comment-like-btns{
+    display: flex;
+    flex-direction: row;
+  }
   .comment-content-editDelete{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
+
+  /* 반응형 미디어 쿼리 추가 */
+@media (max-width: 600px) {
+  .postdetail-detail{
+    margin-top:0px;
+    width: 100%;
+    margin: 0 auto;
+    justify-content: center;
+    justify-items: center;
+    align-items: center; /* 요소들을 가로 중앙에 배치 */
+  }
+  .reply-section{
+    width: 100%;
+
+    justify-content: center;
+    justify-items: center;
+    align-items: center; /* 요소들을 가로 중앙에 배치 */
+  }
+  .reply-edit-delete{
+    display: none;
+  }
+  .reply-edit-delete-mobile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    justify-content: flex-start;
+  }
+  .comment-section{
+    width: 100%;
+    margin-top: 30px;
+    justify-content: center;
+    justify-items: center;
+    align-items: center; /* 요소들을 가로 중앙에 배치 */
+  }
+  /* .flexRow-reply{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+  }
+  .flexRow{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+  } */
+  .spaceBar{
+    width:10px;
+    height: 10px;
+    margin-top: 10px;
+    margin-right: 5px;
+  }
+
+}
+
+@media (max-width: 500px) {
+  .comment-like-btns{
+    display: flex;
+    flex-direction: column;
+  }
+  .postdetail-detail {
+    margin-top: 0;
+    width: 100%; /* 고정된 80% 대신 100%로 설정 */
+    margin: 0px;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%; /* 최대 너비 설정 */
+  }
+  .reply-section{
+    width: 100%;
+    margin-left: 0px;
+    margin:0px;
+    margin-top: 10px;
+  }
+  .comment-section {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+  }
+  .comment-header2{
+ 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%; /* 헤더도 너비를 100%로 설정 */
+    max-width: 100%;
+  }
+  .comment-list .comment-item{
+    width: 100%; /* 너비를 100%로 설정 */
+    max-width: 100%;
+    align-items: center;
+  }
+  .comment-list .comment-item2 {
+    width: 100%; /* 너비를 100%로 설정 */
+    max-width: 100%;
+    align-items: center;
+  }
+  .textarea-container,
+  .textarea-container2 {
+    width: 100%;
+    max-width: 100%;
+    align-items: center;
+  }
+  .reply-edit-delete{
+    display: none;
+  }
+  .reply-edit-delete-mobile{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    justify-content: flex-start;
+  }
+  .like-button2 {
+    margin-top: 20px;
+    background-color: transparent;
+    border: 2px solid #ff88d769;
+    border-radius: 10px;
+    width: 50px;
+    height: 30px;
+    min-width: 50px; /* 최소 크기 설정 */
+    min-height: 30px; /* 최소 크기 설정 */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 3px 7px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+}

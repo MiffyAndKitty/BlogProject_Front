@@ -6,7 +6,7 @@
     display: flex;
     flex-wrap: wrap; /* 줄바꿈이 일어나도록 설정 */
     gap: 10px; /* 태그 간 간격 */
-    justify-content: center;
+    /* justify-content: center; */
   }
   
   .tag {
@@ -34,10 +34,15 @@
         width: 80px; /* 화면이 작아지면 태그 크기를 줄임 */
       }
   }
-  
+  @media (max-width: 1141px){
+    .tags {
+
+      justify-content: center; 
+    }
+  }
   @media (max-width: 537px) {
     .tag {
         width: 60px; /* 더 작은 화면에서는 태그 크기를 더 줄임 */
       }
   }
-  
+ 

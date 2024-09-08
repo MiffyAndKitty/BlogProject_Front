@@ -33,6 +33,7 @@ interface CommentData {
   isDislike:boolean;
   isLike:boolean;
   isWriter:boolean; 
+  reply_count:number
 
 }
 const PostDetail: React.FC = () => {
@@ -102,7 +103,7 @@ const PostDetail: React.FC = () => {
       }
       const result = await newComment(newData);
       if(result) {
-        alert('댓글 추가에 성공했습니다!');
+        //alert('댓글 추가에 성공했습니다!');
         setComment(''); // 댓글 등록 후 입력 창 초기화
         // 댓글을 등록한 후 1페이지로 돌아가서 댓글 목록을 다시 불러옵니다.
         setCursor(''); // Cursor를 초기화하여 첫 페이지를 가져오도록 함
@@ -244,12 +245,20 @@ const PostDetail: React.FC = () => {
     const result = await newComment(newReply);
     
     if (result) {
-      alert('답글 추가에 성공했습니다!');
+      //alert('답글 추가에 성공했습니다!');
       setReplyInputs(prevState => ({
         ...prevState,
         [commentId]: '', // 답글 입력 후 초기화
       }));
       await fetchReplies(commentId); // 답글 목록 갱신
+      // 댓글의 reply_count를 증가시키기 위해 comments 상태 업데이트
+      setComments(prevComments => 
+        prevComments.map(comment => 
+          comment.comment_id === commentId
+            ? { ...comment, reply_count: comment.reply_count + 1 } // reply_count 증가
+            : comment
+        )
+      );
     }
   } catch (error) {
     alert('답글 추가에 실패했습니다. 다시 시도해주세요.');
@@ -591,11 +600,11 @@ const PostDetail: React.FC = () => {
             
             <div className='flexRow'>
               <span className="comment-date">{formatDate(comment.created_at)}</span>
-              <span onClick={() => handleReplyClick(comment.comment_id)} className="comment-commentBtn">답글</span>
+              <span onClick={() => handleReplyClick(comment.comment_id)} className="comment-commentBtn">답글[{comment.reply_count}]</span>
               
               {/** 댓글 좋아요/싫어요 버튼 */}
               {token && (
-                <>
+                <div className='comment-like-btns'>
                   <button onClick={() => handleCommentLike(true, comment.comment_id, true, comment.isLike)} className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}>
                     <img style={{ width: '30px', height: '30px' }} src={comment.isLike ? filledLikeComment : emptyLikeComment} alt="like" />
                     <span>:</span>{comment.likes}
@@ -604,10 +613,10 @@ const PostDetail: React.FC = () => {
                     <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
                     <span>:</span>{comment.dislikes}
                   </button>
-                </>
+                </div>
               )}
                {!token && (
-                <>
+                <div className='comment-like-btns'>
                   <button onClick={() => alert('로그인 후 이용해주세요!')} className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}>
                     <img style={{ width: '30px', height: '30px' }} src={comment.isLike ? filledLikeComment : emptyLikeComment} alt="like" />
                     <span>:</span>{comment.likes}
@@ -616,14 +625,13 @@ const PostDetail: React.FC = () => {
                     <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
                     <span>:</span>{comment.dislikes}
                   </button>
-                </>
+                </div>
               )}
             </div>
-          </div>
-          
-           {/** 댓글 수정/삭제 버튼 */}
-           {comment.isWriter && token && (
-            <>
+
+             {/** 댓글 수정/삭제 버튼 */}
+          {comment.isWriter && token && (
+            <div className='reply-edit-delete-mobile'> 
               {editingCommentId === comment.comment_id ? (
                 <>
                   <button onClick={()=>{handleSaveCommentEdit(true)}} className="like-button">저장</button>
@@ -641,13 +649,38 @@ const PostDetail: React.FC = () => {
                 onConfirm={()=>{confirmDeleteComment(true)}}
                 message="이 댓글을 삭제하시겠습니까?"
               />
-            </>
+            </div>
           )}
+          </div>
+          
+           {/** 댓글 수정/삭제 버튼 */}
+           {comment.isWriter && token && (
+            <div className='reply-edit-delete'> 
+              {editingCommentId === comment.comment_id ? (
+                <>
+                  <button onClick={()=>{handleSaveCommentEdit(true)}} className="like-button">저장</button>
+                  <button onClick={handleCancelCommentEdit} className="like-button">취소</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => handleEditComment(comment.comment_id, comment.comment_content)} className="like-button">수정</button>
+                  <button onClick={() => handleDeleteComment(comment.comment_id)} className="like-button">삭제</button>
+                </>
+              )}
+              <ConfirmModal
+                isOpen={isCommentModalOpen}
+                onClose={() => setIsCommentModalOpen(false)}
+                onConfirm={()=>{confirmDeleteComment(true)}}
+                message="이 댓글을 삭제하시겠습니까?"
+              />
+            </div>
+          )}
+          
         </div>
-  
+         
         {/* 답글 입력창 및 답글 목록 */}
         {openReplies[comment.comment_id] && (
-          <div className="reply-section" style={{ marginLeft: '20px', marginTop: '10px' }}>
+          <div className="reply-section">
             <div className='comment-profile'>
               <img alt="Profile" className="heart" src={profileImage}></img>
               <div className="textarea-container2">
@@ -685,7 +718,7 @@ const PostDetail: React.FC = () => {
     return commentsList.map((comment, index) => (
       <div key={comment.comment_id} className="comment-item2" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
         <div className="comment-header2">
-          <img style={{width:'15px', height:'15px', marginTop:'10px', marginRight:'5px'}} src={spaceBar} alt="User Profile" />
+          <img className='spaceBar' src={spaceBar} alt="User Profile" />
           <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
             <span className="comment-item-author">{comment.user_nickname}</span>
@@ -697,16 +730,16 @@ const PostDetail: React.FC = () => {
               onChange={(e) => setEditingCommentContent(e.target.value)} // 수정 내용 업데이트
             />
             ) : (
-              // 기본 댓글 내용 표시
+              // 기본 답글 내용 표시
               <div className="comment-content2">{comment.comment_content}</div>
             )}
             
-            <div className='flexRow'>
+            <div className='flexRow-reply'>
               <span className="comment-date">{formatDate(comment.created_at)}</span>
               
               {/** 답글 좋아요/싫어요 버튼 */}
               {token && (
-                <>
+                <div className='comment-like-btns'>
                   <button 
                     onClick={() => handleCommentLike(false, comment.comment_id, true, comment.isLike, parentCommentId)} 
                     className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}
@@ -721,11 +754,11 @@ const PostDetail: React.FC = () => {
                     <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
                     <span>:</span>{comment.dislikes}
                   </button>
-                </>
+                </div>
               )}
 
               {!token && (
-                <>
+               <div className='comment-like-btns'>
                   <button 
                     onClick={() => alert('로그인 후 이용해주세요!')} 
                     className={`comment-like-button ${comment.isLike ? 'liked' : ''}`}
@@ -740,14 +773,14 @@ const PostDetail: React.FC = () => {
                     <img style={{ width: '30px', height: '30px' }} src={comment.isDislike ? filledDisLikeComment : emptyDisLikeComment} alt="dislike" />
                     <span>:</span>{comment.dislikes}
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
           
-           {/** 댓글 수정/삭제 버튼 */}
+           {/** 답글 수정/삭제 버튼 -웹화면*/}
            {comment.isWriter && token && (
-            <>
+            <div className='reply-edit-delete'>
               {editingCommentId === comment.comment_id ? (
                 <>
                   <button onClick={()=>{handleSaveCommentEdit(false,parentCommentId)}} className="like-button2">저장</button>
@@ -765,10 +798,31 @@ const PostDetail: React.FC = () => {
                 onConfirm={()=>{confirmDeleteComment(false, parentCommentId)}}
                 message="이 댓글을 삭제하시겠습니까?"
               />
-            </>
+            </div>
           )}
         </div>
-
+          {/** 답글 수정/삭제 버튼 -모바일화면*/}
+          {comment.isWriter && token && (
+            <div className='reply-edit-delete-mobile'> 
+              {editingCommentId === comment.comment_id ? (
+                <>
+                  <button onClick={()=>{handleSaveCommentEdit(false,parentCommentId)}} className="like-button2">저장</button>
+                  <button onClick={handleCancelCommentEdit} className="like-button2">취소</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => handleEditComment(comment.comment_id, comment.comment_content)} className="like-button2">수정</button>
+                  <button onClick={() => handleDeleteComment(comment.comment_id)} className="like-button2">삭제</button>
+                </>
+              )}
+              <ConfirmModal
+                isOpen={isCommentModalOpen}
+                onClose={() => setIsCommentModalOpen(false)}
+                onConfirm={()=>{confirmDeleteComment(false, parentCommentId)}}
+                message="이 댓글을 삭제하시겠습니까?"
+              />
+            </div>
+          )}
       </div>
     ));
   };
@@ -776,10 +830,11 @@ const PostDetail: React.FC = () => {
   const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <>
-     
+     <h1 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nickname}`)}}>{nickname}의 블로그</h1>
+     <hr className="notification-divider" />
        
      
-              <div style={{ marginTop: '70px' }} className="postdetail-detail">
+              <div style={{ marginTop: '20px' }} className="postdetail-detail">
                 {loading ?  (
                   <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555' }}>
                     <div style={{ marginBottom: '10px' }}>
@@ -798,6 +853,7 @@ const PostDetail: React.FC = () => {
                 ) : (
                   <>
                     <h1>{post.board_title}</h1>
+
                     <div className="postdetail-meta">
                       <span
                         onClick={() => goToBlog(post.user_nickname)}
@@ -816,8 +872,9 @@ const PostDetail: React.FC = () => {
                         <span className="postdetail-comments">댓글: {post.board_comment}</span>
                       </div>
                     </div>
+                    
                     <div className="separator"></div> {/* 구분선 추가 */}
-                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />
+                    <div className='postdetail-content' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.board_content) }} />
                   </>
                 )}
               </div>
@@ -888,10 +945,11 @@ const PostDetail: React.FC = () => {
                       </>
                     )}
                   </div>
+
                   <div ref={firstCommentRef} className="comment-section">
                     <div className="titleSort">
                       <h3>
-                        댓글<span style={{ marginLeft: '10px', color: '#FF88D7' }}>{totalComments}</span>
+                        댓글<span style={{ marginLeft: '10px', color: '#FF88D7', backgroundColor:'transparent' }}>{totalComments}</span>
                       </h3>
                       <div style={{ marginLeft: '30px' }}>
                         <span
@@ -940,7 +998,7 @@ const PostDetail: React.FC = () => {
                       {isLoading ? (
                         <div>댓글을 불러오는 중...</div>
                       ) : comments.length > 0 ? (
-                        renderComments(comments) // 댓글 목록 재귀적으로 렌더링
+                        renderComments(comments) 
                       ) : (
                         <div className="no-comments">
                           <span className="no-comments-icon">💬</span>

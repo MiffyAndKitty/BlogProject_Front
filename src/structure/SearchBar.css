@@ -21,7 +21,9 @@
     font-size: 16px;
     background-color: #FFE6FA;
   }
-  
+  .search-bar input:focus {
+    background-color: #FFE6FA; /* 포커스 상태에서도 동일한 배경색 유지 */
+  }
   .search-bar button {
     background-color: #FFE6FA;
     border: none;

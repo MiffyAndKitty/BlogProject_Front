@@ -347,13 +347,20 @@ const GetPost: React.FC = () => {
   return (
     <div className="App">
    
-      <Header pageType="otherblog" />
-      <main className="main-container">
-        <span style={{ marginBottom: '50px;' }}></span>
       
-          <Profile pageType="postManage" nicknameParam={nickname} />
+      {loading ? (
+        <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
+      ) : (
+        <>
+       <Header pageType="otherblog" />
+       <main className="blog-main-container">
+      
+          <Profile 
+          pageType="postManage" 
+          nicknameParam={nickname} 
+          />
   
-          <div className="container">
+      <section className='main-blog-posts-section'>
             <div>
               <div className="tabs">
                 <button
@@ -492,10 +499,12 @@ const GetPost: React.FC = () => {
                 )}
               </div>
             </div>
-          </div>
+          </section>
       
         <SSEComponent></SSEComponent>
       </main>
+        </>
+      )}
       <Footer />
     </div>
   );
