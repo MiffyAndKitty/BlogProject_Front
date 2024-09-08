@@ -49,27 +49,7 @@
   cursor: pointer;
   margin-bottom: 5px;
 }
-/* .container {
-    flex: 2;
-    max-width: 1000px;
-    margin-left: -80px;
-    margin: 10 auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border: #ff4da6;
-    min-height: 1000px;
-    border-width: 5px;
-  } */
-  /* .login-button_profile {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #ff80bf;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  } */
+
   .title_manage {
     margin-bottom: 20px;
     color:  #f0a4d8;
@@ -84,8 +64,10 @@
   .post-card {
     background-color: #FFE6FA;
     border: 0px;
-    border-radius: 10px;
-    padding: 0; /* post-header와 맞추기 위해 padding을 0으로 설정 */
+    border-radius: 5px;
+    height: 200px;
+    max-width: 100%;
+    padding: 0; /* post-main-header와 맞추기 위해 padding을 0으로 설정 */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
@@ -236,16 +218,14 @@
     margin-top: 50px;
   }
 
-  .post-manage{
-    /* border: 2px solid #d4d4d4;
-    padding: 10px 20px;
-    background-color: #f0f0f0; */
-  }
-
+.getPost-container{
+  display: flex;
+  justify-content: center;
+}
   .tabs {
     display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+    align-items: center;
+
   }
   
   .tab-button {

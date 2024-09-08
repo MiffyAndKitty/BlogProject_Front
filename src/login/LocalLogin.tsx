@@ -201,8 +201,8 @@ const LocalLogin: React.FC = () => {
 
             <Button variant="primary" type="button" className={`loginButton ${!isFormValid ? 'disabledButton' : ''}`} onClick={handleLogin} disabled={!isFormValid}>로그인</Button>
             <div className="loginsForLocalLogin">
-            <Button onClick={goToFindID}>아이디 찾기</Button>
-            <span>|</span>
+            {/* <Button onClick={goToFindID}>아이디 찾기</Button>
+            <span>|</span> */}
             <Button>비밀번호 찾기</Button>
             <span>|</span>
             <Button onClick={goToSignUp}>회원가입</Button>

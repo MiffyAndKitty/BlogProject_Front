@@ -353,29 +353,31 @@ const GetPost: React.FC = () => {
       ) : (
         <>
        <Header pageType="otherblog" />
-       <main className="blog-main-container">
+        <main className="blog-main-container">
       
           <Profile 
           pageType="postManage" 
           nicknameParam={nickname} 
           />
   
-      <section className='main-blog-posts-section'>
-            <div>
-              <div className="tabs">
-                <button
-                  className={`tab-button ${managementType === 'post' ? 'active' : ''}`}
-                  onClick={goToPostManagement}
-                >
-                  글 관리
-                </button>
-                <button
-                  className={`tab-button ${managementType === 'category' ? 'active' : ''}`}
-                  onClick={goToCategoryManagement}
-                >
-                  카테고리 관리
-                </button>
-              </div>
+          <section className='main-blog-posts-section'>
+              <div className='getPost-container'>
+                <div className='tabs'>
+                  <button
+                    className={`tab-button ${managementType === 'post' ? 'active' : ''}`}
+                    onClick={goToPostManagement}
+                  >
+                    글 관리
+                  </button>
+                  <button
+                    className={`tab-button ${managementType === 'category' ? 'active' : ''}`}
+                    onClick={goToCategoryManagement}
+                  >
+                    카테고리 관리
+                  </button>
+                </div>
+              </div> 
+              <hr className="notification-divider" />
               <div >
                 {managementType === 'post' && (
                   <>
@@ -383,7 +385,7 @@ const GetPost: React.FC = () => {
                       <SearchBar onSearch={handleSearch} />
                     </div>
                     
-                    <div className="post-manage">
+                    <div>
                       <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px' }}>
                         <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
                           {category.category_name}
@@ -414,7 +416,7 @@ const GetPost: React.FC = () => {
                             <div className="post-list">
                           {posts.map((post) => (
                             <div className="post-card" key={post.board_id}>
-                              <div className="post-header">
+                              <div className="post-main-header">
                                 <div className="title-container">
                                   <h2
                                     className="post-title"
@@ -424,22 +426,22 @@ const GetPost: React.FC = () => {
                                   ></h2>
                                   <span className="user-nickname">{post.user_nickname}</span>
                                 </div>
-                                <div className="post-meta">
-                                  <span className="post-category">
+                                <div className="post-main-meta">
+                                  <span className="post-main-category">
                                     {findCategoryById(categories, post.category_id)}
                                   </span>
-                                  <span className="post-date">{formatDate(post.created_at)}</span>
-                                  <span className="post-stats">
-                                    <span className="user-nickname">조회수: {post.board_view}</span>
-                                    <span className="user-nickname">
+                                  <span className="post-main-date">{formatDate(post.created_at)}</span>
+                                  <span className="post-main-stats">
+                                    <span className="post-user-nickname">조회수: {post.board_view}</span>
+                                    <span className="post-user-nickname">
                                       <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="Carrot Icon" /> : {post.board_like}
                                     </span>
-                                    <span className="user-nickname">댓글: {post.board_comment}</span>
+                                    <span className="post-user-nickname">댓글: {post.board_comment}</span>
                                   </span>
                                 </div>
                               </div>
                               <div
-                                className="post-content"
+                                className="post-main-content"
                                 onClick={() => goToDetailPost(post.board_id)}
                                 dangerouslySetInnerHTML={{
                                   __html: highlightKeyword(post.board_content, searchTerm),
@@ -498,7 +500,7 @@ const GetPost: React.FC = () => {
                   </>
                 )}
               </div>
-            </div>
+            
           </section>
       
         <SSEComponent></SSEComponent>

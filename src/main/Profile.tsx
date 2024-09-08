@@ -233,8 +233,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
           <div className="logins_profile">
-            <button onClick={goToFindID} style={{cursor:'pointer'}}>아이디 찾기</button>
-            <span>|</span>
+            {/* <button onClick={goToFindID} style={{cursor:'pointer'}}>아이디 찾기</button>
+            <span>|</span> */}
             <button style={{cursor:'pointer'}}>비밀번호 찾기</button>
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>

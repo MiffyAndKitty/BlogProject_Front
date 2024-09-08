@@ -188,7 +188,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                 )}
               </Draggable>
               )}
-              {level ===2 &&(
+              {/* {level ===2 &&(
                
                
                     <div 
@@ -271,7 +271,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                       )}
                     </div>
                 
-                )}
+                )} */}
             
    
               {provided.placeholder}

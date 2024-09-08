@@ -61,7 +61,7 @@
     gap: 10px;
   }
   .post-main-category{
-    color: rgba(245, 245, 245, 0.842); /* 글씨색 흰색으로 설정 */
+    color: rgba(34, 31, 31, 0.842); /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   .post-main-date {
@@ -233,6 +233,8 @@
   }
 
  
-  @media (max-width: 522px) {
-
+  @media (max-width: 402px) {
+    .post-main-meta {
+      display: none;
+    }
   }
