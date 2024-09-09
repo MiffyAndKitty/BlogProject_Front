@@ -27,6 +27,7 @@ const WriteNewPost: React.FC = () => {
   const [images, setImages] = useState<File[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const [newPostResult, setNewPostResult] = useState<boolean | null>(null);
   const navigate = useNavigate();
   const newImages: File[] = [];
@@ -303,7 +304,9 @@ const WriteNewPost: React.FC = () => {
     //   alert("글 저장에 실패했습니다!!");
     // }
   }, [newPostResult, navigate]);
-
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   useEffect(() => {
     console.log('Updated images in useEffect:', images);
   }, [images]);
@@ -330,7 +333,7 @@ const WriteNewPost: React.FC = () => {
 
   return (
     <div className="App">
-      <Header pageType="otherblog" />
+      <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="write-new-post">
         <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -436,7 +439,7 @@ const WriteNewPost: React.FC = () => {
             </Button>
           </div>
         </Form>
-        <SSEComponent></SSEComponent>
+        <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />
     </div>

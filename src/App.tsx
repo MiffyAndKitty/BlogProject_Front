@@ -46,7 +46,7 @@ function App() {
       <Route path={`/dashboard/all-popular-post`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-post`} element={<AllNewPost></AllNewPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />
-      <Route path={`/:nickname/:postID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
+      <Route path={`/:nickname/:postID?/:commentID?/:replyID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />

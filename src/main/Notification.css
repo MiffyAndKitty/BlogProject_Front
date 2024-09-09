@@ -1,4 +1,6 @@
-
+.notification-list{
+  max-width: 100%;
+}
 .modal-overlay-notification {
   position: fixed;
   top: 0;
@@ -11,32 +13,50 @@
   justify-content: center;
   z-index: 1000;
 }
+.modal-overlay-notification h3{
+  flex-wrap: nowrap;
+}
 .modal-header-notification {
   display: flex;
   justify-content: space-between; /* 두 요소를 양쪽 끝에 배치 */
   align-items: center; /* 수직 중앙 정렬 */
+  flex-wrap: nowrap;
 }
 .allLook {
+  margin-left: 10px;
   cursor: pointer;
   font-size: 14px;
   color:rgb(152, 152, 152);
-  margin-left: auto; /* 자동 왼쪽 여백으로 오른쪽 정렬 */
-  margin-right: 450px;
-}
 
+}
+.title-all{
+  display: flex;
+  align-items: center;
+}
+.noti-all{
+  max-width: 100%;
+}
+.noti-title{
+  text-overflow: ellipsis; /* 넘치는 텍스트는 말줄임표 처리 */
+  overflow: hidden; /* 태그 내용이 넘치면 잘림 방지 */
+  max-width: 50%;
+  font-weight: bold;
+  white-space: wrap; /* 텍스트를 한 줄로 처리 */
+}
 .modal-content-notification {
+  position: fixed; /* 화면에 고정 */
+  top: 50px;       /* 화면 상단에서 20px 아래 */
+  right: 50px;     /* 화면 오른쪽에서 20px 떨어짐 */
   background-color: white;
   padding: 20px;
-  border:2px solid #FF88D7;
+  border: 2px solid #FF88D7;
   border-radius: 5px;
-  width: 80%;
-  max-width: 600px;
+  width: 80vw;     /* 너비를 화면 너비의 80%로 설정 */
+  max-width: 600px; /* 최대 너비를 600px로 제한 */
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  position: relative;
   z-index: 1001;
-   /* 스크롤을 가능하게 하는 속성 추가 */
-  max-height: 80vh; /* 화면 높이의 80%로 제한 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
+  max-height: 80vh; /* 최대 높이를 화면 높이의 80%로 설정 */
+  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
 }
 
 .modal-close-notification {
@@ -51,17 +71,21 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  max-width: 100%;
 }
 
 .notification-content {
   display: flex;
   background-color: #00000000;
   align-items: center;
+  max-width: 100%;
 }
 
 .notification-trigger-image {
   width: 40px;
   height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   border-radius: 50%;
   margin-right: 10px;
   border:2px solid #FF88D7;
@@ -71,6 +95,7 @@
 .notification-details {
   display: flex;
   flex-direction: column;
+  max-width: 100%;
   background-color: #00000000;
 }
 
@@ -106,4 +131,7 @@
 .notification-name{
   color: #FF6DC6;
   cursor: pointer;
+  font-weight: bold;
+  background-color: transparent;
 }
+

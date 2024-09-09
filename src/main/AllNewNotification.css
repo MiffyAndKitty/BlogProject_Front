@@ -2,5 +2,6 @@
   display: flex;
   justify-content: center; /* 버튼들을 수평으로 중앙 정렬 */
   margin-bottom: 20px; /* 아래 여백 추가 */
+  flex-wrap: wrap;
   gap: 10px; /* 버튼 사이 간격 */
 }

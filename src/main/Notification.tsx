@@ -22,7 +22,8 @@ interface NotificationData {
   comment_content: string | null;
   notification_board:string | null;
   notification_comment:string | null;
-
+  board_writer:string| null,
+  parent_comment_id: string | null,
 
 
 }
@@ -66,34 +67,52 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
       case 'new-follower':
         return (
           <span style={{cursor:'pointer'}}>
-            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>님이 당신을 팔로우했습니다.
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 당신을 팔로우했습니다.
           </span>
         );
       case 'following-new-board':
         return (
-          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
-            <strong className='notification-name'>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em>
-          </span>
+          <div className='noti-all' style={{cursor:'pointer'}} 
+          onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>
+              {notification.trigger_nickname}</strong>
+            님이 새 게시글을 작성했습니다:
+             <em className='noti-title'>{truncateText(notification.board_title || '', 20)}</em>
+          </div>
         );
       case 'comment-on-board':
         return (
-          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
-            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 게시글 "<span style={{fontWeight:'bold'}}>{notification.board_title}</span>"에 댓글을 남겼습니다: <em>{notification.comment_content}</em>
-          </span>
+          <div className='noti-all' style={{cursor:'pointer'}} 
+          onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board, notification.notification_comment)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 게시글 "
+            <span style={{fontWeight:'bold'}} className='noti-title'>{truncateText(notification.board_title || '', 20)}</span>"
+            에 댓글을 남겼습니다: 
+            <em className='noti-title'>{truncateText(notification.comment_content || '', 20)}</em>
+          </div>
         );
       case 'reply-to-comment':
         return (
-          <span style={{cursor:'pointer'}} onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
-            <strong className='notification-name' > {notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em>
-          </span>
+          <div className='noti-all' style={{cursor:'pointer'}} 
+          onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board,notification.parent_comment_id,notification.notification_comment)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>
+               {truncateText(notification.trigger_nickname || '', 20)}</strong>
+            님이 게시글 "
+            <span style={{fontWeight:'bold'}} className='noti-title'>{truncateText(notification.board_title || '', 20)}</span>"
+            에 쓴 당신의 댓글에 답글을 남겼습니다:
+            <em className='noti-title'>{truncateText(notification.comment_content || '', 20)}</em>
+          </div>
         );
       case 'broadcast':
         return <span>새로운 공지가 있습니다.</span>;
       case 'board-new-like':
         return (
-          <span onClick={()=>{goToNotificationPost(localNickName,notification.notification_board)}} style={{cursor:'pointer'}}>
-            <strong className='notification-name' >{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다: <em>{notification.board_title}</em>
-          </span>
+          <div className='noti-all' onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board)}} style={{cursor:'pointer'}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 당신의 게시글을 좋아합니다:
+             <em className='noti-title'>{truncateText(notification.board_title || '', 20)}</em>
+          </div>
         );
       default:
         return <span>새로운 알림이 있습니다.</span>;
@@ -134,8 +153,10 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
 
   };
 
-  const goToNotificationPost = (name, location)=>{
-    navigate(`/${name}/${location}`);
+  const goToNotificationPost = (name, location, commentID?, replyID?)=>{
+    if(commentID && !replyID) navigate(`/${name}/${location}/${commentID}`);
+    else if(commentID && replyID) navigate(`/${name}/${location}/${commentID}/${replyID}`);
+    else navigate(`/${name}/${location}`);
     onClose();
   }
   const formatDate = (dateString: string): string => {
@@ -193,17 +214,26 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
       return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
     }
   };
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
   return (
     <div className="modal-overlay-notification" onClick={onClose}>
       <div
         className="modal-content-notification"
-        style={{ position: 'absolute', ...modalStyle }} // 위치 스타일 적용
+        // style={{ position: 'absolute', ...modalStyle }}
         onClick={(e) => e.stopPropagation()}
       >
         
         <div className="modal-header-notification">
-        <h3 >새소식</h3>
-        <span className="allLook" onClick={goToAllNewNotification}>전체보기</span>
+
+        <div className='title-all'>
+          <h3>새소식</h3>
+          <span className="allLook" onClick={goToAllNewNotification}>전체보기</span>
+        </div>
         <span className="modal-close-notification" onClick={onClose}>
           &times;
         </span>

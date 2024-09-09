@@ -21,8 +21,12 @@ interface NotificationData {
   trigger_image: string;
   board_title: string | null;
   comment_content: string | null;
-  notification_board: string | null;
-  notification_comment: string | null;
+  notification_board:string | null;
+  notification_comment:string | null;
+  board_writer:string| null,
+  parent_comment_id: string | null,
+
+
 }
 
 const AllNewNotification: React.FC = () => {
@@ -34,7 +38,7 @@ const AllNewNotification: React.FC = () => {
   const [cursor, setCursor] = useState<string>('');
   const [localNickName, setLocalNickName] = useState<string>('');
   const navigate = useNavigate();
-
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   useEffect(() => {
     const localNickname = sessionStorage.getItem("nickname");
     if (localNickname) {
@@ -81,26 +85,71 @@ const AllNewNotification: React.FC = () => {
     setCursor('');
     fetchNotifications(type, 10);
   };
-
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
+  const goToNotificationPost = (name, location, commentID?, replyID?)=>{
+    if(commentID && !replyID) navigate(`/${name}/${location}/${commentID}`);
+    else if(commentID && replyID) navigate(`/${name}/${location}/${commentID}/${replyID}`);
+    else navigate(`/${name}/${location}`);
+  };
   const renderNotificationMessage = (notification: NotificationData) => {
-    const navigateToPost = () => navigate(`/${notification.trigger_nickname}/${notification.notification_board}`);
-    const navigateToProfile = () => navigate(`/${notification.trigger_nickname}`);
-
     switch (notification.notification_type) {
       case 'new-follower':
-        return <span  style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={navigateToProfile}><strong>{notification.trigger_nickname}</strong>님이 당신을 팔로우했습니다.</span>;
+        return (
+          <span style={{cursor:'pointer', backgroundColor:'transparent'}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 당신을 팔로우했습니다.
+          </span>
+        );
       case 'following-new-board':
-        return <span   style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={navigateToPost}><strong>{notification.trigger_nickname}</strong>님이 새 게시글을 작성했습니다: <em>{notification.board_title}</em></span>;
+        return (
+          <div className='noti-all' style={{cursor:'pointer', backgroundColor:'transparent'}} 
+          onClick={()=>{goToNotificationPost(notification.trigger_nickname,notification.notification_board)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>
+              {notification.trigger_nickname}</strong>
+            님이 새 게시글을 작성했습니다:
+             <em className='noti-title'>{truncateText(notification.board_title || '', 20)}</em>
+          </div>
+        );
       case 'comment-on-board':
-        return <span  style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={navigateToPost}><strong>{notification.trigger_nickname}</strong>님이 게시글 "<strong>{notification.board_title}</strong>"에 댓글을 남겼습니다: <em>{notification.comment_content}</em></span>;
+        return (
+          <div className='noti-all' style={{cursor:'pointer', backgroundColor:'transparent'}} 
+          onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board, notification.notification_comment)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 게시글 "
+            <span style={{fontWeight:'bold', backgroundColor:'transparent'}} className='noti-title'>{truncateText(notification.board_title || '', 20)}</span>"
+            에 댓글을 남겼습니다: 
+            <em className='noti-title'>{truncateText(notification.comment_content || '', 20)}</em>
+          </div>
+        );
       case 'reply-to-comment':
-        return <span  style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={navigateToPost}><strong>{notification.trigger_nickname}</strong>님이 당신의 댓글에 답글을 남겼습니다: <em>{notification.comment_content}</em></span>;
+        return (
+          <div className='noti-all' style={{cursor:'pointer', backgroundColor:'transparent'}} 
+          onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board,notification.parent_comment_id,notification.notification_comment)}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>
+               {truncateText(notification.trigger_nickname || '', 20)}</strong>
+            님이 게시글 "
+            <span style={{fontWeight:'bold', backgroundColor:'transparent'}} className='noti-title'>{truncateText(notification.board_title || '', 20)}</span>"
+            에 쓴 당신의 댓글에 답글을 남겼습니다:
+            <em className='noti-title'>{truncateText(notification.comment_content || '', 20)}</em>
+          </div>
+        );
       case 'broadcast':
-        return <span style={{cursor:'pointer', backgroundColor:'transparent'}} >새로운 공지가 있습니다.</span>;
+        return <span>새로운 공지가 있습니다.</span>;
       case 'board-new-like':
-        return <span  style={{cursor:'pointer', backgroundColor:'transparent'}} onClick={navigateToPost}><strong>{notification.trigger_nickname}</strong>님이 당신의 게시글을 좋아합니다: <em>{notification.board_title}</em></span>;
+        return (
+          <div className='noti-all' onClick={()=>{goToNotificationPost(notification.board_writer,notification.notification_board)}} style={{cursor:'pointer', backgroundColor:'transparent'}}>
+            <strong className='notification-name' onClick={()=>{navigate(`/${notification.trigger_nickname}`)}}>{notification.trigger_nickname}</strong>
+            님이 당신의 게시글을 좋아합니다:
+             <em className='noti-title'>{truncateText(notification.board_title || '', 20)}</em>
+          </div>
+        );
       default:
-        return <span style={{cursor:'pointer', backgroundColor:'transparent'}} >새로운 알림이 있습니다.</span>;
+        return <span>새로운 알림이 있습니다.</span>;
     }
   };
 
@@ -204,14 +253,16 @@ const AllNewNotification: React.FC = () => {
       setCursor(notifications[notifications.length - 1].notification_id);
     }
   };
-
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   return (
-    <>
-      <Header pageType="otherblog" />
-      <main>
-        <div className="main-container">
+    <div className="App">
+      <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
+      <main className="blog-main-container">
+ 
           <Profile pageType="profileSetting" nicknameParam={localNickName} />
-          <div className="container">
+          <section className="main-blog-posts-section">
             <h2>새소식</h2>
             <div className="filter-buttons">
               <button className={`tab-button ${filterType === null ? 'active' : ''}`} onClick={() => handleFilterChange(null)}>전체 보기</button>
@@ -224,6 +275,7 @@ const AllNewNotification: React.FC = () => {
               </button>
               <button className={`tab-button ${filterType === 'broadcast' ? 'active' : ''}`} onClick={() => handleFilterChange('broadcast')}>공지사항</button>
             </div>
+            <hr className="notification-divider" />
             <div className="notification-list border">
               {notifications.map((notification) => (
                 <div key={notification.notification_id} className="notification-item">
@@ -254,12 +306,12 @@ const AllNewNotification: React.FC = () => {
               <span className="pagination-info">{currentPage} / {totalPages}</span>
               <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
             </div>
-          </div>
-        </div>
-        <SSEComponent />
+          </section>
+
+        <SSEComponent onNotification={handleNotification}/>
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
