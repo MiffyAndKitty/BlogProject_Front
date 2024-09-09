@@ -4,7 +4,7 @@
     right: 20px;
     width: 300px;
     padding: 10px 20px;
-    background-color: rgba(251, 162, 226, 0.553); /* 알림창의 배경색 */
+    background-color: rgba(251, 162, 226, 0.757); /* 알림창의 배경색 */
     color: #fff; /* 알림창의 글자색 */
     border-radius: 8px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -35,7 +35,11 @@
   background-color: transparent;
   color: #fff; /* 알림창 내용의 글자색 */
   }
-  
+  .notification-content-message{
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+  }
   .close-btn-SSE  {
     background: none;
   border: none;

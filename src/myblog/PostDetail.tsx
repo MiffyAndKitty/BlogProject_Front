@@ -39,7 +39,7 @@ interface CommentData {
 const PostDetail: React.FC = () => {
   const [isBefore, setIsBefore] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
-  const { postID, nickname } = useParams();
+  const { postID, nickname, commentID,replyID } = useParams();
   const [post, setPost] = useState<TYPES.getPostDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -61,8 +61,14 @@ const PostDetail: React.FC = () => {
   const [cursor, setCursor] = useState<string>('');
   const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
   const [sortName, setSortName] = useState('작성순'); // 정렬 이름 상태 추가
+
   const firstCommentRef = useRef<HTMLDivElement | null>(null);
   const lastCommentRef = useRef<HTMLDivElement | null>(null); // 마지막 댓글 참조를 위한 Ref 생성
+  const commentRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const replyRef = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [isCommentScrolled, setIsCommentScrolled] = useState(false); // 스크롤 완료 여부를 추적하는 상태
+  const [isReplyScrolled, setIsReplyScrolled] = useState(false); // 스크롤 완료 여부를 추적하는 상태
+
   const [selectedCommentId, setSelectedCommentId] = useState<string | null>(null);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [editingCommentId, setEditingCommentId] = useState<string | null>(null); // 수정 중인 댓글 ID 상태
@@ -72,7 +78,29 @@ const PostDetail: React.FC = () => {
   const [openReplies, setOpenReplies] = useState<{ [key: string]: boolean }>({}); // 답글이 열려 있는지 여부 상태 관리
   const [replyInputs, setReplyInputs] = useState<{ [key: string]: string }>({}); // 각 댓글의 답글 입력 상태 관리
 
+   // 각 댓글의 ref를 설정하는 함수
+   const setCommentRef = (commentId: string, ref: HTMLDivElement | null, isLast: boolean) => {
+    commentRef.current[commentId] = ref; // 각 댓글의 ref 저장
+    if (isLast) {
+      lastCommentRef.current = ref; // 마지막 댓글일 경우 lastCommentRef 설정
+    }
 
+      if (commentID && commentRef.current[commentID] && !isCommentScrolled) {
+        // commentID에 해당하는 댓글이 존재하면 스크롤
+        commentRef.current[commentID]?.scrollIntoView({ behavior: 'smooth' });
+        setIsCommentScrolled(true);
+      }
+  };
+  // 각 댓글의 ref를 설정하는 함수
+  const setReplyRef = (commentId: string, ref: HTMLDivElement | null, isLast: boolean) => {
+    replyRef.current[commentId] = ref; // 각 댓글의 ref 저장
+
+      if (replyID && replyRef.current[replyID] && !isReplyScrolled) {
+        // commentID에 해당하는 댓글이 존재하면 스크롤
+        replyRef.current[replyID]?.scrollIntoView({ behavior: 'smooth' });
+        setIsReplyScrolled(true);
+      }
+  };
   // 첫 번째 댓글로 스크롤하는 함수
   const scrollToFirstComment = () => {
     if (firstCommentRef.current) {
@@ -444,7 +472,14 @@ const PostDetail: React.FC = () => {
      setCurrentPage(1); // 페이지를 첫 페이지로 설정
      fetchComments(sortOption, 10,''); // 첫 페이지의 댓글 목록 불러오기
     fetchPostDetail();
+
+    if(replyID){
+      handleReplyClick(commentID)
+    }
+
   }, [postID]);
+
+
 
   const editPost = (postID: string)=>{
     if (isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
@@ -580,7 +615,7 @@ const PostDetail: React.FC = () => {
   // }
   const renderComments = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
-      <div key={comment.comment_id} className="comment-item" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
+      <div key={comment.comment_id} className="comment-item" ref={(el) => setCommentRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}>
         <div className="comment-header">
           <img className='heart' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
@@ -716,7 +751,7 @@ const PostDetail: React.FC = () => {
   
   const renderReplies = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
-      <div key={comment.comment_id} className="comment-item2" ref={index === commentsList.length - 1 && !parentCommentId ? lastCommentRef : null}>
+      <div key={comment.comment_id} className="comment-item2" ref={(el) => setReplyRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}>
         <div className="comment-header2">
           <img className='spaceBar' src={spaceBar} alt="User Profile" />
           <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" />

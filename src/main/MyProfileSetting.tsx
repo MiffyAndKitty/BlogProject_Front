@@ -19,6 +19,7 @@ const MyProfileSetting: React.FC = () => {
     const [newPassword, setNewPassword] = useState<string>('');
     const [sendPassword, setSendPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+    const [hasNotifications, setHasNotifications] = useState<boolean>(false);
     const [errors, setErrors] = useState({
         password: '',
         newPassword: '',
@@ -233,7 +234,9 @@ const MyProfileSetting: React.FC = () => {
     useEffect(() => {
         fetchMyProfile();
     }, [navigate]);
-
+    const handleNotification = (isNotified: boolean) => {
+        setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+      };
     useEffect(() => {
         fetchMyProfile();
     }, []);
@@ -314,7 +317,7 @@ const MyProfileSetting: React.FC = () => {
 
     return (
         <div className="App">
-            <Header pageType="profileSetting" />
+            <Header pageType="profileSetting" hasNotifications ={hasNotifications}/>
             <main className="main-container">
                
                 {/* <div className="MainPosts-section"> */}
@@ -365,7 +368,7 @@ const MyProfileSetting: React.FC = () => {
                         </div>
                    
                 {/* </div> */}
-                <SSEComponent></SSEComponent>
+                <SSEComponent onNotification={handleNotification}></SSEComponent>
             </main>
             <Footer />
         </div>

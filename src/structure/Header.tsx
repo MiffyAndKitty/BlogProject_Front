@@ -8,20 +8,27 @@ import UserProfile from './UserProfile';
 import no_notification from '../img/no_notification.png';
 import has_notification from '../img/has_notification.png';
 import Notification from '../main/Notification';
+import SSEComponent from '../main/SSEComponent';
+import { useNotification } from '../NotificationContext';
+
 interface ProfileProps {
   pageType: 'profileSetting'|'signup'|'logout' | 'otherblog'| 'myBlog';
+  hasNotifications?:boolean
 }
-const Header: React.FC<ProfileProps> = ({pageType}) => {
+const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) => {
   const notificationButtonRef = useRef<HTMLDivElement>(null); // 알림 버튼 참조
   const [nickname, setNickname] = useState<string>();
   const [message, setMessage] = useState<string>('');
   const [image, setImage] = useState<string>(mainCharacterImg);
   const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
+  const { hasNoti, setHasNoti } = useNotification(); // 전역 상태 사용
   const [token, setToken] = useState<string>('');
   const [openNotification, setOpenNotification]  = useState<boolean>(false);
-  
+
+
   const closeModal = () => {
     setOpenNotification(false);
+    setHasNoti(false);
   };
 
   useEffect(() => {
@@ -58,7 +65,48 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
         document.removeEventListener('keydown', handleKeyDown);
     };
     }
+
+    
+
   }, []);
+  useEffect(()=>{
+      console.log(`
+        
+        
+        header
+        
+        
+        hasNotifications
+        
+        
+        `,hasNotifications)
+        if(hasNotifications===true)setHasNoti(hasNotifications);
+        
+  },[hasNotifications])
+
+  useEffect(()=>{
+    console.log(`
+        
+
+
+
+
+
+
+
+        [hasNoti];
+
+
+
+
+
+
+
+      
+      
+      `,hasNoti)
+  },[hasNoti]);
+
 
   useEffect(() => {
     if (image) {
@@ -107,7 +155,11 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             {openNotification && notificationButtonRef.current && (
               <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
             )}
-            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            {hasNoti ?
+              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            }
+           
           </div>
             {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
@@ -131,7 +183,10 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             {openNotification && notificationButtonRef.current && (
               <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
             )}
-            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            {hasNoti ?
+              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            }
           </div>
           {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
           </div>
@@ -155,7 +210,10 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             {openNotification && notificationButtonRef.current && (
               <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
             )}
-            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            {hasNoti ?
+              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            }
           </div>
           {profileImage && <UserProfile profileType={'otherblog'} profileImage={profileImage}></UserProfile>}
           </div>
@@ -179,7 +237,10 @@ const Header: React.FC<ProfileProps> = ({pageType}) => {
             {openNotification && notificationButtonRef.current && (
               <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
             )}
-            <img src={no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            {hasNoti ?
+              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+            }
           </div>
           {profileImage && <UserProfile profileType={'myBlog'} profileImage={profileImage}></UserProfile>}
           </div>

@@ -363,7 +363,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       </section>
       )}
     {pageType === 'profileSetting' && (
-        <section className='profile-section-profileSetting'>
+        <section className='profile-section-myBlog'>
          <div className="profile-container">
           <img 
             src={image || mainCharacterImg} 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
@@ -16,6 +16,7 @@ import SSEComponent from './SSEComponent';
  */
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem('accessToken');
@@ -23,9 +24,14 @@ const Dashboard: React.FC = () => {
       navigate('/');
     }
   }, [navigate]);
+
+
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   return (
     <div className="App">
-      <Header pageType="otherblog"/>
+      <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="main-content">
         <Profile pageType="login" />
         <NewPost />
@@ -33,7 +39,7 @@ const Dashboard: React.FC = () => {
         <PopularTags/>
         <LotsOfFollowerBloger/>
         <CarrotBloger/>
-        <SSEComponent></SSEComponent>
+        <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />
     </div>

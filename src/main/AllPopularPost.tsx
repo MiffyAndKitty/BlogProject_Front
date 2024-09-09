@@ -37,7 +37,7 @@ const AllPopularPost: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [token, setToken] = useState<string>('');
   const [localNickName, setLocalNickName] = useState<string>('');
-
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const pageSize = 10;
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
@@ -266,7 +266,9 @@ const AllPopularPost: React.FC = () => {
     };
     
   }, []);
-
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   useEffect(() => {
     console.log(`
       
@@ -290,7 +292,7 @@ const AllPopularPost: React.FC = () => {
 
   return (
     <>
-      <Header pageType="otherblog" />
+      <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main>
         <div className="main-container">
         {(!token && <Profile pageType="signup_for_blog" />)}
@@ -350,7 +352,7 @@ const AllPopularPost: React.FC = () => {
           
           </div>
         </div>
-        <SSEComponent></SSEComponent>
+        <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />
     </>

@@ -37,6 +37,7 @@ const GetPost: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
 
@@ -344,6 +345,9 @@ const GetPost: React.FC = () => {
       setCursor('');
       fetchPosts(undefined,category.category_id,searchTerm);
   }, [category]);
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   return (
     <div className="App">
    
@@ -352,7 +356,7 @@ const GetPost: React.FC = () => {
         <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
       ) : (
         <>
-       <Header pageType="otherblog" />
+       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
         <main className="blog-main-container">
       
           <Profile 
@@ -503,7 +507,7 @@ const GetPost: React.FC = () => {
             
           </section>
       
-        <SSEComponent></SSEComponent>
+        <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
         </>
       )}

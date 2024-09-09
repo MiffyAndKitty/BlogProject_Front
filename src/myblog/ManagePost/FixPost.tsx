@@ -31,6 +31,7 @@ const FixPost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const newImages: File[] = [];
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -141,6 +142,9 @@ const FixPost: React.FC = () => {
       return newImages;
     }
     return [];
+  };
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
   };
   const fixPosts = async () => {
 
@@ -324,7 +328,7 @@ const FixPost: React.FC = () => {
 
   return (
     <div className="App">
-      <Header pageType="otherblog" />
+      <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="write-new-post">
         <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
           <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
@@ -419,7 +423,7 @@ const FixPost: React.FC = () => {
             </Button>
           </div>
         </Form>
-        <SSEComponent></SSEComponent>
+        <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />
     </div>

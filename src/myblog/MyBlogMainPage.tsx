@@ -16,6 +16,7 @@ import SSEComponent from '../main/SSEComponent';
  */
 const MyBlogMainPage: React.FC = () => {
   const navigate = useNavigate();
+  const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   let { nickname, postID } = useParams<{ nickname: string; postID?: string }>();
   const [categories, setCategories] = useState<Categories[]>([]);
   const [categoryID, setCategoryID] = useState<string>();
@@ -112,7 +113,9 @@ const MyBlogMainPage: React.FC = () => {
     fetchCategories();
   
   }, [navigate, nickname]);
-
+  const handleNotification = (isNotified: boolean) => {
+    setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
+  };
   return (
     <div className="App">
 
@@ -120,8 +123,8 @@ const MyBlogMainPage: React.FC = () => {
         <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
       ) : (
         <>
-          {(localNickName === nickname) && <Header pageType="myBlog" />}
-          {(localNickName !== nickname) && <Header pageType="otherblog" />}
+          {(localNickName === nickname) && <Header pageType="myBlog" hasNotifications ={hasNotifications}/>}
+          {(localNickName !== nickname) && <Header pageType="otherblog" hasNotifications ={hasNotifications}/>}
 
           <main>
             
@@ -232,7 +235,7 @@ const MyBlogMainPage: React.FC = () => {
                 </>
                
               )}
-              <SSEComponent></SSEComponent>
+              <SSEComponent onNotification={handleNotification}></SSEComponent>
             
           
           </main>

@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { EventSourcePolyfill, NativeEventSource } from 'event-source-polyfill';
 import './SSEComponent.css'; // 스타일링을 위한 CSS 파일
+import mainCharacterImg from '../img/main_character.png';
 
-function SSEComponent() {
+function SSEComponent({ onNotification }) {
   const [notification, setNotification] = useState(null);
   const navigate = useNavigate();
   const [localNickName, setLocalNickName] = useState<string>('');
-
+  const [image, setImage] = useState<string>(mainCharacterImg);
   const newFollower = 'new-follower';
   const writeNewPost = 'following-new-board';
   const newComment = 'comment-on-board';
@@ -17,57 +18,62 @@ function SSEComponent() {
 
   const handleEvent = (eventData) => {
     const data = JSON.parse(eventData);
-    const { type, trigger, location } = data;
-    console.log(`
-      
-      
-      data
-      
-      
-      `,data )
+    const { type, trigger, location = null } = data;
+  
+    console.log(`data:`, data);
+  
     let notificationMessage = '';
     let notificationType = '';
-
+  
     switch (type) {
       case 'new-follower':
-        notificationMessage = `${trigger.nickname}님이 당신을 팔로우했습니다.`;
         notificationType = newFollower;
         break;
       case 'following-new-board':
-        notificationMessage = ` 새 게시글을 작성했습니다: ${location.boardTitle}`;
         notificationType = writeNewPost;
         break;
       case 'comment-on-board':
-        notificationMessage = ` 게시글 "${location.boardTitle}"에 댓글을 남겼습니다: ${location.commentContent}`;
         notificationType = newComment;
         break;
       case 'reply-to-comment':
-        notificationMessage = ` 당신의 댓글에 대댓글을 달았습니다: ${location.commentContent}`;
         notificationType = newReply;
         break;
       case 'broadcast':
-        notificationMessage = `새로운 공지사항이 있습니다.`;
+
         notificationType = broadcast;
         break;
       case 'board-new-like':
-        notificationMessage = ` 당신의 게시글을 좋아합니다: ${location.boardTitle}`;
         notificationType = newPostLike;
         break;
       default:
-        return; // 기본 케이스에서는 아무 작업도 하지 않음;
+        return; // 기본 케이스에서는 아무 작업도 하지 않음
     }
-
+  
     setNotification({
       type: notificationType,
       message: notificationMessage,
-      boardTitle: location.boardTitle,
-      boardId: location.boardId,
-      commentId: location.commentId,
+      boardTitle: location ? location.boardTitle : null,
+      boardId: location ? location.boardId : null,
+      commentId: location ? location.commentId : null,
+      commentContent: location? location.commentContent : null,
+      parentCommentId: location ? location.parentCommentId : null,
+      boardWriterNickname:location ? location.boardWriterNickname : null,
       name: trigger.nickname,
-      image: trigger.image || '/path/to/default/profile.png' // 기본 이미지 경로를 설정할 수 있습니다.
+      image: trigger.image || mainCharacterImg, // 기본 이미지 경로를 설정할 수 있습니다.
     });
+  
+    // 알림이 발생했음을 상위 컴포넌트에 알림
+    if (onNotification) {
+      onNotification(true);
+    }
   };
-
+  
+  useEffect(() => {
+    if (notification) {
+      onNotification(true); // 알림이 발생하면 true로 설정
+      console.log('SSEComponent notified Dashboard.');
+    }
+  }, [notification]);
   useEffect(() => {
     try {
       const localNickname = sessionStorage.getItem("nickname");
@@ -106,13 +112,38 @@ function SSEComponent() {
 
   useEffect(() => {
     if (notification) {
+      setImage(notification.image || mainCharacterImg)
+      console.log(`
+        
+        
+        notification.image 
+        
+        
+        
+        
+        `,notification.image )
       const timer = setTimeout(() => {
         setNotification(null);
       }, 5000); // 5초 후에 알림 자동 제거
 
       return () => clearTimeout(timer);
+      
     }
+    
   }, [notification]);
+
+  const goToNotificationPost = (name, location, commentID?, replyID?)=>{
+    if(commentID && !replyID) navigate(`/${name}/${location}/${commentID}`);
+    else if(commentID && replyID) navigate(`/${name}/${location}/${commentID}/${replyID}`);
+    else navigate(`/${name}/${location}`);
+  };
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length > maxLength) {
+      return text.slice(0, maxLength) + '...';
+    }
+    return text;
+  };
 
   return (
     <div className={`notification-SSE ${notification ? 'show' : ''}`}>
@@ -120,39 +151,62 @@ function SSEComponent() {
         <div className="notification-content-SSE">
           <div className="notification-header-SSE">
             <img
-              src={notification.image}
-              alt={`${notification.name}의 프로필`}
+              src={image || mainCharacterImg}
               className="profileImg"
             />
           
-          {notification.type === newFollower && (
+          {notification.type === newFollower && ( //새 팔로워
             <span
-              style={{ color: 'white', backgroundColor: 'transparent', cursor: 'pointer' }}
+              className='notification-content-message'
               onClick={() => navigate(`/${notification.name}`)}
             >
-              <span style={{ color: '#FF6DC6',backgroundColor: 'transparent', fontWeight:'bold'}}>{notification.name}</span>님이 당신을 팔로우했습니다.
+              <span className='notification-name'>{notification.name}</span>님이 당신을 팔로우했습니다.
             </span>
           )}
-          {( notification.type === newPostLike || notification.type === newComment||notification.type === newReply) && (
+          {( notification.type === newPostLike ) && ( //새 게시글 좋아요
             <span
-              style={{ color: 'white', backgroundColor: 'transparent', cursor: 'pointer' }}
-              onClick={() => navigate(`/${localNickName}/${notification.location}`)}
+              className='notification-content-message'
+              onClick={()=>{goToNotificationPost(localNickName,notification.boardId)}}
             >
-              <span style={{ color: '#FF6DC6' ,backgroundColor: 'transparent', fontWeight:'bold'}}>{notification.name}</span>님이 {notification.message}
+              <span className='notification-name'>{notification.name}</span>님이 당신의 게시글을 좋아합니다:
+             <em className='notification-name'>{truncateText(notification.boardTitle || '', 20)}</em>
             </span>
           )}
-          {(notification.type === writeNewPost) && (
+           {( notification.type === newComment) && ( //내 글에 새 댓글
             <span
-              style={{ color: 'white', backgroundColor: 'transparent', cursor: 'pointer' }}
-              onClick={() => navigate(`/${localNickName}/${notification.location}`)}
+              className='notification-content-message'
+              onClick={()=>{goToNotificationPost(notification.name,notification.boardId, notification.commentId)}}
             >
-              <span style={{ color: '#FF6DC6' ,backgroundColor: 'transparent', fontWeight:'bold'}}>{notification.name}</span>님이 {notification.message}
+              <span className='notification-name'>{notification.name}</span>님이 게시글 "
+            <span className='notification-name'>{truncateText(notification.boardTitle || '', 20)}</span>"
+            에 댓글을 남겼습니다: 
+            <em className='notification-name'>{truncateText(notification.commentContent || '', 20)}</em>
+            </span>
+          )}
+           {( notification.type === newReply) && (// 내 댓글에 새 답글
+            <span
+              className='notification-content-message'
+              onClick={()=>{goToNotificationPost(notification.boardWriterNickname,notification.boardId,notification.parentCommentId, notification.commentId)}}>
+           
+              <span className='notification-name'>{notification.name}</span>님이 "
+            <span style={{fontWeight:'bold', backgroundColor:'transparent'}} className='noti-title'>{truncateText(notification.boardTitle || '', 20)}</span>"
+            에 댓글을 남겼습니다: 
+            <em className='notification-name'>{truncateText(notification.commentContent || '', 20)}</em>
+            </span>
+          )}
+          {(notification.type === writeNewPost) && ( //내 이웃이 새로 쓴 글
+            <span
+              className='notification-content-message'
+              onClick={()=>{goToNotificationPost(notification.name,notification.boardId)}}
+            >
+              <span className='notification-name'>{notification.name}</span>님이 새 게시글을 작성했습니다:
+              <em className='notification-name'>{truncateText(notification.boardTitle || '', 20)}</em>
             </span>
           )}
 
           </div>
 
-          <button className="close-btn-SSE" onClick={() => setNotification(null)}>
+          <button className="close-btn-SSE" onClick={() =>{setNotification(null); } }>
             &times;
           </button>
         </div>
