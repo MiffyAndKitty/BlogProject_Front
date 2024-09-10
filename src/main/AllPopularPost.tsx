@@ -326,8 +326,8 @@ const AllPopularPost: React.FC = () => {
                 ):(
                   <div className="post-main-main-list">
                   {posts.map((post) => (
-                    <div className="post-main-card" key={post.board_id} >
-                      <div className="post-main-header">
+                    <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                      <div className="post-main-header" >
                         <div className="title-container">
                           <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
                           <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className="post-user-author" style={{cursor:'pointer'}}>{post.user_nickname}</span>
@@ -352,7 +352,7 @@ const AllPopularPost: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="post-main-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}></div>
+                      <div className="post-main-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
                     </div>
                     ))}
                   </div>
