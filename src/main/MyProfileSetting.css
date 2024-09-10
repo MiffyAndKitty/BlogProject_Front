@@ -14,7 +14,15 @@
     
     margin-bottom: 10px;
 }
-
+.submit-cancel{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.paswd-field{
+    display: flex;
+    flex-direction: column;
+}
 .profile-image-container button {
     background-color: #FF88D7;
     color: white;

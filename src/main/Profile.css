@@ -25,6 +25,10 @@ button:active {
 }
 .mainCharacter_profile_login {
   width: 100px; /* 원하는 너비로 조정 */
+  max-width: 100px;
+  max-height: 100px;
+  min-width: 100px;
+  min-height: 100px;
   height: 100px; /* 원하는 높이로 조정 */
   object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞게 조정 */
   border-radius: 50%; /* 이미지를 원형으로 만들고 싶다면 추가 */

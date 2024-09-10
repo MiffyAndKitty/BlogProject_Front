@@ -188,7 +188,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
              :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
             }
           </div>
-          {profileImage && <UserProfile profileType={'logout'} profileImage={profileImage}></UserProfile>}
+          {profileImage && <UserProfile profileType={'profileSetting'} profileImage={profileImage}></UserProfile>}
           </div>
         </>
        

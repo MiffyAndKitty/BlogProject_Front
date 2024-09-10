@@ -220,21 +220,11 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
   return (
     <>
-    {/* <section className={
-      `profile-section ${pageType === 'myBlog' ? 'myBlog' 
-      : (pageType==='otherBlog'?'otherBlog'
-      :(pageType==='signup_for_blog'?'signup_for_blog'
-      :(pageType==='profileSetting'?'profileSetting'
-      :(pageType==='postManage'?'postManage'
-      :(pageType==='login'?'login': '')))))}`}>
-       */}
       {pageType === 'signup' && (
         <section className='profile-section'>
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
           <div className="logins_profile">
-            {/* <button onClick={goToFindID} style={{cursor:'pointer'}}>아이디 찾기</button>
-            <span>|</span> */}
             <button style={{cursor:'pointer'}}>비밀번호 찾기</button>
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
@@ -424,15 +414,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       </section>
       )}
      {error && <div className="error">{error}</div>}
-     {/* <div style={{
-      marginTop:'400px',
-      position: 'absolute', // 절대 위치로 설정하여 부모 요소와 독립적으로 위치를 조정
-      marginRight: '100px'
-    }}>
-     {children}
-     </div> */}
-    {/* </section> */}
-     
+
      </>
   );
 };

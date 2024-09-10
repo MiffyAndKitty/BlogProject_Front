@@ -49,7 +49,7 @@ const AllNewNotification: React.FC = () => {
  
   useEffect(() => {
     fetchNotifications(filterType);
-  }, [currentPage, filterType, isBefore]); // isBefore 추가
+  }, [currentPage,filterType, isBefore]); // isBefore 추가
   
   const fetchNotifications = async (type: string | null = filterType, pageSize: number = 10) => {
     try {
@@ -83,7 +83,7 @@ const AllNewNotification: React.FC = () => {
     setFilterType(type);
     setCurrentPage(1);
     setCursor('');
-    fetchNotifications(type, 10);
+   // fetchNotifications(type, 10);
   };
   const truncateText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {

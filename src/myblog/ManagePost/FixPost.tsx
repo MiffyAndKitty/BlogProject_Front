@@ -34,6 +34,8 @@ const FixPost: React.FC = () => {
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const newImages: File[] = [];
 
+  const errorMessage ='제목과 내용을 모두 입력해주세요!';
+
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
@@ -83,9 +85,9 @@ const FixPost: React.FC = () => {
       if (!tags.includes(tagInput.trim())&& tags.length < 10) {
         setTags([...tags, tagInput.trim()]);
       }
-      // if(tags.length===10){
-      //   alert('최대 태그 수 10개를 넘었습니다!');
-      // }
+      if(tags.length===10){
+        alert('최대 태그 수 10개를 넘었습니다!');
+      }
       setTagInput('');
     }
   };
@@ -146,8 +148,29 @@ const FixPost: React.FC = () => {
   const handleNotification = (isNotified: boolean) => {
     setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
   };
-  const fixPosts = async () => {
 
+  // 불필요한 태그만 있는지 확인하는 함수
+  const isContentEmpty = (htmlContent: string) => {
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = htmlContent;
+
+    // 텍스트 노드를 포함한 모든 텍스트를 가져옴 (공백은 제외)
+    const textContent = tempElement.textContent?.trim() || '';
+
+    // 텍스트가 비어 있으면 내용이 없는 것으로 간주
+    return textContent === '';
+  };
+
+  const fixPosts = async () => {
+    if(!title || !content){
+      alert(errorMessage);
+      return;
+    }
+     // 내용이 비어 있으면 저장하지 않음
+    if (isContentEmpty(content)) {
+      alert("내용을 입력해주세요!");
+      return;
+    }
     const imagesFromSaveImgs = await saveImgs();
     console.log('Images in savePost before formData:', imagesFromSaveImgs);
 
