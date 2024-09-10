@@ -303,7 +303,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   return (
     <>
       
-              <h1 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h1>
+              <h2 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h2>
               <hr className="notification-divider" />
               <div className="search-and-sort-container">
                   <SearchBar onSearch={handleSearch} />
@@ -375,16 +375,27 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
                             <div className="title-container">
                               <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                              <span className="post-user-nickname">{post.user_nickname}</span>
+                              <span className="post-user-author">{post.user_nickname}</span>
                             </div>
                             
                             <div className="post-main-meta">
                               <span className="post-main-category">{findCategoryById(categories, post.category_id)}</span>
                               <span className="post-main-date">{formatDate(post.created_at)}</span>
                               <span className="post-main-stats">
-                                <span className="post-user-nickname">조회수: {post.board_view}</span>
-                                <span className="post-user-nickname"><img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> : {post.board_like}</span>
-                                <span className="post-user-nickname">댓글: {post.board_comment}</span>
+
+                                <span className="post-user-nickname">조회수
+                                  <span className="post-user-num"> {post.board_view}</span>
+                                </span>
+
+                                <span className="post-user-nickname">
+                                  <img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> 
+                                  <span className="post-user-num"> {post.board_like}</span>
+                                </span>
+
+                                <span className="post-user-nickname">댓글
+                                  <span className="post-user-num"> {post.board_comment}</span>
+                                </span>
+
                               </span>
                             </div>
 

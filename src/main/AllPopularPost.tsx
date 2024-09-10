@@ -4,6 +4,7 @@ import { useParams,Link  } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import SearchBar from '../structure/SearchBar';
+import './PopularTags.css';
 import '../myblog/ManagePost/GetPost.css';
 import * as TYPES from '../types/index';
 import mainCharacterImg from '../img/main_character.png';
@@ -17,8 +18,12 @@ import filledCarrot from '../img/filledCarrot.png'
 import CategorySettings from '../myblog/CategorySetting';
 import ConfirmModal from '../myblog/ConfirmModal'; 
 import SSEComponent from './SSEComponent';
+import  upBtn  from '../img/upToggle.png';
+import  downBtn  from '../img/downToggle.png';
+import noPosts from '../img/noPosts.png';
+
 const AllPopularPost: React.FC = () => {
-  let {  postID } = useParams<{ postID?: string }>();
+  let {  postID , tag} = useParams<{ postID?: string, tag?:string }>();
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -28,16 +33,14 @@ const AllPopularPost: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
-  const [ managementType, setManagementType] = useState<'post'| 'category'>('post');
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-//   const [category, setCategory] = useState<TYPES.category>({category_name:'카테고리 설정', category_id:""});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [token, setToken] = useState<string>('');
   const [localNickName, setLocalNickName] = useState<string>('');
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
+  const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
+  
   const pageSize = 10;
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
@@ -105,7 +108,7 @@ const AllPopularPost: React.FC = () => {
   
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    fetchPosts(undefined,null, term,'view');
+    fetchPosts(undefined,null, term,sortOption);
   };
 
   const handlePreviousPage = () => {
@@ -123,28 +126,13 @@ const AllPopularPost: React.FC = () => {
       setCurrentPage(currentPage + 1);
     }
   };
+
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
     const regex = new RegExp(`(${keyword})`, 'gi');
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
-  /**
-   * 새 글 작성하기로 이동하기 위한 메서드
-   */
-   const goToWritePost = () => {
-    navigate(`/writenewpost/${nickname}`);
-  };
-  const goToMyBlog = () => {
-    navigate(`/${nickname}`);
-  };
 
-  const goToPostManagement = () => {
-    setManagementType ( 'post');
-  };
-
-  const goToCategoryManagement = () => {
-    setManagementType ( 'category');
-  };
   const removePost = async (postId: string) => {
     try {
 
@@ -158,19 +146,7 @@ const AllPopularPost: React.FC = () => {
       setLoading(false);
     }
   };
-  const handleDelete = (postId: string) => {
-    setSelectedPostId(postId);
-    setIsModalOpen(true);
-  };
-  const confirmDelete = () => {
-    if (selectedPostId) {
-      // 실제 삭제 로직을 여기에 추가
-      removePost(selectedPostId);
-      console.log(`Post ${selectedPostId} deleted`);
-    }
-    setIsModalOpen(false);
-    setSelectedPostId(null);
-  };
+
   /**
    * 게시글 불러오기
    */
@@ -190,7 +166,7 @@ const AllPopularPost: React.FC = () => {
         query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query,sort);
+      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query,sort,tag);
       setIsWriter(fetchedPosts.data.isWriter);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -199,9 +175,7 @@ const AllPopularPost: React.FC = () => {
       }));
       setPosts(postsWithCleanContent);
       setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
-    //   const fetchedCategories: TYPES.categories[] = await getCategories(nickname);
-    //   setCategories(fetchedCategories);
-      //setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length-1].board_id);
+
       if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
       }
@@ -221,6 +195,7 @@ const AllPopularPost: React.FC = () => {
       setLoading(false);
     }
   };
+
   // 불필요한 태그 제거 함수
   const removeUnwantedTags = (html: string): string => {
     const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
@@ -254,21 +229,14 @@ const AllPopularPost: React.FC = () => {
         setLoading(false);
     }
     
-    fetchPosts(undefined,undefined,undefined,'view');
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    fetchPosts();
     
   }, []);
+
   const handleNotification = (isNotified: boolean) => {
     setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
   };
+
   useEffect(() => {
     console.log(`
       
@@ -279,8 +247,10 @@ const AllPopularPost: React.FC = () => {
       
       
       ${cursor}`)
-      fetchPosts(cursor,undefined,searchTerm,'view');
+      fetchPosts(cursor,null,searchTerm,sortOption);
   }, [currentPage]);
+
+  
   const goToBlog = (nickname:string,email:string)=>{
 
     navigate(`/${nickname}`);
@@ -288,50 +258,106 @@ const AllPopularPost: React.FC = () => {
 
   const goToDetailPost = (postID: string , postAthor:String)=>{
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
-  }
+  };
+
+  const handleSortChange = (option) => {
+    setSortOption(option);
+    console.log(option)
+    fetchPosts(undefined,null,undefined,option)
+  };
 
   return (
-    <>
+    <div className="App">
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
-      <main>
-        <div className="main-container">
+      <main className="blog-main-container">
+     
         {(!token && <Profile pageType="signup_for_blog" />)}
         {(token &&<Profile pageType="profileSetting" nicknameParam={localNickName}/>)}
-          <div className="container">
+
+          <section className='main-blog-posts-section'>
             {
-              managementType === 'post' && postID?(
+              postID?(
                 <PostDetail/>
               ) : (
                 
                 <> 
-                <h1 className="title_manage">조회수 높은 순으로 전체보기</h1>
-                <SearchBar onSearch={handleSearch}/>
-                <div className='post-manage'>
-                {!loading && !error && posts.length > 0 && (
-                  <div className="post-list">
+
+                
+                {tag?  
+                    (
+                      <div className='tagTitle-all'>
+                        <em className="tagTitle">#{tag}</em>
+                        <h2> 전체보기</h2> 
+                      </div>
+                    )
+                   
+                   :(
+                      <h2>게시글 전체보기</h2>
+                   )
+                   }
+
+                <div className="filter-buttons">
+                  <button className={`tab-button ${sortOption === '' ? 'active' : ''}`} onClick={() => handleSortChange('')}>최신순</button>
+                  <button className={`tab-button ${sortOption === 'like' ? 'active' : ''}`} onClick={() => handleSortChange('like')}>인기순(당근수)</button>
+                  <button className={`tab-button ${sortOption === 'view' ? 'active' : ''}`} onClick={() => handleSortChange('view')}>조회순</button>
+                </div>
+
+                <div className='search-and-sort-container'>
+                      <SearchBar onSearch={handleSearch} />
+                </div>
+
+                <hr className="notification-divider" />
+
+                <div>
+
+                {loading ?(
+                  <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <p>로딩중...</p>
+                  </div>
+                </div>
+                ): posts.length === 0 ?(
+                  <div className="no-posts-message">
+                  <div className="no-posts-container">
+                    <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                    <p>게시물이 없습니다.</p>
+                  </div>
+                </div>
+                ):(
+                  <div className="post-main-main-list">
                   {posts.map((post) => (
-                    <div className="post-card" key={post.board_id} >
-                      <div className="post-header">
+                    <div className="post-main-card" key={post.board_id} >
+                      <div className="post-main-header">
                         <div className="title-container">
                           <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
-                          <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className="user-nickname" style={{cursor:'pointer'}}>작성자: {post.user_nickname}</span>
+                          <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className="post-user-author" style={{cursor:'pointer'}}>{post.user_nickname}</span>
                         </div>
-                        <div className="post-meta">
-                          <span className="post-category">{post.category_name}</span>
-                          <span className="post-date">{formatDate(post.created_at)}</span>
-                          <span className="post-stats">
-                            <span className="user-nickname">조회수: {post.board_view}</span>
-                            <span className="user-nickname"><img style={{width:'15px', height:'15px'}} src={filledCarrot}></img> : {post.board_like}</span>
-                            <span className="user-nickname">댓글: {post.board_comment}</span>
+                        <div className="post-main-meta">
+                          <span className="post-main-category">{post.category_name}</span>
+                          <span className="post-main-date">{formatDate(post.created_at)}</span>
+                          <span className="post-main-stats">
+                           
+                          <span className="post-user-nickname">조회수
+                                  <span className="post-user-num"> {post.board_view}</span>
+                                </span>
+
+                                <span className="post-user-nickname">
+                                  <img style={{ width: '15px', height: '15px' }} src={filledCarrot}></img> 
+                                  <span className="post-user-num"> {post.board_like}</span>
+                                </span>
+
+                                <span className="post-user-nickname">댓글
+                                  <span className="post-user-num"> {post.board_comment}</span>
+                                </span>
                           </span>
                         </div>
                       </div>
-                      <div className="post-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}></div>
+                      <div className="post-main-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}></div>
                     </div>
-                  ))}
-                </div>
-                
+                    ))}
+                  </div>
                 )}
+
                 <div className="pagination">
                   <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
                     이전
@@ -350,12 +376,12 @@ const AllPopularPost: React.FC = () => {
 
             
           
-          </div>
-        </div>
+          </section>
+  
         <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

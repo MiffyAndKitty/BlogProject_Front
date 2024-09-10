@@ -272,6 +272,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
             <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
           </div>
+
           <div className="logins_profile">
             <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
             {isModalOpen && <Follow onClose={closeModal} />}
@@ -370,8 +371,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           </div>
         
         <div className="login-buttons-container">
-          <button className="login-button_profile" onClick={goToWritePost}>글 작성하기</button>
-          <button className="login-button_profile" onClick={goToMyBlog}>내 블로그 가기</button>
+          <button className="login-button_profile_myblog" onClick={goToWritePost}>글 작성하기</button>
+          <button className="login-button_profile_myblog" onClick={goToMyBlog}>내 블로그 가기</button>
         </div>
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>

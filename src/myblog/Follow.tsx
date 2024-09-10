@@ -199,7 +199,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
         <div className="modal-overlay2" onClick={onClose}>
             <div className="modal-content2" onClick={(e) => e.stopPropagation()}>
                 <span className="modal-close2" onClick={onClose}>&times;</span>
-                <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+                <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between',alignItems:'center', flexWrap:'wrap'}}>
                     <h2 style={{ color: "#FF88D7" }}>{nickname}의 팔로우</h2>
             
                     {followers.length > 0 &&!isOthers && !manage && (<button style={{height:'30px',backgroundColor: '#ff4da6',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}} onClick={()=>{setManage(true)}}>관리하기</button>)}

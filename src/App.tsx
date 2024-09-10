@@ -16,7 +16,6 @@ import FixPost from './myblog/ManagePost/FixPost';
 import CategorySettings from './myblog/CategorySetting';
 import PostDetail from './myblog/PostDetail';
 import AllPopularPost from './main/AllPopularPost';
-import AllNewPost from './main/AllNewPost';
 import MyProfileSetting from './main/MyProfileSetting';
 import AllNewNotification from './main/AllNewNotification';
 import DragTest from './main/DragTest';
@@ -32,8 +31,6 @@ function App() {
   return (
     <Router>
     <Routes>
-      <Route path={`/123`} element={<DragTest></DragTest>}/>
-      {/* <Route path={`/`} element={<Layout></Layout>}/> */}
       <Route index element={<MainPage></MainPage>}/>
       <Route path={`/login`} element={<Login></Login>}/>
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
@@ -43,14 +40,12 @@ function App() {
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />
-      <Route path={`/dashboard/all-popular-post`} element={<AllPopularPost></AllPopularPost>} />
-      <Route path={`/dashboard/all-new-post`} element={<AllNewPost></AllNewPost>} />
+      <Route path={`/dashboard/all-post/:tag?`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />
       <Route path={`/:nickname/:postID?/:commentID?/:replyID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
       <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
-     
       <Route path={`/categorySetting/:nickname`} element={<CategorySettings></CategorySettings>} />
       <Route path={`/myProfileSetting/:nickname`} element={<MyProfileSetting></MyProfileSetting>} />
     </Routes>

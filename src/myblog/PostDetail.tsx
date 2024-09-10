@@ -77,7 +77,6 @@ const PostDetail: React.FC = () => {
   const [replies, setReplies] = useState<{ [key: string]: CommentData[] }>({}); // 각 댓글의 답글 상태 관리
   const [openReplies, setOpenReplies] = useState<{ [key: string]: boolean }>({}); // 답글이 열려 있는지 여부 상태 관리
   const [replyInputs, setReplyInputs] = useState<{ [key: string]: string }>({}); // 각 댓글의 답글 입력 상태 관리
-
    // 각 댓글의 ref를 설정하는 함수
    const setCommentRef = (commentId: string, ref: HTMLDivElement | null, isLast: boolean) => {
     commentRef.current[commentId] = ref; // 각 댓글의 ref 저장
@@ -132,6 +131,8 @@ const PostDetail: React.FC = () => {
       const result = await newComment(newData);
       if(result) {
         //alert('댓글 추가에 성공했습니다!');
+        lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+        setTotalComment(totalComments+1);
         setComment(''); // 댓글 등록 후 입력 창 초기화
         // 댓글을 등록한 후 1페이지로 돌아가서 댓글 목록을 다시 불러옵니다.
         setCursor(''); // Cursor를 초기화하여 첫 페이지를 가져오도록 함
@@ -887,7 +888,7 @@ const PostDetail: React.FC = () => {
                   </div>
                 ) : (
                   <>
-                    <h1>{post.board_title}</h1>
+                    <h2>{post.board_title}</h2>
 
                     <div className="postdetail-meta">
                       <span
@@ -984,7 +985,7 @@ const PostDetail: React.FC = () => {
                   <div ref={firstCommentRef} className="comment-section">
                     <div className="titleSort">
                       <h3>
-                        댓글<span style={{ marginLeft: '10px', color: '#FF88D7', backgroundColor:'transparent' }}>{totalComments}</span>
+                        댓글 <span style={{ marginLeft: '10px', color: '#FF88D7', backgroundColor:'transparent' }}>{totalComments}</span>
                       </h3>
                       <div style={{ marginLeft: '30px' }}>
                         <span

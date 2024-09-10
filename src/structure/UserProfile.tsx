@@ -34,7 +34,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
     <>
     {profileType==='logout' &&(
       <div ref={dropdownRef}>
-      <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+      <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
       {dropdownOpen && (
                     <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
@@ -48,7 +48,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
     {profileType==='signup' &&(
        <div ref={dropdownRef}>
-       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate("/signup")}>회원가입</button>
@@ -62,7 +62,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
     {profileType==='profileSetting' &&(
        <div ref={dropdownRef}>
-       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
@@ -78,7 +78,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
     {profileType==='otherblog' &&(
        <div ref={dropdownRef}>
-       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
@@ -95,7 +95,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
 
   {profileType==='myBlog' &&(
        <div ref={dropdownRef}>
-       <img src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
+       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>

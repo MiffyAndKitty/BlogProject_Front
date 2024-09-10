@@ -86,9 +86,12 @@ button:active {
 .profile-container {
     display: flex;
     align-items: center;
+
   }
   
   .profile-details {
+    display: flex;
+    flex-direction: column;
     margin-left: 15px;
   }
   
@@ -113,4 +116,16 @@ button:active {
     .login-button_profile_myblog{
       display: none;
     }
+    .profile-container {
+
+      padding: 1em;
+    }
+    .login-buttons-container {
+      margin-top: 20px;
+
+  }
+    .logins_profile {
+      margin-top: 30px;
+
+  }
   }

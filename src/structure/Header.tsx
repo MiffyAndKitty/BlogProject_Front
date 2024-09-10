@@ -70,41 +70,13 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
 
   }, []);
   useEffect(()=>{
-      console.log(`
-        
-        
-        header
-        
-        
-        hasNotifications
-        
-        
-        `,hasNotifications)
+
         if(hasNotifications===true)setHasNoti(hasNotifications);
         
   },[hasNotifications])
 
   useEffect(()=>{
-    console.log(`
-        
 
-
-
-
-
-
-
-        [hasNoti];
-
-
-
-
-
-
-
-      
-      
-      `,hasNoti)
   },[hasNoti]);
 
 

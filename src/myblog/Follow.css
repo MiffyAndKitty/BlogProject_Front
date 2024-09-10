@@ -3,6 +3,8 @@
     flex-wrap: wrap; /* 여러 줄로 넘어갈 수 있도록 설정 */
     gap: 16px; /* 아이템 간의 간격 */
     gap: 16px; /* 아이템 간의 간격 */
+    justify-content: center;
+    align-items: center;
     
 }
 
@@ -12,7 +14,8 @@
     align-items: center;
     position: relative; /* 부모 요소에 상대적으로 배치 */
     margin-bottom: 16px;
-    width: calc(20% - 16px); /* 한 줄에 5개씩 배치되도록 설정 (5개의 아이템이 들어가도록 20%로 설정하고 간격을 뺌) */
+    width: 80px;
+    /* width: calc(20% - 16px);  */
 }
 
 .follower-image-wrapper {
@@ -37,8 +40,8 @@
 }
 .both-friend-wrapper-follower {
   position: absolute;
-  top: -3px; 
-  right: -3px;
+  top: -8px; 
+  right: -10px;
   background-color:#fed0a2;
   border-radius: 50%;
   padding: 1px;
@@ -104,7 +107,7 @@
     background-color: white;
     padding: 20px;
     border-radius: 10px;
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: relative;

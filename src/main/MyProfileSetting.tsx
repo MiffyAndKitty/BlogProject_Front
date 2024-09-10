@@ -393,7 +393,7 @@ const MyProfileSetting: React.FC = () => {
                         <div className="main-blog-posts-section">
                             {userData && (
                                 <>
-                                    <h1 style={{color:"#FF88D7"}}>{nickname}의 프로필</h1>
+                                    <h2 style={{color:"#FF88D7"}}>{nickname}의 프로필</h2>
                                     <div className='border'>
                                     <div>
                                             <label style={{fontWeight:'bold', color:'#FF88D7', marginBottom:'5px',}}>프로필 이미지:</label>

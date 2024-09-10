@@ -54,14 +54,18 @@
     color: white; /* 글씨색 흰색으로 설정 */
     
   }
-  
+  .post-user-author{
+    font-size: 0.9em; /* 닉네임의 크기를 조절합니다 */
+    color:rgba(255, 255, 255, 0.659); /* 닉네임의 색상을 조절합니다 */
+    background-color: #ffffff00;
+  }
   .post-main-meta {
     display: flex;
     align-items: center;
     gap: 10px;
   }
   .post-main-category{
-    color: rgba(34, 31, 31, 0.842); /* 글씨색 흰색으로 설정 */
+    color: #f829b3; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   .post-main-date {
@@ -80,7 +84,16 @@
     font-size: 0.9em; /* 닉네임의 크기를 조절합니다 */
     color:white; /* 닉네임의 색상을 조절합니다 */
     background-color: #ffffff00;
+
   }
+
+  .post-user-num {
+    font-size: 12px;
+    color: #fa25a8;
+    background-color: transparent;
+    font-weight: bold;
+  }
+
   .post-main-likes,
   .post-main-comments {
     display: flex;

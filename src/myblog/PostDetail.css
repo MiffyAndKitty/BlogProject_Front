@@ -124,8 +124,19 @@
     font-size: 14px;
   }
 
-
-
+  .tagTitle{
+    font-weight: bold;
+   
+    background-color: #FFE6FA;
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 14px;
+  }
+.tagTitle-all{
+  display: flex;
+  align-items: center;
+}
   .comment-section {
     margin-top: 40px;
     padding: 20px;

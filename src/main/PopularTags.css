@@ -19,6 +19,7 @@
     box-sizing: border-box;
     white-space: nowrap; /* 각 태그의 텍스트가 줄바꿈되지 않도록 설정 */
   }
+
   .tag:hover {
     max-width: 300px; /* 마우스를 올렸을 때 태그의 너비를 확장 */
     white-space: normal; /* 태그의 텍스트가 여러 줄로 나타날 수 있게 설정 */

@@ -170,7 +170,7 @@ const PopularPost: React.FC = () => {
     }
   };
   const goToAllPopularPosts = ()=>{
-    navigate(`/dashboard/all-popular-post`);
+    navigate(`/dashboard/all-post`);
   };
   const goToDetailPost = (postID: string , postAthor:String)=>{
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
@@ -218,11 +218,16 @@ const PopularPost: React.FC = () => {
                              <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_view}</span>
                           </span>
 
-
-                          <img style={{ width: '15px', height: '15px', marginLeft: '50px' }} src={filledCarrot}></img>
-                          <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>
-                            <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_like}</span> 
-                          </span>
+                          <div className='carrot-like'>
+                            <div style={{marginRight:'3px'}}>
+                              <img style={{ width: '15px', height: '15px',  }} src={filledCarrot}></img>
+                            </div>
+                            
+                            <div className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>
+                              <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}> {post.board_like}</span> 
+                            </div>
+                          </div>
+                         
 
                           <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>댓글
                           <span className={firstImageSrc ? "post-popular-effect-white" : "post-popular-effect"}>  {post.board_comment}</span>
