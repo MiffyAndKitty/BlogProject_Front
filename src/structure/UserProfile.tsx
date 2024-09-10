@@ -31,7 +31,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
     };
   }, []);
   return (
-    <>
+    <div  style={{cursor:'pointer'}}>
     {profileType==='logout' &&(
       <div ref={dropdownRef}>
       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
@@ -108,7 +108,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
        </div>
       
     )}
-    </>
+    </div>
   );
 };
 

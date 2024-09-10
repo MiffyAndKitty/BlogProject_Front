@@ -87,15 +87,15 @@ export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolea
  * 게시글 목록 불러오기
  * @returns 
  */
-export const getALLPosts = async (pageSize:number, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string, sort?: string, tags?:string): Promise<any> => {
+export const getALLPosts = async (pageSize:number, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string, sort?: string, tag?:string): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/`;
   const params: Record<string, any> = {};
   if(pageSize){
     params['page-size'] = pageSize;
   }
-  if(tags){
-    params.tags = tags;
+  if(tag){
+    params.tag = tag;
   }
   if(cursor){
     params.cursor = cursor;

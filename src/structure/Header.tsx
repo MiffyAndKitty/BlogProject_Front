@@ -21,10 +21,19 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
   const [message, setMessage] = useState<string>('');
   const [image, setImage] = useState<string>(mainCharacterImg);
   const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const { hasNoti, setHasNoti } = useNotification(); // 전역 상태 사용
   const [token, setToken] = useState<string>('');
   const [openNotification, setOpenNotification]  = useState<boolean>(false);
+  const navigate = useNavigate();
 
+
+  const handleSearch = (term: string) => {
+    const params = new URLSearchParams({ search: term });
+    navigate(`/dashboard/all-post?${params.toString()}`);
+
+    
+  };
 
   const closeModal = () => {
     setOpenNotification(false);
@@ -104,7 +113,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
         </div>
 
         <div className="header__auth">
-        
+          <SearchBar onSearch={handleSearch} />
           <UserProfile profileType={'signup'} profileImage={mainCharacterImg}></UserProfile>
         </div>
       </>
@@ -120,7 +129,10 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
 
         
           <div className="header__auth">
+          <SearchBar onSearch={handleSearch} />
+
           <div 
+          style={{cursor:'pointer'}}
           ref={notificationButtonRef}
           onClick={()=>setOpenNotification(true)}>
 
@@ -128,8 +140,8 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
               <Notification onClose={closeModal} buttonRef={notificationButtonRef} />
             )}
             {hasNoti ?
-              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
-             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px'}}/>
+              <img src={ has_notification}  style={{width:'20px', height:'auto', marginRight:'20px',cursor:'pointer'}}/>
+             :<img src={ no_notification}  style={{width:'20px', height:'auto', marginRight:'20px',cursor:'pointer'}}/>
             }
            
           </div>
@@ -148,6 +160,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
           </div>
           
           <div className="header__auth">
+          <SearchBar onSearch={handleSearch} />
           <div 
           ref={notificationButtonRef}
           onClick={()=>setOpenNotification(true)}>
@@ -175,6 +188,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
           </div>
 
           <div className="header__auth">
+            <SearchBar onSearch={handleSearch} />
           <div 
           ref={notificationButtonRef}
           onClick={()=>setOpenNotification(true)}>
@@ -202,6 +216,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
           </div>
 
           <div className="header__auth">
+          <SearchBar onSearch={handleSearch} />
           <div 
           ref={notificationButtonRef}
           onClick={()=>setOpenNotification(true)}>

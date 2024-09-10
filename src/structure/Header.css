@@ -2,7 +2,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     background-color: #FFE6FA;
+    flex-wrap: nowrap; 
   }
   
   .header__logo h1 {
@@ -26,6 +28,8 @@
     display: flex;
     align-items: center;
     background-color: #FFE6FA;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
   }
   .header__auth a {
     text-decoration: none;
@@ -38,4 +42,11 @@
   .header__logo-img {
     width: 50px;
     height: 50px;
+  }
+
+  @media(max-width: 403px){
+    .header__auth{
+      justify-content: flex-start;
+    }
+    
   }

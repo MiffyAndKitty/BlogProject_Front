@@ -65,7 +65,7 @@
     gap: 10px;
   }
   .post-main-category{
-    color: #f829b3; /* 글씨색 흰색으로 설정 */
+    color: #f829b395; /* 글씨색 흰색으로 설정 */
     background-color: #f0a4d8;
   }
   .post-main-date {
@@ -89,7 +89,7 @@
 
   .post-user-num {
     font-size: 12px;
-    color: #fa25a8;
+    color: #ff6cc7;
     background-color: transparent;
     font-weight: bold;
   }

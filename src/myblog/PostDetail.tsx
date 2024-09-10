@@ -129,7 +129,21 @@ const PostDetail: React.FC = () => {
           commentContent: comment
       }
       const result = await newComment(newData);
-      if(result) {
+      
+      console.log(`
+        
+        
+        
+        
+        
+        result
+        
+        
+        
+        
+        
+        `,result.status); 
+      if(result.status=== 201) {
         //alert('댓글 추가에 성공했습니다!');
         lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
         setTotalComment(totalComments+1);
@@ -138,18 +152,16 @@ const PostDetail: React.FC = () => {
         setCursor(''); // Cursor를 초기화하여 첫 페이지를 가져오도록 함
         setCurrentPage(1); // 페이지를 첫 페이지로 설정
         fetchComments(sortOption, 10,''); // 첫 페이지의 댓글 목록 불러오기
-      }else {
-        // 상태 코드에 따른 에러 메시지 처리
-        if (result.status === 400) {
-          alert('잘못된 요청입니다. 입력한 내용을 다시 확인해주세요.');
-        } else if (result.status === 500) {
-          alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-        } else {
-          alert(`댓글 추가에 실패했습니다! 오류 메시지: ${result.message}`);
-        }
       }
     }catch(err){
-      alert('댓글 추가에 실패했습니다! 다시 시도해주세요.');
+       // 상태 코드에 따른 에러 메시지 처리
+       if (err.response.status === 400) {
+        alert('잘못된 요청입니다. 입력한 내용을 다시 확인해주세요.');
+      } else if (err.response.status === 500) {
+        alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+      } else {
+        alert(`댓글 추가에 실패했습니다! 오류 메시지: ${err.response.message}`);
+      }
     }
     
   };
@@ -503,7 +515,7 @@ const PostDetail: React.FC = () => {
       navigate(`/${nickname}`);
     } catch (err) {
       console.error(err);
-      alert('글을 삭제하는 중에 오류가 발생했습니다.');
+      alert(`글을 삭제하는 중에 오류가 발생했습니다: ${err.response.message}`);
 
     } finally {
       setLoading(false);
@@ -593,7 +605,7 @@ const PostDetail: React.FC = () => {
           setEditingCommentContent(''); // 수정 완료 후 상태 초기화
         }
       } catch (err) {
-        console.error('댓글 수정 중 오류 발생:', err);
+        console.error('댓글 수정 중 오류 발생:', err.response.message);
       }
     }
   };

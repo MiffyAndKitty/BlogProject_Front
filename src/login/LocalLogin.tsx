@@ -8,6 +8,8 @@ import { setLogin } from '../services/postService';
 import { getMyProfile } from '../services/getService';
 import { loginData } from '../types';
 import mainCharacterImg from '../img/main_character.png';
+import openEye from '../img/openEye.png';
+import closeEye from '../img/closeEye.png';
 import './LocalLogin.css';
 
 const LocalLogin: React.FC = () => {
@@ -22,6 +24,9 @@ const LocalLogin: React.FC = () => {
   const [areYouFollowing, setAreYouFollowing] = useState<string>('');
   const [areYouFollowed, setAreYouFollowed] = useState<string>('');
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
+
+
 
   const [errors, setErrors] = useState({
     email: '',
@@ -170,6 +175,7 @@ const LocalLogin: React.FC = () => {
             <h2 style={{color:"#A9A9A9"}}>로그인</h2>
             <Form>
               <Form.Group className="inputFieldCss mb-3">
+                <div className='password-container'>
                 <Form.Control 
                   type="email" 
                   placeholder="이메일" 
@@ -179,21 +185,32 @@ const LocalLogin: React.FC = () => {
                   isInvalid={touched.email && !!errors.email}
                   className="transparent-input"
                 />
+                </div>
+              
                 
               </Form.Group>
               <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
 
               <Form.Group className="inputFieldCss mb-3">
                 <Form.Label></Form.Label>
-                <Form.Control 
-                  type="password" 
-                  placeholder="비밀번호" 
-                  value={password} 
-                  onChange={(e) => setPassword(e.target.value)} 
-                  onBlur={() => setTouched({ ...touched, password: true })}
-                  isInvalid={touched.password && !!errors.password}
-                  className="transparent-input"
-                />
+                <div className="password-container">
+                  <Form.Control 
+                    type={isPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
+                    placeholder="비밀번호" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    onBlur={() => setTouched({ ...touched, password: true })}
+                    isInvalid={touched.password && !!errors.password}
+                    className="transparent-input"
+                  />
+                   <img
+                    src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                    alt="Toggle visibility"
+                    className="toggle-password-visibility"
+                    onClick={() => setIsPasswordVisible(!isPasswordVisible)} // 클릭 시 상태 변경
+                    style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                  />
+                </div>
                
               </Form.Group>
               <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password}</Form.Control.Feedback>

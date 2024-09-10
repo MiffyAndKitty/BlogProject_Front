@@ -1,3 +1,35 @@
+/* 배경이 확대되는 애니메이션 */
+@keyframes expandBackground {
+  0% {
+    transform: scale(0);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(100);
+    opacity: 0;
+  }
+}
+
+.expand-background {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  background-color: pink;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.expand-background.active {
+  transform: scale(100);
+  opacity: 0;
+}
+
+
 .popularpost-section {
     padding: 20px;
   }
@@ -5,6 +37,7 @@
   .posts {
     display: flex;
     gap: 20px;
+    position: relative;
   }
   .slider {
     position: relative;
@@ -40,7 +73,9 @@
   }
 
   .post-popular {
+    box-sizing: border-box;
     display: flex;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 */
     flex-direction: column;
     width: 300px;
     height: 335px;
@@ -48,9 +83,12 @@
     background-color: #FFE6FA;
     border-radius: 10px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.273);
   }
-  
+  .post-popular:hover {
+    transform: translateY(-10px) scale(1.05); /* 마우스를 올리면 위로 약간 올라가고, 살짝 커짐 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.273); /* 약간의 그림자 효과 */
+  }
   /* 기본 스타일 */
   .post-popular-image {
     width: 100%;
@@ -60,8 +98,14 @@
   .carrot-like{
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
+    justify-content: flex-start ;
+
+  }
+  .post-popular-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 10px;
   }
   .post-popular.has-image .post-overlay {
     background-color: rgba(0, 0, 0, 0.413); /* 반투명한 검은색 오버레이 */
@@ -74,6 +118,7 @@
   }
   .post-popular-content {
     padding: 10px;
+    margin-top: 50px;
   }
   
   .post-popular-author {
@@ -107,12 +152,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
    
-  }
-
-  .post-popular-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
   }
   
   .post-popular-likes, .post-popular-comments {
@@ -153,7 +192,11 @@
   }
 
   @media (max-width: 1141px) {
-
+    .post-popular-content {
+      padding: 10px;
+      margin-top: 0px;
+    }
+    
     .popularpost-section {
       padding: 20px;
     }
@@ -282,7 +325,8 @@
   
     .post-popular-footer {
       display: flex;
-      justify-content: space-between;
+      flex-direction: row;
+      justify-content: flex-start;
       margin-top: 10px;
     }
     

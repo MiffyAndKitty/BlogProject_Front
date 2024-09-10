@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useRef } from 'react';
 import { useParams,Link  } from 'react-router-dom';
 import Header from '../structure/Header';
@@ -21,15 +22,17 @@ import SSEComponent from './SSEComponent';
 import  upBtn  from '../img/upToggle.png';
 import  downBtn  from '../img/downToggle.png';
 import noPosts from '../img/noPosts.png';
+import { set } from 'date-fns';
 
 const AllPopularPost: React.FC = () => {
-  let {  postID , tag} = useParams<{ postID?: string, tag?:string }>();
+  let {  postID , tag, search, sort} = useParams<{ postID?: string, tag?:string, search?:string, sort?:string }>();
+  const location = useLocation();
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
@@ -133,20 +136,6 @@ const AllPopularPost: React.FC = () => {
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
 
-  const removePost = async (postId: string) => {
-    try {
-
-      await deletePost(postId);
-      fetchPosts();
-    } catch (err) {
-      console.error(err);
-      alert('글을 삭제하는 중에 오류가 발생했습니다.');
-
-    } finally {
-      setLoading(false);
-    }
-  };
-
   /**
    * 게시글 불러오기
    */
@@ -179,16 +168,6 @@ const AllPopularPost: React.FC = () => {
       if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
         setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
       }
-
-
-      console.log(`
-
-
-        GetPost 
-        ----fetchedPosts---- 
-
-
-        `,fetchedPosts.data.data, posts);
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
@@ -229,28 +208,52 @@ const AllPopularPost: React.FC = () => {
         setLoading(false);
     }
     
-    fetchPosts();
-    
+    //fetchPosts();
+
   }, []);
 
   const handleNotification = (isNotified: boolean) => {
     setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
   };
 
+  // 쿼리 스트링에서 search 및 sort 값을 추출
   useEffect(() => {
-    console.log(`
+    const queryParams = new URLSearchParams(location.search);
+    const search = queryParams.get('search') || '';  // search 값을 가져옴
+    const sort = queryParams.get('sort') || '';      // sort 값을 가져옴
+    
+    console.log(  `
       
       
       
-      페이지가 변경되면서 글 다시 불러오기
       
       
       
-      ${cursor}`)
-      fetchPosts(cursor,null,searchTerm,sortOption);
+      search
+      
+      sort
+      
+      
+      
+      
+      
+      `,search,sort)
+    setSearchTerm(search);  // 검색어 상태 설정
+    setSortOption(sort);    // 정렬 옵션 상태 설정
+
+    fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
+  }, [location.search]);  // location.search가 변경될 때마다 실행
+
+    useEffect(() => {
+
+      if(currentPage !==0) {
+        fetchPosts(cursor,null,searchTerm,sortOption);
+      }else{
+        setCurrentPage(1);
+      }
+      
   }, [currentPage]);
 
-  
   const goToBlog = (nickname:string,email:string)=>{
 
     navigate(`/${nickname}`);
@@ -263,9 +266,17 @@ const AllPopularPost: React.FC = () => {
   const handleSortChange = (option) => {
     setSortOption(option);
     console.log(option)
-    fetchPosts(undefined,null,undefined,option)
+    fetchPosts(undefined,null,searchTerm,option)
   };
 
+  const fetchAllPost = ()=>{
+    setSearchTerm('');
+    setCursor('');
+    setCurrentPage(1);
+    setSortOption('');
+    fetchPosts();  // 게시글 가져오기 함수 호출
+    
+  }
   return (
     <div className="App">
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
@@ -292,7 +303,7 @@ const AllPopularPost: React.FC = () => {
                     )
                    
                    :(
-                      <h2>게시글 전체보기</h2>
+                      <h2 onClick={fetchAllPost}>게시글 전체보기</h2>
                    )
                    }
 

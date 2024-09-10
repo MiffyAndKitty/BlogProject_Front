@@ -67,12 +67,25 @@ select:focus {
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease;
 }
+.password-container {
+  position: relative;
+  display: flex;
+  
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.toggle-password-visibility {
+  margin-left: 10px;
+  cursor: pointer;
+}
 
 .transparent-input {
   background-color: transparent;
   border: 0px;
   color: #000; /* 텍스트 색상 */
   width: 100%;
+  min-width: 100%;
   text-align: center; /* 입력 텍스트를 중앙 정렬 */
 }
 

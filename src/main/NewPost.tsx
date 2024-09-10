@@ -14,7 +14,7 @@ const NewPost: React.FC = () => {
   const [cursor, setCursor] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const [autoSlide, setAutoSlide] = useState<boolean>(true); // 자동 슬라이드 제어
   const pageSize = 3;
   const navigate = useNavigate();
 
@@ -79,6 +79,16 @@ const NewPost: React.FC = () => {
   },[]);
 
   useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (autoSlide) {
+        nextPosts();
+      }
+    }, 3000); // 3초마다 실행
+  
+    return () => clearInterval(intervalId); // 컴포넌트가 언마운트 될 때 인터벌 정리
+  }, [currentPage, autoSlide, posts]);
+
+  useEffect(() => {
     console.log(`
       
       
@@ -94,11 +104,16 @@ const NewPost: React.FC = () => {
   const postsPerPage = 3; // 한번에 보여줄 포스트의 개수
 
   const nextPosts = () => {
-    if (currentPage < totalPages) {
-      setCursor(posts[posts.length - 1].board_id);
-      setIsBefore(false);
-      setCurrentPage(currentPage + 1);
-    }
+     if (currentPage < totalPages) {
+    setCursor(posts[posts.length - 1].board_id);
+    setIsBefore(false);
+    setCurrentPage(currentPage + 1);
+  } else {
+    // 마지막 페이지에서 다시 1페이지로 이동
+    setCursor('');
+    setCurrentPage(1);
+    setIsBefore(false);
+  }
   };
 
   const prevPosts = () => {
@@ -209,7 +224,7 @@ const NewPost: React.FC = () => {
                       <h3 className="post-popular-title">{post.board_title}</h3>
                         <p className="post-popular-author">
                           <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className={firstImageSrc ? 'post-popular-author-white' : "post-popular-author"}>
-                            작성자: {post.user_nickname}
+                            {post.user_nickname}
                           </span> <span className={firstImageSrc ? "post-popular-likes-white" : "post-popular-likes"}>| {formatDate(post.created_at)}</span>
                         </p>
                        

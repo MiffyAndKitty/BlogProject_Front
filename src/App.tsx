@@ -40,7 +40,7 @@ function App() {
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
       <Route path={`/dashboard/:nickname`} element={<Dashboard></Dashboard>} />
-      <Route path={`/dashboard/all-post/:tag?`} element={<AllPopularPost></AllPopularPost>} />
+      <Route path={`/dashboard/all-post/:tag?/:search?/:sort?`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />
       <Route path={`/:nickname/:postID?/:commentID?/:replyID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />

@@ -2,15 +2,17 @@
 .search-bar {
     display: flex;
     align-items: center;
-    justify-content:flex-end; /* 수평 방향으로 중앙에 정렬 */
+    justify-content:flex-end; 
     flex-wrap: nowrap;
-    /* width: 100%; */
-    min-width: 250px;
+    
+    margin-right: 20px;
+    /* min-width: 250px; */
     height: 35px;
     margin-bottom: 10px;
-    border: 2px solid #f0a4d8;
-    border-radius: 8px;
+    border: 2px solid #FF6DC6;
+    border-radius: 12px;
     overflow: hidden;
+    margin-top:5px
   }
   
   .search-bar input {
@@ -40,3 +42,25 @@
     height: 25px;
   }
   
+  @media(max-width: 403px){
+    .search-bar {
+      width:50%
+      
+    }
+    .search-bar input {
+      width:50%;
+      flex-grow: 1;
+      padding: 5px; /* padding 줄이기 */
+      font-size: 14px; /* 폰트 크기 줄이기 */
+
+    }
+    
+    .search-bar button {
+      padding: 5px; /* padding 줄이기 */
+    }
+    .searchIcon{
+      width: 20px;
+      height: 20px;
+    }
+    
+  }
