@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import './PopularPost.Module.css';
+import spinner from '../img/Spinner.png';
 import { getALLPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
 import filledCarrot from '../img/filledCarrot.png';
@@ -16,6 +17,8 @@ const PopularPost: React.FC = () => {
   const [autoSlide, setAutoSlide] = useState<boolean>(true); // 자동 슬라이드 제어
   const [expandEffect, setExpandEffect] = useState<boolean>(false); // 애니메이션 상태
   const [selectedPost, setSelectedPost] = useState<string | null>(null); // 선택된 포스트
+  const [cachedPosts, setCachedPosts] = useState<{ [page: number]: any[] }>({});
+
   const pageSize = 3;
   const navigate = useNavigate();
   const extractFirstImage = (htmlContent: string): string | null => {
@@ -38,6 +41,12 @@ const PopularPost: React.FC = () => {
   */
   const fetchPosts = async (cursor?: string, categoryID?: string, query?:string,sort?:string) => {
     try {
+      setLoading(true);
+      if (cachedPosts[currentPage]) {
+        // 캐시에 데이터가 있으면 그것을 사용
+        setPosts(cachedPosts[currentPage]);
+        return;
+      }
       console.log(`
         ==================
         fetchPosts Info 
@@ -52,6 +61,11 @@ const PopularPost: React.FC = () => {
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,
         board_content:post.board_content, // 목록에서만 제거된 내용을 표시
+      }));
+      // 새로운 페이지의 데이터를 캐시에 저장
+      setCachedPosts((prev) => ({
+        ...prev,
+        [currentPage]: postsWithCleanContent,
       }));
       setPosts(postsWithCleanContent);
       if(fetchedPosts.data.total.totalPageCount){
@@ -89,16 +103,19 @@ const PopularPost: React.FC = () => {
     fetchPosts(undefined,undefined,undefined,'view');
   },[]);
   useEffect(() => {
+
     console.log(`
-      
-      
-      
       페이지가 변경되면서 글 다시 불러오기
-      
-      
-      
-      ${cursor}`)
-      fetchPosts(cursor,undefined,undefined,'view');
+      ${cursor}
+    `);
+  
+    if (!cachedPosts[currentPage]) {
+      // 캐시에 없는 경우에만 fetchPosts 호출
+      fetchPosts(cursor, undefined, undefined, 'view');
+    } else {
+      // 캐시된 데이터가 있으면 그 데이터를 사용
+      setPosts(cachedPosts[currentPage]);
+    }
   }, [currentPage]);
 
   useEffect(() => {
@@ -263,6 +280,28 @@ const PopularPost: React.FC = () => {
                 
               })}
             </div>
+          )}
+
+          {loading&&(
+             <div className="posts">
+             
+             <div className='post-popular' style={{  backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                   <div className='loading-post-overlay' >
+                   <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                     </div>
+                   </div>
+                   <div className='post-popular' style={{  backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                   <div className='loading-post-overlay' >
+                   <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                     </div>
+                   </div>
+                   <div className='post-popular' style={{  backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                   <div className='loading-post-overlay' >
+                   <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                     </div>
+                   </div>
+              
+           </div>
           )}
         </div>
         <button className="slide-button right" onClick={nextPosts} disabled={currentPage === totalPages}>

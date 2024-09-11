@@ -39,6 +39,11 @@
     gap: 20px;
     position: relative;
   }
+  .loading-posts {
+    display: flex;
+    gap: 20px;
+    position: relative;
+  }
   .slider {
     position: relative;
     display: flex;
@@ -85,6 +90,19 @@
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.273);
   }
+  .loading-post-popular {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    height: 335px;
+    border: none; /* 테두리 추가 */
+    background-color: #dcdcdc;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.273);
+  }
+
   .post-popular:hover {
     transform: translateY(-10px) scale(1.05); /* 마우스를 올리면 위로 약간 올라가고, 살짝 커짐 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.273); /* 약간의 그림자 효과 */
@@ -207,6 +225,12 @@
       gap: 20px;
       width: 100%;
     }
+    .loading-posts{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
     .slider {
       position: relative;
       display: flex;
@@ -254,6 +278,22 @@
       flex-grow: 1; /* 포스트가 남은 공간을 가득 채우도록 함 */
       flex-shrink: 0; /* 포스트가 작아지지 않도록 방지 */
     }
+
+      /* 각 포스트부분 style */
+      .loading-post-popular {
+        display: flex;
+        flex-direction: column;
+        width: 100%; /* 너비를 항상 100%로 설정 */
+        min-width: 100%; /* 최소 너비도 100%로 설정 */
+        height: 100px; /* 높이는 내용에 따라 자동 */
+        border: none;
+        background-color: #dcdcdc;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        flex-grow: 1; /* 포스트가 남은 공간을 가득 채우도록 함 */
+        flex-shrink: 0; /* 포스트가 작아지지 않도록 방지 */
+      }
     /* 기본 스타일 */
     .post-popular-image {
       width: 100%;
@@ -278,6 +318,11 @@
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
+    }
+    .loading-post-overlay{
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .post-popular-content {
       padding: 10px;
@@ -387,6 +432,21 @@
   height: 100px; /* 높이는 내용에 따라 자동 */
   border: 2px solid #FF88D7;
   background-color: #FFE6FA;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-grow: 1; /* 포스트가 남은 공간을 가득 채우도록 함 */
+  flex-shrink: 0; /* 포스트가 작아지지 않도록 방지 */
+}
+ /* 각 포스트부분 style */
+ .loading-post-popular {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* 너비를 항상 100%로 설정 */
+  min-width: 100%; /* 최소 너비도 100%로 설정 */
+  height: 100px; /* 높이는 내용에 따라 자동 */
+  border: none;
+  background-color: #dcdcdc;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

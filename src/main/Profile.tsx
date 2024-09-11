@@ -31,7 +31,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 interface ProfileProps {
-  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage';
+  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage'|'no-login-section';
   userImg?:string,
   otherEmail? :string,
   userMessage?: string,
@@ -231,6 +231,17 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           </div>
         </section>
       )}
+      {pageType === 'no-login-section' && (
+        <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
+          <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
+          <div className="logins_profile">
+            <button style={{cursor:'pointer'}}>비밀번호 찾기</button>
+            <span>|</span>
+            <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
+          </div>
+        </section>
+      )}
        {pageType === 'signup_for_blog' && (
         <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
         <div className="profile-container">
@@ -245,10 +256,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
         <div className="logins_profile" style={{marginTop:'100px'}}>
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} />}
+        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail}/>}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} isOthers={true} otherEmail={otherEmail}/>}
         </div>
       </section>
       )}

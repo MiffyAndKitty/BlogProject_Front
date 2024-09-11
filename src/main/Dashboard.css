@@ -1,3 +1,27 @@
+/*런드리고딕*/
+@font-face {
+  font-family: 'TTLaundryGothicB';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+h1, h2, h3 {
+  font-family: 'TTLaundryGothicB', sans-serif;
+}
+
+/* 이서윤체 */
+@font-face { 
+  font-family: 'LeeSeoyun';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/LeeSeoyun.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+span,div,button,input {
+  font-family: 'LeeSeoyun', sans-serif;
+}
+
+
 .main-content {
     display: grid;
     grid-template-columns: 2.5fr 1fr; /* 두 개의 열 */
@@ -372,6 +396,22 @@
     margin-left: -0px;
     grid-column: auto;
     grid-row: 13 /14; /* 7행부터 8행까지 차지 */
+    height: 100px; /* 고정 높이 설정 */
+  }
+}
+
+@media (max-width:360px){
+  .lotsoffollowerbloger-section {
+  
+    grid-column: auto;
+    grid-row: 13 / 14; /* 6행부터 7행까지 차지 */
+    height: 100px; /* 고정 높이 설정 */
+  }
+  
+  .carrotbloger-section {
+  
+    grid-column: auto;
+    grid-row: 14 /15; /* 7행부터 8행까지 차지 */
     height: 100px; /* 고정 높이 설정 */
   }
 }

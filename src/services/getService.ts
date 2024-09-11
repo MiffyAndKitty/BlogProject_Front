@@ -237,9 +237,9 @@ export const getPopTags = async (): Promise<any> => {
  * 사용자 프로필 가져오기
  * @returns 
  */
-export const getMyProfile = async (nickname: string): Promise<any> => {
+export const getMyProfile = async (email: string): Promise<any> => {
   const token = getToken();
-  const url = `/users/:${nickname}`;
+  const url = `/users/:${email}`;
   let response;
 
   if(token ===null ){
@@ -290,11 +290,20 @@ export const getFollow = async (email: string,page: number): Promise<any> => {
   const url = `/users/:${email}/follow?page=${page}&pageSize=`;
   let response;
 
-  response = await apiClient.get(url,{
-    headers:{
-      'Authorization': `${token}`,
-    }
-  });
+  if(token ===null ){
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }else{
+    response = await apiClient.get(url,{
+      headers:{
+        'Authorization': `${token}`,
+      }
+    });
+  }
+ 
 
   console.log(response);
   return response.data;

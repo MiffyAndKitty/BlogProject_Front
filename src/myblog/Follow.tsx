@@ -18,6 +18,7 @@ interface FollowModalProps {
 }
 const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => {
     const { nickname } = useParams();
+    const [token, setToken] = useState<string>('');
     const [followers, setFollowers] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -140,7 +141,15 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
         }else{
             setUseEmail(otherEmail);
         }
-        
+        const localStorageToken = sessionStorage.getItem('accessToken');
+
+        if(localStorageToken ===null){
+          setToken('');
+        }else{
+          setToken(localStorageToken);
+        }
+
+
     }, []);
 
     useEffect(() => {
@@ -226,7 +235,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                 <img
                                                     src={follower.user_image || mainCharacterImg}
                                                     alt="Profile"
-                                                    className="heart"
+                                                    className="heart-no-spin"
                                                     onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
                                                 />
                                                 {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
@@ -237,7 +246,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                 />
                                                 )}
                                                
-                                                 {isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                                                 {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
                         
                                                     <div
                                                         className="both-friend-wrapper-follower">
@@ -251,7 +260,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
     
     
                                                  )}
-                                                {!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                                                {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
     
                                                     <div
                                                         className="both-friend-wrapper">
@@ -287,7 +296,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                             >
                                                 {follower.user_nickname}
                                             </div>
-                                            {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
+                                            {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
                                                          <button onClick={()=>{deleteFollowers(follower.user_email)}}
                                                          className="both-friend-wrapper-dofollow">
                                                          <img
@@ -299,7 +308,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                   )}
     
                                                   
-                                                  {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
+                                                  {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
                                                          <button onClick={()=>{followUsers(follower.user_email)}}
                                                          className="both-friend-wrapper-dontfollow">
                                                          <img
@@ -335,7 +344,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                 <img
                                                     src={follower.user_image || mainCharacterImg}
                                                     alt="Profile"
-                                                    className="heart"
+                                                    className="heart-no-spin"
                                                     onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
                                                 />
                                                 {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
@@ -346,7 +355,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                 />
                                                 )}
                                                
-                                                 {isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                                                 {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
                         
                                                     <div
                                                         className="both-friend-wrapper-follower">
@@ -360,7 +369,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
     
     
                                                  )}
-                                                {!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                                                {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
     
                                                     <div
                                                         className="both-friend-wrapper">
@@ -396,7 +405,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                             >
                                                 {follower.user_nickname}
                                             </div>
-                                            {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
+                                            {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
                                                          <button onClick={()=>{deleteFollowers(follower.user_email)}}
                                                          className="both-friend-wrapper-dofollow">
                                                          <img
@@ -408,7 +417,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
                                                   )}
     
                                                   
-                                                  {(follower.user_email !== localEmail) &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
+                                                  {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
                                                          <button onClick={()=>{followUsers(follower.user_email)}}
                                                          className="both-friend-wrapper-dontfollow">
                                                          <img

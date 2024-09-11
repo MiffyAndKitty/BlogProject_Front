@@ -27,34 +27,7 @@
   .signup1 button {
     margin: 0 auto; /* 버튼을 중앙에 정렬 */
   }
-  .google-login-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #4285F4;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    font-family: 'Roboto', sans-serif;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-bottom: 10px; /* 다른 버튼과의 간격 */
-  }
-  
-  .google-login-button .google-logo {
-    height: 18px;
-    width: 18px;
-    margin-right: 24px;
-  }
-  
-  .google-login-button:hover {
-    background-color: #357ae8;
-  }
-  
-  .google-login-button:active {
-    background-color: #3367d6;
-  }
+
   .login-button{
     margin-top:30px;
     background-color: #FFE6FA;

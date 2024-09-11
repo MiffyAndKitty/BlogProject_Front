@@ -62,6 +62,7 @@ const MyBlogMainPage: React.FC = () => {
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
+      navigate(`/dashboard/${localNickName}`);
     } finally {
       setProfileLoading(false); // 프로필 로딩 끝
     }

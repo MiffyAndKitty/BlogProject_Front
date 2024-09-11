@@ -159,7 +159,7 @@ const LocalLogin: React.FC = () => {
   useEffect(() => {
     if (loginResult === 'true') {
       alert("로그인에 성공했습니다!!");
-      navigate(`/dashboard/${nickname}`);
+      navigate(`/dashboard`);
     } else if (loginResult === 'false') {
       alert("로그인에 실패했습니다!!");
     }

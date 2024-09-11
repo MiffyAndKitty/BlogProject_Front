@@ -37,19 +37,22 @@
 .loginStruct button {
   margin: 0 auto; /* 버튼을 중앙에 정렬 */
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
 .google-login-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #4285F4;
-  color: white;
+  background-color: white;
+  color: rgb(0, 0, 0);
   border: none;
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 14px;
   font-family: 'Roboto', sans-serif;
+  font-weight: 500; /* Roboto Medium */
   cursor: pointer;
   border-radius: 4px;
   margin-bottom: 10px; /* 다른 버튼과의 간격 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .google-login-button .google-logo {
@@ -59,11 +62,11 @@
 }
 
 .google-login-button:hover {
-  background-color: #357ae8;
+  background-color: #FFFFFF;
 }
 
 .google-login-button:active {
-  background-color: #3367d6;
+  background-color: #FFFFFF;
 }
 .login-button{
   margin-top:30px;

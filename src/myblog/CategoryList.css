@@ -50,6 +50,10 @@
   background-color: #eee8ec00;
   font-weight: bold;
   color: #ff0080; /* 원하는 색상으로 변경 */
+  margin:0px;
+  /* display: flex;
+  flex-direction: row;
+  flex-wrap: wrap; */
 }
 
 .addOrCancelBtn {

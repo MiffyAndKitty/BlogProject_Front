@@ -122,7 +122,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
       {token &&pageType === 'logout' &&(
         <>
           <div className="header__logo">
-            <Link to={`/dashboard/${nickname}`}>
+            <Link to={`/dashboard`}>
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
@@ -154,7 +154,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
       {token &&pageType === 'profileSetting' &&(
         <>
           <div className="header__logo">
-          <Link to={`/dashboard/${nickname}`}>
+          <Link to={`/dashboard`}>
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
@@ -182,7 +182,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
       {token &&pageType === 'otherblog' &&(
         <>
           <div className="header__logo">
-          <Link to={`/dashboard/${nickname}`}>
+          <Link to={`/dashboard`}>
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>
@@ -210,7 +210,7 @@ const Header: React.FC<ProfileProps> = ({pageType ,hasNotifications = false}) =>
       {token &&pageType === 'myBlog' &&(
         <>
           <div className="header__logo">
-          <Link to={`/dashboard/${nickname}`}>
+          <Link to={`/dashboard`}>
               <img src={mainCharacterImg} alt="Main Character" className="header__logo-img" />
             </Link>
           </div>

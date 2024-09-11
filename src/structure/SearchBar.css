@@ -42,21 +42,23 @@
     height: 25px;
   }
   
-  @media(max-width: 403px){
+  @media(max-width: 503px){
     .search-bar {
-      width:50%
+      width:100%;
+      margin-right: 10px;
       
     }
     .search-bar input {
-      width:50%;
-      flex-grow: 1;
-      padding: 5px; /* padding 줄이기 */
-      font-size: 14px; /* 폰트 크기 줄이기 */
+      width:100%;
+      flex-grow: 0;
+      height: 100%;
+      padding: 5px; 
+      font-size: 14px; 
 
     }
     
     .search-bar button {
-      padding: 5px; /* padding 줄이기 */
+      padding: 5px; 
     }
     .searchIcon{
       width: 20px;

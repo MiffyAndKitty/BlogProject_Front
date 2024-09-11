@@ -20,6 +20,7 @@ interface FollowModalProps {
 
 const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => {
     const { nickname } = useParams();
+    const [token, setToken] = useState<string>('');
     const [followers, setFollowers] = useState<any[]>([]);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -152,7 +153,13 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
       }else{
           setUseEmail(otherEmail);
       }
-      
+      const localStorageToken = sessionStorage.getItem('accessToken');
+
+      if(localStorageToken ===null){
+        setToken('');
+      }else{
+        setToken(localStorageToken);
+      }
   }, []);
     const handleDelete = (nicknameToDelete: string) => {
         setNicknameToDelete(nicknameToDelete);
@@ -186,12 +193,12 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                               <img
                                 src={follower.user_image || mainCharacterImg}
                                 alt="Profile"
-                                className="heart"
+                                className="heart-no-spin"
                                 onClick={() =>
                                   goToBlog(follower.user_nickname, follower.user_email)
                                 }
                               />
-                              {follower.areYouFollowing === 1 &&
+                              {follower.areYouFollowing === 1 &&token &&
                                 follower.areYouFollowed === 1 && (
                                   <div className="both-friend-wrapper-follower">
                                     <img
@@ -225,7 +232,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                             >
                               {follower.user_nickname}
                             </div>
-                            {follower.user_email !== localEmail &&
+                            {follower.user_email !== localEmail &&token &&
                               follower.areYouFollowing === 1 && (
                                 <button
                                   onClick={() => deleteFollowers(follower.user_email)}
@@ -239,7 +246,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                                 </button>
                               )}
       
-                            {follower.user_email !== localEmail &&
+                            {follower.user_email !== localEmail &&token &&
                               follower.areYouFollowing === 0 && (
                                 <button
                                   onClick={() => followUsers(follower.user_email)}
@@ -282,14 +289,14 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                               <img
                                 src={follower.user_image || mainCharacterImg}
                                 alt="Profile"
-                                className="heart"
+                                className="heart-no-spin"
                                 onClick={() =>
                                   goToBlog(follower.user_nickname, follower.user_email)
                                 }
                               />
 
                               
-                              {follower.areYouFollowing === 1 &&
+                              {follower.areYouFollowing === 1 &&token &&
                                 follower.areYouFollowed === 1 && (
                                   <div className="both-friend-wrapper-follower">
                                     <img
@@ -324,7 +331,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                             >
                               {follower.user_nickname}
                             </div>
-                            {follower.user_email !== localEmail &&
+                            {follower.user_email !== localEmail &&token &&
                               follower.areYouFollowing === 1 && (
                                 <button
                                   onClick={() => deleteFollowers(follower.user_email)}
@@ -338,7 +345,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                                 </button>
                               )}
       
-                            {follower.user_email !== localEmail &&
+                            {follower.user_email !== localEmail &&token &&
                               follower.areYouFollowing === 0 && (
                                 <button
                                   onClick={() => followUsers(follower.user_email)}

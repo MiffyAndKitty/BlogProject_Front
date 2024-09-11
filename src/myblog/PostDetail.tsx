@@ -14,6 +14,7 @@ import emptyDisLikeComment from '../img/empty_dislike_comment.png';
 import emptyLikeComment from '../img/empty_like_comment.png';
 import filledDisLikeComment from '../img/filled_dislike_comment.png';
 import filledLikeComment from '../img/filled_like_comment.png';
+import spinner from '../img/Spinner.png';
 import DOMPurify from 'dompurify';
 import './PostDetail.css';
 import ConfirmModal from './ConfirmModal'; 
@@ -630,7 +631,7 @@ const PostDetail: React.FC = () => {
     return commentsList.map((comment, index) => (
       <div key={comment.comment_id} className="comment-item" ref={(el) => setCommentRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}>
         <div className="comment-header">
-          <img className='heart' src={comment.user_image || mainCharacterImg} alt="User Profile" />
+          <img className='heart-no-spin' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
             <span className="comment-item-author">{comment.user_nickname}</span>
             
@@ -730,7 +731,7 @@ const PostDetail: React.FC = () => {
         {openReplies[comment.comment_id] && (
           <div className="reply-section">
             <div className='comment-profile'>
-              <img alt="Profile" className="heart" src={profileImage}></img>
+              <img alt="Profile" className="heart-no-spin" src={profileImage}></img>
               <div className="textarea-container2">
                 {token &&(
                   <textarea
@@ -886,9 +887,9 @@ const PostDetail: React.FC = () => {
                 {loading ?  (
                   <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555' }}>
                     <div style={{ marginBottom: '10px' }}>
-                      <img src="https://example.com/loading-spinner.gif" alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                      <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
                     </div>
-                    로딩 중...
+                    <span>로딩 중...</span>
                   </div>
                 ) : error ? (
                   <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: 'red', border: '1px solid red', borderRadius: '5px', backgroundColor: '#ffe6e6' }}>
@@ -903,6 +904,8 @@ const PostDetail: React.FC = () => {
                     <h2>{post.board_title}</h2>
 
                     <div className="postdetail-meta">
+
+                      
                       <span
                         onClick={() => goToBlog(post.user_nickname)}
                         className="postdetail-author"
@@ -910,15 +913,23 @@ const PostDetail: React.FC = () => {
                       >
                         작성자: {post.user_nickname}
                       </span>
-                      <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
-                      <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
-                      <div>
+
+
+                      
+                      <div className='postdetail-meta-meta'>
+                        <span className="postdetail-date">작성날짜: {formatDate(post.created_at)}</span>
+                        <span className="postdetail-date">수정날짜: {formatDate(post.updated_at)}</span>
+
+                        <div>
                         <span className="postdetail-likes">
                           <img style={{ width: '15px', height: '15px' }} src={filledCarrot} alt="likes" /> : {post.board_like}
                         </span>
                         <span className="postdetail-comments">조회수: {post.board_view}</span>
                         <span className="postdetail-comments">댓글: {post.board_comment}</span>
+                        </div>
+                       
                       </div>
+
                     </div>
                     
                     <div className="separator"></div> {/* 구분선 추가 */}
@@ -1020,7 +1031,7 @@ const PostDetail: React.FC = () => {
                     </div>
   
                     <div className="comment-profile">
-                      <img alt="Profile" className="heart" src={profileImage}></img>
+                      <img alt="Profile" className="heart-no-spin" src={profileImage}></img>
                       <div className="textarea-container">
                         {token &&(
                              <textarea

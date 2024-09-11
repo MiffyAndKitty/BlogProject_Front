@@ -62,7 +62,7 @@ const AuthCallback: React.FC = () => {
         sessionStorage.setItem('message', message);
         sessionStorage.setItem('areYouFollowing', areYouFollowing);
         sessionStorage.setItem('areYouFollowed', areYouFollowed);
-        navigate(`/dashboard/${nickname}`);
+        navigate(`/dashboard`);
       } else if (token === 'undefined' && nickname) {
         sessionStorage.setItem('email', email);
       

@@ -44,7 +44,10 @@
   .postdetail-meta .post-comments {
     margin-left: 20px;
   }
-  
+  .postdetail-meta-meta{
+    display: flex;
+    flex-wrap: wrap;
+  }
   .postdetail-content {
     margin-top: 20px;
     line-height: 1.6;

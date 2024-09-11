@@ -136,6 +136,7 @@ const AllPopularPost: React.FC = () => {
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
 
+
   /**
    * 게시글 불러오기
    */
@@ -282,7 +283,7 @@ const AllPopularPost: React.FC = () => {
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="blog-main-container">
      
-        {(!token && <Profile pageType="signup_for_blog" />)}
+        {(!token && <Profile pageType="no-login-section" />)}
         {(token &&<Profile pageType="profileSetting" nicknameParam={localNickName}/>)}
 
           <section className='main-blog-posts-section'>
