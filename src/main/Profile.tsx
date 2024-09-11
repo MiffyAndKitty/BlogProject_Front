@@ -118,8 +118,8 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
     }
    
   };
-  const goToFindID = () => {
-    navigate(`/findID`);
+  const goToFindPW = () => {
+    navigate(`/find-password`);
   };
 
   /**
@@ -225,7 +225,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
           <div className="logins_profile">
-            <button style={{cursor:'pointer'}}>비밀번호 찾기</button>
+            <button onClick={goToFindPW} style={{cursor:'pointer'}}>비밀번호 찾기</button>
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
           </div>
@@ -236,7 +236,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
           <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
           <button className="login-button" onClick={goToLogin} style={{cursor:'pointer'}}>로그인</button>
           <div className="logins_profile">
-            <button style={{cursor:'pointer'}}>비밀번호 찾기</button>
+            <button onClick={goToFindPW} style={{cursor:'pointer'}}>비밀번호 찾기</button>
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
           </div>
@@ -256,10 +256,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
         <div className="logins_profile" style={{marginTop:'100px'}}>
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail}/>}
+        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail} profileNickname={nicknameParam}/>}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower} isOthers={true} otherEmail={otherEmail}/>}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} isOthers={true} otherEmail={otherEmail} profileNickname={nicknameParam}/>}
         </div>
       </section>
       )}
@@ -286,10 +286,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
           <div className="logins_profile">
             <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-            {isModalOpen && <Follow onClose={closeModal} />}
+            {isModalOpen && <Follow onClose={closeModal} profileNickname={user}/>}
             <span>|</span>
             <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-            {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
+            {isModalOpenFollower && <Follower onClose={closeModalFollower} profileNickname={user}/>}
             <span>|</span>
             <button onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
             <span>|</span>
@@ -318,10 +318,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         </div>
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} />}
+        {isModalOpen && <Follow onClose={closeModal} profileNickname={user} />}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} profileNickname={user}  />}
           <span>|</span>
           <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
@@ -353,10 +353,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         </div>
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} />}
+        {isModalOpen && <Follow onClose={closeModal} profileNickname={user} />}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} profileNickname={user} />}
           <span>|</span>
           <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
@@ -387,10 +387,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         </div>
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} />}
+        {isModalOpen && <Follow onClose={closeModal} profileNickname={user} />}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower} />}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower} profileNickname={user}/>}
           <span>|</span>
           <button  onClick={()=>{navigate(`/dashboard/all-new-notification`)}} style={{cursor:'pointer'}}>새소식</button>
           <span>|</span>
@@ -418,10 +418,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
 
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
-        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail}/>}
+        {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail} profileNickname={nicknameParam} />}
           <span>|</span>
           <button onClick={openModalFollower}  style={{cursor:'pointer'}} >팔로워</button>
-          {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true} otherEmail={otherEmail}/>}
+          {isModalOpenFollower && <Follower onClose={closeModalFollower}  isOthers={true} otherEmail={otherEmail} profileNickname={nicknameParam}/>}
         </div>
       </section>
       )}

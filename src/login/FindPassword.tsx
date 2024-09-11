@@ -7,7 +7,7 @@ const FindLoginID: React.FC = () => {
     <div className="App">
     <Header pageType="signup"/>
     <main>
-      로그인 아이디 찾기
+      
     </main>
     <Footer />
   </div>

@@ -6,20 +6,25 @@ import { followUser } from '../services/postService';
 import mainCharacterImg from '../img/main_character.png';
 import deleteFollowImg from '../img/deleteFollow.png';
 import './Follow.css';
+import spinner from '../img/Spinner.png';
 import FollowDeleteModal from './FollowDeleteModal'; 
 import bothFriendImg from '../img/both_friend.png';
 import friendImg from '../img/friend.png';
 import nonFriendImg from '../img/nonFriend.png';
+import noPosts from '../img/noPosts.png';
 import { set } from 'date-fns';
+
 interface FollowModalProps {
     onClose: () => void;
     isOthers?: boolean
-    otherEmail? : string 
+    otherEmail? : string
+    profileNickname?: string
 }
-const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => {
+const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,otherEmail}) => {
     const { nickname } = useParams();
     const [token, setToken] = useState<string>('');
     const [followers, setFollowers] = useState<any[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nicknameToDelete, setNicknameToDelete] = useState('');
@@ -36,20 +41,10 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
     const fetchFollowers = async () => {
         setIsLoading(true);
         try {
-        
+            setLoading(true); 
           if (otherEmail) {
             const fetchedFollowers = await getFollow(otherEmail, page);
-            console.log(`
-                
-                
-                
-                fetchedFollowers
-                
-                
-                
-                
-                
-                `,fetchedFollowers)
+
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       
             if (fetchedFollowers.data.followingsList.length < 10) {
@@ -57,17 +52,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
             }
           }else{
             const fetchedFollowers = await getFollow(localEmail, page);
-            console.log(`
-                
-                
-                
-                fetchedFollowers
-                
-                
-                
-                
-                
-                `,fetchedFollowers)
+
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       
             if (fetchedFollowers.data.followingsList.length < 10) {
@@ -78,6 +63,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
           console.error('Failed to load followers:', error);
         } finally {
           setIsLoading(false);
+          setLoading(false);
         }
       };
       
@@ -209,7 +195,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
             <div className="modal-content2" onClick={(e) => e.stopPropagation()}>
                 <span className="modal-close2" onClick={onClose}>&times;</span>
                 <div style={{display:'flex', flexDirection:'row',justifyContent:'space-between',alignItems:'center', flexWrap:'wrap'}}>
-                    <h2 style={{ color: "#FF88D7" }}>{nickname}의 팔로우</h2>
+                    <h2 style={{ color: "#FF88D7" }}>{profileNickname}의 팔로우</h2>
             
                     {followers.length > 0 &&!isOthers && !manage && (<button style={{height:'30px',backgroundColor: '#ff4da6',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}} onClick={()=>{setManage(true)}}>관리하기</button>)}
                     {followers.length > 0 &&!isOthers && manage && (<button style={{height:'30px',backgroundColor: 'grey',color: 'white',padding: '10px 20px', border: 'none',borderRadius: '5px'}}   onClick={()=>{setManage(false)}}>관리 끝내기</button>)}
@@ -218,234 +204,246 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => 
 
                 <div className="border">
                     <div>
-                        {followers.length > 0 ? (
+                      
                             <div className="followers-list">
-                                {followers.map((follower, index) => {
+                                {loading?(
+                                   <>
+                                   <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                                   <p>로딩중...</p></>
+                                ): followers.length === 0 ?(
+                                    <div >
+                                      <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                                      <p>팔로우가 없습니다.</p>
+                                    </div>
+                                  ):(
+                                    <>
+                                    {followers.map((follower, index) => {
 
-                                    if(followers.length === index + 1) {
-                                        return(
-                                            <div
-                                            ref={lastFollowerElementRef}
-                                            key={follower.user_email}
-                                            className="follower-item"
-                                            onMouseEnter={() => setHoveredFollower(follower.user_nickname)}
-                                            onMouseLeave={() => setHoveredFollower(null)}
-                                        >
-                                            <div className="follower-image-wrapper">
-                                                <img
-                                                    src={follower.user_image || mainCharacterImg}
-                                                    alt="Profile"
-                                                    className="heart-no-spin"
-                                                    onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
-                                                />
-                                                {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
-                                                    <img
-                                                    src={deleteFollowImg}
-                                                    className="delete-button"
-                                                    onClick={() => handleDelete(follower.user_email)}
-                                                />
-                                                )}
-                                               
-                                                 {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
-                        
-                                                    <div
-                                                        className="both-friend-wrapper-follower">
-                                                        <img
-                                                          src={bothFriendImg}
-                                                          className="both-friend"
-                                                          alt="Both Friend"
-                                                        />
-                                                    </div>
-                      
-    
-    
-                                                 )}
-                                                {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
-    
-                                                    <div
-                                                        className="both-friend-wrapper">
-                                                        <img
-                                                          src={bothFriendImg}
-                                                          className="both-friend"
-                                                          alt="Both Friend"
-                                                        />
-                                                    </div>
-    
-                                                
-                                                
-                                                 )}
-                                                 
-                                                <FollowDeleteModal
-                                                    isOpen={isModalOpen}
-                                                    onClose={() => setIsModalOpen(false)}
-                                                    onConfirm={() => deleteFollowers(nicknameToDelete)}
-                                                    message="해당 팔로우를 삭제하시겠습니까?"
-                                                />
-                                            </div>
-    
-                                            <div
-                                                style={{ 
-                                                    fontWeight: 'bold', 
-                                                    fontSize: '12px', 
-                                                    maxWidth:'50px',
-                                                    overflow:'hidden',
-                                                    whiteSpace: 'nowrap', // 한 줄로 표시
-                                                    textOverflow: 'ellipsis', // 길면 점점점 표시
-                                                    cursor:'pointer' }}
-                                                onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
+                                        if(followers.length === index + 1) {
+                                            return(
+                                                <div
+                                                ref={lastFollowerElementRef}
+                                                key={follower.user_email}
+                                                className="follower-item"
+                                                onMouseEnter={() => setHoveredFollower(follower.user_nickname)}
+                                                onMouseLeave={() => setHoveredFollower(null)}
                                             >
-                                                {follower.user_nickname}
-                                            </div>
-                                            {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
-                                                         <button onClick={()=>{deleteFollowers(follower.user_email)}}
-                                                         className="both-friend-wrapper-dofollow">
-                                                         <img
-                                                           src={friendImg}
-                                                           className="friend"
-                                                           alt="friend"
-                                                         />
-                                                        </button>
-                                                  )}
-    
-                                                  
-                                                  {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
-                                                         <button onClick={()=>{followUsers(follower.user_email)}}
-                                                         className="both-friend-wrapper-dontfollow">
-                                                         <img
-                                                           src={nonFriendImg}
-                                                           className="friend"
-                                                           alt="friend"
-                                                         />
-                                                        </button>
-                                                  )}
-                                            {!isOthers &&hoveredFollower === follower.user_nickname && (
-                                                <div>
-                                                    {follower.areYouFollowed ? (
-                                                        <div className="hover-message">나를 팔로우하는 사용자입니다!</div>
-                                                    ) : (
-                                                        <div className="hover-message">나를 팔로우하지 않는 사용자입니다!</div>
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                        );
-                                    }else{
-
-                                        return(
-
-                                            
-                                            <div
-                                            key={follower.user_email}
-                                            className="follower-item"
-                                            onMouseEnter={() => setHoveredFollower(follower.user_nickname)}
-                                            onMouseLeave={() => setHoveredFollower(null)}
-                                        >
-                                            <div className="follower-image-wrapper">
-                                                <img
-                                                    src={follower.user_image || mainCharacterImg}
-                                                    alt="Profile"
-                                                    className="heart-no-spin"
-                                                    onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
-                                                />
-                                                {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
+                                                <div className="follower-image-wrapper">
                                                     <img
-                                                    src={deleteFollowImg}
-                                                    className="delete-button"
-                                                    onClick={() => handleDelete(follower.user_email)}
-                                                />
-                                                )}
-                                               
-                                                 {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
-                        
-                                                    <div
-                                                        className="both-friend-wrapper-follower">
+                                                        src={follower.user_image || mainCharacterImg}
+                                                        alt="Profile"
+                                                        className="heart-no-spin"
+                                                        onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
+                                                    />
+                                                    {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
                                                         <img
-                                                          src={bothFriendImg}
-                                                          className="both-friend"
-                                                          alt="Both Friend"
-                                                        />
-                                                    </div>
-                      
-    
-    
-                                                 )}
-                                                {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
-    
-                                                    <div
-                                                        className="both-friend-wrapper">
-                                                        <img
-                                                          src={bothFriendImg}
-                                                          className="both-friend"
-                                                          alt="Both Friend"
-                                                        />
-                                                    </div>
-    
-                                                
-                                                
-                                                 )}
-                                                 
-                                                <FollowDeleteModal
-                                                    isOpen={isModalOpen}
-                                                    onClose={() => setIsModalOpen(false)}
-                                                    onConfirm={() => deleteFollowers(nicknameToDelete)}
-                                                    message="해당 팔로우를 삭제하시겠습니까?"
-                                                />
-                                            </div>
-    
-                                            <div
-                                                style={{ 
-                                                    fontWeight: 'bold', 
-                                                    fontSize: '12px', 
-                                                    maxWidth:'50px',
-                                                    overflow:'hidden',
-                                                    whiteSpace: 'nowrap', // 한 줄로 표시
-                                                    textOverflow: 'ellipsis', // 길면 점점점 표시
-                                                    cursor:'pointer' }}
-                                                onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
-                                            >
-                                                {follower.user_nickname}
-                                            </div>
-                                            {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
-                                                         <button onClick={()=>{deleteFollowers(follower.user_email)}}
-                                                         className="both-friend-wrapper-dofollow">
-                                                         <img
-                                                           src={friendImg}
-                                                           className="friend"
-                                                           alt="friend"
-                                                         />
-                                                        </button>
-                                                  )}
-    
-                                                  
-                                                  {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
-                                                         <button onClick={()=>{followUsers(follower.user_email)}}
-                                                         className="both-friend-wrapper-dontfollow">
-                                                         <img
-                                                           src={nonFriendImg}
-                                                           className="friend"
-                                                           alt="friend"
-                                                         />
-                                                        </button>
-                                                  )}
-                                            {!isOthers &&hoveredFollower === follower.user_nickname && (
-                                                <div>
-                                                    {follower.areYouFollowed ? (
-                                                        <div className="hover-message">나를 팔로우하는 사용자입니다!</div>
-                                                    ) : (
-                                                        <div className="hover-message">나를 팔로우하지 않는 사용자입니다!</div>
+                                                        src={deleteFollowImg}
+                                                        className="delete-button"
+                                                        onClick={() => handleDelete(follower.user_email)}
+                                                    />
                                                     )}
+                                                   
+                                                     {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                            
+                                                        <div
+                                                            className="both-friend-wrapper-follower">
+                                                            <img
+                                                              src={bothFriendImg}
+                                                              className="both-friend"
+                                                              alt="Both Friend"
+                                                            />
+                                                        </div>
+                          
+        
+        
+                                                     )}
+                                                    {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+        
+                                                        <div
+                                                            className="both-friend-wrapper">
+                                                            <img
+                                                              src={bothFriendImg}
+                                                              className="both-friend"
+                                                              alt="Both Friend"
+                                                            />
+                                                        </div>
+        
+                                                    
+                                                    
+                                                     )}
+                                                     
+                                                    <FollowDeleteModal
+                                                        isOpen={isModalOpen}
+                                                        onClose={() => setIsModalOpen(false)}
+                                                        onConfirm={() => deleteFollowers(nicknameToDelete)}
+                                                        message="해당 팔로우를 삭제하시겠습니까?"
+                                                    />
                                                 </div>
-                                            )}
-                                        </div>
-                                        );
+        
+                                                <div
+                                                    style={{ 
+                                                        fontWeight: 'bold', 
+                                                        fontSize: '12px', 
+                                                        maxWidth:'50px',
+                                                        overflow:'hidden',
+                                                        whiteSpace: 'nowrap', // 한 줄로 표시
+                                                        textOverflow: 'ellipsis', // 길면 점점점 표시
+                                                        cursor:'pointer' }}
+                                                    onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
+                                                >
+                                                    {follower.user_nickname}
+                                                </div>
+                                                {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
+                                                             <button onClick={()=>{deleteFollowers(follower.user_email)}}
+                                                             className="both-friend-wrapper-dofollow">
+                                                             <img
+                                                               src={friendImg}
+                                                               className="friend"
+                                                               alt="friend"
+                                                             />
+                                                            </button>
+                                                      )}
+        
+                                                      
+                                                      {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
+                                                             <button onClick={()=>{followUsers(follower.user_email)}}
+                                                             className="both-friend-wrapper-dontfollow">
+                                                             <img
+                                                               src={nonFriendImg}
+                                                               className="friend"
+                                                               alt="friend"
+                                                             />
+                                                            </button>
+                                                      )}
+                                                {!isOthers &&hoveredFollower === follower.user_nickname && (
+                                                    <div>
+                                                        {follower.areYouFollowed ? (
+                                                            <div className="hover-message">나를 팔로우하는 사용자입니다!</div>
+                                                        ) : (
+                                                            <div className="hover-message">나를 팔로우하지 않는 사용자입니다!</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            );
+                                        }else{
+    
+                                            return(
+    
+                                                
+                                                <div
+                                                key={follower.user_email}
+                                                className="follower-item"
+                                                onMouseEnter={() => setHoveredFollower(follower.user_nickname)}
+                                                onMouseLeave={() => setHoveredFollower(null)}
+                                            >
+                                                <div className="follower-image-wrapper">
+                                                    <img
+                                                        src={follower.user_image || mainCharacterImg}
+                                                        alt="Profile"
+                                                        className="heart-no-spin"
+                                                        onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
+                                                    />
+                                                    {(manage&&follower.user_email !== localEmail) &&!isOthers &&(
+                                                        <img
+                                                        src={deleteFollowImg}
+                                                        className="delete-button"
+                                                        onClick={() => handleDelete(follower.user_email)}
+                                                    />
+                                                    )}
+                                                   
+                                                     {token &&isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+                            
+                                                        <div
+                                                            className="both-friend-wrapper-follower">
+                                                            <img
+                                                              src={bothFriendImg}
+                                                              className="both-friend"
+                                                              alt="Both Friend"
+                                                            />
+                                                        </div>
+                          
+        
+        
+                                                     )}
+                                                    {token &&!isOthers&& follower.areYouFollowing===1 &&follower.areYouFollowed===1 && (
+        
+                                                        <div
+                                                            className="both-friend-wrapper">
+                                                            <img
+                                                              src={bothFriendImg}
+                                                              className="both-friend"
+                                                              alt="Both Friend"
+                                                            />
+                                                        </div>
+        
+                                                    
+                                                    
+                                                     )}
+                                                     
+                                                    <FollowDeleteModal
+                                                        isOpen={isModalOpen}
+                                                        onClose={() => setIsModalOpen(false)}
+                                                        onConfirm={() => deleteFollowers(nicknameToDelete)}
+                                                        message="해당 팔로우를 삭제하시겠습니까?"
+                                                    />
+                                                </div>
+        
+                                                <div
+                                                    style={{ 
+                                                        fontWeight: 'bold', 
+                                                        fontSize: '12px', 
+                                                        maxWidth:'50px',
+                                                        overflow:'hidden',
+                                                        whiteSpace: 'nowrap', // 한 줄로 표시
+                                                        textOverflow: 'ellipsis', // 길면 점점점 표시
+                                                        cursor:'pointer' }}
+                                                    onClick={() => goToBlog(follower.user_nickname, follower.user_email)}
+                                                >
+                                                    {follower.user_nickname}
+                                                </div>
+                                                {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===1 && (//다른 사람 블로그의 팔로우 목록에서 내가 팔로우한 사람일 경우
+                                                             <button onClick={()=>{deleteFollowers(follower.user_email)}}
+                                                             className="both-friend-wrapper-dofollow">
+                                                             <img
+                                                               src={friendImg}
+                                                               className="friend"
+                                                               alt="friend"
+                                                             />
+                                                            </button>
+                                                      )}
+        
+                                                      
+                                                      {(follower.user_email !== localEmail) &&token &&isOthers && follower.areYouFollowing===0 && ( //다른 사람 블로그의 팔로우 목록에서 내가 팔로우한적 없는 사람일 경우
+                                                             <button onClick={()=>{followUsers(follower.user_email)}}
+                                                             className="both-friend-wrapper-dontfollow">
+                                                             <img
+                                                               src={nonFriendImg}
+                                                               className="friend"
+                                                               alt="friend"
+                                                             />
+                                                            </button>
+                                                      )}
+                                                {!isOthers &&hoveredFollower === follower.user_nickname && (
+                                                    <div>
+                                                        {follower.areYouFollowed ? (
+                                                            <div className="hover-message">나를 팔로우하는 사용자입니다!</div>
+                                                        ) : (
+                                                            <div className="hover-message">나를 팔로우하지 않는 사용자입니다!</div>
+                                                        )}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            );
+                                        }
                                     }
-                                }
-                                    
+                                        
+                                    )}
+                                    </>
                                 )}
+                               
                             </div>
-                        ) : (
-                            <p>팔로우가 없습니다.</p>
-                        )}
+                        
                     </div>
                 </div>
             </div>

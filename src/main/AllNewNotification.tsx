@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Profile from '../main/Profile';
 import filledCarrot from '../img/filledCarrot.png';
 import mainCharacterImg from '../img/main_character.png';
+import spinner from '../img/Spinner.png';
+import noPosts from '../img/noPosts.png';
 import SSEComponent from './SSEComponent';
 import { deleteNotification } from '../services/deleteService';
 
@@ -39,6 +41,9 @@ const AllNewNotification: React.FC = () => {
   const [localNickName, setLocalNickName] = useState<string>('');
   const navigate = useNavigate();
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+
+
   useEffect(() => {
     const localNickname = sessionStorage.getItem("nickname");
     if (localNickname) {
@@ -53,6 +58,7 @@ const AllNewNotification: React.FC = () => {
   
   const fetchNotifications = async (type: string | null = filterType, pageSize: number = 10) => {
     try {
+      setLoading(true); 
       console.log('Fetching notifications with isBefore:', isBefore); // 디버깅 로그
       const fetchedNotification = await getNotificationsList(type, pageSize, cursor, isBefore);
       if (fetchedNotification.result) {
@@ -65,6 +71,8 @@ const AllNewNotification: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
+    }{
+      setLoading(false);
     }
   };
 
@@ -277,29 +285,46 @@ const AllNewNotification: React.FC = () => {
             </div>
             <hr className="notification-divider" />
             <div className="notification-list border">
-              {notifications.map((notification) => (
-                <div key={notification.notification_id} className="notification-item">
-                  <div className="notification-content">
-                    <img
-                      src={notification.trigger_image || mainCharacterImg}
-                      alt={`${notification.trigger_nickname} profile`}
-                      className="notification-trigger-image"
-                    />
-                    <div className="notification-details">
-                      {renderNotificationMessage(notification)}
-                      <span className="notification-time">
-                        {formatDate(notification.created_at)}
-                      </span>
-                    </div>
-                  </div>
-                  <button
-                    className="delete-notification-button"
-                    onClick={() => handleDeleteNotification(notification.notification_id)}
-                  >
-                    &times;
-                  </button>
+              {loading?(
+                 <div className="no-posts-message">
+                 <div >
+                 <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                   <p>로딩중...</p>
+                 </div>
+               </div>
+              ):notifications.length === 0 ?(
+                <div >
+                  <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                  <p>알림이 없습니다.</p>
                 </div>
-              ))}
+              ):(
+                <>
+                {notifications.map((notification) => (
+                  <div key={notification.notification_id} className="notification-item">
+                    <div className="notification-content">
+                      <img
+                        src={notification.trigger_image || mainCharacterImg}
+                        alt={`${notification.trigger_nickname} profile`}
+                        className="notification-trigger-image"
+                      />
+                      <div className="notification-details">
+                        {renderNotificationMessage(notification)}
+                        <span className="notification-time">
+                          {formatDate(notification.created_at)}
+                        </span>
+                      </div>
+                    </div>
+                    <button
+                      className="delete-notification-button"
+                      onClick={() => handleDeleteNotification(notification.notification_id)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+                </>
+              )}
+             
             </div>
             <div className="pagination">
               <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>

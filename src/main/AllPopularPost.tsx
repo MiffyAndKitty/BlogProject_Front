@@ -5,6 +5,7 @@ import { useParams,Link  } from 'react-router-dom';
 import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import SearchBar from '../structure/SearchBar';
+import spinner from '../img/Spinner.png';
 import './PopularTags.css';
 import '../myblog/ManagePost/GetPost.css';
 import * as TYPES from '../types/index';
@@ -325,6 +326,7 @@ const AllPopularPost: React.FC = () => {
                 {loading ?(
                   <div className="no-posts-message">
                   <div className="no-posts-container">
+                  <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
                     <p>로딩중...</p>
                   </div>
                 </div>

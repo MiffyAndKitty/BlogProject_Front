@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchBar from '../structure/SearchBar';
 import filledCarrot from '../img/filledCarrot.png';
 import  upBtn  from '../img/upToggle.png';
+import spinner from '../img/Spinner.png';
 import  downBtn  from '../img/downToggle.png';
 import noPosts from '../img/noPosts.png';
 interface MainPostsProps {
@@ -351,6 +352,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
               {loading ? (
                 <div className="no-posts-message">
                   <div className="no-posts-container">
+                  <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
                     <p>로딩중...</p>
                   </div>
                 </div>

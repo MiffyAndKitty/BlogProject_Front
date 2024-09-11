@@ -148,6 +148,10 @@ const LocalLogin: React.FC = () => {
     setErrors(newErrors);
   },[email, password,touched]);
 
+  const goToFindPW = () => {
+    navigate(`/find-password`);
+  };
+  
   useEffect(() => {
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
@@ -220,7 +224,7 @@ const LocalLogin: React.FC = () => {
             <div className="loginsForLocalLogin">
             {/* <Button onClick={goToFindID}>아이디 찾기</Button>
             <span>|</span> */}
-            <Button>비밀번호 찾기</Button>
+            <Button onClick={goToFindPW} >비밀번호 찾기</Button>
             <span>|</span>
             <Button onClick={goToSignUp}>회원가입</Button>
           </div>

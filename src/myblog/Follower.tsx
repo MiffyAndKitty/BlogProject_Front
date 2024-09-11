@@ -6,19 +6,22 @@ import mainCharacterImg from '../img/main_character.png';
 import deleteFollowImg from '../img/deleteFollow.png';
 import { followUser } from '../services/postService';
 import './Follow.css';
+import spinner from '../img/Spinner.png';
 import FollowDeleteModal from './FollowDeleteModal'; 
 import bothFriendImg from '../img/both_friend.png';
 import friendImg from '../img/friend.png';
 import nonFriendImg from '../img/nonFriend.png';
 import { set } from 'date-fns';
+import noPosts from '../img/noPosts.png';
 
 interface FollowModalProps {
     onClose: () => void;
     isOthers?: boolean
     otherEmail? : string 
+    profileNickname?: string
 }
 
-const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) => {
+const Follower: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,otherEmail}) => {
     const { nickname } = useParams();
     const [token, setToken] = useState<string>('');
     const [followers, setFollowers] = useState<any[]>([]);
@@ -26,6 +29,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [nicknameToDelete, setNicknameToDelete] = useState('');
     const [localEmail, setLocalEmail] = useState('');
+    const [loading, setLoading] = useState<boolean>(true);
     const [useEmail, setUseEmail] = useState('');
     const [hoveredFollower, setHoveredFollower] = useState<string | null>(null);
     const [page, setPage] = useState(1);
@@ -35,7 +39,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
     const fetchFollowers = async () => {
         setIsLoading(true);
         try {
-          
+          setLoading(true);
           if (otherEmail) {
             const fetchedFollowers = await getFollow(otherEmail, page);
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followersList]);
@@ -45,17 +49,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
             }
           }else{
             const fetchedFollowers = await getFollow(localEmail, page);
-            console.log(`
-                
-                
-                
-                fetchedFollowers
-                
-                
-                
-                
-                
-                `,fetchedFollowers)
+
             setFollowers(prevFollowers => [...prevFollowers, ...fetchedFollowers.data.followingsList]);
       
             if (fetchedFollowers.data.followingsList.length < 10) {
@@ -66,6 +60,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
           console.error('Failed to load followers:', error);
         } finally {
           setIsLoading(false);
+          setLoading(false);
         }
       };
     
@@ -172,12 +167,24 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
             <span className="modal-close2" onClick={onClose}>
               &times;
             </span>
-            <h2 style={{ color: "#FF88D7" }}>{nickname}의 팔로워</h2>
+            <h2 style={{ color: "#FF88D7" }}>{profileNickname}의 팔로워</h2>
             <div className="border">
               <div>
-                {followers.length > 0 ? (
+             
                   <div className="followers-list">
-                    {followers.map((follower, index) => {
+                    {loading?(
+                       <>
+                       <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                       <p>로딩중...</p></>
+                    ):followers.length === 0 ?(
+                      <div >
+                        <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                        <p>팔로워가 없습니다.</p>
+                      </div>
+                    ):
+                    (
+                        <>
+                          {followers.map((follower, index) => {
                       if (followers.length === index + 1) {
                         return (
                           <div
@@ -376,10 +383,11 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,isOthers,otherEmail}) =
                         );
                       }
                     })}
+                        </>
+                    )}
+                  
                   </div>
-                ) : (
-                  <p>팔로워가 없습니다.</p>
-                )}
+            
               </div>
             </div>
           </div>

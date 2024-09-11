@@ -6,7 +6,7 @@ import SignUp from'./login/SignUp';
 import GoogleSignUp from './login/GoogleSignUp';
 import LocalSignUp from'./login/LocalSignup';
 import Login from './login/Login';
-import FindLoginID from './login/FindLoginID';
+import FindPassword from './login/FindPassword';
 import MainPage from './main/MainPage';
 import AuthCallback from './login/AuthCallback';
 import MyBlogMainPage from './myblog/MyBlogMainPage';
@@ -38,7 +38,7 @@ function App() {
       <Route path={`/signup`} element={<SignUp></SignUp>}/>
       <Route path={`/google/signup/:nickname`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
-      <Route path={`/findID`} element={<FindLoginID></FindLoginID>}/>
+      <Route path={`/find-password`} element={<FindPassword></FindPassword>}/>
       <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />
       <Route path={`/dashboard/all-post/:tag?/:search?/:sort?`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />

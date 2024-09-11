@@ -15,6 +15,7 @@ import filledCarrot from '../../img/filledCarrot.png';
 import ConfirmModal from '../ConfirmModal'; 
 import Profile from '../../main/Profile';
 import SSEComponent from '../../main/SSEComponent';
+import spinner from '../../img/Spinner.png';
 import noPosts from '../../img/noPosts.png';
 import  upBtn  from '../../img/upToggle.png';
 import  downBtn  from '../../img/downToggle.png';
@@ -353,7 +354,7 @@ const GetPost: React.FC = () => {
    
       
       {loading ? (
-        <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
+        <></>
       ) : (
         <>
        <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
@@ -405,6 +406,7 @@ const GetPost: React.FC = () => {
                       {loading ? (
                         <div className="no-posts-message">
                           <div className="no-posts-container">
+                          <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
                             <p>로딩중...</p>
                           </div>
                         </div>

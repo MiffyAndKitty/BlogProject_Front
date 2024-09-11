@@ -10,6 +10,7 @@ import PostDetail from './PostDetail';
 import { categories as Categories } from '../types/index';
 import { getCategories, getMyProfile,getProfiles } from '../services/getService';
 import SSEComponent from '../main/SSEComponent';
+import spinner from '../img/Spinner.png';
 /**
  * 블로그 메인 페이지
  * @returns 
@@ -121,7 +122,7 @@ const MyBlogMainPage: React.FC = () => {
     <div className="App">
 
       {loading ? (
-        <div>로딩 중...</div> // 전체 페이지 로딩 상태 시 표시될 내용
+       <></>
       ) : (
         <>
           {(localNickName === nickname) && <Header pageType="myBlog" hasNotifications ={hasNotifications}/>}
