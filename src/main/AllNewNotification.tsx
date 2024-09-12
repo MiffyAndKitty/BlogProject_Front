@@ -293,7 +293,7 @@ const AllNewNotification: React.FC = () => {
                  </div>
                </div>
               ):notifications.length === 0 ?(
-                <div >
+                <div className="no-posts-message">
                   <img src={noPosts} alt="No posts" className="no-posts-icon" />
                   <p>알림이 없습니다.</p>
                 </div>

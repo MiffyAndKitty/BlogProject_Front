@@ -195,7 +195,7 @@ const WriteNewPost: React.FC = () => {
       content: newContent,
       public: status, // true/false를 1/0으로 변환
       categoryId:category.category_id,
-      tagNames:tagArray,
+      tagNames:tags,
       uploaded_files: imagesFromSaveImgs.length > 0 ? imagesFromSaveImgs : null // 이미지 배열로 설정
     };
     const formData = new FormData();

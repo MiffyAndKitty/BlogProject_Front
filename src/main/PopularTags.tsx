@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './PopularTags.css';
 import { getPopTags } from '../services/getService';
 import { Link,useNavigate } from 'react-router-dom';
-
+import { QuestionMark } from '../resource/QuestionMark';
 const PopularTags: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -38,10 +38,17 @@ const PopularTags: React.FC = () => {
   };
   return (
     <section className="populartags-section">
-      <h2>{nowHour}시의 인기태그</h2>
+
+      <div className='h2-question'>
+        <h2>{nowHour}시의 인기태그</h2>
+        <QuestionMark></QuestionMark>
+      </div>
+      
+
       <div className="tags">
         {!loading && !error? (tags.map((tag: any) => (
-          <span key={tag.tagName} className="tag" onClick={()=>{goToTagPost(tag.tagName)}}>
+          
+          <span key={tag.tagName} className={tag.score ===0 ? 'gray-tag':'tag'} onClick={()=>{goToTagPost(tag.tagName)}}>
             {tag.tagName}
           </span>
         ))):(

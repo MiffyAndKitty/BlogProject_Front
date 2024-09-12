@@ -347,7 +347,7 @@ const AllPopularPost: React.FC = () => {
                           <span onClick={() => goToBlog(post.user_nickname, post.user_email)} className="post-user-author" style={{cursor:'pointer'}}>{post.user_nickname}</span>
                         </div>
                         <div className="post-main-meta">
-                          <span className="post-main-category">{post.category_name}</span>
+                          <span className="post-user-num">{post.category_name}</span>
                           <span className="post-main-date">{formatDate(post.created_at)}</span>
                           <span className="post-main-stats">
                            

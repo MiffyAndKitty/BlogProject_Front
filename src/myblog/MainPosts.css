@@ -88,8 +88,9 @@
   }
 
   .post-user-num {
-    font-size: 12px;
-    color: #ff6cc7;
+    font-size: 14px;
+    font-weight: bold;
+    color: #FFE6FA;
     background-color: transparent;
     font-weight: bold;
   }
@@ -103,7 +104,7 @@
   }
   
   .post-main-content {
-    padding: 8px;
+    padding: 20px;
     max-height: 4em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
     overflow: hidden;  /* 넘치는 내용은 숨김 처리 */
     text-overflow: ellipsis;  /* 넘치는 텍스트는 말줄임표(...)로 표시 */
@@ -218,7 +219,7 @@
   }
   @media (max-width: 1245px) {
     .post-title {
-      width: 200px;
+      /* width: 200px; */
       font-size: 20px;
       margin: 0;
       color: white; /* 글씨색 흰색으로 설정 */
@@ -231,8 +232,8 @@
   }
   @media (max-width: 1180px) {
     .post-main-content {
-      padding: 8px;
-      max-height: 2.8em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
+      padding: 20px;
+      max-height: 3.5em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
       overflow: hidden;  /* 넘치는 내용은 숨김 처리 */
       text-overflow: ellipsis;  /* 넘치는 텍스트는 말줄임표(...)로 표시 */
       white-space: wrap;  /* 줄바꿈 없이 한 줄로 표시 */
@@ -244,8 +245,12 @@
       height: 100%; /* 비율에 맞게 이미지 높이를 자동 조정 */
     }
   }
-
- 
+  @media (max-width: 550px) {
+    .post-title {
+      width: 200px;
+     
+    }
+  }
   @media (max-width: 402px) {
     .post-main-meta {
       display: none;

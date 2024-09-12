@@ -1,29 +1,58 @@
 .populartags-section {
     padding: 20px;
   }
-  
+  .h2-question{
+    display: flex;
+    align-items: center;
+  }
   .tags {
     display: flex;
     flex-wrap: wrap; /* 줄바꿈이 일어나도록 설정 */
     gap: 10px; /* 태그 간 간격 */
     /* justify-content: center; */
   }
-  
+
   .tag {
-    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    /* display: inline-block; */
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 14px;
     text-overflow: ellipsis; /* 넘치는 텍스트는 말줄임표 처리 */
-    background-color: #f0f0f0;
-    border-radius: 5px;
+    background-color: #FFE6FA;
     overflow: hidden; /* 태그 내용이 넘치면 잘림 방지 */
     text-align: center;
     box-sizing: border-box;
     white-space: nowrap; /* 각 태그의 텍스트가 줄바꿈되지 않도록 설정 */
   }
-
+  .gray-tag{
+    cursor: pointer;
+    font-weight: bold;
+    /* display: inline-block; */
+    border-radius: 12px;
+    padding: 5px 10px;
+    margin-right: 5px;
+    font-size: 14px;
+    text-overflow: ellipsis; /* 넘치는 텍스트는 말줄임표 처리 */
+    background-color: #e7e6e7;
+    overflow: hidden; /* 태그 내용이 넘치면 잘림 방지 */
+    text-align: center;
+    box-sizing: border-box;
+    white-space: nowrap; /* 각 태그의 텍스트가 줄바꿈되지 않도록 설정 */
+  }
   .tag:hover {
     max-width: 300px; /* 마우스를 올렸을 때 태그의 너비를 확장 */
     white-space: normal; /* 태그의 텍스트가 여러 줄로 나타날 수 있게 설정 */
     overflow: visible; /* 숨겨진 텍스트를 모두 표시 */
+    background-color: #ffcaf4;
+  }
+  .gray-tag:hover {
+    max-width: 300px; /* 마우스를 올렸을 때 태그의 너비를 확장 */
+    white-space: normal; /* 태그의 텍스트가 여러 줄로 나타날 수 있게 설정 */
+    overflow: visible; /* 숨겨진 텍스트를 모두 표시 */
+    background-color: #c1c1c1;
   }
   .tag-row {
     display: flex;

@@ -16,7 +16,8 @@ const NewPost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [autoSlide, setAutoSlide] = useState<boolean>(true); // 자동 슬라이드 제어
-  const [cachedPosts, setCachedPosts] = useState<{ [page: number]: any[] }>({});
+  const [cachedPosts, setCachedPosts] = useState<{ [page: number]: any[] }>({}); 
+  const [animationClass, setAnimationClass] = useState<string>('');
   const pageSize = 3;
   const navigate = useNavigate();
 
@@ -122,9 +123,14 @@ const NewPost: React.FC = () => {
 
   const nextPosts = () => {
      if (currentPage < totalPages) {
-    setCursor(posts[posts.length - 1].board_id);
-    setIsBefore(false);
-    setCurrentPage(currentPage + 1);
+      setAnimationClass('slide-out');  // 오른쪽으로 슬라이드
+      setTimeout(() => {
+        setCursor(posts[posts.length - 1].board_id);
+        setIsBefore(false);
+        setCurrentPage(currentPage + 1);
+        setAnimationClass('');  // 애니메이션 클래스 초기화
+  
+      }, 500); // 애니메이션 시간에 맞춰 전환
   } else {
     // 마지막 페이지에서 다시 1페이지로 이동
     setCursor('');
@@ -135,9 +141,14 @@ const NewPost: React.FC = () => {
 
   const prevPosts = () => {
     if (currentPage > 1) {
-      setCursor(posts[0].board_id);
-      setIsBefore(true);
-      setCurrentPage(currentPage - 1);
+      setAnimationClass('slide-in');  // 왼쪽으로 슬라이드
+      setTimeout(() => {
+        setCursor(posts[0].board_id);
+        setIsBefore(true);
+        setCurrentPage(currentPage - 1);
+        setAnimationClass('');  // 애니메이션 클래스 초기화
+
+      }, 500); // 애니메이션 시간에 맞춰 전환
     }
   };
   const formatDate = (dateString: string): string => {
@@ -226,7 +237,7 @@ const NewPost: React.FC = () => {
         </button>
         <div className="posts">
           {!loading && !error && posts.length > 0 && (
-            <div className="posts">
+            <div className={`posts ${animationClass}`}>
               {posts.slice(currentIndex, currentIndex + postsPerPage).map((post, index) => {
                 const firstImageSrc = extractFirstImage(post.board_content); // 첫 번째 이미지 추출
                 // 이미지가 있을 경우만 has-image 클래스를 추가

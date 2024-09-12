@@ -117,7 +117,7 @@
     margin-bottom: 15px;
   }
   
-  .tag {
+  /* .tag {
     font-weight: bold;
     display: inline-block;
     background-color: #FFE6FA;
@@ -125,7 +125,9 @@
     padding: 5px 10px;
     margin-right: 5px;
     font-size: 14px;
-  }
+  }   */
+
+
 
   .tagTitle{
     font-weight: bold;

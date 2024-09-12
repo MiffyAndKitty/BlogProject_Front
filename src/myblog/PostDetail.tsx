@@ -876,6 +876,10 @@ const PostDetail: React.FC = () => {
     ));
   };
   
+  const goToTagPost=(tag:string) =>{
+    navigate(`/dashboard/all-post/${tag}`);
+  };
+  
   const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <>
@@ -941,7 +945,7 @@ const PostDetail: React.FC = () => {
                 <>
                   <div className="tags">
                     {tags.map((tag) => (
-                      <span key={tag} className="tag">
+                      <span key={tag} className="tag" onClick={()=>{goToTagPost(tag)}}>
                         {tag}
                       </span>
                     ))}

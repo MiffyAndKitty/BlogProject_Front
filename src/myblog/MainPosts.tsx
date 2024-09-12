@@ -372,7 +372,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                       const firstImage = extractFirstImage(post.board_content);
                       
                       return (
-                        <div className="post-main-card" key={post.board_id}>
+                        <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id)}>
                           <div className="post-main-header">
 
                             <div className="title-container">
@@ -381,7 +381,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                             </div>
                             
                             <div className="post-main-meta">
-                              <span className="post-main-category">{findCategoryById(categories, post.category_id)}</span>
+                              <span className="post-user-num">{findCategoryById(categories, post.category_id)}</span>
                               <span className="post-main-date">{formatDate(post.created_at)}</span>
                               <span className="post-main-stats">
 
@@ -403,7 +403,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
                           </div>
                           
-                          <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>
+                          <div className="post-main-content" >
                             
                             {firstImage ? (
                               <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
