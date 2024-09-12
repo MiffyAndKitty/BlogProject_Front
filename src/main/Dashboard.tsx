@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
         <PopularPost/>
         <PopularTags/>
         <LotsOfFollowerBloger/>
-        <CarrotBloger/>
+        {/* <CarrotBloger/> */}
         <SSEComponent onNotification={handleNotification}></SSEComponent>
       </main>
       <Footer />

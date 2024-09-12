@@ -34,7 +34,7 @@ const MainPage: React.FC = () => {
         <PopularPost/>
         <PopularTags/>
         <LotsOfFollowerBloger/>
-        <CarrotBloger/>
+        {/* <CarrotBloger/> */}
       </main>
 
       <Footer />

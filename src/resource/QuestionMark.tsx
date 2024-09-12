@@ -2,9 +2,22 @@ import React, { useState } from 'react';
 import type { SVGProps } from 'react';
 import './QuestionMark.css';
 
-export function QuestionMark(props: SVGProps<SVGSVGElement>) {
+type QuestionMarkType = 'Follow' | 'tag';
+
+interface QuestionMarkProps extends SVGProps<SVGSVGElement> {
+  type: QuestionMarkType;
+}
+
+export function QuestionMark({ type, ...props }: QuestionMarkProps) {
   const [isHovered, setIsHovered] = useState(false);
-  const TAG_MESSAGE=`특정 시간대에 인기태그가 없다면 대체태그가 보여지며, 회색으로 표시됩니다.`;
+
+  // 타입에 따른 메시지 정의
+  const TAG_MESSAGE = `특정 시간대에 인기태그가 없다면 \n대체태그가 보여지며, 회색으로 표시됩니다.`;
+  const FOLLOW_MESSAGE = `회색 테두리로 표시된 블로거는 10명을 채우기 위해 \n 무작위로 추천된 대체 블로거입니다.`;
+
+  // 메시지 결정
+  const tooltipMessage = type === 'tag' ? TAG_MESSAGE : FOLLOW_MESSAGE;
+
   return (
     <div 
       className="question-mark-container"
@@ -25,8 +38,10 @@ export function QuestionMark(props: SVGProps<SVGSVGElement>) {
         </g>
       </svg>
       {isHovered && (
-        <div className="tooltip">
-          {TAG_MESSAGE}
+        <div className={type === 'tag' ? "tooltip":'tooltip-follow'}>
+          {tooltipMessage.split('\n').map((line, index) => (
+            <div key={index}>{line}</div>
+          ))}
         </div>
       )}
     </div>

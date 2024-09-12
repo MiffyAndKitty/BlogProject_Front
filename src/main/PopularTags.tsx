@@ -3,6 +3,7 @@ import './PopularTags.css';
 import { getPopTags } from '../services/getService';
 import { Link,useNavigate } from 'react-router-dom';
 import { QuestionMark } from '../resource/QuestionMark';
+
 const PopularTags: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,7 +42,7 @@ const PopularTags: React.FC = () => {
 
       <div className='h2-question'>
         <h2>{nowHour}시의 인기태그</h2>
-        <QuestionMark></QuestionMark>
+        <QuestionMark type='tag'></QuestionMark>
       </div>
       
 

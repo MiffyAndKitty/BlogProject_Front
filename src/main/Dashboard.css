@@ -132,17 +132,18 @@ span,div,button,input {
     padding: 1rem;
     border-radius: 8px;
     grid-column: 2 / 3;
-    grid-row: 6 / 7; /* 6행부터 7행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
+    grid-row: 6 / 10; /* 6행부터 7행까지 차지 */
+    margin-top: 10px;
+    height: 100%;
   }
   
-  .carrotbloger-section {
+  /* .carrotbloger-section {
     padding: 1rem;
     border-radius: 8px;
     grid-column:2 / 3;
-    grid-row: 7 / 8; /* 7행부터 8행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
-  }
+    grid-row: 7 / 8; 
+    height: 100px; 
+  } */
 
   @media (max-width: 1241px) {
     .App .main-content {
@@ -221,24 +222,24 @@ span,div,button,input {
     }
     
     .lotsoffollowerbloger-section {
-
+      margin-top: 0px;
       padding: 1rem;
       border-radius: 8px;
       margin-left:10%;
       grid-column: auto;
-      grid-row:12 / 13; /* 6행부터 7행까지 차지 */
-      height: 100px; /* 고정 높이 설정 */
+      grid-row:12 / 14; /* 6행부터 7행까지 차지 */
+      
     }
     
-    .carrotbloger-section {
+    /* .carrotbloger-section {
 
       padding: 1rem;
       border-radius: 8px;
       margin-left:10%;
       grid-column: auto;
-      grid-row: 13 / 14; /* 7행부터 8행까지 차지 */
-      height: 100px; /* 고정 높이 설정 */
-    }
+      grid-row: 13 / 14;
+      height: 100px; 
+    } */
   }
 @media (max-width: 1141px){
   .popularpost-section {
@@ -285,21 +286,21 @@ span,div,button,input {
     border-radius: 8px;
     margin-left:10%;
     grid-column: auto;
-    grid-row: 11 / 12; /* 6행부터 7행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
+    grid-row: 11 / 15; /* 6행부터 7행까지 차지 */
+    
   }
   
-  .carrotbloger-section {
+  /* .carrotbloger-section {
     display: flex;
-    flex-direction: column; /* 수직 방향 정렬 */
-    align-items: center; /* 수직 방향 가운데 정렬 */
+    flex-direction: column; 
+    align-items: center; 
     padding: 1rem;
     border-radius: 8px;
     margin-left:10%;
     grid-column: auto;
-    grid-row: 12 / 13; /* 7행부터 8행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
-  }
+    grid-row: 12 / 13;
+    height: 100px; 
+  } */
 }
 
 /*모바일 화면*/
@@ -384,20 +385,20 @@ span,div,button,input {
     margin-left: -0px;
     grid-column: auto;
     grid-row: 12 / 13; /* 6행부터 7행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
+   
   }
   
-  .carrotbloger-section {
+  /* .carrotbloger-section {
     display: flex;
-    flex-direction: column; /* 수직 방향 정렬 */
-    align-items: center; /* 수직 방향 가운데 정렬 */
+    flex-direction: column; 
+    align-items: center; 
     padding: 1rem;
     border-radius: 8px;
     margin-left: -0px;
     grid-column: auto;
-    grid-row: 13 /14; /* 7행부터 8행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
-  }
+    grid-row: 13 /14; 
+    height: 100px; 
+  } */
 }
 
 @media (max-width:360px){
@@ -405,13 +406,13 @@ span,div,button,input {
   
     grid-column: auto;
     grid-row: 13 / 14; /* 6행부터 7행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
+   
   }
   
-  .carrotbloger-section {
+  /* .carrotbloger-section {
   
     grid-column: auto;
-    grid-row: 14 /15; /* 7행부터 8행까지 차지 */
-    height: 100px; /* 고정 높이 설정 */
-  }
+    grid-row: 14 /15; 
+    height: 100px; 
+  } */
 }

@@ -232,6 +232,20 @@ export const getPopTags = async (): Promise<any> => {
   console.log(response);
   return response.data;
 };
+/**
+ * 지난 주 동안 가장 많은 팔로워를 보유한 블로거의 목록과 그들의 팔로워 수를 조회합니다.
+  만약 블로거의 수가 지정한 limit에 미치지 못할 경우, 추가 태그가 0점으로 채워집니다.
+ * @returns 
+ */
+export const getPopFollower = async (): Promise<any> => {
+  const response = await apiClient.get<any>(`/users/top-followers`,{
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  console.log(response);
+  return response.data;
+};
 
 /**
  * 사용자 프로필 가져오기

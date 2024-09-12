@@ -1,0 +1,71 @@
+.bloggers{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 300px;
+}
+
+.blogger{
+    
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center; 
+    position: relative; /* 부모 요소에 상대적으로 배치 */
+    margin-bottom: 16px;
+    
+    width: 50px;
+}
+
+.gray-blogger{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+.blogger-name{
+    font-weight: bold;
+    font-size: 12px;
+    max-width: 50px;
+    overflow:hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.blogger-name:hover{
+    max-width: 100%;
+    overflow:visible;
+  
+}
+.gray-blogger {
+    width: 40px;
+    height: 40px;
+    min-width: 40px; /* 최소 크기를 고정 */
+    min-height: 40px; /* 최소 크기를 고정 */
+    border-radius: 50%; /* 이미지를 원형으로 만듭니다 */
+    border: 2px solid #c1c1c1; /* 원하는 색상과 두께의 테두리를 추가합니다 */
+    object-fit: cover; /* 이미지를 테두리 내에 맞게 조정합니다 */
+  
+  }
+  .gray-blogger:hover {
+    width: 40px;
+    height: 40px;
+    min-width: 40px; /* 최소 크기를 고정 */
+    min-height: 40px; /* 최소 크기를 고정 */
+    border-radius: 50%; /* 이미지를 원형으로 만듭니다 */
+    border: 2px solid #818080; /* 원하는 색상과 두께의 테두리를 추가합니다 */
+    object-fit: cover; /* 이미지를 테두리 내에 맞게 조정합니다 */
+    animation: rotate 2s linear infinite; /* 마우스를 올리면 회전 */
+  }
+
+ @media (max-width:1241px){
+    .bloggers{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-width: 100%;
+    }
+ }
