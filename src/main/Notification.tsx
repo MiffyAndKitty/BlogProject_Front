@@ -4,6 +4,9 @@ import { getNotificationsList } from '../services/getService';
 import { useNavigate } from "react-router-dom";
 import { deleteNotification } from '../services/deleteService';
 import mainCharacterImg from '../img/main_character.png';
+import spinner from '../img/Spinner.png';
+import noPosts from '../img/noPosts.png';
+
 interface FollowModalProps {
   onClose: () => void;
   buttonRef: React.RefObject<HTMLDivElement>; // 버튼 위치 참조
@@ -30,11 +33,13 @@ interface NotificationData {
 
 const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
   const [modalStyle, setModalStyle] = useState({});
+  const [loading, setLoading] = useState<boolean>(true);
   const [notifications, setNotifications] = useState<NotificationData[]>([]);
   const [localNickName, setLocalNickName] = useState<string>('');
   const navigate = useNavigate();
   const getNotifications = async () => {
     try {
+      setLoading(true); 
       const fetchedNotification = await getNotificationsList();
       if (fetchedNotification.result === true) {
         // 최대 5개의 알림만 저장
@@ -42,6 +47,8 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -240,7 +247,22 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
       </div>
         <hr className="notification-divider" />
         <div className="notification-list">
-          {notifications.map((notification, index) => (
+          {
+            loading?(
+                <div className="no-posts-message" style={{backgroundColor:'transparent'}}>
+                 <div >
+                 <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                   <p>로딩중...</p>
+                 </div>
+               </div>
+            ):notifications.length === 0 ?(
+                <div className="no-posts-message" style={{backgroundColor:'transparent'}}>
+                  <img src={noPosts} alt="No posts" className="no-posts-icon" />
+                  <p>알림이 없습니다.</p>
+                </div>
+            ):(
+              <>
+               {notifications.map((notification, index) => (
             <div key={notification.notification_id} className="notification-item">
               <div className="notification-content">
                 <img
@@ -266,6 +288,10 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
               )} */}
             </div>
           ))}
+          </>
+            )
+          }
+         
         </div>
       </div>
     </div>

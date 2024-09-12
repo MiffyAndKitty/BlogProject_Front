@@ -71,7 +71,7 @@ const AllNewNotification: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
-    }{
+    }finally{
       setLoading(false);
     }
   };
