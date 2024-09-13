@@ -83,7 +83,8 @@
   .inputFieldCssForSignUp {
     padding: 10px 15px;
     font-size: 14px;
-    max-width: 80%; /* 작은 화면에서는 필드가 최대 너비를 부모 컨테이너에 맞춤 */
+    min-width: 80%;
+    max-width: 100%; /* 더 작은 화면에서는 필드가 전체 너비를 차지하도록 설정 */
   }
 }
 
@@ -96,7 +97,8 @@
   .inputFieldCssForSignUp {
     padding: 8px 10px;
     font-size: 12px;
-    max-width: 80%; /* 더 작은 화면에서는 필드가 전체 너비를 차지하도록 설정 */
+    min-width: 80%;
+    max-width: 100%; /* 더 작은 화면에서는 필드가 전체 너비를 차지하도록 설정 */
   }
 
   .mainCharacter_localsignup {

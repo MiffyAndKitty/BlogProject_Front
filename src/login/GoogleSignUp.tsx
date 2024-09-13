@@ -3,13 +3,14 @@ import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useParams } from "react-router-dom";
 import { setSignUp ,checkDuplicated } from '../services/postService';
 import { SignUpData,CheckDuplicatedData } from '../types';
 import mainCharacterImg from '../img/main_character.png';
 import './GoogleSignUp.css';
 
 const SignUp: React.FC = () => {
+  let { token } = useParams<{ token: string;  }>();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -52,7 +53,7 @@ const SignUp: React.FC = () => {
       return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
     } catch (error) {
       console.error("중복 확인 오류:", error);
-      alert(`중복 확인 중 오류가 발생했습니다: ${error.response.data.message}`);
+      if(error.response) alert(`중복 확인 중 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
   };
@@ -72,7 +73,7 @@ const SignUp: React.FC = () => {
       return response.result;
     } catch (error) {
       console.error("회원가입 오류:", error);     
-      alert(`회원가입 중에 오류가 발생했습니다: ${error.response.data.message}`);
+      if(error.response) alert(`회원가입 중에 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
   };
@@ -108,8 +109,13 @@ const SignUp: React.FC = () => {
   };
 
   useEffect(()=>{
-    setEmail(sessionStorage.getItem('nickname'));
+    const nickname=sessionStorage.getItem('nickname');
+    
+    if(!nickname){navigate(-1)};
     setPassword(null);
+    setEmail(nickname);
+
+    if(token !== sessionStorage.getItem('accessToken')) navigate(-1);
   },[]);
 
   useEffect(() => {
@@ -132,10 +138,10 @@ const SignUp: React.FC = () => {
     <div className="App">
       <Header pageType="signup"/>
       <main className="main">
-        <div className='signup'>
+        <div className='signup2'>
           
           <h2 style={{color:"#A9A9A9"}}>회원가입</h2>
-          <Form>
+          <Form className='form'> 
 
           <Form.Group className="inputFieldCssForGoogleSignUp mb-3">
             <Form.Control 
@@ -148,7 +154,7 @@ const SignUp: React.FC = () => {
             />
             
           </Form.Group>
-          <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
+          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
           </Form>
           <Button className={'login-button'} variant="primary" type="button" onClick={handleSignUp}>회원가입</Button>
         </div>

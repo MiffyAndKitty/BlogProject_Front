@@ -83,7 +83,7 @@ const LocalLogin: React.FC = () => {
     } catch (error) {
       // 오류 발생 시 메시지 출력
       console.log("로그인 오류 발생:", error); 
-      alert(`로그인 실패했습니다: ${error.response.data.message}`);
+      if(error.response) alert(`로그인 실패했습니다: ${error.response.data.message}`);
       return false;
     }
   };
@@ -105,7 +105,7 @@ const LocalLogin: React.FC = () => {
       setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
     } catch (err) {
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
-      alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
     }
   };
 

@@ -76,7 +76,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       sessionStorage.removeItem('areYouFollowed');
       navigate(`/`);
     } catch (error) {
-      alert(`로그아웃 중에 오류가 발생했습니다: ${error.response.data.message}`);
+      if(error.response) alert(`로그아웃 중에 오류가 발생했습니다: ${error.response.data.message}`);
       console.error(error);
       setError(error.message);
     }
@@ -97,7 +97,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
         setIsFollow(true);
       };
     }catch(err){
-      alert(`팔로우 추가에 실패했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`팔로우 추가에 실패했습니다: ${err.response.data.message}`);
     }
     
   };
@@ -115,7 +115,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             else alert('팔로우 취소에 실패했습니다! 다시 시도해주세요.');
         }
     }catch(error){
-      alert(`팔로우 취소에 실패했습니다: ${error.response.data.message}`); 
+      if(error.response) alert(`팔로우 취소에 실패했습니다: ${error.response.data.message}`); 
     }
    
   };
@@ -127,7 +127,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
    * 새 글 작성하기로 이동하기 위한 메서드
    */
   const goToWritePost = () => {
-    navigate(`/writenewpost/${nickname}`);
+    navigate(`/writenewpost`);
   };
 
   const goToFollower = ()=>{
@@ -156,10 +156,10 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
   };
 
   const goToManagePosts = ()=>{
-    navigate(`/getpost/${nickname}`);
+    navigate(`/getpost/`);
   };
   const goToProfileSetting = ()=>{
-    navigate(`/myProfileSetting/${user}`);
+    navigate(`/myProfileSetting`);
   };
 
   useEffect(()=>{

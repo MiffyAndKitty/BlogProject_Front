@@ -49,10 +49,6 @@ const AllPopularPost: React.FC = () => {
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
 
-  const fixPost = (postID: string) => {
-    if (isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
-    else alert('수정권한이 없습니다!');
-  };
 
   const formatDate = (dateString: string): string => {
     const inputDate = new Date(dateString); // 입력된 ISO 형식의 날짜를 Date 객체로 변환
@@ -172,7 +168,7 @@ const AllPopularPost: React.FC = () => {
       }
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
-      alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
     } finally {
       setLoading(false);
     }
@@ -206,7 +202,7 @@ const AllPopularPost: React.FC = () => {
         }
     }catch(err){
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
-        alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+        if(err.response) alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
         setLocalNickName('');
     }finally {
         setLoading(false);

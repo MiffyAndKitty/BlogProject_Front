@@ -21,7 +21,7 @@ const PopularTags: React.FC = () => {
         `,fetchedTags)
       setTags(fetchedTags.data);
     } catch (err) {
-      alert(`태그들을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`태그들을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
       setError('태그들을 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);

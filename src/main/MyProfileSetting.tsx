@@ -10,7 +10,7 @@ import Footer from '../structure/Footer';
 import Profile from './Profile';
 import SSEComponent from './SSEComponent';
 const MyProfileSetting: React.FC = () => {
-    const { nickname } = useParams();
+    // const { nickname } = useParams();
     const [newNick, setNewNick] = useState<string>('');
     const [image, setImage] = useState<string | null>(null);
     const [saveImage, setSaveImage] = useState<File | null>(null);
@@ -64,6 +64,7 @@ const MyProfileSetting: React.FC = () => {
             const fetchedProfile = await getMyProfile(sessionStorageEmail);
             setUserData(fetchedProfile.data);
             setNewNick(fetchedProfile.data.user_nickname);
+            
             sessionStorage.setItem('nickname', fetchedProfile.data.user_nickname);
             sessionStorage.setItem('image', fetchedProfile.data.user_image);
             sessionStorage.setItem('message', fetchedProfile.data.user_message);
@@ -73,7 +74,7 @@ const MyProfileSetting: React.FC = () => {
             }
         } catch (err) {
             console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
-            alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+            if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
         }
     };
 
@@ -107,7 +108,7 @@ const MyProfileSetting: React.FC = () => {
           return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
         } catch (error) {
           console.error("중복 확인 오류:", error);
-          alert(`중복 확인 오류가 발생했습니다: ${error.response.data.message}`);
+          if(error.response) alert(`중복 확인 오류가 발생했습니다: ${error.response.data.message}`);
           return false;
         }
       };
@@ -134,7 +135,7 @@ const MyProfileSetting: React.FC = () => {
                 window.location.reload();
             },1000)
         } catch (err) {
-            alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
+            if(err.response) alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
         }
     };
     const handleSubmitPasswd = () =>{
@@ -160,7 +161,7 @@ const MyProfileSetting: React.FC = () => {
             
             
         } catch (err) {
-            alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
+            if(err.response) alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
             console.log('프로필 업데이트 중 오류가 발생했습니다.');
         }
     };
@@ -174,7 +175,7 @@ const MyProfileSetting: React.FC = () => {
             return response.result;
         } catch (error) {
             console.error("중복 확인 오류:", error);
-            alert(`중복 확인 중  오류가 발생했습니다: ${error.response.data.message}`);
+            if(error.response) alert(`중복 확인 중  오류가 발생했습니다: ${error.response.data.message}`);
             return false;
         }
     };
@@ -248,9 +249,9 @@ const MyProfileSetting: React.FC = () => {
         }
     };
 
-    useEffect(() => {
-        fetchMyProfile();
-    }, [navigate]);
+    // useEffect(() => {
+    //     fetchMyProfile();
+    // }, [navigate]);
 
     const handleNotification = (isNotified: boolean) => {
         setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
@@ -261,6 +262,7 @@ const MyProfileSetting: React.FC = () => {
     };
 
     useEffect(() => {
+        
         fetchMyProfile();
     }, []);
 
@@ -393,11 +395,11 @@ const MyProfileSetting: React.FC = () => {
                
                 {/* <div className="MainPosts-section"> */}
                    
-                    <Profile pageType="profileSetting" nicknameParam={nickname} />
+                    <Profile pageType="profileSetting" nicknameParam={newNick} />
                         <div className="main-blog-posts-section">
                             {userData && (
                                 <>
-                                    <h2 style={{color:"#FF88D7"}}>{nickname}의 프로필</h2>
+                                    <h2 style={{color:"#FF88D7"}}>{newNick}의 프로필</h2>
                                     <div className='border'>
                                     <div>
                                             <label style={{fontWeight:'bold', color:'#FF88D7', marginBottom:'5px',}}>프로필 이미지:</label>

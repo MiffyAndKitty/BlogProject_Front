@@ -58,7 +58,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOther
           }
         } catch (error) {
           console.error('Failed to load followers:', error);
-          alert(`팔로워 목록 조회에 실패했습니다: ${error.response.data.message}`); 
+          if(error.response) alert(`팔로워 목록 조회에 실패했습니다: ${error.response.data.message}`); 
         } finally {
           setIsLoading(false);
           setLoading(false);
@@ -85,7 +85,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOther
             //fetchFollowers();
           };
         }catch(err){
-          alert(`팔로우 추가에 실패했습니다: ${err.response.data.message}`); 
+          if(err.response) alert(`팔로우 추가에 실패했습니다: ${err.response.data.message}`); 
          
         }
         
@@ -124,7 +124,7 @@ const Follower: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOther
             }
         } catch (error) {
             console.error('Failed to delete follow:', error);
-            alert(`팔로워 삭제에 실패했습니다: ${error.response.data.message}`); 
+            if(error.response) alert(`팔로워 삭제에 실패했습니다: ${error.response.data.message}`); 
         }
     };
 

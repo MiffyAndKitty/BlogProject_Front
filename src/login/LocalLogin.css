@@ -58,6 +58,7 @@ select:focus {
   background-color: #FFF7FD;
   color: #000;
   border: none;
+  min-width: 90%;
   width: 90%;
   border-radius: 30px;
   padding: 10px 60px;

@@ -25,7 +25,7 @@ const AuthCallback: React.FC = () => {
       setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
     } catch (err) {
       console.log(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err}`);
-      alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
 
     }
   };
@@ -41,11 +41,13 @@ const AuthCallback: React.FC = () => {
       fetchMyProfile(email);
     } else if (token === 'undefined') {
       fetchMyProfile(email).then(() => {
-        navigate(`/google/signup/${nickname}`);
+        navigate(`/google/signup/${token}`);
       });
     } else if (error) {
       console.error(error);
       navigate('/login');
+    }else{
+      navigate('/');
     }
   }, [location, navigate]);
 
@@ -73,7 +75,7 @@ const AuthCallback: React.FC = () => {
         sessionStorage.setItem('message', message);
         sessionStorage.setItem('areYouFollowing', areYouFollowing);
         sessionStorage.setItem('areYouFollowed', areYouFollowed);
-        navigate(`/google/signup/${nickname}`);
+        navigate(`/google/signup/${token}`);
       }
     }
   }, [isProfileFetched, nickname, navigate, location]);

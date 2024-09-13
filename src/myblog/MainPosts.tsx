@@ -39,11 +39,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const [totalPosts, setTotalPosts] = useState(0);
   const navigate = useNavigate();
 
-  const fixPost = (postID: string) => {
-    if(isWriter === true) navigate(`/fixpost/${nickname}`, { state: { postID } });
-    else alert("수정권한이 없습니다!");
-    
-  };
+
   const handleSortChange = (option, name) => {
     setSortOption(option);
     setDropdownOpen(false); // 드롭다운을 닫음
@@ -179,26 +175,41 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       setNickname(nickname);
   
       const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query,sort);
-      setIsWriter(fetchedPosts.data.isWriter);
+      if (fetchedPosts && fetchedPosts.data.data) {
+        setIsWriter(fetchedPosts.data.isWriter);
   
-      const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
-        ...post,
-        board_content: removeUnwantedTags(post.board_content),
-      }));
-  
-      setPosts(postsWithCleanContent);
-  
-      setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
-      setTotalPosts(fetchedPosts.data.total.totalCount || 0);
-  
-      if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
-        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
+        const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
+          ...post,
+          board_content: removeUnwantedTags(post.board_content),
+        }));
+    
+        setPosts(postsWithCleanContent);
+    
+        setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
+        setTotalPosts(fetchedPosts.data.total.totalCount || 0);
+    
+        if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
+          setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
+        }
+    
+        const fetchedCategories: any = await getCategories(nicknameParam);
+        setCategories(fetchedCategories.hierarchicalCategory);
       }
-  
-      const fetchedCategories: any = await getCategories(nicknameParam);
-      setCategories(fetchedCategories.hierarchicalCategory);
+     
     } catch (err) {
-      alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+      console.log(`
+        
+        
+        
+        
+        err
+        
+        
+        
+        
+        `,err)
+     if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+     
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);

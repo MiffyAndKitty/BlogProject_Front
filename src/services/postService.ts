@@ -47,6 +47,22 @@ export const setLogin = async (postData: TYPES.loginData): Promise<any> => {
         return response;
 };
 /**
+ * 비밀번호 재설정을 위해 사용자에게 임시 비밀번호를 이메일로 전송합니다. 단, 구글 로그인 사용자에게는 불가능합니다.
+ * @param email 
+ * @returns 
+ */
+export const setTempPasswd = async (email: Object): Promise<any> => {
+    const response = await apiClient.post<TYPES.loginData>('/account/temp-password', email,{
+        headers: {
+            'Content-Type': 'application/json',
+    
+          },
+    });
+        console.log(email);
+        console.log(response);
+        return response;
+};
+/**
  * 게시글 저장
  * @param postData 
  * @returns 

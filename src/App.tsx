@@ -36,18 +36,17 @@ function App() {
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
       <Route path={`/locallogin`} element={<LocalLogin></LocalLogin>}/>
       <Route path={`/signup`} element={<SignUp></SignUp>}/>
-      <Route path={`/google/signup/:nickname`} element={<GoogleSignUp></GoogleSignUp>}/>
+      <Route path={`/google/signup/:token`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/find-password`} element={<FindPassword></FindPassword>}/>
       <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />
       <Route path={`/dashboard/all-post/:tag?/:search?/:sort?`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />
       <Route path={`/:nickname/:postID?/:commentID?/:replyID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
-      <Route path={`/writenewpost/:nickname`} element={<WriteNewPost></WriteNewPost>} />
-      <Route path={`/getpost/:nickname`} element={<GetPost></GetPost>} />
-      <Route path={`/fixpost/:nickname`} element={<FixPost></FixPost>} />
-      <Route path={`/categorySetting/:nickname`} element={<CategorySettings></CategorySettings>} />
-      <Route path={`/myProfileSetting/:nickname`} element={<MyProfileSetting></MyProfileSetting>} />
+      <Route path={`/writenewpost`} element={<WriteNewPost></WriteNewPost>} />
+      <Route path={`/getpost`} element={<GetPost></GetPost>} />
+      <Route path={`/fixpost`} element={<FixPost></FixPost>} />
+      <Route path={`/myProfileSetting/`} element={<MyProfileSetting></MyProfileSetting>} />
     </Routes>
     </Router>
   );

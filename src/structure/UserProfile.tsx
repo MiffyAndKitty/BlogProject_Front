@@ -18,7 +18,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
       const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
     }catch (err) {
-      alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+      if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       console.log('게시물을 불러오는 중에 오류가 발생했습니다.');
     } 
     const handleClickOutside = (event: MouseEvent) => {
@@ -38,7 +38,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
       <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
       {dropdownOpen && (
                     <div className="dropdown-menu-profile" >
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
 
                     </div>
@@ -66,8 +66,8 @@ const UserProfile = ({ profileType ,profileImage}) => {
        <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost/${nickname}`)}>글 관리</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost`)}>글 작성하기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost`)}>글 관리</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
  
@@ -82,10 +82,10 @@ const UserProfile = ({ profileType ,profileImage}) => {
        <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost/${nickname}`)}>글 관리</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost`)}>글 작성하기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost`)}>글 관리</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
  
                      </div>
@@ -99,9 +99,9 @@ const UserProfile = ({ profileType ,profileImage}) => {
        <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
        {dropdownOpen && (
                      <div className="dropdown-menu-profile" >
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost/${nickname}`)}>글 작성하기</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost/${nickname}`)}>글 관리</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting/${nickname}`)}>내 프로필 설정</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/writenewpost`)}>글 작성하기</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost`)}>글 관리</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
  
                      </div>

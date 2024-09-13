@@ -21,7 +21,7 @@ const LotsOfFollowerBloger: React.FC = () => {
         setBlogger(fetchedBlogger.data);
     } catch (err) {
       setError('블로거들을 불러오는 중에 오류가 발생했습니다.');
-      alert(`블로거들을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      if(err.response) alert(`블로거들을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
     } finally {
       setLoading(false);
     }
