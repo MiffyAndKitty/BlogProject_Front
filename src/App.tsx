@@ -25,6 +25,7 @@ import {
   Route,
   Routes
 } from "react-router-dom";
+import DeleteUser from './login/DeleteUser';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
       <Route path={`/google/signup/:token`} element={<GoogleSignUp></GoogleSignUp>}/>
       <Route path={`/localsignup`} element={<LocalSignUp></LocalSignUp>}/>
       <Route path={`/find-password`} element={<FindPassword></FindPassword>}/>
+      <Route path={`/delete-user/:token`} element={<DeleteUser></DeleteUser>}/>
       <Route path={`/dashboard`} element={<Dashboard></Dashboard>} />
       <Route path={`/dashboard/all-post/:tag?/:search?/:sort?`} element={<AllPopularPost></AllPopularPost>} />
       <Route path={`/dashboard/all-new-notification`} element={<AllNewNotification></AllNewNotification>} />

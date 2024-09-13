@@ -11,15 +11,18 @@ const UserProfile = ({ profileType ,profileImage}) => {
   const [nickname, setNickname] = useState<string>('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const [token, setToken] = useState<string>('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     try {
       const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
+
+      const accessToken = sessionStorage.getItem('accessToken');
+      setToken(accessToken);
     }catch (err) {
-      if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
-      console.log('게시물을 불러오는 중에 오류가 발생했습니다.');
+      console.log(err);
     } 
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -33,19 +36,6 @@ const UserProfile = ({ profileType ,profileImage}) => {
   }, []);
   return (
     <div  style={{cursor:'pointer'}}>
-    {profileType==='logout' &&(
-      <div ref={dropdownRef}>
-      <img style={{marginRight:'5px'}} src={profileImage} alt="Profile" className="heart" onClick={() => setDropdownOpen(!dropdownOpen)}/>
-      {dropdownOpen && (
-                    <div className="dropdown-menu-profile" >
-                      <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
-                      <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
-
-                    </div>
-      )}
-      </div>
-      
-    )}
 
     {profileType==='signup' &&(
        <div ref={dropdownRef}>
@@ -70,7 +60,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost`)}>글 관리</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
- 
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/delete-user/${token}`)}>회원 탈퇴하기</button>
                      </div>
        )}
        </div>
@@ -87,6 +77,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/${nickname}`)}>내 블로그 가기</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/delete-user/${token}`)}>회원 탈퇴하기</button>
  
                      </div>
        )}
@@ -103,6 +94,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/getpost`)}>글 관리</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate(`/myProfileSetting`)}>내 프로필 설정</button>
                       <button className="dropdown-item-profile" onClick={() =>navigate("/")}>로그아웃</button>
+                      <button className="dropdown-item-profile" onClick={() =>navigate(`/delete-user/${token}`)}>회원 탈퇴하기</button>
  
                      </div>
        )}

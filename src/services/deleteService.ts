@@ -93,7 +93,7 @@ export const deleteNotification  = async (notificationId: string): Promise<any> 
     console.log("API response:", response); // API 응답 확인
     return response;
   } catch (error) {
-    console.error("Error in deleteFollow:", error); // 오류 로그
+    console.error("Error in deleteNotification:", error); // 오류 로그
     throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
   }
 }; 
@@ -121,7 +121,7 @@ export const deleteCommentLike  = async (commentId: string): Promise<any> => {
     console.log("API response:", response); // API 응답 확인
     return response;
   } catch (error) {
-    console.error("Error in deleteFollow:", error); // 오류 로그
+    console.error("Error in deleteCommentLike:", error); // 오류 로그
     throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
   }
 }; 
@@ -149,7 +149,31 @@ export const deleteComment  = async (commentId: string): Promise<any> => {
     console.log("API response:", response); // API 응답 확인
     return response;
   } catch (error) {
-    console.error("Error in deleteFollow:", error); // 오류 로그
+    console.error("Error in deleteComment:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
+}; 
+
+/**
+ * 데이터베이스에서 사용자의 계정을 삭제 상태로 변경합니다.
+ * @param email 
+ * @returns 
+ */
+export const deleteUser  = async (): Promise<any> => {
+  try {
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/account`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+    });
+
+    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteUser:", error); // 오류 로그
     throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
   }
 }; 

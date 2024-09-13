@@ -616,7 +616,10 @@ const PostDetail: React.FC = () => {
   // }
   const renderComments = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
-      <div key={comment.comment_id} className="comment-item" ref={(el) => setCommentRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}>
+      <div key={comment.comment_id} 
+      className="comment-item" 
+      ref={(el) => setCommentRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}
+      onClick={()=>{navigate(`/${comment.user_nickname}`)}}>
         <div className="comment-header">
           <img className='heart-no-spin' src={comment.user_image || mainCharacterImg} alt="User Profile" />
           <div className='comment-item-content'>
@@ -752,7 +755,10 @@ const PostDetail: React.FC = () => {
   
   const renderReplies = (commentsList: CommentData[], parentCommentId?: string) => {
     return commentsList.map((comment, index) => (
-      <div key={comment.comment_id} className="comment-item2" ref={(el) => setReplyRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}>
+      <div key={comment.comment_id} 
+      className="comment-item2" 
+      ref={(el) => setReplyRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}
+      onClick={()=>{navigate(`/${comment.user_nickname}`)}}>
         <div className="comment-header2">
           <img className='spaceBar' src={spaceBar} alt="User Profile" />
           <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" />
