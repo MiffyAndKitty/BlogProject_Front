@@ -21,7 +21,7 @@ const Login: React.FC = () => {
       // await getGoogleLogin();  // 로그아웃 API 호출
       // navigate(`/dashboard`);
     } catch (error) {
-      console.error(error);
+      alert(`구글 로그인에 실패했습니다: ${error.response.data.message}`);
     }
   };
   return (

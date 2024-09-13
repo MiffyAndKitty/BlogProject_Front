@@ -60,6 +60,7 @@ const SignUp: React.FC = () => {
       return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
     } catch (error) {
       console.error("중복 확인 오류:", error);
+      alert(`중복 확인 중 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
   };
@@ -87,21 +88,8 @@ const SignUp: React.FC = () => {
       setSignUpResult(response.result.toString());
       return response.result;
     } catch (error) {
-      // 400 Bad Request 처리
-    if (error.response && error.response.status === 400) {
       setSignUpResult(`error: ${error.response.data.message}`);
       alert(`회원가입에 실패했습니다: ${error.response.data.message}`);
-    }
-    // 500 Internal Server Error 처리
-    else if (error.response && error.response.status === 500) {
-      setSignUpResult(`error: ${error.response.data.message}`);
-      alert(`회원가입에 실패했습니다: ${error.response.data.message}`);
-    }
-    // 그 외 에러 처리
-    else {
-      setSignUpResult('error: 서버와의 연결에 실패했습니다.');
-      alert(`error: 서버와의 연결에 실패했습니다.`);
-    }
     console.error("회원가입 오류:", error);
   }
   };

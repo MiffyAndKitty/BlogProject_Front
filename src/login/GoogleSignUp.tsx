@@ -52,6 +52,7 @@ const SignUp: React.FC = () => {
       return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
     } catch (error) {
       console.error("중복 확인 오류:", error);
+      alert(`중복 확인 중 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
   };
@@ -71,6 +72,7 @@ const SignUp: React.FC = () => {
       return response.result;
     } catch (error) {
       console.error("회원가입 오류:", error);     
+      alert(`회원가입 중에 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
   };

@@ -81,6 +81,7 @@ const CategorySettings = () => {
         `,fetchedCategories.hierarchicalCategory);
     } catch (err) {
       console.error(err);
+      alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);
@@ -124,7 +125,7 @@ const CategorySettings = () => {
       alert('카테고리 추가를 성공했습니다!');
     } catch (err) {
       console.error(err);
-      alert('카테고리를 추가하는 중에 오류가 발생했습니다.');
+      alert(`카테고리를 추가하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       setError('카테고리를 추가하는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);
@@ -146,7 +147,7 @@ const CategorySettings = () => {
       alert('카테고리를 추가했습니다!');
     } catch (err) {
       console.error(err);
-      alert('하위 카테고리를 추가하는 중에 오류가 발생했습니다.');
+      alert(`하위 카테고리를 추가하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       setError('하위 카테고리를 추가하는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);
@@ -166,7 +167,7 @@ const CategorySettings = () => {
       fetchCategories();
     } catch (err) {
       console.error(err);
-      alert('카테고리를 수정하는 중에 오류가 발생했습니다.');
+      alert(`카테고리를 수정하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
     } finally {
       setLoading(false);
     }
@@ -184,7 +185,7 @@ const CategorySettings = () => {
       fetchCategories();
     } catch (err) {
       console.error(err);
-      alert('카테고리 위치를 수정하는 중에 오류가 발생했습니다.');
+      alert(`카테고리 위치를 수정하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
     } finally {
       setLoading(false);
     }
@@ -197,7 +198,7 @@ const CategorySettings = () => {
       fetchCategories();
     } catch (err) {
       console.error(err);
-      alert('카테고리를 삭제하는 중에 오류가 발생했습니다.');
+      alert(`카테고리를 삭제하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
 
     } finally {
       setLoading(false);

@@ -172,6 +172,7 @@ const AllPopularPost: React.FC = () => {
       }
     } catch (err) {
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
+      alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
     } finally {
       setLoading(false);
     }
@@ -205,6 +206,7 @@ const AllPopularPost: React.FC = () => {
         }
     }catch(err){
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
+        alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
         setLocalNickName('');
     }finally {
         setLoading(false);

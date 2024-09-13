@@ -18,6 +18,7 @@ const UserProfile = ({ profileType ,profileImage}) => {
       const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
     }catch (err) {
+      alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       console.log('게시물을 불러오는 중에 오류가 발생했습니다.');
     } 
     const handleClickOutside = (event: MouseEvent) => {

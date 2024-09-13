@@ -60,7 +60,8 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
             }
           }
         } catch (error) {
-          console.error('Failed to load followers:', error);
+            alert(`팔로우를 불러오는 중에 오류가 발생했습니다: ${error.response.data.message}`); 
+            console.error('Failed to load followers:', error);
         } finally {
           setIsLoading(false);
           setLoading(false);
@@ -100,8 +101,8 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
             }
             } 
             else alert('팔로우 취소에 실패했습니다! 다시 시도해주세요.');
-        }catch{
-            
+        }catch(err){
+            alert(`팔로우 취소 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         }
        
       };
@@ -185,7 +186,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
             );
           };
         }catch(err){
-          alert('팔로우 추가에 실패했습니다! 다시 시도해주세요.');
+          alert(`팔로우 추가에 실패했습니다: ${err.response.data.message}`); 
         }
         
       };

@@ -253,7 +253,7 @@ const WriteNewPost: React.FC = () => {
       return response.data.result;
     } catch (error) {
       console.error("글 저장 오류:", error);     
-      alert(`글 저장 오류: ${error.response.data.message}`);
+      alert(`글 저장 중에 오류가 발생했습니다: ${error.response.data.message}`); 
       return false;
     }
 
@@ -280,6 +280,7 @@ const WriteNewPost: React.FC = () => {
         setCategories(fetchedCategories.hierarchicalCategory);
         console.log(`fetchedCategories`,fetchedCategories);
       } catch (err) {
+        alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);

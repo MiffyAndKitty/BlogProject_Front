@@ -46,6 +46,7 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
         setNotifications(fetchedNotification.data.slice(0, 5));
       }
     } catch (error) {
+      alert(`알림을 불러오는 중에 오류가 발생했습니다: ${error.response.data.message}`);
       console.error('Error fetching notifications:', error);
     }finally{
       setLoading(false);
@@ -65,6 +66,7 @@ const Notification: React.FC<FollowModalProps> = ({ onClose, buttonRef }) => {
             }
         }
     } catch (error) {
+        alert(`알림을 삭제하는 중에 오류가 발생했습니다: ${error.response.data.message}`);
         console.error('Failed to delete follow:', error);
     }
   };

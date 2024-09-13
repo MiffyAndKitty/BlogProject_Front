@@ -248,8 +248,8 @@ const FixPost: React.FC = () => {
       setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
+      alert(`글 수정 중에 오류가 발생했습니다: ${error.response.data.message}`); 
       console.error("글 저장 오류:", error);     
-      alert(`글 저장 오류: ${error.response.data.message}`);
       return false;
     }
   };
@@ -303,6 +303,7 @@ const FixPost: React.FC = () => {
         console.log(`fetchedPosts`, fetchedPosts.data);
         setPost(fetchedPosts.data, fetchedCategories.hierarchicalCategory); // 카테고리를 함께 전달
       } catch (err) {
+        alert(`글 조회 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         setError('데이터를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);
@@ -326,6 +327,7 @@ const FixPost: React.FC = () => {
       }
     } catch (err) {
       console.log(err);
+      
     }
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {

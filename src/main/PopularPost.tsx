@@ -93,6 +93,7 @@ const PopularPost: React.FC = () => {
 
         `,fetchedPosts.data.data, posts);
     } catch (err) {
+      alert(`인기 게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);

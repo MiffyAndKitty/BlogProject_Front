@@ -62,6 +62,7 @@ const MyBlogMainPage: React.FC = () => {
       setOtherMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
+      alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
       navigate(`/dashboard/${localNickName}`);
     } finally {
@@ -76,7 +77,7 @@ const MyBlogMainPage: React.FC = () => {
       // setOtherMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
-      console.log('상세 개인정보를 불러오는 중에 오류가 발생했습니다.');
+      alert(`상세 개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
     } finally {
       setProfileLoading(false); // 프로필 로딩 끝
     }
@@ -105,6 +106,7 @@ const MyBlogMainPage: React.FC = () => {
           setLocalNickName(localNickname);
         }
       } catch (err) {
+        alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
         setLocalNickName('');
       } finally {

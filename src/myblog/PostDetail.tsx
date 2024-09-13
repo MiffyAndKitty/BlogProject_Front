@@ -144,7 +144,7 @@ const PostDetail: React.FC = () => {
         
         
         `,result.status); 
-      if(result.status=== 201) {
+      if(result) {
         //alert('댓글 추가에 성공했습니다!');
         lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
         setTotalComment(totalComments+1);
@@ -156,13 +156,7 @@ const PostDetail: React.FC = () => {
       }
     }catch(err){
        // 상태 코드에 따른 에러 메시지 처리
-       if (err.response.status === 400) {
-        alert('잘못된 요청입니다. 입력한 내용을 다시 확인해주세요.');
-      } else if (err.response.status === 500) {
-        alert('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-      } else {
-        alert(`댓글 추가에 실패했습니다! 오류 메시지: ${err.response.message}`);
-      }
+       alert(`댓글 추가 중에 오류가 발생했습니다: ${err.response.data.message}`); 
     }
     
   };
@@ -234,6 +228,7 @@ const PostDetail: React.FC = () => {
       
     } catch (error) {
       console.error('Failed to load comments:', error);
+      alert(`댓글 조회 중에 오류가 발생했습니다: ${error.response.data.message}`); 
     } finally {
       setIsLoading(false); // 로딩 종료
     }
@@ -244,6 +239,7 @@ const PostDetail: React.FC = () => {
       const fetchedReplies = await getCommentReplies(commentId); // 특정 댓글의 답글을 가져옴
       setReplies(prevReplies => ({ ...prevReplies, [commentId]: fetchedReplies.data }));
     } catch (error) {
+      alert(`답글 조회 중에 오류가 발생했습니다: ${error.response.data.message}`); 
       console.error('Failed to load replies:', error);
     }
   };
@@ -303,7 +299,7 @@ const PostDetail: React.FC = () => {
       );
     }
   } catch (error) {
-    alert('답글 추가에 실패했습니다. 다시 시도해주세요.');
+    alert(`답글 추가 중에 오류가 발생했습니다: ${error.response.data.message}`); 
   }
 };
 
@@ -455,6 +451,7 @@ const PostDetail: React.FC = () => {
       }
     } catch (error) {
       console.error("Failed to update like/dislike", error);
+      alert(`좋아요/싫어요  오류가 발생했습니다: ${error.response.data.message}`); 
     }
   };
   
@@ -470,6 +467,7 @@ const PostDetail: React.FC = () => {
       setTags(fetchedPost.data.tags);
       setTotalComment(fetchedPost.data.board_comment);
     } catch (err) {
+      alert(`게시물 내용을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
     } finally {
       setLoading(false);
@@ -560,6 +558,7 @@ const PostDetail: React.FC = () => {
           }));
         }
       } catch (err) {
+        alert(`댓글 삭제 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         console.error('댓글 삭제 중 오류 발생:', err);
       } finally {
         setIsCommentModalOpen(false);
@@ -606,6 +605,7 @@ const PostDetail: React.FC = () => {
           setEditingCommentContent(''); // 수정 완료 후 상태 초기화
         }
       } catch (err) {
+        alert(`댓글 수정 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         console.error('댓글 수정 중 오류 발생:', err.response.message);
       }
     }

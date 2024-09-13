@@ -73,6 +73,7 @@ const MyProfileSetting: React.FC = () => {
             }
         } catch (err) {
             console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
+            alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
         }
     };
 
@@ -106,6 +107,7 @@ const MyProfileSetting: React.FC = () => {
           return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
         } catch (error) {
           console.error("중복 확인 오류:", error);
+          alert(`중복 확인 오류가 발생했습니다: ${error.response.data.message}`);
           return false;
         }
       };
@@ -132,7 +134,7 @@ const MyProfileSetting: React.FC = () => {
                 window.location.reload();
             },1000)
         } catch (err) {
-            alert('프로필 업데이트 중 오류가 발생했습니다.');
+            alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
         }
     };
     const handleSubmitPasswd = () =>{
@@ -158,6 +160,7 @@ const MyProfileSetting: React.FC = () => {
             
             
         } catch (err) {
+            alert(`프로필 업데이트 중 오류가 발생했습니다: ${err.response.data.message}`);
             console.log('프로필 업데이트 중 오류가 발생했습니다.');
         }
     };
@@ -171,6 +174,7 @@ const MyProfileSetting: React.FC = () => {
             return response.result;
         } catch (error) {
             console.error("중복 확인 오류:", error);
+            alert(`중복 확인 중  오류가 발생했습니다: ${error.response.data.message}`);
             return false;
         }
     };

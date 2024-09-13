@@ -71,6 +71,7 @@ const AllNewNotification: React.FC = () => {
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
+      alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);
     }finally{
       setLoading(false);
     }
@@ -84,6 +85,7 @@ const AllNewNotification: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to delete notification:', error);
+      alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);
     }
   };
 

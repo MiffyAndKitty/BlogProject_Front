@@ -22,6 +22,7 @@ const Login: React.FC = () => {
       // navigate(`/dashboard`);
     } catch (error) {
       console.error(error);
+      alert(`구글 로그인에 실패했습니다: ${error.response.data.message}`);
     }
   };
   return (
