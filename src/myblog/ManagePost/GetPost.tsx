@@ -43,7 +43,7 @@ const GetPost: React.FC = () => {
   const navigate = useNavigate();
 
   const fixPost = (postID: string) => {
-    if (isWriter === true) navigate(`/fixpost`);
+    if (isWriter === true) navigate(`/fixpost/${postID}`);
     else alert('수정권한이 없습니다!');
   };
 
@@ -239,8 +239,8 @@ const GetPost: React.FC = () => {
     // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
     const cleanHtml = DOMPurify.sanitize(html, { 
       USE_PROFILES: { html: true },
-      ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'a', 'img'], // 허용할 태그들 (img 포함)
-      ALLOWED_ATTR: ['src', 'alt', 'title', 'width', 'height'], // 허용할 속성들
+      ALLOWED_TAGS: [ 'img'], // 허용할 태그들 (img 포함)
+      ALLOWED_ATTR: ['src',], // 허용할 속성들
     });
     return cleanHtml;
   };
@@ -283,17 +283,7 @@ const GetPost: React.FC = () => {
       </>
     );
   };
-  useEffect(()=>{
-    console.log(`
 
-
-      GetPost 
-      ----posts---- 
-
-
-      `,posts);
-      // setFilteredPosts(posts);
-  },[posts]); 
   useEffect(() => {
     const token = sessionStorage.getItem('accessToken');
     if (!token) {
@@ -320,30 +310,12 @@ const GetPost: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log(`
-      
-      
-      
-      페이지가 변경되면서 글 다시 불러오기
-      
-      
-      
-      ${cursor} ${category.category_id}`)
     fetchPosts(cursor,category.category_id,searchTerm);
   }, [currentPage]);
 
   useEffect(() => {
 
     setCurrentPage(1);
-    console.log(`
-      
-      
-      
-      카테고리가 변경되면서 글 다시 불러오기
-      
-      
-      
-      ${cursor} ${category.category_id}`)
       setCursor('');
       fetchPosts(undefined,category.category_id,searchTerm);
   }, [category]);
@@ -421,8 +393,10 @@ const GetPost: React.FC = () => {
                       ) : (
                         <>
                             <div className="post-list">
-                          {posts.map((post) => (
-                            <div className="post-card" key={post.board_id}>
+                          {posts.map((post) => {
+                            const firstImage = extractFirstImage(post.board_content);
+                            return(
+                              <div className="post-card" key={post.board_id}>
                               <div className="post-main-header">
                                 <div className="title-container">
                                   <h2
@@ -447,13 +421,26 @@ const GetPost: React.FC = () => {
                                   </span>
                                 </div>
                               </div>
-                              <div
+                              {/* <div
                                 className="post-main-content"
                                 onClick={() => goToDetailPost(post.board_id)}
                                 dangerouslySetInnerHTML={{
                                   __html: highlightKeyword(post.board_content, searchTerm),
                                 }}
-                              ></div>
+                              ></div> */}
+                                 {firstImage ? (
+                                     <div className="post-main-content-img" onClick={() => goToDetailPost(post.board_id)}>
+                                        <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
+                                    </div>
+                                  ):(
+                                    <div className="post-main-content" onClick={() => goToDetailPost(post.board_id)}>
+                                      <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
+                                    </div>
+                                  )
+                                }
+                         
+
+                         
                               <div className="post-actions">
                                 <button className="edit-btn" onClick={() => fixPost(post.board_id)}>
                                   수정
@@ -469,7 +456,9 @@ const GetPost: React.FC = () => {
                                 />
                               </div>
                             </div>
-                          ))}
+                            )
+ 
+                          })}
                         </div>
                         </>
                       )}

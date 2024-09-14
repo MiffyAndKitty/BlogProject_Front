@@ -13,13 +13,7 @@
   position: relative;
   display: inline-block;
 }
-.dropdown-getpost-toggle {
-  background-color: #ffffff00;
-  color: #ff69b4;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-}
+
 .dropdown-getpost-menu {
   display: block;
   position: absolute;
@@ -45,11 +39,16 @@
   color: #060606;
   padding: 10px 20px;
   border-width:2px;
-  border-color: #f0a4d8;
+  border: none;
   cursor: pointer;
   margin-bottom: 5px;
-}
+  display: flex;
+  flex-wrap: nowrap;
 
+}
+.dropdown-category-name{
+  flex-wrap: nowrap;
+}
   .title_manage {
     margin-bottom: 20px;
     color:  #f0a4d8;
@@ -264,4 +263,15 @@
     width: auto;     /* 이미지의 비율을 유지하며 높이를 자동 조정 */
     display: block;   /* 이미지를 블록 요소로 처리 */
   }
-  
+  @media (max-width:478px) {
+    .post-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 5px;
+      padding: 0 20px 20px; /* 좌우 padding 추가, 하단 padding 추가 */
+    }
+    .dropdown-getpost-toggle {
+      padding: 10px;
+    }
+  }

@@ -108,7 +108,7 @@ const MyProfileSetting: React.FC = () => {
           return response.result;  // 가정: API 응답이 { result: 계산된 값 } 형식일 때
         } catch (error) {
           console.error("중복 확인 오류:", error);
-          if(error.response) alert(`중복 확인 오류가 발생했습니다: ${error.response.data.message}`);
+          //if(error.response) alert(`중복 확인 오류가 발생했습니다: ${error.response.data.message}`);
           return false;
         }
       };
@@ -131,7 +131,7 @@ const MyProfileSetting: React.FC = () => {
             fetchMyProfile();
             
             setTimeout(()=>{
-                navigate(`/myProfileSetting/${newNick}`);
+                navigate(`/myProfileSetting`);
                 window.location.reload();
             },1000)
         } catch (err) {
@@ -175,7 +175,7 @@ const MyProfileSetting: React.FC = () => {
             return response.result;
         } catch (error) {
             console.error("중복 확인 오류:", error);
-            if(error.response) alert(`중복 확인 중  오류가 발생했습니다: ${error.response.data.message}`);
+            //if(error.response) alert(`중복 확인 중  오류가 발생했습니다: ${error.response.data.message}`);
             return false;
         }
     };
@@ -343,7 +343,7 @@ const MyProfileSetting: React.FC = () => {
             {editingField === field && isEditable ? (
                 field === 'user_password' ? (
                     renderPasswordFields() // 비밀번호 필드는 수정하지 않음
-                ) : (
+                ) :field === 'user_nickname' ?(
                     <div>
                         <input
                             style={{ background: 'transparent' }}
@@ -358,18 +358,39 @@ const MyProfileSetting: React.FC = () => {
                                 }
                             }}
                         />
-                        {/* 닉네임 중복 체크 시 에러 메시지 표시 */}
-                        {/* {field === 'user_nickname' && errors.newNick && (
-                            <p style={{ color: 'red' }}>{errors.newNick}</p>
-                        )} */}
+
                         <div className="submit-cancel">
                             <button 
-                            onClick={handleSubmit} 
+                            onClick={handleSubmit}
                             disabled={field === 'user_nickname' && !isOk.newNick}
                             style={{
                                 marginRight:'5px',
                                 backgroundColor: !isOk.newNick ? 'gray' : '', // 닉네임 중복 시 회색 버튼
                                 cursor: !isOk.newNick ? 'not-allowed' : 'pointer'
+                            }}
+                            >저장</button>
+                            <button onClick={() => setEditingField(null)}>취소</button>
+                        </div>
+                    </div>
+                ):(
+                    <div>
+                        <input
+                            style={{ background: 'transparent' }}
+                            type={type}
+                            name={field}
+                            value={ (userData ? userData[field] : '')}
+                            onChange={(e) => {
+                                handleChange(e);
+                                
+                            }}
+                        />
+
+                        <div className="submit-cancel">
+                            <button 
+                            onClick={handleSubmit}
+                            style={{
+                                marginRight:'5px',
+                                cursor: 'pointer'
                             }}
                             >저장</button>
                             <button onClick={() => setEditingField(null)}>취소</button>
@@ -409,17 +430,20 @@ const MyProfileSetting: React.FC = () => {
                                             
                                             {editingField === 'uploaded_files' ? (
                                                 <div>
-                                                    <input type="file" onChange={handleImageChange} />
-                                                    {image && <img src={image} alt="프로필 이미지" width="150" />}
-                                                    {/* <span style={{marginRight:'450px'}}></span> */}
+
+                                                    <div className='image-submit'>
+                                                        <input type="file" onChange={handleImageChange} />
+                                                        {image && <img src={image} alt="프로필 이미지"/>}
+                                                    </div>
+
                                                     <div  className='submit-cancel'>
                                                         <button style={{marginRight:'5px'}} onClick={handleSubmit}>저장</button>
-                                                        <button onClick={() => setEditingField(null)}>취소</button>
+                                                        <button style={{marginRight:'5px'}} onClick={() => setEditingField(null)}>취소</button>
                                                     </div>
                                                 </div>
                                             ) : (
                                                 <div>
-                                                    {userData.user_image && <img src={userData.user_image} alt="프로필 이미지" width="150" />}
+                                                    {userData.user_image && <img src={userData.user_image} alt="프로필 이미지"/>}
                                                     <button onClick={() => setEditingField('uploaded_files')}>수정</button>
                                                 </div>
                                             )}

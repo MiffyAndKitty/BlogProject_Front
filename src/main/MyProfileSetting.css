@@ -9,9 +9,17 @@
     justify-content: space-between;
     align-items: center;
 }
-
+.image-submit{
+    display: flex;
+    flex-direction: column;
+}
 .profile-image-container img {
-    
+    max-width: 150px;    /* 이미지가 부모 요소의 너비를 넘지 않도록 설정 */
+    min-width: 150px;
+    max-height: 150px;    /* 이미지가 부모 요소의 너비를 넘지 않도록 설정 */
+    min-height: 150px;
+    object-fit: cover;  /* 이미지가 컨테이너에 맞춰 잘리더라도 비율을 유지 */
+    border-radius: 50%; /* 프로필 이미지가 원형으로 보이도록 설정 (선택 사항) */
     margin-bottom: 10px;
 }
 .submit-cancel{

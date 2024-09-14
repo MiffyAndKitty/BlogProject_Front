@@ -18,6 +18,7 @@ import PostDetail from './myblog/PostDetail';
 import AllPopularPost from './main/AllPopularPost';
 import MyProfileSetting from './main/MyProfileSetting';
 import AllNewNotification from './main/AllNewNotification';
+import NotFound from './main/NotFound';
 import DragTest from './main/DragTest';
 import Layout from './main/Layout.js';
 import {
@@ -32,6 +33,8 @@ function App() {
   return (
     <Router>
     <Routes>
+      {/* 없는 페이지(404)를 처리하는 라우트 */}
+      <Route path="*" element={<NotFound />} />
       <Route index element={<MainPage></MainPage>}/>
       <Route path={`/login`} element={<Login></Login>}/>
       <Route path={`/auth/callback`} element={<AuthCallback></AuthCallback>}/>
@@ -47,7 +50,7 @@ function App() {
       <Route path={`/:nickname/:postID?/:commentID?/:replyID?`} element={<MyBlogMainPage></MyBlogMainPage>} />
       <Route path={`/writenewpost`} element={<WriteNewPost></WriteNewPost>} />
       <Route path={`/getpost`} element={<GetPost></GetPost>} />
-      <Route path={`/fixpost`} element={<FixPost></FixPost>} />
+      <Route path={`/fixpost/:postID`} element={<FixPost></FixPost>} />
       <Route path={`/myProfileSetting/`} element={<MyProfileSetting></MyProfileSetting>} />
     </Routes>
     </Router>

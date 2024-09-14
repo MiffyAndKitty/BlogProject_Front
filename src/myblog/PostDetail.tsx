@@ -37,7 +37,10 @@ interface CommentData {
   reply_count:number
 
 }
-const PostDetail: React.FC = () => {
+interface DetailPostsProps {
+  isDeleteUser?:boolean
+}
+const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
   const [isBefore, setIsBefore] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
   const { postID, nickname, commentID,replyID } = useParams();
@@ -230,7 +233,46 @@ const PostDetail: React.FC = () => {
       console.error('Failed to load replies:', error);
     }
   };
+  // const cleanHTMLContent=(html: string): string =>{
 
+  //   console.log(`
+      
+      
+  //     cleanHTMLContent
+      
+
+  //     `,html)
+  //     // DOMParser를 사용해 HTML 파싱
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(html, 'text/html');
+      
+  //   // 제거할 불필요한 태그 목록
+  //   const tagsToRemove = ['style', 'script', 'iframe', 'object'];
+  //   tagsToRemove.forEach(tag => {
+  //     const elements = doc.getElementsByTagName(tag);
+  //     while (elements[0]) {
+  //       elements[0].parentNode?.removeChild(elements[0]);
+  //     }
+  //   });
+  
+  //   // 모든 태그에서 인라인 스타일 제거
+  //   const allElements = doc.body.getElementsByTagName('*');
+  //   for (let i = 0; i < allElements.length; i++) {
+  //     allElements[i].removeAttribute('style'); // 인라인 스타일 제거
+  //   }
+  
+  //   // 불필요한 클래스 제거 (필요에 따라 더 추가 가능)
+  //   const classesToRemove = ['ql-font-monospace', 'ql-align-center'];
+  //   for (let className of classesToRemove) {
+  //     const elements = doc.getElementsByClassName(className);
+  //     while (elements[0]) {
+  //       elements[0].classList.remove(className);
+  //     }
+  //   }
+  
+  //   // 정리된 HTML을 다시 문자열로 변환해서 반환
+  //   return doc.body.innerHTML;
+  // }
   const handleReplyClick = async (commentId: string) => {
     if (openReplies[commentId]) {
       // 이미 열려 있는 경우 닫기
@@ -481,7 +523,7 @@ const PostDetail: React.FC = () => {
 
 
   const editPost = (postID: string)=>{
-    if (isWriter === true) navigate(`/fixpost`);
+    if (isWriter === true) navigate(`/fixpost/${postID}`);
     else alert('수정권한이 없습니다!');
   };
 
@@ -619,11 +661,11 @@ const PostDetail: React.FC = () => {
       <div key={comment.comment_id} 
       className="comment-item" 
       ref={(el) => setCommentRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}
-      onClick={()=>{navigate(`/${comment.user_nickname}`)}}>
-        <div className="comment-header">
-          <img className='heart-no-spin' src={comment.user_image || mainCharacterImg} alt="User Profile" />
+      >
+        <div className="comment-header" >
+          <img className='heart-no-spin' src={comment.user_image || mainCharacterImg} alt="User Profile" onClick={()=>{navigate(`/${comment.user_nickname}`)}}/>
           <div className='comment-item-content'>
-            <span className="comment-item-author">{comment.user_nickname}</span>
+            <span className="comment-item-author" onClick={()=>{navigate(`/${comment.user_nickname}`)}}>{comment.user_nickname}</span>
             
             {editingCommentId === comment.comment_id ? (
               // 댓글 수정 모드일 때
@@ -758,10 +800,10 @@ const PostDetail: React.FC = () => {
       <div key={comment.comment_id} 
       className="comment-item2" 
       ref={(el) => setReplyRef(comment.comment_id, el, index === commentsList.length - 1 && !parentCommentId)}
-      onClick={()=>{navigate(`/${comment.user_nickname}`)}}>
+      >
         <div className="comment-header2">
-          <img className='spaceBar' src={spaceBar} alt="User Profile" />
-          <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" />
+          <img className='spaceBar' src={spaceBar} alt="User Profile" onClick={()=>{navigate(`/${comment.user_nickname}`)}}/>
+          <img className='heart2' src={comment.user_image || mainCharacterImg} alt="User Profile" onClick={()=>{navigate(`/${comment.user_nickname}`)}}/>
           <div className='comment-item-content'>
             <span className="comment-item-author">{comment.user_nickname}</span>
             {editingCommentId === comment.comment_id ? (
@@ -876,8 +918,13 @@ const PostDetail: React.FC = () => {
   const profileImage = isImageLoaded ? image : mainCharacterImg;
   return (
     <>
-     <h1 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nickname}`)}}>{nickname}의 블로그</h1>
-     <hr className="notification-divider" />
+              {!isDeleteUser && (
+                <h2 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nickname}`)}}>{nickname}의 블로그</h2>
+              )}
+             {isDeleteUser && (
+                <h2 style={{cursor:'pointer'}} >탈퇴한 사용자입니다.</h2>
+              )}
+                <hr className="notification-divider" />
        
      
               <div style={{ marginTop: '20px' }} className="postdetail-detail">

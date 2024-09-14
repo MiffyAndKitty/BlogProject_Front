@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { Form, Button } from 'react-bootstrap';
 import Header from '../../structure/Header';
 import Footer from '../../structure/Footer';
@@ -15,7 +15,7 @@ const FixPost: React.FC = () => {
   const [nickname, setNickname] = useState<string>();
   const quillRef = useRef<ReactQuill>(null);
   const location = useLocation();
-  const postID = location.state?.postID;
+  let {postID} = useParams<{postID: string}>();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [status, setStatus] = useState(true);
@@ -303,8 +303,11 @@ const FixPost: React.FC = () => {
         console.log(`fetchedPosts`, fetchedPosts.data);
         setPost(fetchedPosts.data, fetchedCategories.hierarchicalCategory); // 카테고리를 함께 전달
       } catch (err) {
-        if(err.response) alert(`글 조회 중에 오류가 발생했습니다: ${err.response.data.message}`); 
-        navigate(-1);
+        if(err.response){
+          alert(`글 조회 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+          navigate(-1);
+        } 
+        
         setError('데이터를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);

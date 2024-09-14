@@ -32,7 +32,12 @@ const MyBlogMainPage: React.FC = () => {
   const [areYouFollowing, setAreYouFollowing] = useState<boolean>(false);
   const [totalCategories,setTotalCategories] = useState<number>();
   const [noCategories,setNoCategories] = useState<number>();
+  const [otherNickname, setOtherNickname] = useState<string>('');
   const [otherEmail, setOtherEmail] = useState<string>('');
+  const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
+
+
+
   const onPostClick = (postID: string) => {
     setCurrentPostID(postID);
   };
@@ -57,6 +62,7 @@ const MyBlogMainPage: React.FC = () => {
     setProfileLoading(true); // 프로필 로딩 시작
     try {
       const fetchedProfile = await getProfiles(nickname);
+      setOtherNickname(nickname);
       setOtherEmail(fetchedProfile.data.user_email);
       setOtherImage(fetchedProfile.data.user_image);
       setOtherMessage(fetchedProfile.data.user_message);
@@ -64,7 +70,7 @@ const MyBlogMainPage: React.FC = () => {
     } catch (err) {
       if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
-      navigate(`/dashboard/${localNickName}`);
+
     } finally {
       setProfileLoading(false); // 프로필 로딩 끝
     }
@@ -78,6 +84,23 @@ const MyBlogMainPage: React.FC = () => {
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
       if(err.response) alert(`상세 개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+      console.log(`err.response.status
+        
+        
+        
+        
+        ${err.response.status}
+        
+        
+        
+        
+        
+        
+        `,err.response)
+      if(err.response.status===500) { // 탈퇴한 사용자의 경우
+        setIsDeleteUser(true);
+        
+      }
     } finally {
       setProfileLoading(false); // 프로필 로딩 끝
     }
@@ -144,7 +167,7 @@ const MyBlogMainPage: React.FC = () => {
                   {(!token && (
                     <Profile 
                       pageType="signup_for_blog" 
-                      nicknameParam={nickname} 
+                      nicknameParam={otherNickname} 
                       userImg={otherImage} 
                       userMessage={otherMessage} 
                       areYouFollowing={areYouFollowing} 
@@ -164,7 +187,7 @@ const MyBlogMainPage: React.FC = () => {
 
                   {(token && localNickName !== nickname && !profileLoading && (
                     <Profile pageType="otherBlog" 
-                      nicknameParam={nickname}
+                      nicknameParam={otherNickname}
                       userImg={otherImage}
                       userMessage={otherMessage} 
                       areYouFollowing={areYouFollowing}
@@ -186,7 +209,7 @@ const MyBlogMainPage: React.FC = () => {
                   </section>
 
                   <section className='main-blog-detail-posts-section'>
-                  <PostDetail />
+                  <PostDetail isDeleteUser={isDeleteUser}/>
                   </section>
                   </div>
                 </>
@@ -233,7 +256,7 @@ const MyBlogMainPage: React.FC = () => {
                   </section>
 
                   <section className='main-blog-posts-section'>
-                    <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} />
+                    <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} isDeleteUser={isDeleteUser}/>
                   </section>
                   </div>
                 </>

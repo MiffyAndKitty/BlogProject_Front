@@ -112,8 +112,23 @@
     width: 100%; /* 내용이 박스를 넘어가지 않도록 부모 요소의 너비에 맞춤 */
     box-sizing: border-box; /* padding과 border를 포함하여 크기를 계산 */
   }
-  
-  
+  .post-main-content-img {
+    padding: 20px;
+    max-height: 4em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
+    overflow: hidden;  /* 넘치는 내용은 숨김 처리 */
+    text-overflow: ellipsis;  /* 넘치는 텍스트는 말줄임표(...)로 표시 */
+    white-space: wrap;  /* 줄바꿈 없이 한 줄로 표시 */
+    width: 100%; /* 내용이 박스를 넘어가지 않도록 부모 요소의 너비에 맞춤 */
+    box-sizing: border-box; /* padding과 border를 포함하여 크기를 계산 */
+  }
+  .first-image-content  {
+    max-height: 4em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
+    width: 100%; /* 내용이 박스를 넘어가지 않도록 부모 요소의 너비에 맞춤 */
+    max-width: 100%; /* 이미지 크기를 콘텐츠 영역에 맞게 조정 */
+    height: auto; /* 비율에 맞게 이미지 높이를 자동 조정 */
+    box-sizing: border-box; /* padding과 border를 포함하여 크기를 계산 */
+    object-fit: cover; /* 이미지의 비율을 유지하면서 컨테이너에 맞게 조정 */
+  }
   
   
   .post-main-actions {
@@ -181,11 +196,23 @@
   .first-image-content img {
     max-width: 100%; /* 이미지 크기를 콘텐츠 영역에 맞게 조정 */
     height: auto; /* 비율에 맞게 이미지 높이를 자동 조정 */
+    object-fit: cover; /* 이미지의 비율을 유지하면서 컨테이너에 맞게 조정 */
+  }
+  .first-image-content  {
+    max-width: 100%; /* 이미지 크기를 콘텐츠 영역에 맞게 조정 */
+    height: auto; /* 비율에 맞게 이미지 높이를 자동 조정 */
+    object-fit: cover; /* 이미지의 비율을 유지하면서 컨테이너에 맞게 조정 */
   }
 
   /* 기존 CSS 파일에 추가 */
 
   .post-main-content img {
+    max-height: 50px;  /* 이미지의 최대 너비를 부모 요소의 너비에 맞춤 */
+    width: auto;     /* 이미지의 비율을 유지하며 높이를 자동 조정 */
+    display: block;   /* 이미지를 블록 요소로 처리 */
+    
+  }
+  .post-main-content-img img {
     max-height: 50px;  /* 이미지의 최대 너비를 부모 요소의 너비에 맞춤 */
     width: auto;     /* 이미지의 비율을 유지하며 높이를 자동 조정 */
     display: block;   /* 이미지를 블록 요소로 처리 */
@@ -234,6 +261,15 @@
     .post-main-content {
       padding: 20px;
       max-height: 3.5em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
+      overflow: hidden;  /* 넘치는 내용은 숨김 처리 */
+      text-overflow: ellipsis;  /* 넘치는 텍스트는 말줄임표(...)로 표시 */
+      white-space: wrap;  /* 줄바꿈 없이 한 줄로 표시 */
+      width: 100%; /* 내용이 박스를 넘어가지 않도록 부모 요소의 너비에 맞춤 */
+      box-sizing: border-box; /* padding과 border를 포함하여 크기를 계산 */
+    }
+    .post-main-content-img {
+      padding: 20px;
+      max-height: 5em; /* 한 줄의 높이에 맞게 설정 (대략적인 한 줄 높이) */
       overflow: hidden;  /* 넘치는 내용은 숨김 처리 */
       text-overflow: ellipsis;  /* 넘치는 텍스트는 말줄임표(...)로 표시 */
       white-space: wrap;  /* 줄바꿈 없이 한 줄로 표시 */

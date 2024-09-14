@@ -62,17 +62,20 @@ const AllNewNotification: React.FC = () => {
       console.log('Fetching notifications with isBefore:', isBefore); // 디버깅 로그
       const fetchedNotification = await getNotificationsList(type, pageSize, cursor, isBefore);
       if (fetchedNotification.result) {
-        setNotifications(fetchedNotification.data);
+        setNotifications(fetchedNotification.data||[]);
         if(fetchedNotification.total.totalPageCount ===0) setTotalPages(1);
         else setTotalPages(fetchedNotification.total.totalPageCount);
         if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
-          setCursor(fetchedNotification.data[fetchedNotification.data.length - 1].notification_id);
+          setCursor(fetchedNotification.data[fetchedNotification.data.length - 1].notification_id||'');
         }
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
-      if(error.response) alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);
-      navigate(-1);
+      if(error.response){
+        alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);
+        navigate(-1);
+      } 
+
     }finally{
       setLoading(false);
     }

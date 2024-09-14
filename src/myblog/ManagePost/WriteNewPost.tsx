@@ -280,8 +280,11 @@ const WriteNewPost: React.FC = () => {
         setCategories(fetchedCategories.hierarchicalCategory);
         console.log(`fetchedCategories`,fetchedCategories);
       } catch (err) {
-        if(err.response) alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
-        navigate(-1);
+        if(err.response){
+          alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+          navigate(-1);
+        } 
+       
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
         setLoading(false);

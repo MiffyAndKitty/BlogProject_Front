@@ -57,6 +57,16 @@
     width: 100%; 
     box-sizing: border-box; 
   }
+  .postdetail-content div {
+    width: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  .postdetail-content img {
+    max-width: 100%;
+    height: auto;
+  }
+  
   .like-button {
     margin-top: 20px;
     background-color: transparent;
@@ -467,6 +477,7 @@
     justify-items: center;
     align-items: center; /* 요소들을 가로 중앙에 배치 */
   }
+ 
   .reply-section{
     width: 100%;
 
@@ -588,5 +599,17 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+  }
+}
+
+@media (max-width: 380px){
+  .postdetail-content div {
+    width: auto !important;
+    max-width: 80% !important;
+    height: auto !important;
+  }
+  .postdetail-content img {
+    max-width: 80%;
+    height: auto;
   }
 }

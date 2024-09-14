@@ -173,14 +173,15 @@ const AllPopularPost: React.FC = () => {
       setLoading(false);
     }
   };
-
-  // 불필요한 태그 제거 함수
-  const removeUnwantedTags = (html: string): string => {
-    const cleanHtml = DOMPurify.sanitize(html, { USE_PROFILES: { html: true } });
-    const div = document.createElement('div');
-    div.innerHTML = cleanHtml;
-    return div.textContent || div.innerText || '';
-  };
+ // 불필요한 태그 제거 함수 (이미지 태그는 유지)
+ const removeUnwantedTags = (html: string): string => {
+  // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
+  const cleanHtml = DOMPurify.sanitize(html, { 
+    ALLOWED_TAGS: ['img'], // 허용할 태그들 (img만 포함)
+    ALLOWED_ATTR: ['src', 'alt'], // 허용할 속성들
+  });
+  return cleanHtml;
+};
 
 
   useEffect(() => {
@@ -221,26 +222,10 @@ const AllPopularPost: React.FC = () => {
     const queryParams = new URLSearchParams(location.search);
     const search = queryParams.get('search') || '';  // search 값을 가져옴
     const sort = queryParams.get('sort') || '';      // sort 값을 가져옴
-    
-    console.log(  `
-      
-      
-      
-      
-      
-      
-      search
-      
-      sort
-      
-      
-      
-      
-      
-      `,search,sort)
     setSearchTerm(search);  // 검색어 상태 설정
     setSortOption(sort);    // 정렬 옵션 상태 설정
-
+    setCursor('');
+    setCurrentPage(1);
     fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
   }, [location.search]);  // location.search가 변경될 때마다 실행
 
@@ -263,9 +248,19 @@ const AllPopularPost: React.FC = () => {
     navigate(`/${postAthor}/${postID}`, { state: { postID } });
   };
 
+  const extractFirstImage = (htmlContent: string): string | null => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlContent, 'text/html');
+    
+    const firstImage = doc.querySelector('img'); // 첫 번째 이미지를 선택
+    
+    return firstImage ? firstImage.outerHTML : null; // 이미지가 있으면 HTML 태그를 반환, 없으면 null 반환
+  };
+
   const handleSortChange = (option) => {
     setSortOption(option);
-    console.log(option)
+    setCursor('');
+    setCurrentPage(1);
     fetchPosts(undefined,null,searchTerm,option)
   };
 
@@ -337,8 +332,10 @@ const AllPopularPost: React.FC = () => {
                 </div>
                 ):(
                   <div className="post-main-main-list">
-                  {posts.map((post) => (
-                    <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
+                  {posts.map((post) => {
+                    const firstImage = extractFirstImage(post.board_content);
+                    return(
+                      <div className="post-main-card" key={post.board_id} onClick={() => goToDetailPost(post.board_id, post.user_nickname)}>
                       <div className="post-main-header" >
                         <div className="title-container">
                           <h2 className="post-title" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_title, searchTerm) }}></h2>
@@ -364,9 +361,20 @@ const AllPopularPost: React.FC = () => {
                           </span>
                         </div>
                       </div>
-                      <div className="post-main-content" dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
+                      {firstImage ? (
+                             <div className="post-main-content-img" >
+                                <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
+                            </div>
+                          ):(
+                            <div className="post-main-content" >
+                              <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
+                            </div>
+                          )
+                          }
+                         
                     </div>
-                    ))}
+                    )
+                  })}
                   </div>
                 )}
 

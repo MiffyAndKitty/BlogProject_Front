@@ -14,9 +14,10 @@ import noPosts from '../img/noPosts.png';
 interface MainPostsProps {
   nicknameParam : string
   categoryID : string
-  onPostClick: (postID: string) => void;  // 새로운 prop 추가
+  onPostClick: (postID: string) => void;  // 새로운 prop 추가,
+  isDeleteUser?:boolean
 }
-const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostClick} ) => {
+const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostClick,isDeleteUser} ) => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -315,8 +316,12 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   }, [category]);
   return (
     <>
-      
-              <h2 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h2>
+              {!isDeleteUser && (
+                <h2 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h2>
+              )}
+             {isDeleteUser && (
+                <h2 style={{cursor:'pointer'}} >탈퇴한 사용자입니다.</h2>
+              )}
               <hr className="notification-divider" />
               <div className="search-and-sort-container">
                   <SearchBar onSearch={handleSearch} />
@@ -414,15 +419,21 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                             </div>
 
                           </div>
-                          
-                          <div className="post-main-content" >
-                            
-                            {firstImage ? (
-                              <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
-                            ) : (
+                          {firstImage ? (
+                             <div className="post-main-content-img" >
+                                <div dangerouslySetInnerHTML={{ __html: firstImage }} className="first-image-content"></div>
+                            </div>
+                          ):(
+                            <div className="post-main-content" >
                               <div dangerouslySetInnerHTML={{ __html: highlightKeyword(post.board_content, searchTerm) }} ></div>
-                            )}
-                          </div>
+                            </div>
+                          )
+                          }
+                         
+
+                         
+
+
                         </div>
                       );
                     })}
