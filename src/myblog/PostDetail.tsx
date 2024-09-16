@@ -133,17 +133,15 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
           commentContent: comment
       }
       const result = await newComment(newData);
-      
-      if(result) {
-        //alert('댓글 추가에 성공했습니다!');
-        lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
-        setTotalComment(totalComments+1);
-        setComment(''); // 댓글 등록 후 입력 창 초기화
-        // 댓글을 등록한 후 1페이지로 돌아가서 댓글 목록을 다시 불러옵니다.
-        setCursor(''); // Cursor를 초기화하여 첫 페이지를 가져오도록 함
-        setCurrentPage(1); // 페이지를 첫 페이지로 설정
-        fetchComments(sortOption, 10,''); // 첫 페이지의 댓글 목록 불러오기
-      }
+      setComment(''); // 댓글 등록 후 입력 창 초기화
+      // 댓글을 등록한 후 1페이지로 돌아가서 댓글 목록을 다시 불러옵니다.
+      setCursor(''); // Cursor를 초기화하여 첫 페이지를 가져오도록 함
+      setCurrentPage(1); // 페이지를 첫 페이지로 설정
+      fetchComments(sortOption, 10,''); // 첫 페이지의 댓글 목록 불러오기
+     //alert('댓글 추가에 성공했습니다!');
+     lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+     setTotalComment(totalComments+1);
+    
     }catch(err){
        // 상태 코드에 따른 에러 메시지 처리
        if(err.response) alert(`댓글 추가 중에 오류가 발생했습니다: ${err.response.data.message}`); 

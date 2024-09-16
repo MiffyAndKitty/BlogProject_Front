@@ -24,6 +24,7 @@ import  upBtn  from '../img/upToggle.png';
 import  downBtn  from '../img/downToggle.png';
 import noPosts from '../img/noPosts.png';
 import { set } from 'date-fns';
+import { isDeepStrictEqual } from 'util';
 
 const AllPopularPost: React.FC = () => {
   let {  postID , tag, search, sort} = useParams<{ postID?: string, tag?:string, search?:string, sort?:string }>();
@@ -44,6 +45,7 @@ const AllPopularPost: React.FC = () => {
   const [localNickName, setLocalNickName] = useState<string>('');
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
+  const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
   
   const pageSize = 10;
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
@@ -283,7 +285,7 @@ const AllPopularPost: React.FC = () => {
           <section className='main-blog-posts-section'>
             {
               postID?(
-                <PostDetail/>
+                <PostDetail isDeleteUser = {isDeleteUser}/>
               ) : (
                 
                 <> 

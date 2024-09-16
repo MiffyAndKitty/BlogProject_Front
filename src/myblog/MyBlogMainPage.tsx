@@ -84,19 +84,6 @@ const MyBlogMainPage: React.FC = () => {
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
       if(err.response) alert(`상세 개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
-      console.log(`err.response.status
-        
-        
-        
-        
-        ${err.response.status}
-        
-        
-        
-        
-        
-        
-        `,err.response)
       if(err.response.status===500) { // 탈퇴한 사용자의 경우
         setIsDeleteUser(true);
         
