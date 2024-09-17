@@ -65,6 +65,7 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
   const [cursor, setCursor] = useState<string>('');
   const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
   const [sortName, setSortName] = useState('작성순'); // 정렬 이름 상태 추가
+  const [isWriteComment, setIsWriteComment] = useState(false);
 
   const firstCommentRef = useRef<HTMLDivElement | null>(null);
   const lastCommentRef = useRef<HTMLDivElement | null>(null); // 마지막 댓글 참조를 위한 Ref 생성
@@ -132,6 +133,7 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
           parentCommentId: null,
           commentContent: comment
       }
+      setIsWriteComment(true);
       const result = await newComment(newData);
       setComment(''); // 댓글 등록 후 입력 창 초기화
       // 댓글을 등록한 후 1페이지로 돌아가서 댓글 목록을 다시 불러옵니다.
@@ -139,7 +141,7 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
       setCurrentPage(1); // 페이지를 첫 페이지로 설정
       fetchComments(sortOption, 10,''); // 첫 페이지의 댓글 목록 불러오기
      //alert('댓글 추가에 성공했습니다!');
-     lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+     
      setTotalComment(totalComments+1);
     
     }catch(err){
@@ -148,6 +150,13 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
     }
     
   };
+  useEffect(()=>{
+    if(isWriteComment === true){
+      lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+      setIsWriteComment(false);
+    } 
+  },[isWriteComment]);
+
   useEffect(() => {
     if (comments.length === 0) return;
   

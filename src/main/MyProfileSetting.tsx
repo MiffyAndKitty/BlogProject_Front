@@ -155,7 +155,7 @@ const MyProfileSetting: React.FC = () => {
             //fetchMyProfile();
             
             setTimeout(()=>{
-                navigate(`/myProfileSetting/${newNick}`);
+                navigate(`/myProfileSetting`);
                 window.location.reload();
             },1000)
             
