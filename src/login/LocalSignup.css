@@ -5,7 +5,19 @@
   min-height: 80vh;
   padding: 20px;
 }
+.email-submit{
+  display: flex;
+  flex-direction: row;
+  
+}
+.email-submit input {
+  flex-grow: 2; /* 이메일 인풋 필드가 더 많은 공간을 차지 */
+}
 
+.email-submit button {
+  flex-grow: 1; /* 버튼은 상대적으로 작은 공간 차지 */
+  margin-left: 10px; /* 인풋 필드와 버튼 사이에 간격 추가 */
+}
 .form-container {
   display: flex;
   align-items: center;

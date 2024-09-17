@@ -4,24 +4,30 @@ import Footer from '../structure/Footer';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
-import { setSignUp ,checkDuplicated } from '../services/postService';
+import { setSignUp ,checkDuplicated,verifyEmail } from '../services/postService';
 import { SignUpData,CheckDuplicatedData } from '../types';
 import openEye from '../img/openEye.png';
 import closeEye from '../img/closeEye.png';
 import mainCharacterImg from '../img/main_character.png';
 import './LocalSignup.css';
-
+import Confirm from './Confirm';
+import notConfirm from '../img/not_confirm.png';
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [emailAuth, setEmailAuth] = useState('');
   const [password, setPassword] = useState('');
   const [password2, setPassword2] = useState('');
   const [nickname, setNickname] = useState('');
   const [signUpResult, setSignUpResult] = useState('');
   const [checkDuplicatedResult, setCheckDuplicatedResult] = useState<string | null>(null);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
+  const [isEmailFormValid, setIsEmailFormValid] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
+  const [verifiedEmailAuth,setVerifiedEmailAuth] =  useState();
   const [isPasswordVisibleConfirm, setIsPasswordVisibleConfirm] = useState(false); // 비밀번호 확인 표시 상태 관리
+  const [isEmailAuthTrue, setIsEmailAuthTrue] = useState(false);
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -64,7 +70,34 @@ const SignUp: React.FC = () => {
       return false;
     }
   };
+  const handleVerifyEmail = () =>{
+    verifiedEmail();
+  };
+  const verifiedEmail = async () => {
 
+    try {
+      const response = await verifyEmail({email:email});
+      if(response){
+        console.log('verifiedEmail',response);
+        setVerifiedEmailAuth(response.data.data);
+      }
+    } catch (error) {
+      console.error("중복 확인 오류:", error);
+      if(error.response) alert(`이메일 인증 오류가 발생했습니다: ${error.response.data.message}`);
+      
+    }
+  };
+  const handleVerifyEmailConfirm =()=>{
+    console.log('verifiedEmailAuth',verifiedEmailAuth);
+    console.log('emailAuth',parseInt(emailAuth ));
+    if(parseInt(emailAuth )===verifiedEmailAuth){
+      alert('이메일 인증 확인되었습니다!');
+      setIsEmailAuthTrue(true);
+    }else{
+      alert('이메일 인증 번호를 정확히 다시 입력해주세요!');
+      setIsEmailAuthTrue(false);
+    }
+  };
   const checkSetSignUpResult = async () => {
     const newPost: SignUpData = { 
       email: email,
@@ -104,19 +137,24 @@ const SignUp: React.FC = () => {
       };
 
       if (touched.email && validateEmail(email)) {
-        const isEmailDuplicate = await checkDuplication('user_email', email);
-        if (!isEmailDuplicate) {
-          newErrors.email = '이미 사용 중인 이메일입니다.';
-        }
+        
       }
-  
+      const isEmailDuplicate = await checkDuplication('user_email', email);
+      if (!isEmailDuplicate) {
+        newErrors.email = '이미 사용 중인 이메일입니다.';
+        setIsEmailFormValid(false);
+     
+      }else{
+
+        setIsEmailFormValid(true);
+      }
       if (touched.nickname && validateNickname(nickname)) {
         const isNicknameDuplicate = await checkDuplication('user_nickname', nickname);
         if (!isNicknameDuplicate) {
           newErrors.nickname = '이미 사용 중인 닉네임입니다.';
         }
       }
-
+      setEmailError( newErrors.email);
       setErrors(newErrors);
     };
 
@@ -127,26 +165,17 @@ const SignUp: React.FC = () => {
     const isPasswordValid = validatePassword(password);
     const isPassword2Valid = password === password2;
     const isNicknameValid = validateNickname(nickname);
-  
+    setIsEmailFormValid(isEmailValid);
+    
     // 모든 필드가 유효하면 폼이 유효한 상태로 설정
     setIsFormValid(isEmailValid && isPasswordValid && isPassword2Valid && isNicknameValid && !Object.values(errors).some(error => error !== ''));
   }, [email, password, password2, nickname, errors]);
   
   const handleSignUp = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault(); // 버튼의 기본 동작 방지
-
-    // if (Object.values(errors).some((error) => error !== '')) {
-    //   alert("입력된 값에 오류가 있습니다. 다시 확인해주세요.");
-    //   return;
-    // }
-
-    const newPost: SignUpData = { 
-      email: email,
-      password: password,
-      nickname: nickname,
-    };
-    const isSetSignUpResult = await checkSetSignUpResult();
-
+    
+     checkSetSignUpResult();
+    
 
   };
 
@@ -158,19 +187,65 @@ const SignUp: React.FC = () => {
         <div className='signup2'>
           <h2 style={{color:"#A9A9A9"}}>회원가입</h2>
           <Form className='form'>
-          <Form.Group className="inputFieldCss mb-3">
-            <Form.Control 
-              type="email" 
-              placeholder="이메일" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              onBlur={() => setTouched({ ...touched, email: true })}
-              isInvalid={touched.email && !!errors.email}
-              className="transparent-input"
-            />
+
+          <div className='email-submit'>
+
+            <div>
+              <Form.Group className="inputFieldCss mb-3">
+                <Form.Control 
+                  type="email" 
+                  placeholder="이메일" 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  onBlur={() => setTouched({ ...touched, email: true })}
+                  isInvalid={touched.email && !!errors.email}
+                  className="transparent-input"
+                />
+
+              </Form.Group>
+              <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
+            </div>
+
+            <div>
+              <Button variant="primary" type="button" onClick={handleVerifyEmail} className={` ${!isEmailFormValid||emailError ? 'authDisabledButton' : 'authButton'}`} disabled={!isEmailFormValid||emailError}>인증번호 전송</Button>
+            </div>
             
-          </Form.Group>
-          <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
+          </div>
+          {verifiedEmailAuth && (
+  <div className="email-submit">
+    <div style={{ flexGrow: 2, marginLeft:'25px' }}>
+      <Form.Group className="inputFieldCss mb-3">
+        <Form.Control
+          type="text"
+          placeholder="인증번호 입력"
+          value={emailAuth}
+          onChange={(e) => setEmailAuth(e.target.value)}
+          className="transparent-input"
+        />
+      </Form.Group>
+    </div>
+
+    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+      <div >
+        <Button
+          variant="primary"
+          type="button"
+          onClick={handleVerifyEmailConfirm}
+          className="authButton"
+        >
+          인증번호 확인
+        </Button>
+      </div>
+      <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
+        {isEmailAuthTrue ? (
+          <Confirm />
+        ) : (
+          <img src={notConfirm} style={{ width: '1em', height: '1em' }} alt="Not Confirmed" />
+        )}
+      </div>
+    </div>
+  </div>
+)}
 
           <Form.Group className="inputFieldCss mb-3">
              <div className="password-container">
@@ -231,7 +306,7 @@ const SignUp: React.FC = () => {
           <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.nickname}</Form.Control.Feedback>
 
           </Form>
-          <Button variant="primary" type="button" onClick={handleSignUp} className={`loginButton ${!isFormValid ? 'disabledButton' : ''}`} disabled={!isFormValid}>회원가입</Button>
+          <Button variant="primary" type="button" onClick={handleSignUp} className={`loginButton ${!isFormValid || !isEmailAuthTrue ? 'disabledButton' : ''}`} disabled={!isFormValid|| !isEmailAuthTrue}>회원가입</Button>
         </div>
         <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_localsignup" />
       </main>
