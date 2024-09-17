@@ -67,6 +67,11 @@ const MyBlogMainPage: React.FC = () => {
       setOtherImage(fetchedProfile.data.user_image);
       setOtherMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
+      if(fetchedProfile.data.deleted_at !==null) {
+        setIsDeleteUser(true);
+
+      }
+      
     } catch (err) {
       if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
@@ -84,10 +89,7 @@ const MyBlogMainPage: React.FC = () => {
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
     } catch (err) {
       if(err.response) alert(`상세 개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
-      if(err.response.status===500) { // 탈퇴한 사용자의 경우
-        setIsDeleteUser(true);
-        
-      }
+      
     } finally {
       setProfileLoading(false); // 프로필 로딩 끝
     }
@@ -151,7 +153,7 @@ const MyBlogMainPage: React.FC = () => {
                 <>
                 <div className="blog-main-detail-container">
                   {/* Profile */}
-                  {(!token && (
+                  {(!token && !isDeleteUser&&(
                     <Profile 
                       pageType="signup_for_blog" 
                       nicknameParam={otherNickname} 
@@ -164,7 +166,7 @@ const MyBlogMainPage: React.FC = () => {
                     </Profile>
                   ))}
 
-                  {(token && localNickName === nickname && (
+                  {(token && localNickName === nickname && !isDeleteUser&&(
                     <Profile 
                     pageType="myBlog" 
                     nicknameParam={localNickName}  
@@ -172,7 +174,7 @@ const MyBlogMainPage: React.FC = () => {
                     </Profile>
                   ))}
 
-                  {(token && localNickName !== nickname && !profileLoading && (
+                  {(token && localNickName !== nickname && !profileLoading && !isDeleteUser&&(
                     <Profile pageType="otherBlog" 
                       nicknameParam={otherNickname}
                       userImg={otherImage}
@@ -183,7 +185,11 @@ const MyBlogMainPage: React.FC = () => {
                       >
                     </Profile>
                   ))}
-
+                  {(isDeleteUser&&(
+                    <Profile pageType="deleteUser" isDetailPost = {true}
+                      >
+                    </Profile>
+                  ))}
                   {profileLoading && <div>프로필 로딩 중...</div>}
                 
                   {/* category */}
@@ -204,7 +210,7 @@ const MyBlogMainPage: React.FC = () => {
                 <>
                 <div className="blog-main-container">
                   {/* Profile */}
-                  {(!token && (
+                  {(!token && !isDeleteUser&&(
                     <Profile 
                       pageType="signup_for_blog" 
                       nicknameParam={nickname} 
@@ -216,12 +222,12 @@ const MyBlogMainPage: React.FC = () => {
                     </Profile>
                   ))}
 
-                  {(token && localNickName === nickname && (
+                  {(token && localNickName === nickname && !isDeleteUser&&(
                     <Profile pageType="myBlog" nicknameParam={localNickName}>
                     </Profile>
                   ))}
 
-                  {(token && localNickName !== nickname && !profileLoading && (
+                  {(token && localNickName !== nickname && !profileLoading && !isDeleteUser&&(
                     <Profile pageType="otherBlog" 
                       nicknameParam={nickname}
                       userImg={otherImage}
@@ -230,7 +236,11 @@ const MyBlogMainPage: React.FC = () => {
                       otherEmail = {otherEmail}>
                     </Profile>
                   ))}
-
+                  {(isDeleteUser&&(
+                    <Profile pageType="deleteUser"
+                      >
+                    </Profile>
+                  ))}
                   {profileLoading && <div>프로필 로딩 중...</div>}
                 
                   {/* category */}
@@ -246,6 +256,7 @@ const MyBlogMainPage: React.FC = () => {
                     <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} isDeleteUser={isDeleteUser}/>
                   </section>
                   </div>
+               
                 </>
                
               )}

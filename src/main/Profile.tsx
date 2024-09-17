@@ -31,7 +31,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 interface ProfileProps {
-  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage'|'no-login-section';
+  pageType: 'login' | 'signup' | 'myBlog' | 'otherBlog' | 'signup_for_blog' | 'profileSetting' |'postManage'|'no-login-section'|'deleteUser';
   userImg?:string,
   otherEmail? :string,
   userMessage?: string,
@@ -230,6 +230,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             <span>|</span>
             <button onClick={goToSignUp} style={{cursor:'pointer'}}>회원가입</button>
           </div>
+        </section>
+      )}
+       {pageType === 'deleteUser' && (
+        <section className={isDetailPost? 'profile-section-detailPost':'profile-section-myBlog'}>
+          <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_profile_dash" />
+          <div className="profile-details">
+          <span className="username">탈퇴한 사용자입니다.</span>
+              
+            </div>
+        
         </section>
       )}
       {pageType === 'no-login-section' && (

@@ -212,40 +212,40 @@ const SignUp: React.FC = () => {
             
           </div>
           {verifiedEmailAuth && (
-  <div className="email-submit">
-    <div style={{ flexGrow: 2, marginLeft:'25px' }}>
-      <Form.Group className="inputFieldCss mb-3">
-        <Form.Control
-          type="text"
-          placeholder="인증번호 입력"
-          value={emailAuth}
-          onChange={(e) => setEmailAuth(e.target.value)}
-          className="transparent-input"
-        />
-      </Form.Group>
-    </div>
-
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-      <div >
-        <Button
-          variant="primary"
-          type="button"
-          onClick={handleVerifyEmailConfirm}
-          className="authButton"
-        >
-          인증번호 확인
-        </Button>
-      </div>
-      <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
-        {isEmailAuthTrue ? (
-          <Confirm />
-        ) : (
-          <img src={notConfirm} style={{ width: '1em', height: '1em' }} alt="Not Confirmed" />
-        )}
-      </div>
-    </div>
-  </div>
-)}
+            <div className="email-submit">
+              <div style={{ flexGrow: 2, marginLeft:'25px' }}>
+                <Form.Group className="inputFieldCss mb-3">
+                  <Form.Control
+                    type="text"
+                    placeholder="인증번호 입력"
+                    value={emailAuth}
+                    onChange={(e) => setEmailAuth(e.target.value)}
+                    className="transparent-input"
+                  />
+                </Form.Group>
+              </div>
+                    
+              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                <div >
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={handleVerifyEmailConfirm}
+                    className="authButton"
+                  >
+                    인증번호 확인
+                  </Button>
+                </div>
+                <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center' }}>
+                  {isEmailAuthTrue ? (
+                    <Confirm />
+                  ) : (
+                    <img src={notConfirm} style={{ width: '1em', height: '1em' }} alt="Not Confirmed" />
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
 
           <Form.Group className="inputFieldCss mb-3">
              <div className="password-container">

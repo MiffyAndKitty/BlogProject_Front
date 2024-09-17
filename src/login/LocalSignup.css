@@ -9,6 +9,7 @@
   display: flex;
   flex-direction: row;
   
+  
 }
 .email-submit input {
   flex-grow: 2; /* 이메일 인풋 필드가 더 많은 공간을 차지 */
@@ -105,7 +106,12 @@
   .signup2 {
     padding: 0.5rem;
   }
-
+  .email-submit{
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    
+  }
   .inputFieldCssForSignUp {
     padding: 8px 10px;
     font-size: 12px;

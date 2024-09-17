@@ -274,6 +274,12 @@ export const getMyProfile = async (email: string): Promise<any> => {
   console.log(response);
   return response.data;
 };
+
+/**
+ * 닉네임으로 사용자의 프로필 가져오기
+ * @param nickname 
+ * @returns 
+ */
 export const getProfiles = async (nickname: string): Promise<any> => {
   const token = getToken();
   const url = `/users/nickname/:${nickname}`;
@@ -384,6 +390,7 @@ export const getNotificationsList = async (sort?:string, pageSize?:number, curso
  * @returns 
  */
 export const getComments = async (boardId:string, sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
+
   const token = getToken();
   let url = `/board/:${boardId}/comments`;
   const params: Record<string, any> = {};

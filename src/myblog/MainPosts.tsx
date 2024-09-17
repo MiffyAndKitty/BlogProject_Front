@@ -323,49 +323,56 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 <h2 style={{cursor:'pointer'}} >탈퇴한 사용자입니다.</h2>
               )}
               <hr className="notification-divider" />
-              <div className="search-and-sort-container">
-                  <SearchBar onSearch={handleSearch} />
-                  </div>
+              
+              {!isDeleteUser &&(
+                 <div>
+                 <div className="search-and-sort-container">
+                   <SearchBar onSearch={handleSearch} />
+                 </div>
 
-                  <div className="search-and-sort-container">
-                    <h3 onClick={fetchAll}  style={{cursor:'pointer'}}>
-                    전체 글<span style={{ marginLeft: '10px', color: '#FF88D7', cursor:'pointer' }}>{totalPosts}</span>
-                  </h3>
+                 <div className="search-and-sort-container">
+                     <h3 onClick={fetchAll}  style={{cursor:'pointer'}}>
+                     전체 글<span style={{ marginLeft: '10px', color: '#FF88D7', cursor:'pointer' }}>{totalPosts}</span>
+                   </h3>
 
-                  <div className='category-and-sort'>
+                   <div className='category-and-sort'>
 
-                      <section className='mobile-category-section'>
-                        <div className="dropdown-getpost" ref={dropdownCategoryRef} >
-                            <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownCategoryOpen(!dropdownCategoryOpen)}>
-                              {category.category_name}
-                              {dropdownCategoryOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
-                            : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
-                            </button>
-                            {dropdownCategoryOpen && (
-                              <div className="dropdown-getpost-menu">
-                                {renderCategoryMenu(categories)}
-                              </div>
-                            )}
-                        </div>
-                      </section>
-
-                      <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
-                        <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
-                          {sortName} 
-                          {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
-                          : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
-                        </button>
-                        {dropdownOpen && (
-                          <div className="dropdown-menu">
-                            <button className="dropdown-item" onClick={() => handleSortChange('', '최신순')}>최신순</button>
-                            <button className="dropdown-item" onClick={() => handleSortChange('like', '인기순(당근수)')}>인기순(당근수)</button>
-                            <button className="dropdown-item" onClick={() => handleSortChange('view', '조회순')}>조회순</button>
-                          </div>
-                        )}
-                      </div>
-                      
-                    </div>
-                  </div>
+                       <section className='mobile-category-section'>
+                         <div className="dropdown-getpost" ref={dropdownCategoryRef} >
+                             <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownCategoryOpen(!dropdownCategoryOpen)}>
+                               {category.category_name}
+                               {dropdownCategoryOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
+                             : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
+                             </button>
+                             {dropdownCategoryOpen && (
+                               <div className="dropdown-getpost-menu">
+                                 {renderCategoryMenu(categories)}
+                               </div>
+                             )}
+                         </div>
+                       </section>
+                           
+                       <div className="dropdown-getpost" ref={dropdownRef} style={{ width: '300px', marginRight: '-200px', fontWeight: 'bold' }}>
+                         <button className="dropdown-getpost-toggle" style={{ fontWeight: 'bold' }} onClick={() => setDropdownOpen(!dropdownOpen)}>
+                           {sortName} 
+                           {dropdownOpen ? <img src={upBtn} style={{ width: '15px', height: '15px' }} /> 
+                           : <img src={downBtn} style={{ width: '15px', height: '15px' }} />}
+                         </button>
+                         {dropdownOpen && (
+                           <div className="dropdown-menu">
+                             <button className="dropdown-item" onClick={() => handleSortChange('', '최신순')}>최신순</button>
+                             <button className="dropdown-item" onClick={() => handleSortChange('like', '인기순(당근수)')}>인기순(당근수)</button>
+                             <button className="dropdown-item" onClick={() => handleSortChange('view', '조회순')}>조회순</button>
+                           </div>
+                         )}
+                       </div>
+                       
+                     </div>
+                 </div>
+                </div>
+              )}
+             
+             
               {loading ? (
                 <div className="no-posts-message">
                   <div className="no-posts-container">
@@ -382,9 +389,8 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 </div>
               ) : (
                 <>
-               
-                 
-                  <div style={{ marginTop: '15px' }} className="post-main-main-list">
+               {!isDeleteUser &&(
+                <div style={{ marginTop: '15px' }} className="post-main-main-list">
                     {posts.map(post => {
                       const firstImage = extractFirstImage(post.board_content);
                       
@@ -438,6 +444,9 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                       );
                     })}
                   </div>
+               )}
+                 
+                  
                 </>
               )}
             

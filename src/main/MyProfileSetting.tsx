@@ -9,6 +9,8 @@ import Header from '../structure/Header';
 import Footer from '../structure/Footer';
 import Profile from './Profile';
 import SSEComponent from './SSEComponent';
+import openEye from '../img/openEye.png';
+import closeEye from '../img/closeEye.png';
 const MyProfileSetting: React.FC = () => {
     // const { nickname } = useParams();
     const [newNick, setNewNick] = useState<string>('');
@@ -21,6 +23,9 @@ const MyProfileSetting: React.FC = () => {
     const [sendPassword, setSendPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
     const [hasNotifications, setHasNotifications] = useState<boolean>(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
+    const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
+    const [isNewConfirmPasswordVisible, setIsNewConfirmPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
     const [errors, setErrors] = useState({
         password: '',
         newPassword: '',
@@ -295,33 +300,61 @@ const MyProfileSetting: React.FC = () => {
     const renderPasswordFields = () => (
         <div className="password-fields">
             <div className='paswd-field'>
+                <div className='password-container'>
                 <input
-                    type="password"
+                    type={isPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
                     placeholder="현재 비밀번호"
                     name="currentPassword"
                     value={currentPassword}
                     onChange={handlePasswordChange}
                 />
+                <img
+                    src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                    alt="Toggle visibility"
+                    className="toggle-password-visibility"
+                    onClick={() => setIsPasswordVisible(!isPasswordVisible)} // 클릭 시 상태 변경
+                    style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                  />
+                </div>
+                
                 {errors.password && <p style={{color:'red', minHeight: '20px', fontSize:'12px'}}>{errors.password}</p>}
             </div>
             <div className='paswd-field'>
-                <input
-                    type="password"
-                    placeholder="새 비밀번호"
-                    name="newPassword"
-                    value={newPassword}
-                    onChange={handlePasswordChange}
-                />
+                <div className='password-container'>
+                    <input
+                        type={isNewPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
+                        placeholder="새 비밀번호"
+                        name="newPassword"
+                        value={newPassword}
+                        onChange={handlePasswordChange}
+                    />
+                    <img
+                        src={isNewPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                        alt="Toggle visibility"
+                        className="toggle-password-visibility"
+                        onClick={() => setIsNewPasswordVisible(!isNewPasswordVisible)} // 클릭 시 상태 변경
+                        style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                      />
+                </div>
                 {errors.newPassword && <p style={{color:'red', minHeight: '20px', fontSize:'12px'}}>{errors.newPassword}</p>}
             </div>
             <div className='paswd-field'>
-                <input
-                    type="password"
-                    placeholder="새 비밀번호 확인"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    onChange={handlePasswordChange}
-                />
+                <div className='password-container'>
+                    <input
+                         type={isNewConfirmPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
+                        placeholder="새 비밀번호 확인"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        onChange={handlePasswordChange}
+                    />
+                    <img
+                        src={isNewConfirmPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                        alt="Toggle visibility"
+                        className="toggle-password-visibility"
+                        onClick={() => setIsNewConfirmPasswordVisible(!isNewConfirmPasswordVisible)} // 클릭 시 상태 변경
+                        style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                    />
+                </div>
             </div>
             {errors.newPassword2 && <p style={{color:'red', minHeight: '20px', fontSize:'12px'}}>{errors.newPassword2}</p>}
             <div className='submit-cancel'>
