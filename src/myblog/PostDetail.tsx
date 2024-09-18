@@ -148,7 +148,7 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
        
        setTotalComment(totalComments+1);
        setIsWriteComment(true);
-       lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
+       //lastCommentRef.current.scrollIntoView({ behavior: 'smooth' });
       }
      
     

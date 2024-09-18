@@ -39,6 +39,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   const [sortedPosts, setSortedPosts] = useState(posts); // 정렬된 포스트 상태 추가
   const [totalPosts, setTotalPosts] = useState(0);
   const navigate = useNavigate();
+  const topRef = useRef<HTMLDivElement | null>(null);  // 화면 최상단을 참조하는 useRef
 
 
   const handleSortChange = (option, name) => {
@@ -248,7 +249,9 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   useEffect(() => {
     if(category.category_id) fetchPosts(cursor,category.category_id,searchTerm,sortOption);
     else fetchPosts(cursor,categoryID,searchTerm,sortOption);
-
+    if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'smooth' });  // 최상단으로 스크롤
+    }
   }, [currentPage]);
   useEffect(()=>{
     setSearchTerm('');
@@ -315,7 +318,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       fetchPosts(undefined,category.category_id,searchTerm,sortOption);
   }, [category]);
   return (
-    <>
+    <div ref={topRef}>
               {!isDeleteUser && (
                 <h2 style={{cursor:'pointer'}} onClick={()=>{navigate(`/${nicknameParam}`)}}>{nicknameParam}의 블로그</h2>
               )}
@@ -457,7 +460,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
                 <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
               </div>
         
-    </>
+    </div>
   );
 };
 

@@ -46,7 +46,7 @@ const AllPopularPost: React.FC = () => {
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const [sortOption, setSortOption] = useState(''); // 정렬 옵션 상태 추가
   const [isDeleteUser, setIsDeleteUser] = useState<boolean>(false);
-  
+  const topRef = useRef<HTMLDivElement | null>(null);  // 화면 최상단을 참조하는 useRef
   const pageSize = 10;
   // const [filteredPosts, setFilteredPosts] = useState<TYPES.getPost[]>([]);
   const navigate = useNavigate();
@@ -238,7 +238,9 @@ const AllPopularPost: React.FC = () => {
       }else{
         setCurrentPage(1);
       }
-      
+      if (topRef.current) {
+        topRef.current.scrollIntoView({ behavior: 'smooth' });  // 최상단으로 스크롤
+      }
   }, [currentPage]);
 
   const goToBlog = (nickname:string,email:string)=>{
@@ -275,7 +277,7 @@ const AllPopularPost: React.FC = () => {
     
   }
   return (
-    <div className="App">
+    <div className="App"  ref={topRef}>
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="blog-main-container">
      
