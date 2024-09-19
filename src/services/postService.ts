@@ -94,7 +94,22 @@ export const saveNewPost = async (postData: FormData): Promise<any> => {
         console.log(response);
         return response;
 };
-
+/**
+ * 게시글 임시 저장
+ * @param postData 
+ * @returns 
+ */
+export const saveNewTempPost = async (postData: FormData): Promise<any> => {
+    const token = getToken();
+    const response = await multipart.post<TYPES.newPost>('/draft', postData,{
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `${token}`,
+          },
+    });
+        console.log(response);
+        return response;
+};
 /**
  * 카테고리 저장
  * @param postData 

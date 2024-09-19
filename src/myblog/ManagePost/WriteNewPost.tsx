@@ -6,11 +6,12 @@ import Footer from '../../structure/Footer';
 import './WriteNewPost.css';
 import ReactQuill from 'react-quill';
 import { newPost, category, categories } from '../../types';
-import { saveNewPost } from '../../services/postService';
+import { saveNewPost, saveNewTempPost } from '../../services/postService';
 import { getCategories } from '../../services/getService';
 import * as ENUMS from  '../../types/enum'
 import 'react-quill/dist/quill.snow.css';
 import SSEComponent from '../../main/SSEComponent';
+import divider from '../../img/divider.png';
 const WriteNewPost: React.FC = () => {
   const [nickname, setNickname] = useState<string>();
   const quillRef = useRef<ReactQuill>(null);
@@ -436,8 +437,13 @@ const WriteNewPost: React.FC = () => {
           </div>
   
           <div className="button-group">
-            <Button variant="secondary" type="button">
-              임시저장
+            <Button variant="secondary" type="button" >
+              <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignContent:'center', alignItems:'center'}}>
+              <span style={{marginRight:'30px'}}>임시저장 </span>
+              <img src={divider} style={{width:'20px', height:'20px'}}></img>
+              <span style={{color:'#FF88D7'}}>6</span>
+              </div>
+              
             </Button>
             <Button onClick={savePost} variant="primary" type="submit">
               저장

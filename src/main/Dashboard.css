@@ -19,6 +19,7 @@ h1, h2, h3 {
 
 span,div,button,input {
   font-family: 'LeeSeoyun', sans-serif;
+  background-color: transparent;
 }
 
 

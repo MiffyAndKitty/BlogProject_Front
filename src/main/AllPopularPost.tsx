@@ -129,9 +129,14 @@ const AllPopularPost: React.FC = () => {
     }
   };
 
+  const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // 특수문자 이스케이프
+  };
+
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
-    const regex = new RegExp(`(${keyword})`, 'gi');
+    const safeKeyword = escapeRegExp(keyword);
+    const regex = new RegExp(`(${safeKeyword})`, 'gi');
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
 

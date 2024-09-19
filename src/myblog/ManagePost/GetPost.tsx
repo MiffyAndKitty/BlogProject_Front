@@ -256,9 +256,14 @@ const GetPost: React.FC = () => {
     setCategory(categoryItem);
     setDropdownOpen(false); // 드롭다운을 닫음
   };
+  const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // 특수문자 이스케이프
+  };
+
   const highlightKeyword = (text, keyword) => {
     if (!keyword) return text;
-    const regex = new RegExp(`(${keyword})`, 'gi');
+    const safeKeyword = escapeRegExp(keyword);
+    const regex = new RegExp(`(${safeKeyword})`, 'gi');
     return text.replace(regex, '<span class="highlight">$1</span>');
   };
   const renderCategoryMenu = (categories: TYPES.categories[], level: number = 0) => {
