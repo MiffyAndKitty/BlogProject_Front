@@ -156,6 +156,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
+    setCursor('');
     setCurrentPage(1);
     fetchPosts(undefined,categoryID, term);
   };

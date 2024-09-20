@@ -547,3 +547,30 @@ export const getCommentReplies = async (parentCommentId:string, sort?:string, pa
   console.log(response);
   return response.data;
 };
+
+/**
+ * 해당 임시 저장된 게시글이 현재 로그인한 유저의 게시글인지 확인합니다.
+ * @param draftId 
+ * @returns 
+ */
+export const getIsTempPostDraftId = async (draftId: string): Promise<any> => {
+  const token = getToken();
+  const url = `/draft/:${draftId}/user-check`;
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get(url,{
+      headers:{
+        
+      }
+    });
+  }else{
+    response = await apiClient.get(url,{
+      headers:{
+        'Authorization': `${token}`,
+      }
+    });
+  }
+  console.log(response);
+  return response.data;
+}

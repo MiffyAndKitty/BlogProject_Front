@@ -105,7 +105,9 @@ const GetPost: React.FC = () => {
   
   const handleSearch = (term: string) => {
     setSearchTerm(term);
-    fetchPosts(undefined,null, term);
+    setCursor('');
+    setCurrentPage(1);
+    fetchPosts(undefined,category.category_id, term);
   };
 
   const handlePreviousPage = () => {
@@ -164,7 +166,7 @@ const GetPost: React.FC = () => {
     try {
 
       await deletePost(postId);
-      fetchPosts();
+      fetchPosts(cursor,category.category_id,searchTerm);
     } catch (err) {
       console.error(err);
       if(err.response) alert(`글을 삭제하는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
@@ -216,9 +218,9 @@ const GetPost: React.FC = () => {
       setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
       const fetchedCategories: any = await getCategories(nickname);
       setCategories(fetchedCategories.hierarchicalCategory);
-      if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
-        setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-      }
+      // if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
+      //   setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
+      // }
       console.log(`
 
 
@@ -319,7 +321,7 @@ const GetPost: React.FC = () => {
   }, [currentPage]);
 
   useEffect(() => {
-
+    setSearchTerm('');
     setCurrentPage(1);
       setCursor('');
       fetchPosts(undefined,category.category_id,searchTerm);

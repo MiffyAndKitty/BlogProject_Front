@@ -8,7 +8,7 @@ import ReactQuill from 'react-quill';
 import { newPost, category, categories } from '../../types';
 import { saveNewPost, saveNewTempPost } from '../../services/postService';
 import { deleteTempPost } from '../../services/deleteService';
-import { getCategories,getTempPostList,getTempPost } from '../../services/getService';
+import { getCategories,getTempPostList,getTempPost, getIsTempPostDraftId } from '../../services/getService';
 import { fixTempPost } from '../../services/putService';
 import * as ENUMS from  '../../types/enum'
 import 'react-quill/dist/quill.snow.css';
@@ -22,6 +22,7 @@ const WriteNewPost: React.FC = () => {
   const quillRef = useRef<ReactQuill>(null);
   const [title, setTitle] = useState('');
   const [draftId, setDraftId] = useState('');
+  const [isDraftId, setIsDraftId] = useState(false);
   const [content, setContent] = useState('');
   const [status, setStatus] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -190,6 +191,17 @@ const WriteNewPost: React.FC = () => {
         if(fetchedTempPostList.data.data.list){
           setLastTempPostSaved(formatDate(fetchedTempPostList.data.data.list[0].updatedAt));
           setDraftId(fetchedTempPostList.data.data.list[0]._id);
+          console.log(`
+            
+            
+            
+            getTempPosts
+            
+            draftId :${draftId}
+            
+            
+            
+            `,fetchedTempPostList.data.data.list[0]._id)
         }else{
           setLastTempPostSaved('changed');
           setIsOnceChanged(true);
@@ -456,6 +468,111 @@ const WriteNewPost: React.FC = () => {
       //   console.error('임시저장된 게시글을 삭제하는 중에 오류가 발생했습니다:', error);
     }
   };
+
+  // 비동기 함수 호출을 위한 useEffect 수정 예시
+useEffect(() => {
+  // 비동기 함수를 내부에서 선언하고 호출합니다.
+  const fetchDraftStatus = async () => {
+    if (!draftId) {
+      console.log('draftId is not set, skipping check.');
+      return;
+    }
+
+    try {
+      console.log(`
+        
+        
+        
+        
+        
+        
+         1
+        Draft status:
+        
+        
+        
+        
+        
+        
+        
+        `, draftId);
+    
+      const isDraft = await checkIsDraftId(draftId); // 비동기 함수의 결과를 기다림
+      setIsDraftId(isDraft); // 상태 업데이트
+      console.log(`
+        
+        
+        
+        
+        
+        
+        2
+        Draft status:
+        
+        
+        
+        
+        
+        
+        
+        `, isDraft);
+    } catch (error) {
+      console.error('Error fetching draft status:', error);
+    }
+  };
+
+  // 비동기 함수 호출
+  fetchDraftStatus();
+}, [draftId]); // draftId가 변경될 때마다 실행
+
+// 비동기 함수의 정의
+const checkIsDraftId = async (draftID:string) => {
+  try {
+    if (!draftID) {
+      console.warn('Draft ID is not set, skipping check.');
+      return false;
+    }
+    console.log(`
+      
+      
+      
+      
+      
+      
+     draftID
+      
+      
+      
+      
+      
+      
+      `, draftID);
+    const result = await getIsTempPostDraftId(draftID);
+    console.log(`
+      
+      
+      
+      
+      
+      
+      Result from getIsTempPostDraftId:
+      
+      
+      
+      
+      
+      
+      `, result);
+    return result ? true : false;
+  } catch (error) {
+    console.error('Error checking draft ID:', error);
+    if (error.response) {
+      alert(`임시저장 아이디 체크 중에 오류가 발생했습니다: ${error.response.data.message}`);
+    }
+    return false;
+  }
+};
+
   /**
    * 최초 임시저장 게시글 저장
    * @returns 
@@ -544,7 +661,20 @@ const WriteNewPost: React.FC = () => {
     try {
       console.log(formData); // FormData 내용을 로그로 출력하여 확인
       let response;
-      if(isTempPostClicked){
+      console.log(`
+        
+        
+        
+        isTempPostClicked:${isTempPostClicked}
+        
+        
+        isDraftId:${isDraftId}
+        
+        
+        
+        
+        `)
+      if(isTempPostClicked && isDraftId){
 
         formData.append('draftId', draftId);
         console.log(`
@@ -590,22 +720,22 @@ const WriteNewPost: React.FC = () => {
 
   }
 
-  // useEffect(() => {
-  //   // 타이머를 저장할 변수
-  //   let autoSaveInterval: NodeJS.Timeout;
+  useEffect(() => {
+    // 타이머를 저장할 변수
+    let autoSaveInterval: NodeJS.Timeout;
   
-  //   const startAutoSave = () => {
-  //     // setInterval을 사용하여 30초마다 saveTempPost 호출
-  //     autoSaveInterval = setInterval(async () => {
-  //       await saveTempPost(); // 비동기 함수가 완료될 때까지 기다림
-  //     }, 30000); // 30초 간격으로 실행
-  //   };
+    const startAutoSave = () => {
+      // setInterval을 사용하여 30초마다 saveTempPost 호출
+      autoSaveInterval = setInterval(async () => {
+        await saveTempPost(); // 비동기 함수가 완료될 때까지 기다림
+      }, 30000); // 30초 간격으로 실행
+    };
   
-  //   startAutoSave(); // 자동 저장 시작
+    startAutoSave(); // 자동 저장 시작
   
-  //   // 컴포넌트가 언마운트될 때 타이머 정리
-  //   return () => clearInterval(autoSaveInterval);
-  // }, [saveTempPost]);
+    // 컴포넌트가 언마운트될 때 타이머 정리
+    return () => clearInterval(autoSaveInterval);
+  }, [saveTempPost]);
   
 
   useEffect(()=>{
