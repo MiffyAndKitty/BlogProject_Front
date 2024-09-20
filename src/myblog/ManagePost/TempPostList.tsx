@@ -12,10 +12,11 @@ interface TempPostListProps {
   onClose: () => void;
   buttonRef: React.RefObject<HTMLDivElement>; // 버튼 위치 참조
   onGetDraftId: any;
+  onSendTotalCount:any;
 }
 
 
-const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDraftId}) => {
+const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDraftId, onSendTotalCount}) => {
   const [modalStyle, setModalStyle] = useState({});
   const [loading, setLoading] = useState<boolean>(true);
   const [tempPosts, setTempPosts] = useState([]);
@@ -59,6 +60,7 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
         // 최대 5개의 알림만 저장
         setTempPosts(fetchedTempPostList.data.data.list);
         setTempPostsTotalCount(fetchedTempPostList.data.data.totalCount);
+        onSendTotalCount(fetchedTempPostList.data.data.totalCount);
       }
     } catch (error) {
       if(error.response && error.response.status!==404) alert(`임시 저장 게시글 목록을 불러오는 중에 오류가 발생했습니다: ${error.response.data.message}`);
@@ -221,7 +223,7 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
                    <p>로딩중...</p>
                  </div>
                </div>
-            ):tempPosts.length === 0 ?(
+            ):tempPosts === null ?(
                 <div className="no-posts-message" style={{backgroundColor:'transparent'}}>
                   <img src={noPosts} alt="No posts" className="no-posts-icon" />
                   <p>임시저장된 게시글이 없습니다.</p>

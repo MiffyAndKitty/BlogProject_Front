@@ -65,9 +65,30 @@ const AllNewNotification: React.FC = () => {
         setNotifications(fetchedNotification.data||[]);
         if(fetchedNotification.total.totalPageCount ===0) setTotalPages(1);
         else setTotalPages(fetchedNotification.total.totalPageCount);
-        if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
-          setCursor(fetchedNotification.data[fetchedNotification.data.length - 1].notification_id||'');
-        }
+        // if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
+
+        //   console.log(`
+            
+            
+            
+            
+            
+            
+            
+        //     fetchedNotification.data
+            
+            
+            
+            
+            
+            
+            
+        //     `,fetchedNotification.data)
+
+
+
+        //   setCursor(fetchedNotification.data[fetchedNotification.data.length - 1].notification_id||'');
+        // }
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -83,19 +104,18 @@ const AllNewNotification: React.FC = () => {
 
   const handleDeleteNotification = async (notificationId: string) => {
     try {
-      if(notificationId){
+      if (notificationId) {
         const result = await deleteNotification(notificationId);
-        if (result) {
-          // setCursor(notifications[notifications.length - 1].notification_id);
-          fetchNotifications(filterType);
-        }
+        //setCursor('');
+        
+        fetchNotifications(filterType);
       }
-      
     } catch (error) {
       console.error('Failed to delete notification:', error);
-      if(error.response) alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);
+      if (error.response) alert(`알림 삭제에 실패했습니다: ${error.response.data.message}`);
     }
   };
+  
 
   const handleFilterChange = (type: string | null) => {
     setFilterType(type);
@@ -232,21 +252,7 @@ const AllNewNotification: React.FC = () => {
       setCursor(notifications[0].notification_id);
       setCurrentPage(prevPage => prevPage - 1);
       setIsBefore(true);
-      console.log(`
-        
-        
-        
-        handlePreviousPage
-        setCursor
-        
-        
-        
-        
-        
-        
-        
-        `,notifications[0].notification_id)
-    
+  
     }
   };
 
@@ -254,20 +260,6 @@ const AllNewNotification: React.FC = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prevPage => prevPage + 1);
       setIsBefore(false);
-      console.log(`
-        
-        
-        
-        handleNextPage
-        setCursor
-        
-        
-      
-        
-        
-        
-        
-        `,notifications[notifications.length - 1].notification_id)
       setCursor(notifications[notifications.length - 1].notification_id);
     }
   };

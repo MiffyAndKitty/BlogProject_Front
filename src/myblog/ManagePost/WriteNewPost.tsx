@@ -40,7 +40,7 @@ const WriteNewPost: React.FC = () => {
   const [openModal, setOpenModal] =  useState(false);
   const [openTempPostList,setOpenTempPostList] = useState(false);
   const [tempPostsTotalCount,setTempPostsTotalCount] = useState(0);
-  const [isTempPostClicked, setIsTempPostClicked] = useState(false);
+  const [isTempPostClicked, setIsTempPostClicked] = useState(false); // 임시 저장 글을 추가로 보낼지, 수정으로 보낼지 판단하기 위한 변수
   const [lastTempPostSaved, setLastTempPostSaved] =  useState('');
   const [isOnceChanged,setIsOnceChanged] = useState(false);
   const navigate = useNavigate();
@@ -166,26 +166,6 @@ const WriteNewPost: React.FC = () => {
         return;
       }
       setDraftId(draftId);
-      console.log(`
-        
-        
-        
-        
-        
-        
-        draftId
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        `,draftId)
       const fetchedPosts = await getTempPost(draftId);
       setPost(fetchedPosts.data, categories); // 카테고리를 함께 전달
       setIsTempPostClicked(true);
@@ -210,6 +190,9 @@ const WriteNewPost: React.FC = () => {
         if(fetchedTempPostList.data.data.list){
           setLastTempPostSaved(formatDate(fetchedTempPostList.data.data.list[0].updatedAt));
           setDraftId(fetchedTempPostList.data.data.list[0]._id);
+        }else{
+          setLastTempPostSaved('changed');
+          setIsOnceChanged(true);
         }
         
         
@@ -599,29 +582,30 @@ const WriteNewPost: React.FC = () => {
       setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
-      console.error("글 저장 오류:", error);     
-     // if(error.response) alert(`글 저장 중에 오류가 발생했습니다: ${error.response.data.message}`); 
-      return false;
+       console.error("글 저장 오류:", error);     
+      // if(error.response) alert(`글 저장 중에 오류가 발생했습니다: ${error.response.data.message}`); 
+    
+       return false;
     }
 
   }
 
-  useEffect(() => {
-    // 타이머를 저장할 변수
-    let autoSaveInterval: NodeJS.Timeout;
+  // useEffect(() => {
+  //   // 타이머를 저장할 변수
+  //   let autoSaveInterval: NodeJS.Timeout;
   
-    const startAutoSave = () => {
-      // setInterval을 사용하여 30초마다 saveTempPost 호출
-      autoSaveInterval = setInterval(async () => {
-        await saveTempPost(); // 비동기 함수가 완료될 때까지 기다림
-      }, 30000); // 30초 간격으로 실행
-    };
+  //   const startAutoSave = () => {
+  //     // setInterval을 사용하여 30초마다 saveTempPost 호출
+  //     autoSaveInterval = setInterval(async () => {
+  //       await saveTempPost(); // 비동기 함수가 완료될 때까지 기다림
+  //     }, 30000); // 30초 간격으로 실행
+  //   };
   
-    startAutoSave(); // 자동 저장 시작
+  //   startAutoSave(); // 자동 저장 시작
   
-    // 컴포넌트가 언마운트될 때 타이머 정리
-    return () => clearInterval(autoSaveInterval);
-  }, [saveTempPost]);
+  //   // 컴포넌트가 언마운트될 때 타이머 정리
+  //   return () => clearInterval(autoSaveInterval);
+  // }, [saveTempPost]);
   
 
   useEffect(()=>{
@@ -668,22 +652,28 @@ const WriteNewPost: React.FC = () => {
   
     fetchCategories();
     getTempPosts();
+    if(tempPostsTotalCount !==0&& draftId&&!isOnceChanged){
+      const userConfirmed = window.confirm(`
+        ${lastTempPostSaved} 에 저장된 글이 있습니다.
+        이어서 작성하시겠습니까?
+        `);
+
+    if (userConfirmed) {
+        // 사용자가 확인을 눌렀을 때 실행할 코드
+       
+        getTempPostDetail(draftId);
+    } 
+    
+    setIsOnceChanged(true);
+  }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
+
+
   }, []);
 
-  useEffect(() => {
-    // if (newPostResult === true) {
-    //   alert("글 저장에 성공했습니다!!");
-      
-    //   navigate(`/getpost/${nickname}`);
-      
-    // } else if (newPostResult === false) {
-    //   alert("글 저장에 실패했습니다!!");
-    // }
-  }, [newPostResult, navigate]);
   const handleNotification = (isNotified: boolean) => {
     setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
   };
@@ -707,6 +697,11 @@ const WriteNewPost: React.FC = () => {
    
 
   };
+
+  const handleTotalCount=(totalCount)=>{
+    setTempPostsTotalCount(totalCount);
+  };
+
   useEffect(() => {
     console.log('Updated images in useEffect:', images);
   }, [images]);
@@ -831,7 +826,7 @@ const WriteNewPost: React.FC = () => {
           </div>
           
           {openTempPostList &&notificationButtonRef.current && (
-             <TempPostList onClose={closeModal} buttonRef={notificationButtonRef} onGetDraftId={handleDraftId}/>
+             <TempPostList onClose={closeModal} buttonRef={notificationButtonRef} onGetDraftId={handleDraftId} onSendTotalCount={handleTotalCount}/>
           )}
           
           <div className="button-group">
