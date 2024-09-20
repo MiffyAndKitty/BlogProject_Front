@@ -1,0 +1,171 @@
+.tempPost-list{
+    max-width: 100%;
+  }
+  .modal-overlay-tempsave {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    background-color: #0000003d;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .modal-overlay-tempsave h3{
+    flex-wrap: nowrap;
+  }
+  .modal-header-tempsave {
+    display: flex;
+    justify-content: space-between; /* 두 요소를 양쪽 끝에 배치 */
+    align-items: center; /* 수직 중앙 정렬 */
+    flex-wrap: nowrap;
+  }
+  .allLook {
+    margin-left: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color:rgb(152, 152, 152);
+  
+  }
+  .title-all{
+    display: flex;
+    align-items: center;
+  }
+  .noti-all{
+    max-width: 100%;
+  }
+  .noti-title{
+    text-overflow: ellipsis; /* 넘치는 텍스트는 말줄임표 처리 */
+    overflow: hidden; /* 태그 내용이 넘치면 잘림 방지 */
+    max-width: 50%;
+    font-weight: bold;
+    white-space: wrap; /* 텍스트를 한 줄로 처리 */
+  }
+  .modal-content-tempsave {
+    position: fixed; /* 화면에 고정 */
+    bottom: 150px;       /* 화면 상단에서 20px 아래 */
+    left: 50px;     /* 화면 오른쪽에서 20px 떨어짐 */
+    background-color: white;
+    padding: 20px;
+    border: 2px solid #FF88D7;
+    border-radius: 5px;
+    width: 90vw;     /* 너비를 화면 너비의 90%로 설정 */
+    /* max-width: 900px;  */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1001;
+    max-height: 80vh; /* 최대 높이를 화면 높이의 80%로 설정 */
+    overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+  }
+  
+  .modal-close-tempsave {
+    
+    cursor: pointer;
+    font-size: 24px;
+    color: #333;
+    margin-left: 10px; /* 필요에 따라 여백 조정 */
+  }
+  .tempPost-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    max-width: 100%;
+  }
+  
+  .tempPost-content {
+    display: flex;
+    background-color: #00000000;
+    align-items: center;
+    max-width: 100%;
+    flex-wrap: nowrap;
+  }
+  .tempPost-title-content{
+    display: flex;
+    align-items: center;
+    
+  }
+  .tempPost-title{
+    font-size: 20px;
+    font-weight: bold;
+    max-width: 150px;
+    min-width: 150px;
+    flex-wrap: nowrap;
+  }
+  .tempPost-trigger-image {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+    border:2px solid #FF88D7;
+    background-color: #00000000;
+  }
+  
+  .tempPost-details {
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    background-color: #00000000;
+  }
+  
+  .tempPost-text {
+    font-weight: bold;
+    background-color: #00000000;
+  }
+  
+  .tempPost-time {
+    font-size: 0.85em;
+    color: gray;
+    background-color: #00000000;
+    min-width: 50px;
+  }
+  
+  .delete-tempPost-button {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 18px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  
+  .delete-tempPost-button:hover {
+    color: darkred;
+  }
+  
+  .tempPost-divider {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    margin: 10px 0;
+  }
+  .tempPost-name{
+    color: #FF6DC6;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: transparent;
+  }
+  
+  @media (max-width:550px ){
+    .modal-content-tempsave {
+        position: fixed; /* 화면에 고정 */
+        bottom: 150px;       /* 화면 상단에서 20px 아래 */
+        left: 10px;     /* 화면 오른쪽에서 20px 떨어짐 */
+        background-color: white;
+        padding: 20px;
+        border: 2px solid #FF88D7;
+        border-radius: 5px;
+        width: 90vw;     /* 너비를 화면 너비의 80%로 설정 */
+        max-width: 600px; /* 최대 너비를 600px로 제한 */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        max-height: 80vh; /* 최대 높이를 화면 높이의 80%로 설정 */
+        overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+      }
+      .tempPost-contents{
+        display: none;
+      }
+      
+  }

@@ -83,10 +83,14 @@ const AllNewNotification: React.FC = () => {
 
   const handleDeleteNotification = async (notificationId: string) => {
     try {
-      const result = await deleteNotification(notificationId);
-      if (result) {
-        fetchNotifications();
+      if(notificationId){
+        const result = await deleteNotification(notificationId);
+        if (result) {
+          // setCursor(notifications[notifications.length - 1].notification_id);
+          fetchNotifications(filterType);
+        }
       }
+      
     } catch (error) {
       console.error('Failed to delete notification:', error);
       if(error.response) alert(`알림 조회에 실패했습니다: ${error.response.data.message}`);

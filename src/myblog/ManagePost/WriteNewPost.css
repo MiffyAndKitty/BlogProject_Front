@@ -92,17 +92,47 @@
   
   .write-new-post .btn-secondary {
         margin-top:30px;
-        background-color: #FFE6FA;
+        background-color: #ffffff;
         color: #000;
-        border: none;
+        border: 2px solid #FFE6FA;
+        /* border: none; */
         border-radius: 30px;
-        padding: 10px 30px;
+        padding: 10px;
         font-size: 16px;
         cursor: pointer;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         transition: background-color 0.3s ease;
   }
-  
+  .write-new-post .tempsave{
+    padding-right: 20px;
+    padding-left: 30px;
+  }
+
+  .write-new-post .divider {
+    width: 20px;
+    height: 20px;
+  }
+  .write-new-post .total-tempsave{
+    color:#FF88D7;
+    padding-right: 20px;
+  }
+  .write-new-post .tempsave-fin{
+    margin-left: 10px;
+    color: gray;
+  }
+    .write-new-post .btn-secondary:hover {
+      margin-top:30px;
+      background-color: #FFE6FA;
+      color: #000;
+      border: 2px solid #FFE6FA;
+      /* border: none; */
+      border-radius: 30px;
+   
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+  }
   .write-new-post .btn-primary {
         margin-top:30px;
         background-color: #FFE6FA;
@@ -207,16 +237,24 @@
     margin-top:150px;
     margin-bottom: 10px;
   }
- 
+ .temp-save{
+  display: flex;
+  flex-direction: column;
+ }
+ .write-new-post .btn-primary {
+  height: 40px;
+}
 }
 
 @media (max-width: 575px) {
-  .write-new-post .btn-secondary,
   .write-new-post .btn-primary {
     font-size: 15px;
-    padding: 5px 20px; /* 패딩 크기도 조정 */
+    padding: 0px 20px; 
   }
-
+  .write-new-post .tempsave{
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 @media (max-width: 370px) {

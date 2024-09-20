@@ -84,6 +84,48 @@ export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolea
   return response;
 
 };
+
+/**
+ * 사용자별 임시저장 게시글 목록 불러오기
+ * @returns 
+ */
+export const getTempPostList = async ( cursor?:string, isBefore?:boolean): Promise<any> => {
+  const token = getToken();
+  let url  = `/draft/list`;
+  const params: Record<string, any> = {};
+
+  if(cursor){
+    params.cursor = cursor;
+  }
+  if(isBefore){
+    params['is-before'] = isBefore;
+  }
+
+  const queryString = new URLSearchParams(params).toString();
+  if (queryString) {
+    url += `?${queryString}`;
+  }
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }else{
+    response = await apiClient.get<any>(url,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+    });
+  }
+
+  console.log(response);
+  return response;
+
+};
 /**
  * 게시글 목록 불러오기
  * @returns 
@@ -156,6 +198,32 @@ export const getPost = async (boardId:string): Promise<any> => {
     });
   }else{
     response = await apiClient.get<any>(`/board/:${boardId}`,{
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${token}`,
+      },
+    });
+  }
+  console.log(response.data);
+  return response.data;
+
+};
+/**
+ * 임시저장 게시글 상세
+ * @returns 
+ */
+export const getTempPost = async (draftId:string): Promise<any> => {
+  const token = getToken();
+  let response;
+
+  if(token ===null ){
+    response = await apiClient.get<any>(`/draft/:${draftId}`,{
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }else{
+    response = await apiClient.get<any>(`/draft/:${draftId}`,{
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `${token}`,

@@ -207,11 +207,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
                     <div>
                       
                             <div className="followers-list">
-                                {loading?(
-                                   <>
-                                   <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
-                                   <p>로딩중...</p></>
-                                ): followers.length === 0 ?(
+                            {followers.length === 0 ?(
                                     <div >
                                       <img src={noPosts} alt="No posts" className="no-posts-icon" />
                                       <p>팔로우가 없습니다.</p>
@@ -442,6 +438,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
                                     )}
                                     </>
                                 )}
+                               
                                
                             </div>
                         

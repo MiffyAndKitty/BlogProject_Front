@@ -443,10 +443,8 @@ const FixPost: React.FC = () => {
             ))}
           </div>
 
-          <div className="button-group">
-            <Button variant="secondary" type="button">
-              임시저장
-            </Button>
+          <div style={{display:'flex', justifyContent:'flex-end'}}>
+        
             <Button onClick={fixPosts} variant="primary" type="submit">
               저장
             </Button>

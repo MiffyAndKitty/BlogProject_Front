@@ -36,6 +36,7 @@ export interface loginData {
 }
 
 export interface newPost {
+    draftId?:string,
     title:string,
     content:string,
     public:Boolean,

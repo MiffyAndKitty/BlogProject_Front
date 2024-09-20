@@ -32,7 +32,22 @@ export const fixPost = async (postData: FormData): Promise<any> => {
   return response;
 
 };
+/**
+ * 임시저장 게시글 수정
+ * @returns 
+ */
+export const fixTempPost = async (postData: FormData): Promise<any> => {
+  const token = getToken();
+  const response = await multipart.put<any>(`/draft`,postData,{
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      'Authorization': `${token}`,
+    },
+  });
+  console.log(response);
+  return response;
 
+};
 /**
  * 카테고리 수정
  * @returns 

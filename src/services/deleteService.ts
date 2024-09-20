@@ -97,7 +97,33 @@ export const deleteNotification  = async (notificationId: string): Promise<any> 
     throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
   }
 }; 
+/**
+ * 임시저장된 게시글 삭제
+ * @param email 
+ * @returns 
+ */
+export const deleteTempPost  = async (draftId: string): Promise<any> => {
+  try {
+    console.log("deleteNotification called with email:", draftId); // 함수 호출 확인
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/draft`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+      data: {
+        draftId: draftId
+      }
+    });
 
+    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteNotification:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
+}; 
 /**
  * 댓글 좋아요/싫어요 삭제
  * @param email 
