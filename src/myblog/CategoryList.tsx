@@ -135,11 +135,11 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                             </span>
                             {category.category_name}
                             <span className='addChangeDeleteBtn'>
-                              {level !== 2 && (
+                              {level === 0&& (
                                 <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
                               )}
                               <button className='addChangeDeleteBtn' onClick={() =>toEditCategory(category.category_id, category.category_name)}>수정</button>
-                              {(level === 2 || !category.subcategories) && (
+                              {(level === 1 || !category.subcategories) && (
                                 <>
                                   <button className='addChangeDeleteBtn' onClick={() => handleDeleteCategory(category.category_id)}>삭제</button>
                                   <ConfirmModal
@@ -188,92 +188,6 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                 )}
               </Draggable>
               )}
-              {/* {level ===2 &&(
-               
-               
-                    <div 
-                      key={category.category_id}
-                      onMouseEnter={(e) => handleMouseEnter(e, category.category_id)}
-                      onMouseLeave={(e) => handleMouseLeave(e)}
-                    >
-                      <div style={{ cursor: 'pointer' }} className={`category-item-list level-${level}`}>
-                        {editingCategoryId === category.category_id ? (
-                          <div>
-                            <input
-                              type="text"
-                              value={newCategoryName}
-                              onChange={(e) => setNewCategoryName(e.target.value)}
-                            />
-                            <button className='addChangeDeleteBtn' onClick={() => { onEditCategory(category.category_id, newCategoryName); setEditingCategoryId(null); }}>저장</button>
-                            <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(null)}>취소</button>
-                          </div>
-                        ) : (
-                          <div>
-                            <span onClick={() => toggleCategory(category.category_id)} style={{backgroundColor:'transparent', padding:'5px', marginRight:'-5px'}}>
-                              {level !== 2 && (
-                                expandedCategories.includes(category.category_id) 
-                                  ? <img className='arrow'  src={up_arrow} alt="up arrow" /> 
-                                  : <img className='arrow'  src={down_arrow} alt="down arrow" />
-                              )}
-                            </span>
-                            <span style={{backgroundColor:'transparent', padding:'5px'}}>
-                              <img src={move_category} style={{width:'12px', height:'auto'}}></img>
-                            </span>
-                            {category.category_name}
-                            <span className='addChangeDeleteBtn'>
-                              {level !== 2 && (
-                                <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
-                              )}
-                              <button className='addChangeDeleteBtn' onClick={() =>toEditCategory(category.category_id, category.category_name)}>수정</button>
-                              {(level === 2 || !category.subcategories) && (
-                                <>
-                                  <button className='addChangeDeleteBtn' onClick={() => handleDeleteCategory(category.category_id)}>삭제</button>
-                                  <ConfirmModal
-                                    isOpen={isModalOpen}
-                                    onClose={() => setIsModalOpen(false)}
-                                    onConfirm={confirmDeleteCategory}
-                                    message="이 카테고리를 삭제하시겠습니까?"
-                                  />
-                                </>
-                              )}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-  
-                      {addingSubcategoryId === category.category_id && (
-                        <div className={`category-item-list level-${level+1}`}>
-                          <input
-                            type="text"
-                            value={newSubcategoryName}
-                            onChange={(e) => setNewSubcategoryName(e.target.value)}
-                            placeholder={`${category.category_name}의 하위 카테고리 이름`}
-                          />
-                          <button className='addOrCancelBtn' onClick={() => { onAddSubcategory(category.category_id, newSubcategoryName); setAddingSubcategoryId(null); setNewSubcategoryName('');}}>저장</button>
-                          <button className='addOrCancelBtn' onClick={() => {setAddingSubcategoryId(null); setNewSubcategoryName('');}}>취소</button>
-                        </div>
-                      )}
-
-
-                      {expandedCategories.includes(category.category_id) && category.subcategories && category.subcategories.length > 0 && (
-                        <CategoryList
-                          level={level + 1}
-                          expandedCategories={expandedCategories}
-                          toggleCategory={toggleCategory}
-                          categories={category.subcategories}
-                          onAddSubcategory={onAddSubcategory}
-                          onEditCategoryLevel={onEditCategoryLevel}
-                          onEditCategory={onEditCategory}
-                          onDeleteCategory={onDeleteCategory}
-                          onDragEnd={onDragEnd} 
-                          parentId = {category.category_id}
-                        />
-                      )}
-                    </div>
-                
-                )} */}
-            
-   
               {provided.placeholder}
           </div>
         )}

@@ -1,16 +1,20 @@
 import React, { useState, useEffect,useRef } from 'react';
 import './MainPosts.css';
 import * as TYPES from '../types/index';
-import mainCharacterImg from '../img/main_character.png';
 import { getPosts,getCategories } from '../services/getService';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import SearchBar from '../structure/SearchBar';
 import filledCarrot from '../img/filledCarrot.png';
 import  upBtn  from '../img/upToggle.png';
 import spinner from '../img/Spinner.png';
 import  downBtn  from '../img/downToggle.png';
 import noPosts from '../img/noPosts.png';
+import previous from '../img/previous.png';
+import next from '../img/next.png';
+import fastPrevious from '../img/fast_previous.png';
+import fastNext from '../img/fast_next.png';
+
 interface MainPostsProps {
   nicknameParam : string
   categoryID : string
@@ -20,6 +24,7 @@ interface MainPostsProps {
 const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostClick,isDeleteUser} ) => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
@@ -127,22 +132,63 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     }
     return '';
   };
+  const goToFirstPage = () =>{
+    setPage(Math.abs(currentPage - 1));
+    setCursor(posts[0].board_id);
+    setIsBefore(true);
+    setCurrentPage(1);
+    //fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
+  };
+  const goToLastPage = () =>{
 
+    setCursor(posts[posts.length - 1].board_id);
+    setPage(totalPages-currentPage);
+    setCurrentPage(totalPages);
+    setIsBefore(false);
+    //fetchPosts(cursor,null,searchTerm,sortOption);
+  };
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCursor(posts[0].board_id);
+      setPage(1);
       setIsBefore(true);
       setCurrentPage(currentPage - 1);
     }
   };
-  
+
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCursor(posts[posts.length - 1].board_id); 
+      setCursor(posts[posts.length - 1].board_id);
+      setPage(1);
       setIsBefore(false);
       setCurrentPage(currentPage + 1);
     }
   };
+  const goToPage = (page:number)=>{
+    if(currentPage - page >0){
+      setCursor(posts[0].board_id);
+      setIsBefore(true);
+    }else{
+      setCursor(posts[posts.length - 1].board_id);
+      setIsBefore(false);
+    }
+    setPage(Math.abs(currentPage - page));
+    setCurrentPage(page);
+  };
+
+   // renderPages 함수 수정: 현재 페이지를 중심으로 5개의 페이지를 반환
+  const renderPages = (currentPage: number, totalPages: number) => {
+    let pages = [];
+    const startPage = Math.max(currentPage - 2, 1);
+    const endPage = Math.min(startPage + 4, totalPages);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
   // 불필요한 태그 제거 함수 (이미지 태그는 유지)
   const removeUnwantedTags = (html: string): string => {
     // 이미지 태그를 허용하면서 나머지 태그를 제거하도록 설정
@@ -176,8 +222,24 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     try {
       const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
-  
-      const fetchedPosts = await getPosts(nicknameParam, cursor, isBefore, categoryID, query,sort);
+      console.log(  `
+        
+        
+        
+        =========fetchPosts==========
+        
+        nicknameParam:${nicknameParam}
+        page:${page}
+        cursor :${cursor}
+        isBefore:${isBefore}
+        categoryID:${categoryID}
+        query:${query}
+        sort:${sort}
+        
+
+        
+        `)
+      const fetchedPosts = await getPosts(nicknameParam,page, cursor, isBefore, categoryID, query,sort);
       if (fetchedPosts && fetchedPosts.data.data) {
         setIsWriter(fetchedPosts.data.isWriter);
   
@@ -461,11 +523,36 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
               )}
             
 
-              <div className="pagination">
-                <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>
-                <span className="pagination-info">{currentPage} / {totalPages}</span>
-                <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
-              </div>
+            <div className="pagination">
+
+              <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+                <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+              <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                <img src={previous} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+
+               {renderPages(currentPage, totalPages).map(page => (
+              <button
+                key={page}
+                className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+              ))}
+
+              <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <img src={next} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+              <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+                <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+            </div>
         
     </div>
   );

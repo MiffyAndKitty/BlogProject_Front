@@ -168,33 +168,7 @@
   .delete-btn:hover {
     background-color: #ff4da6;
   }
-  /* .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-btn {
-    background-color: #ff4da6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    margin: 0 5px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 5px;
-  }
-  
-  .pagination-btn:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination-info {
-    font-size: 16px;
-    margin: 0 10px;
-  } */
+
 
   .profile_post_manage{
     max-width: 300px;

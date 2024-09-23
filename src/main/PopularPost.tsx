@@ -57,7 +57,7 @@ const PopularPost: React.FC = () => {
         query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query,sort);
+      const fetchedPosts = await getALLPosts(pageSize,undefined, cursor,isBefore,categoryID,query,sort);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,

@@ -39,13 +39,16 @@ export const getGoogleLogin = async (): Promise<any> => {
  * 사용자별 게시글 목록 불러오기
  * @returns 
  */
-export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string,sort?: string): Promise<any> => {
+export const getPosts = async (nickname:string, page?:number, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string,sort?: string): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/:${nickname}`;
   const params: Record<string, any> = {};
 
   if(cursor){
     params.cursor = cursor;
+  }
+  if(page){
+    params.page = page;
   }
   if(isBefore){
     params['is-before'] = isBefore;
@@ -87,13 +90,23 @@ export const getPosts = async (nickname:string, cursor?:string, isBefore?:boolea
 
 /**
  * 사용자별 임시저장 게시글 목록 불러오기
+ * @param pageSize 
+ * @param page 
+ * @param cursor 
+ * @param isBefore 
  * @returns 
  */
-export const getTempPostList = async ( cursor?:string, isBefore?:boolean): Promise<any> => {
+export const getTempPostList = async (pageSize?:number, page?:number,cursor?:string, isBefore?:boolean): Promise<any> => {
   const token = getToken();
   let url  = `/draft/list`;
   const params: Record<string, any> = {};
 
+  if(pageSize){
+    params['page-size'] = pageSize;
+  }
+  if(page){
+    params.page = page;
+  }
   if(cursor){
     params.cursor = cursor;
   }
@@ -130,12 +143,15 @@ export const getTempPostList = async ( cursor?:string, isBefore?:boolean): Promi
  * 게시글 목록 불러오기
  * @returns 
  */
-export const getALLPosts = async (pageSize:number, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string, sort?: string, tag?:string): Promise<any> => {
+export const getALLPosts = async (pageSize:number,page:number, cursor?:string, isBefore?:boolean, categoryID?:string, query?: string, sort?: string, tag?:string): Promise<any> => {
   const token = getToken();
   let url  = `/board/list/`;
   const params: Record<string, any> = {};
   if(pageSize){
     params['page-size'] = pageSize;
+  }
+  if(page){
+    params.page = page;
   }
   if(tag){
     params.tag = tag;

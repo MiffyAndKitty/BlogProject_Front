@@ -9,28 +9,26 @@ import spinner from '../img/Spinner.png';
 import './PopularTags.css';
 import '../myblog/ManagePost/GetPost.css';
 import * as TYPES from '../types/index';
-import mainCharacterImg from '../img/main_character.png';
 import Profile from '../main/Profile';
 import DOMPurify from 'dompurify'; // XSS 방지를 위해 DOMPurify 사용
-import { getALLPosts,getCategories } from '../services/getService';
-import { deletePost } from '../services/deleteService';
+import { getALLPosts } from '../services/getService';
 import { useNavigate } from 'react-router-dom';
 import PostDetail from '../myblog/PostDetail';
 import filledCarrot from '../img/filledCarrot.png'
-import CategorySettings from '../myblog/CategorySetting';
-import ConfirmModal from '../myblog/ConfirmModal'; 
+import previous from '../img/previous.png';
+import next from '../img/next.png';
+import fastPrevious from '../img/fast_previous.png';
+import fastNext from '../img/fast_next.png';
 import SSEComponent from './SSEComponent';
-import  upBtn  from '../img/upToggle.png';
-import  downBtn  from '../img/downToggle.png';
 import noPosts from '../img/noPosts.png';
-import { set } from 'date-fns';
-import { isDeepStrictEqual } from 'util';
+
 
 const AllPopularPost: React.FC = () => {
   let {  postID , tag, search, sort} = useParams<{ postID?: string, tag?:string, search?:string, sort?:string }>();
   const location = useLocation();
   const [isWriter, setIsWriter] = useState<boolean>(false);
   const [posts, setPosts] = useState<TYPES.getPost[]>([]);
+  const [page, setPage] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
@@ -112,10 +110,25 @@ const AllPopularPost: React.FC = () => {
     setSearchTerm(term);
     fetchPosts(undefined,null, term,sortOption);
   };
+  const goToFirstPage = () =>{
+    setPage(Math.abs(currentPage - 1));
+    setCursor(posts[0].board_id);
+    setIsBefore(true);
+    setCurrentPage(1);
+    //fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
+  };
+  const goToLastPage = () =>{
 
+    setCursor(posts[posts.length - 1].board_id);
+    setPage(totalPages-currentPage);
+    setCurrentPage(totalPages);
+    setIsBefore(false);
+    //fetchPosts(cursor,null,searchTerm,sortOption);
+  };
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCursor(posts[0].board_id);
+      setPage(1);
       setIsBefore(true);
       setCurrentPage(currentPage - 1);
     }
@@ -124,9 +137,22 @@ const AllPopularPost: React.FC = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCursor(posts[posts.length - 1].board_id);
+      setPage(1);
       setIsBefore(false);
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const goToPage = (page:number)=>{
+    if(currentPage - page >0){
+      setCursor(posts[0].board_id);
+      setIsBefore(true);
+    }else{
+      setCursor(posts[posts.length - 1].board_id);
+      setIsBefore(false);
+    }
+    setPage(Math.abs(currentPage - page));
+    setCurrentPage(page);
   };
 
   const escapeRegExp = (string: string) => {
@@ -152,15 +178,17 @@ const AllPopularPost: React.FC = () => {
       setNickname(nickname);
       console.log(`
         ==================
-        fetchPosts Info 
+        [인기글 전체보기]
         nickname:${nickname}
         cursor:${cursor}
+        page:${page}
+        pageSize:${pageSize}
         isBefore:${isBefore}
         categoryID:${categoryID}
         query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query,sort,tag);
+      const fetchedPosts = await getALLPosts(pageSize, page, cursor,isBefore,categoryID,query,sort,tag);
       setIsWriter(fetchedPosts.data.isWriter);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -271,6 +299,19 @@ const AllPopularPost: React.FC = () => {
     setCursor('');
     setCurrentPage(1);
     fetchPosts(undefined,null,searchTerm,option)
+  };
+
+   // renderPages 함수 수정: 현재 페이지를 중심으로 5개의 페이지를 반환
+  const renderPages = (currentPage: number, totalPages: number) => {
+    let pages = [];
+    const startPage = Math.max(currentPage - 2, 1);
+    const endPage = Math.min(startPage + 4, totalPages);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
   };
 
   const fetchAllPost = ()=>{
@@ -388,16 +429,36 @@ const AllPopularPost: React.FC = () => {
                 )}
 
                 <div className="pagination">
+
+                  <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+                    <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+                  </button>
+
                   <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
-                    이전
+                    <img src={previous} style={{width:'20px', height:'20px'}}/>
                   </button>
-                  <span className="pagination-info">
-                    {currentPage} / {totalPages}
-                  </span>
+
+                  
+                   {renderPages(currentPage, totalPages).map(page => (
+                  <button
+                    key={page}
+                    className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+                    onClick={() => goToPage(page)}
+                  >
+                    {page}
+                  </button>
+                ))}
+
                   <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    다음
+                    <img src={next} style={{width:'20px', height:'20px'}}/>
                   </button>
+
+                  <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+                    <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+                  </button>
+
                 </div>
+
                 </div>
                 </>
               )

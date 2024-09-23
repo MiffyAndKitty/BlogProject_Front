@@ -48,7 +48,7 @@ const NewPost: React.FC = () => {
         query:${query}
         +++++++++++++++++++
         `)
-      const fetchedPosts = await getALLPosts(pageSize, cursor,isBefore,categoryID,query);
+      const fetchedPosts = await getALLPosts(pageSize,undefined ,cursor,isBefore,categoryID,query);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
         ...post,

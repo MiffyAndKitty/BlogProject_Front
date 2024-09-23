@@ -1,10 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './TempPostList.css';
 import { getTempPostList } from '../../services/getService';
-
+import previous from '../../img/previous.png';
+import next from '../../img/next.png';
+import fastPrevious from '../../img/fast_previous.png';
+import fastNext from '../../img/fast_next.png';
 import { useNavigate } from "react-router-dom";
 import { deleteTempPost } from '../../services/deleteService';
-import mainCharacterImg from '../../img/main_character.png';
 import spinner from '../../img/Spinner.png';
 import noPosts from '../../img/noPosts.png';
 
@@ -21,8 +23,13 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
   const [loading, setLoading] = useState<boolean>(true);
   const [tempPosts, setTempPosts] = useState([]);
   const [localNickName, setLocalNickName] = useState<string>('');
-  const [tempPostsTotalCount,setTempPostsTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages,setTotalPages] = useState(0);
+  const [cursor, setCursor] = useState<string>('');
+  const [isBefore, setIsBefore] = useState<boolean>(false);
   const [deleteTempPostId,setDeleteTempPostId] = useState('');
+  const [page, setPage] = useState(0);
+  const pageSize = 10;
   const navigate = useNavigate();
  
   useEffect(()=>{
@@ -41,25 +48,37 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
   }
   },[deleteTempPostId])
 
-  const getTempPosts = async () => {
+  useEffect(() => {
+
+      if(currentPage !==0) {
+        getTempPosts(cursor);
+      }else{
+        setCurrentPage(1);
+      }
+      
+  }, [currentPage]);
+
+  const getTempPosts = async (cursor?: string) => {
     try {
       setLoading(true); 
-      const fetchedTempPostList = await getTempPostList();
+      const fetchedTempPostList = await getTempPostList(pageSize, page, cursor,isBefore);
       console.log(`
         
         
         
         
-        fetchedTempPostList
+        [임시저장 글 불러오기]
         
-        
-        
+        cursor:${cursor}
+        isBefore:${isBefore}
+        page:${page}
+        pageSize:${pageSize}
         
         `,fetchedTempPostList)
       if (fetchedTempPostList) {
         // 최대 5개의 알림만 저장
         setTempPosts(fetchedTempPostList.data.data.list);
-        setTempPostsTotalCount(fetchedTempPostList.data.data.totalCount);
+        setTotalPages(fetchedTempPostList.data.data.totalPages);
         onSendTotalCount(fetchedTempPostList.data.data.totalCount);
       }
     } catch (error) {
@@ -76,7 +95,7 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
             const fetchedDeleteTempPost = await deleteTempPost(tempPostID);
             if (fetchedDeleteTempPost) {
                 // alert('팔로워를 취소했습니다!');
-                getTempPosts();
+                getTempPosts(cursor);
             }
         }
     } catch (error) {
@@ -87,7 +106,6 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
   };
 
   useEffect(() => {
-    getTempPosts();
     try{
         const localNickname = sessionStorage.getItem("nickname");
         if (localNickname) {
@@ -196,6 +214,80 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
     }
     return text;
   };
+  const goToFirstPage = () =>{
+    setPage(Math.abs(currentPage - 1));
+    setCursor(tempPosts[0]._id);
+    setIsBefore(true);
+    setCurrentPage(1);
+    //fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
+  };
+  const goToLastPage = () =>{
+
+    setCursor(tempPosts[tempPosts.length - 1]._id);
+    setPage(totalPages-currentPage);
+    setCurrentPage(totalPages);
+    setIsBefore(false);
+    //fetchPosts(cursor,null,searchTerm,sortOption);
+  };
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCursor(tempPosts[0]._id);
+      setPage(1);
+      setIsBefore(true);
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCursor(tempPosts[tempPosts.length - 1]._id);
+      setPage(1);
+      setIsBefore(false);
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPage = (page:number)=>{
+    if(currentPage - page >0){
+      setCursor(tempPosts[0]._id);
+      setIsBefore(true);
+    }else{
+      setCursor(tempPosts[tempPosts.length - 1]._id);
+      setIsBefore(false);
+    }
+    setPage(Math.abs(currentPage - page));
+    setCurrentPage(page);
+  };
+   // renderPages 함수 수정: 현재 페이지를 중심으로 5개의 페이지를 반환
+   const renderPages = (currentPage: number, totalPages: number) => {
+    let pages = [];
+    const maxVisiblePages = 5; // 최대 표시할 페이지 수
+
+    // 현재 페이지를 중심으로 시작 페이지와 끝 페이지를 계산
+    let startPage = Math.max(currentPage - 2, 1);
+    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+  
+    // 끝 페이지가 전체 페이지보다 큰 경우 시작 페이지 조정
+    if (endPage === totalPages && endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+    }
+  
+    // 페이지 목록 생성
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    console.log(`
+
+      [renderPages]
+      
+      totalPages:${totalPages}
+      currentPage:${currentPage}
+      startPage: ${startPage}
+      endPage: ${endPage}
+      
+      `,pages)
+    return pages;
+  };
   return (
     <div className="modal-overlay-tempsave" onClick={onClose}>
       <div
@@ -207,7 +299,7 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
         <div className="modal-header-tempsave">
 
         <div className='title-all'>
-          <h3>임시저장<span style={{ marginLeft: '10px', color: '#FF88D7', backgroundColor:'transparent' }}>{tempPostsTotalCount}</span></h3>
+          <h3>임시저장<span style={{ marginLeft: '10px', color: '#FF88D7', backgroundColor:'transparent' }}>{totalPages}</span></h3>
         </div>
         <span className="modal-close-tempsave" onClick={onClose}>
           &times;
@@ -244,11 +336,6 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
                     <span className='tempPost-title'>{truncateText(tempPost.title,5)}</span>
                     <p className='tempPost-contents'>{truncateText(tempPost.content, 100)}</p> {/* 텍스트 잘라서 표시 */}
                 </div>
-                 
-
-                 
-
-                 
 
                 </div>
               </div>
@@ -258,15 +345,44 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
               >
                 &times;
               </button>
-              {/* {index < tempPosts.length - 1 && (
-                <hr className="tempPost-divider" />
-              )} */}
+             
             </div>
+           
           ))}
+          
           </>
             )
           }
-         
+           <div className="pagination">
+
+            <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+              <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+            </button>
+
+            <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+              <img src={previous} style={{width:'20px', height:'20px'}}/>
+            </button>
+
+
+             {renderPages(currentPage, totalPages).map(page => (
+            <button
+              key={page}
+              className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+              onClick={() => goToPage(page)}
+            >
+              {page}
+            </button>
+            ))}
+
+            <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+              <img src={next} style={{width:'20px', height:'20px'}}/>
+            </button>
+
+            <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+              <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+            </button>
+
+            </div>
         </div>
       </div>
     </div>
