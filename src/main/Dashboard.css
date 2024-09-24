@@ -40,15 +40,17 @@ span,div,button,input {
     border-radius: 8px;
     grid-column: 1 / 2;
     grid-row: 1 / 5;
-    height: 300px; /* 고정 높이 설정 */
+   
   }
   .newpost-section {
+    position: relative; /* 부모 컨테이너를 기준으로 애니메이션 제한 */
+    overflow: hidden; /* 애니메이션이 부모 밖으로 나가지 않도록 */
     margin-left:50px;
     padding: 1rem;
     border-radius: 8px;
     grid-column: 1 / 2;
     grid-row: 5 / 7;
-    height: 300px; /* 고정 높이 설정 */
+  
   }
   
   .profile-section {
@@ -133,7 +135,7 @@ span,div,button,input {
     padding: 1rem;
     border-radius: 8px;
     grid-column: 2 / 3;
-    grid-row: 6 / 10; /* 6행부터 7행까지 차지 */
+    grid-row: 6 / 7; /* 6행부터 7행까지 차지 */
     margin-top: 10px;
     height: 100%;
   }
@@ -198,7 +200,7 @@ span,div,button,input {
       border-radius: 8px;
       grid-column: auto;
       grid-row: 3 /4;
-      height: 300px; /* 고정 높이 설정 */
+    
     }
     .newpost-section {
       display: flex;
@@ -209,7 +211,7 @@ span,div,button,input {
       border-radius: 8px;
       grid-row: 7/ 8;
       grid-column: auto;
-      height: 300px; /* 고정 높이 설정 */
+   
     }
     
     .populartags-section {
@@ -252,7 +254,7 @@ span,div,button,input {
     border-radius: 8px;
     grid-column: auto;
     grid-row: 3 /4;
-    height: 300px; /* 고정 높이 설정 */
+
   }
   .newpost-section {
     display: flex;
@@ -263,7 +265,7 @@ span,div,button,input {
     border-radius: 8px;
     grid-row: 7/ 8;
     grid-column: auto;
-    height: 300px; /* 고정 높이 설정 */
+ 
   }
   
   .populartags-section {
@@ -353,7 +355,7 @@ span,div,button,input {
     border-radius: 8px;
     grid-column: auto;
     grid-row: 3 /5;
-    height: 300px; /* 고정 높이 설정 */
+
   }
   .newpost-section {
     display: flex;
@@ -362,7 +364,7 @@ span,div,button,input {
     border-radius: 8px;
     grid-row: 8/ 9;
     grid-column: auto;
-    height: 300px; /* 고정 높이 설정 */
+
   }
   .populartags-section {
     display: flex;

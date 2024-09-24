@@ -32,6 +32,8 @@
 
 .popularpost-section {
     padding: 20px;
+    position: relative; /* 부모 컨테이너를 기준으로 애니메이션 제한 */
+    overflow: hidden; /* 애니메이션이 부모 밖으로 나가지 않도록 */
   }
   
   .posts {
@@ -221,10 +223,6 @@
     .post-popular-content {
       padding: 10px;
       margin-top: 0px;
-    }
-    
-    .popularpost-section {
-      padding: 20px;
     }
     
     .posts {
