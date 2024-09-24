@@ -24,37 +24,54 @@ const CategorySettings = () => {
         : [...prev, categoryId]
     );
   };
-  const onDragEnd = (result: DropResult, level?: number, parentId?: string) => {
+  const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId } = result;
-  
+
     if (!destination) {
       return;
     }
   
     let sourceParentId = source.droppableId;
     let destinationParentId = destination.droppableId;
+    // 출발지와 목적지가 같은 경우
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return; // 이동이 없으므로 종료
+    }
     console.log(`
-      
-      
-      sourceParentId :${sourceParentId}
-      destinationParentId:${destinationParentId}
-      
-      
-      
-      `,result)
-    // 같은 부모 카테고리 내에서 이동하는 경우
-    if (sourceParentId === destinationParentId) {
-      // 기존 카테고리 배열을 복사한 후 드래그된 항목을 재배치
-      const newCategories = Array.from(categories);
-      const [movedItem] = newCategories.splice(source.index, 1);
-      newCategories.splice(destination.index, 0, movedItem);
-  
-      // 상태 업데이트
-      setCategories(newCategories);
-    } else {
-      if(destinationParentId ==='root') destinationParentId = '';
-      // 부모 카테고리 변경
-      editCategoryLevel(draggableId, destinationParentId);
+
+
+
+
+      [result]
+    draggableId :${draggableId}
+    sourceParentId :${sourceParentId}
+    destinationParentId: ${destinationParentId}
+
+
+
+
+    `,destination, source, draggableId )
+
+    try {
+      if (sourceParentId === destinationParentId) {
+        // // 기존 카테고리 배열을 복사한 후 드래그된 항목을 재배치
+        // const newCategories = Array.from(categories);
+        // const [movedItem] = newCategories.splice(source.index, 1);
+        // newCategories.splice(destination.index, 0, movedItem);
+    
+        // // 상태 업데이트
+        // setCategories(newCategories);
+        return;
+      }
+      if (source.droppableId === "level-1" && destination.droppableId === "level-1") {
+       return;
+      } else {
+        if(destinationParentId ==='root') destinationParentId = '';
+        // 부모 카테고리 변경
+        editCategoryLevel(draggableId, destinationParentId);
+        }
+    } catch (error) {
+      console.error("드래그 종료 처리 중 오류 발생:", error);
     }
   };
   
@@ -67,18 +84,7 @@ const CategorySettings = () => {
       }
       const fetchedCategories: any = await getCategories(nickname);
       setCategories(fetchedCategories.hierarchicalCategory);
-      console.log(`
-        
-        
-        
-        
-        fetchedCategories.hierarchicalCategory
-        
-        
-        
-        
-        
-        `,fetchedCategories.hierarchicalCategory);
+
     } catch (err) {
       console.error(err);
       if(err.response) alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
@@ -98,15 +104,7 @@ const CategorySettings = () => {
       });
       return ids;
     };
-    console.log(`
-      
-      
-      categories
-      
-      
-      
-      
-      `,categories)
+
     setExpandedCategories(getAllCategoryIds(categories));
   }, [categories]);
   useEffect(() => {

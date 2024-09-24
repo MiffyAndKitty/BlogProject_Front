@@ -69,7 +69,7 @@ const FixPost: React.FC = () => {
               {level !== 0 && (`- ` + categoryItem.category_name)}
               {level === 0 && (categoryItem.category_name)}
             </button>
-            {categoryItem.subcategories && renderCategoryMenu(categoryItem.subcategories, level + 1)}
+            {categoryItem.subcategories &&level === 0 && renderCategoryMenu(categoryItem.subcategories, level + 1)}
           </div>
         ))}
       </>
