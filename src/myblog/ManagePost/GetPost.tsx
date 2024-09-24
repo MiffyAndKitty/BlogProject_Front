@@ -19,6 +19,10 @@ import spinner from '../../img/Spinner.png';
 import noPosts from '../../img/noPosts.png';
 import  upBtn  from '../../img/upToggle.png';
 import  downBtn  from '../../img/downToggle.png';
+import previous from '../../img/previous.png';
+import next from '../../img/next.png';
+import fastPrevious from '../../img/fast_previous.png';
+import fastNext from '../../img/fast_next.png';
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -31,6 +35,7 @@ const GetPost: React.FC = () => {
   const [totalPages, setTotalPages] = useState<number>(1);
   const [cursor, setCursor] = useState<string>('');
   const [isBefore, setIsBefore] = useState<boolean>(false);
+  const [page, setPage] = useState(0);
   const [managementType, setManagementType] = useState<'post' | 'category'>('post');
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -102,17 +107,25 @@ const GetPost: React.FC = () => {
       return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
     }
   };
-  
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    setCursor('');
+  const goToFirstPage = () =>{
+    setPage(Math.abs(currentPage - 1));
+    setCursor(posts[0].board_id);
+    setIsBefore(true);
     setCurrentPage(1);
-    fetchPosts(undefined,category.category_id, term);
+    //fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
   };
+  const goToLastPage = () =>{
 
+    setCursor(posts[posts.length - 1].board_id);
+    setPage(totalPages-currentPage);
+    setCurrentPage(totalPages);
+    setIsBefore(false);
+    //fetchPosts(cursor,null,searchTerm,sortOption);
+  };
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCursor(posts[0].board_id);
+      setPage(1);
       setIsBefore(true);
       setCurrentPage(currentPage - 1);
     }
@@ -121,10 +134,44 @@ const GetPost: React.FC = () => {
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCursor(posts[posts.length - 1].board_id);
+      setPage(1);
       setIsBefore(false);
       setCurrentPage(currentPage + 1);
     }
   };
+  const goToPage = (page:number)=>{
+    if(currentPage - page >0){
+      setCursor(posts[0].board_id);
+      setIsBefore(true);
+    }else{
+      setCursor(posts[posts.length - 1].board_id);
+      setIsBefore(false);
+    }
+    setPage(Math.abs(currentPage - page));
+    setCurrentPage(page);
+  };
+
+   // renderPages 함수 수정: 현재 페이지를 중심으로 5개의 페이지를 반환
+  const renderPages = (currentPage: number, totalPages: number) => {
+    let pages = [];
+    const startPage = Math.max(currentPage - 2, 1);
+    const endPage = Math.min(startPage + 4, totalPages);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    setCursor('');
+    setCurrentPage(1);
+    fetchPosts(undefined,category.category_id, term);
+  };
+
+
   const goToDetailPost = (postID: string)=>{
     navigate(`/${nickname}/${postID}`, { state: { postID } });
   }
@@ -198,16 +245,18 @@ const GetPost: React.FC = () => {
       const nickname=sessionStorage.getItem('nickname');
       setNickname(nickname);
       console.log(`
-        ==================
-        fetchPosts Info 
+        =========fetchPosts [게시글 관리]==========
+        
         nickname:${nickname}
-        cursor:${cursor}
+        page:${page}
+        cursor :${cursor}
         isBefore:${isBefore}
         categoryID:${categoryID}
         query:${query}
-        +++++++++++++++++++
+        
+
         `)
-      const fetchedPosts = await getPosts(nickname,cursor,isBefore,categoryID,query);
+      const fetchedPosts = await getPosts(nickname,page, cursor,isBefore,categoryID,query);
       setIsWriter(fetchedPosts.data.isWriter);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -470,25 +519,37 @@ const GetPost: React.FC = () => {
                         </>
                       )}
 
-                      <div className="pagination">
-                        <button
-                          className="pagination-btn"
-                          onClick={handlePreviousPage}
-                          disabled={currentPage === 1}
-                        >
-                          이전
-                        </button>
-                        <span className="pagination-info">
-                          {currentPage} / {totalPages}
-                        </span>
-                        <button
-                          className="pagination-btn"
-                          onClick={handleNextPage}
-                          disabled={currentPage === totalPages}
-                        >
-                          다음
-                        </button>
-                      </div>
+                        <div className="pagination">
+
+                          <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+                            <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+                          </button>
+
+                          <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                            <img src={previous} style={{width:'20px', height:'20px'}}/>
+                          </button>
+
+
+                           {renderPages(currentPage, totalPages).map(page => (
+                          <button
+                            key={page}
+                            className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+                            onClick={() => goToPage(page)}
+                          >
+                            {page}
+                          </button>
+                          ))}
+
+                          <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                            <img src={next} style={{width:'20px', height:'20px'}}/>
+                          </button>
+
+                          <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+                            <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+                          </button>
+
+                        </div>
+
                     </div>
                   </>
                 )}
