@@ -23,6 +23,7 @@ import previous from '../../img/previous.png';
 import next from '../../img/next.png';
 import fastPrevious from '../../img/fast_previous.png';
 import fastNext from '../../img/fast_next.png';
+import { QuestionMark } from '../../resource/QuestionMark';
 
 const GetPost: React.FC = () => {
   const [isWriter, setIsWriter] = useState<boolean>(false);
@@ -399,6 +400,7 @@ const GetPost: React.FC = () => {
                     onClick={goToCategoryManagement}
                   >
                     카테고리 관리
+                    <QuestionMark type='category'></QuestionMark>
                   </button>
                 </div>
               </div> 

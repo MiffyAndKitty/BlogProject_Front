@@ -64,6 +64,9 @@ export interface getPost{
     category_name:string
     user_email:string
 }
+
+
+
 export interface getPostDetail{
     isLike: string,
     isWriter: Boolean
@@ -80,7 +83,12 @@ export interface getPostDetail{
     deleted_at : null | string,
     user_nickname : string
     board_comment:number,
-    tags: string[]
+    tags: string[],
+    imageSizes: {
+        sizes: { [key: string]: number }[]; // 각 이미지의 URL과 해당 크기를 담은 객체 배열
+        totalSize: number; // 전체 이미지 크기 합계 등 추가적인 정보가 필요한 경우
+      };
+    
     
 }
 export interface category {

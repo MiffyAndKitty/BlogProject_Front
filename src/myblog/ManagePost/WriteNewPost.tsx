@@ -16,8 +16,9 @@ import SSEComponent from '../../main/SSEComponent';
 import divider from '../../img/divider.png';
 import TempSaveNoti from './TempSaveNoti';
 import TempPostList from './TempPostList';
+import spinner from '../../img/Spinner.png';
 
-const MAX_IMAGE_SIZE = 50 * 1024 * 1024; // 20MB 제한 
+const MAX_IMAGE_SIZE = 20 * 1024 * 1024; // 20MB 제한 
 
 const WriteNewPost: React.FC = () => {
   const notificationButtonRef = useRef<HTMLDivElement>(null); // 임시저장 버튼 참조
@@ -25,6 +26,7 @@ const WriteNewPost: React.FC = () => {
   const quillRef = useRef<ReactQuill>(null);
   const [title, setTitle] = useState('');
   const [draftId, setDraftId] = useState('');
+  const [lastDraftId, setLastDraftId] = useState('');
   const [isDraftId, setIsDraftId] = useState(false);
   const [content, setContent] = useState('');
   const [status, setStatus] = useState(true);
@@ -45,8 +47,11 @@ const WriteNewPost: React.FC = () => {
   const [openTempPostList,setOpenTempPostList] = useState(false);
   const [tempPostsTotalCount,setTempPostsTotalCount] = useState(0);
   const [isTempPostClicked, setIsTempPostClicked] = useState(false); // 임시 저장 글을 추가로 보낼지, 수정으로 보낼지 판단하기 위한 변수
+  const [isTempPostSavedFirst,setIsTempPostSavedFirst] = useState(false);
   const [lastTempPostSaved, setLastTempPostSaved] =  useState('');
   const [isOnceChanged,setIsOnceChanged] = useState(false);
+  const[imgsSize,setImgsSize] = useState({});
+  const [imgsSizeTotal, setImgsSizeTotal] = useState(0);
   const navigate = useNavigate();
   const newImages: File[] = [];
   const errorMessage ='제목과 내용을 모두 입력해주세요!';
@@ -69,6 +74,14 @@ const WriteNewPost: React.FC = () => {
     }
     
   };
+  useEffect(()=>{
+    if(isTempPostSavedFirst){
+      getTempPostDetail(lastDraftId);  
+      setIsTempPostSavedFirst(false);
+    }
+   
+  },[lastDraftId])
+
 // 문자열의 바이트 길이 계산 함수
     const getByteLength = (str: string) => {
        let byteLength = 0;
@@ -86,16 +99,9 @@ const WriteNewPost: React.FC = () => {
       totalFileSize += file.size;
      
     }
-    console.log(`
-      
-      
-      
-      validFiles
-      totalFileSize:${totalFileSize}
-      content: ${content}
-      
-      
-      `,validFiles)
+    const beforeImgsSize =  checkBeforeImgsSize();
+    totalFileSize+=beforeImgsSize;
+
     if (totalFileSize > MAX_IMAGE_SIZE) {
       alert('이미지 파일은 20MB 이하로만 업로드할 수 있습니다.');
   
@@ -182,10 +188,20 @@ const WriteNewPost: React.FC = () => {
   const setPost = (post, categories: categories[]) => {
     setTitle(post.title);
     setContent(post.content);
+    console.log(`
+      
+      
+      setPost
+      
+      
+      
+      
+      
+      `,post.content)
     setStatus(post.public);
     setTags(Array.isArray(post.tagNames) ? post.tagNames : [post.tagNames]);
-
-    
+    setImgsSize(post.imageSizes.sizes);
+    setImgsSizeTotal(post.imageSizes.totalSize);
     const categoryId = post.categoryId;
     //const categoryItem = categories.find(cat => cat.category_id === categoryId);
     const categoryItem = findCategoryById(categories, categoryId);
@@ -214,15 +230,17 @@ const WriteNewPost: React.FC = () => {
    */
   const getTempPostDetail = useCallback(async (draftId:string) => {
     try {
-     
+      setLoading(true);
       if (!draftId) {
         console.warn('Draft ID is not set.');
         return;
       }
       setDraftId(draftId);
+
       const fetchedPosts = await getTempPost(draftId);
       setPost(fetchedPosts.data, categories); // 카테고리를 함께 전달
       setIsTempPostClicked(true);
+  
     } catch (err) {
       if(err.response){
         alert(`임시저장 게시글 상세 조회 중에 오류가 발생했습니다: ${err.response.data.message}`); 
@@ -244,7 +262,8 @@ const WriteNewPost: React.FC = () => {
         if(fetchedTempPostList.data.data.list){
           setLastTempPostSaved(formatDate(fetchedTempPostList.data.data.list[0].updatedAt));
           setDraftId(fetchedTempPostList.data.data.list[0]._id);
-
+          setLastDraftId(fetchedTempPostList.data.data.list[0]._id);
+          
         }else{
           setLastTempPostSaved('changed');
           setIsOnceChanged(true);
@@ -307,12 +326,40 @@ const WriteNewPost: React.FC = () => {
           const file = new File([blob], `image_${checkedImgs.length}.png`, { type: 'image/png' });
           checkedImgs.push(file);
         }
+
+       
       }
     }
   
     return checkedImgs;
   };
   
+  const checkBeforeImgsSize = ()=>{
+    let totalSize = 0;
+    const quillEditor = quillRef.current?.getEditor();
+  
+    if (quillEditor) {
+      const imgTags = quillEditor.root.querySelectorAll('img');
+  
+      // 비동기 작업을 처리하기 위해 for...of 루프를 사용합니다.
+      for (const img of Array.from(imgTags)) {
+        if (img.src.startsWith('https://')) {
+          // 값을 순회합니다.
+          for (let key of Object.keys(imgsSize)) {
+
+           
+            if(key === img.src){
+
+              totalSize += imgsSize[key];
+            }
+          }
+        }
+
+       
+      }
+    }
+    return totalSize;
+  };
 
   const handleCategorySelect = (categoryItem: category) => {
     setCategory(categoryItem);
@@ -373,15 +420,15 @@ const WriteNewPost: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기에 글을 제출하는 로직을 추가하세요 (예: API 호출)
-    // console.log('handleSubmit Title:', title);
-    // console.log('handleSubmit Content:', content);
-    // console.log('handleSubmit Category:', category);
-    // console.log('handleSubmit Is Private:', status);
-    // console.log('handleSubmit Tags:', tags);
-    // if (images) {
-    //   console.log('handleSubmit Images:', images);
-    // }
+    
+    console.log('handleSubmit Title:', title);
+    console.log('handleSubmit Content:', content);
+    console.log('handleSubmit Category:', category);
+    console.log('handleSubmit Is Private:', status);
+    console.log('handleSubmit Tags:', tags);
+    if (images) {
+      console.log('handleSubmit Images:', images);
+    }
 
     
   };
@@ -418,7 +465,7 @@ const WriteNewPost: React.FC = () => {
   };
   const savePost = async () => {
     const tagArray = tags.length > 0 ? tags : [];
-
+    
     if(!title || !content){
       alert(errorMessage);
       return;
@@ -473,8 +520,17 @@ const WriteNewPost: React.FC = () => {
     }
     
     try {
+        
+    console.log('handleSubmit Title:', newPostData.title);
+    console.log('handleSubmit Content:', newContent);
+    console.log('handleSubmit Category:', newPostData.categoryId);
+    console.log('handleSubmit Is Private:', newPostData.public.toString());
+    console.log('handleSubmit Tags:', newPostData.tagNames);
+    if (images) {
+      console.log('handleSubmit Images:', newPostData.uploaded_files);
+    }
 
-
+setLoading(true); 
       const response = await saveNewPost(formData);
       if (response.status === ENUMS.status.SUCCESS) {
 
@@ -492,6 +548,8 @@ const WriteNewPost: React.FC = () => {
       console.error("글 저장 오류:", error);     
       if(error.response) alert(`글 저장 중에 오류가 발생했습니다: ${error.response.data.message}`); 
       return false;
+    }finally{
+      setLoading(false); 
     }
 
   };
@@ -539,11 +597,13 @@ useEffect(() => {
 
   // 비동기 함수 호출
   fetchDraftStatus();
+  //getTempPostDetail(draftId);
 }, [draftId]); // draftId가 변경될 때마다 실행
 
 // 비동기 함수의 정의
 const checkIsDraftId = async (draftID:string) => {
   try {
+
     if (!draftID) {
       console.warn('Draft ID is not set, skipping check.');
       return false;
@@ -562,11 +622,11 @@ const checkIsDraftId = async (draftID:string) => {
 };
 
   /**
-   * 최초 임시저장 게시글 저장
+   * 임시저장 게시글 저장
    * @returns 
    */
   const saveTempPost = async () => {
-
+    
     if(!title || !content){
       alert(errorMessage);
       return;
@@ -625,18 +685,19 @@ const checkIsDraftId = async (draftID:string) => {
       if(isTempPostClicked && isDraftId){
 
         formData.append('draftId', draftId);
-
+        setLoading(true); 
          response = await fixTempPost(formData);
       }else{
-        
+        setLoading(true); 
          response = await saveNewTempPost(formData);
          getTempPosts();
          setIsTempPostClicked(true);
+         setIsTempPostSavedFirst(true);
          
       }
       
       if (response.status === ENUMS.status.SUCCESS) {
-        getTempPostDetail(draftId);
+
         setOpenModal(true);
         setAutoSaveTime(getCurrentTime());
         
@@ -647,8 +708,10 @@ const checkIsDraftId = async (draftID:string) => {
        console.error("글 저장 오류:", error);     
 
        return false;
+    }finally{
+      setLoading(false); 
     }
-
+   
   }
 
   useEffect(() => {
@@ -696,6 +759,7 @@ const checkIsDraftId = async (draftID:string) => {
     };
     const fetchCategories = async () => {
       try {
+      
         const fetchedCategories: any = await getCategories(sessionStorage.getItem('nickname'));
         setCategories(fetchedCategories.hierarchicalCategory);
 
@@ -707,7 +771,7 @@ const checkIsDraftId = async (draftID:string) => {
        
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
       } finally {
-        setLoading(false);
+
       }
     };
   
@@ -776,135 +840,147 @@ const checkIsDraftId = async (draftID:string) => {
   return (
     <div className="App">
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
-      <main className="write-new-post">
-        <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
-          <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
-            {category.category_name}
-          </button>
-          {dropdownOpen && (
-            <div className="dropdown-menu">
-              {renderCategoryMenu(categories)}
+      {!loading &&(
+          <main className="write-new-post">
+          <div className="dropdown" ref={dropdownRef} style={{ width: '300px' }}>
+            <button className="dropdown-toggle" onClick={() => setDropdownOpen(!dropdownOpen)}>
+              {category.category_name}
+            </button>
+            {dropdownOpen && (
+              <div className="dropdown-menu">
+                {renderCategoryMenu(categories)}
+              </div>
+            )}
+          </div>
+          <Form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
+          <div className="title-and-privacy">
+            <Form.Group controlId="formTitle" className="title-input-group">
+              <Form.Control
+                type="text"
+                placeholder="제목을 입력하세요"
+                value={title}
+                onChange={handleTitleChange}
+                className="form-control title-input"
+                isInvalid={!!errors.title}
+              />
+              <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.title}</Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="formPrivate" className="privacy-checkbox-group">
+              <Form.Check
+                type="checkbox"
+                label="공개"
+                checked={status}
+                onChange={handlePrivacyChange}
+                className="private"
+              />
+            </Form.Group>
             </div>
-          )}
-        </div>
-        <Form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
-        <div className="title-and-privacy">
-          <Form.Group controlId="formTitle" className="title-input-group">
-            <Form.Control
-              type="text"
-              placeholder="제목을 입력하세요"
-              value={title}
-              onChange={handleTitleChange}
-              className="form-control title-input"
-              isInvalid={!!errors.title}
-            />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.title}</Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group controlId="formPrivate" className="privacy-checkbox-group">
-            <Form.Check
-              type="checkbox"
-              label="공개"
-              checked={status}
-              onChange={handlePrivacyChange}
-              className="private"
-            />
-          </Form.Group>
-          </div>
-  
-          <div className="separator"></div> {/* 구분선 추가 */}
-  
-          <Form.Group controlId="formContent">
-            <ReactQuill
-              ref={quillRef}
-              value={content}
-              onChange={handleContentChange}
-              modules={{
-                toolbar: [
-                  [{ header: '1' }, { header: '2' }, { font: [] }],
-                  [{ list: 'ordered' }, { list: 'bullet' }],
-                  ['bold', 'italic', 'underline'],
-                  [{ color: [] }, { background: [] }],
-                  [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
-                  ['link', 'image'],
-                  ['clean'],
-                ],
-              }}
-              formats={[
-                'header',
-                'font',
-                'list',
-                'bullet',
-                'bold',
-                'italic',
-                'underline',
-                'color',
-                'background',
-                'align',
-                'link',
-                'image',
-              ]}
-              className="form-control textarea"
-            />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.content}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group controlId="formTagInput">
-            <Form.Control
-              type="text"
-              placeholder="태그를 입력하고 엔터를 누르세요 (최대 10개)"
-              value={tagInput}
-              onChange={handleTagInputChange}
-              onKeyDown={handleTagInputKeyDown}
-              onCompositionStart={() => setIsComposing(true)}
-              onCompositionEnd={() => setIsComposing(false)}
-              className="tagInput"
-            />
-            <Form.Control.Feedback style={{color:'red'}} type="invalid">{tagError}</Form.Control.Feedback>
-          </Form.Group>
-  
-          <div className="tags">
-            {tags.map((tag) => (
-              <span key={tag} className="tag">
-                {tag}
-                <button type="button" onClick={() => handleTagRemove(tag)}>
-                  &times;
-                </button>
-              </span>
-            ))}
-          </div>
           
-          {openTempPostList &&notificationButtonRef.current && (
-             <TempPostList onClose={closeModal} buttonRef={notificationButtonRef} onGetDraftId={handleDraftId} onSendTotalCount={handleTotalCount}/>
-          )}
+            <div className="separator"></div> {/* 구분선 추가 */}
           
-          <div className="button-group">
-
-            <div className='temp-save' ref={notificationButtonRef}>
-              <Button variant="secondary" type="button" >
-                <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignContent:'center', alignItems:'center'}}>
-                  <span className='tempsave' onClick={saveTempPost}>임시저장 </span>
-                  <img src={divider} className='divider'></img>
-                  <span className='total-tempsave' onClick={()=>{setOpenTempPostList(true)}}>{tempPostsTotalCount}</span>
-                </div>
-
-              </Button>
-              {autoSaveTime &&(
-                  <span className='tempsave-fin'>임시저장 완료 {autoSaveTime}</span>
-              )}
-             
+            <Form.Group controlId="formContent">
+              <ReactQuill
+                ref={quillRef}
+                value={content}
+                onChange={handleContentChange}
+                modules={{
+                  toolbar: [
+                    [{ header: '1' }, { header: '2' }, { font: [] }],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['bold', 'italic', 'underline'],
+                    [{ color: [] }, { background: [] }],
+                    [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+                    ['link', 'image'],
+                    ['clean'],
+                  ],
+                }}
+                formats={[
+                  'header',
+                  'font',
+                  'list',
+                  'bullet',
+                  'bold',
+                  'italic',
+                  'underline',
+                  'color',
+                  'background',
+                  'align',
+                  'link',
+                  'image',
+                ]}
+                className="form-control textarea"
+              />
+              <Form.Control.Feedback style={{color:'red'}} type="invalid">{errors.content}</Form.Control.Feedback>
+            </Form.Group>
+              
+            <Form.Group controlId="formTagInput">
+              <Form.Control
+                type="text"
+                placeholder="태그를 입력하고 엔터를 누르세요 (최대 10개)"
+                value={tagInput}
+                onChange={handleTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
+                onCompositionStart={() => setIsComposing(true)}
+                onCompositionEnd={() => setIsComposing(false)}
+                className="tagInput"
+              />
+              <Form.Control.Feedback style={{color:'red'}} type="invalid">{tagError}</Form.Control.Feedback>
+            </Form.Group>
+              
+            <div className="tags">
+              {tags.map((tag) => (
+                <span key={tag} className="tag">
+                  {tag}
+                  <button type="button" onClick={() => handleTagRemove(tag)}>
+                    &times;
+                  </button>
+                </span>
+              ))}
             </div>
             
-            <TempSaveNoti openModal={openModal}></TempSaveNoti>
+            {openTempPostList &&notificationButtonRef.current && (
+               <TempPostList onClose={closeModal} buttonRef={notificationButtonRef} onGetDraftId={handleDraftId} onSendTotalCount={handleTotalCount}/>
+            )}
 
+            <div className="button-group">
+          
+              <div className='temp-save' ref={notificationButtonRef}>
+                <Button variant="secondary" type="button" >
+                  <div style={{display:'flex', flexDirection:'row', justifyContent:'center', alignContent:'center', alignItems:'center'}}>
+                    <span className='tempsave' onClick={saveTempPost}>임시저장 </span>
+                    <img src={divider} className='divider'></img>
+                    <span className='total-tempsave' onClick={()=>{setOpenTempPostList(true)}}>{tempPostsTotalCount}</span>
+                  </div>
+          
+                </Button>
+                {autoSaveTime &&(
+                    <span className='tempsave-fin'>임시저장 완료 {autoSaveTime}</span>
+                )}
 
-
-            <Button onClick={savePost} variant="primary" type="submit">
-              저장
-            </Button>
-          </div>
-        </Form>
-        <SSEComponent onNotification={handleNotification}></SSEComponent>
-      </main>
+              </div>
+              
+              <TempSaveNoti openModal={openModal}></TempSaveNoti>
+              
+              
+              
+              <Button onClick={savePost} variant="primary" type="submit">
+                저장
+              </Button>
+            </div>
+          </Form>
+          <SSEComponent onNotification={handleNotification}></SSEComponent>
+        </main>
+      )}
+      {loading &&(
+         <main className="write-new-post">
+           <div style={{ textAlign: 'center', padding: '20px', fontSize: '18px', color: '#555' }}>
+                    <div style={{ marginBottom: '10px' }}>
+                      <img src={spinner} alt="Loading..." style={{ width: '50px', height: '50px' }} />
+                    </div>
+                    <span>로딩 중...</span>
+                  </div>
+         </main>
+      )}
       <Footer />
     </div>
   );
