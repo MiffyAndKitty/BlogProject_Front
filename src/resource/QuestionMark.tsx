@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import type { SVGProps } from 'react';
 import './QuestionMark.css';
 
-type QuestionMarkType = 'Follow' | 'tag' | 'category';
+type QuestionMarkType = 'Follow' | 'tag' | 'category' |'Profile';
 
 interface QuestionMarkProps extends SVGProps<SVGSVGElement> {
   type: QuestionMarkType;
@@ -15,8 +15,12 @@ export function QuestionMark({ type, ...props }: QuestionMarkProps) {
   const TAG_MESSAGE = `특정 시간대에 인기태그가 없다면 \n대체태그가 보여지며, 회색으로 표시됩니다.`;
   const FOLLOW_MESSAGE = `회색 테두리로 표시된 블로거는 10명을 채우기 위해 \n 무작위로 추천된 대체 블로거입니다.`;
   const CATEGORY_MESSAGE = `카테고리 위치는 1레벨만 수정할 수 있으며, \n 다른 0레벨에 속한 1레벨로만 이동이 가능합니다.`;
+  const PROFILE_MESSAGE = `해당 블로거를 팔로우할 있으며,\n 팔로우된 블로거일 경우 당근에 색상이 표시됩니다.`
   // 메시지 결정
-  const tooltipMessage = type === 'tag' ? TAG_MESSAGE : type==='Follow'? FOLLOW_MESSAGE: CATEGORY_MESSAGE ;
+  const tooltipMessage = type === 'tag' ? TAG_MESSAGE :
+   type==='Follow'? FOLLOW_MESSAGE:
+   type==='category'? CATEGORY_MESSAGE :PROFILE_MESSAGE
+   ;
 
   return (
     <div 

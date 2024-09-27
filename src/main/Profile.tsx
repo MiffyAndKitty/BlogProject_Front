@@ -12,7 +12,7 @@ import   Follow from '../myblog/Follow';
 import   Follower from '../myblog/Follower';
 import Cursor from 'quill/blots/cursor';
 import { deleteFollow } from '../services/deleteService';
-
+import { QuestionMark } from '../resource/QuestionMark';
 const firebaseConfig = {
   apiKey: "AIzaSyCfoepTZGKKL7SubUSCy81pHHag-vDSWmY",
   authDomain: "mk-blog-e88c8.firebaseapp.com",
@@ -421,12 +421,16 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             </div>
         </div>
 
-        <div className="login-buttons-container">
-          <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
-            <img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
+        <div style={{display:'flex', alignItems:'center'}}>
+          <QuestionMark type='Profile'></QuestionMark>
+          <div className="login-buttons-container">
+            <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
+              <img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
             </div>
+          </div>
         </div>
-
+        
+        
         <div className="logins_profile">
         <button onClick={openModal}  style={{cursor:'pointer'}}>팔로우</button>
         {isModalOpen && <Follow onClose={closeModal} isOthers={true} otherEmail={otherEmail} profileNickname={nicknameParam} />}

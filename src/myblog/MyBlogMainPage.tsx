@@ -152,6 +152,8 @@ const MyBlogMainPage: React.FC = () => {
               {postID ? ( //Post Detail
                 <>
                 <div className="blog-main-detail-container">
+
+                <div className='sticky-profile-blog'>
                   {/* Profile */}
                   {(!token && !isDeleteUser&&(
                     <Profile 
@@ -203,7 +205,7 @@ const MyBlogMainPage: React.FC = () => {
                     </section>
                   )}
                  
-
+                  </div>
                   <section className='main-blog-detail-posts-section'>
                   <PostDetail isDeleteUser={isDeleteUser}/>
                   </section>
@@ -213,6 +215,8 @@ const MyBlogMainPage: React.FC = () => {
                 <>
                 <div className="blog-main-container">
                   {/* Profile */}
+
+                  <div className='sticky-profile-blog'>
                   {(!token && !isDeleteUser&&(
                     <Profile 
                       pageType="signup_for_blog" 
@@ -257,7 +261,7 @@ const MyBlogMainPage: React.FC = () => {
                       </section>
                   )}
                  
-
+                 </div>
                   <section className='main-blog-posts-section'>
                     <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} isDeleteUser={isDeleteUser}/>
                   </section>

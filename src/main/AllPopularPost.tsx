@@ -327,8 +327,17 @@ const AllPopularPost: React.FC = () => {
       <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
       <main className="blog-main-container">
      
-        {(!token && <Profile pageType="no-login-section" />)}
-        {(token &&<Profile pageType="profileSetting" nicknameParam={localNickName}/>)}
+        {(!token && 
+          <div className='sticky-profile'>
+            <Profile pageType="no-login-section" />
+          </div>
+        )}
+        {(token &&
+           <div className='sticky-profile'>
+              <Profile pageType="profileSetting" nicknameParam={localNickName}/>
+            </div>
+          
+        )}
 
           <section className='main-blog-posts-section'>
             {

@@ -380,12 +380,12 @@ const GetPost: React.FC = () => {
         <>
        <Header pageType="otherblog" hasNotifications ={hasNotifications}/>
         <main className="blog-main-container">
-      
+        <div className='sticky-profile'>
           <Profile 
           pageType="postManage" 
           nicknameParam={nickname} 
           />
-  
+        </div>
           <section className='main-blog-posts-section'>
               <div className='getPost-container'>
                 <div className='tabs'>
