@@ -230,7 +230,7 @@ const GetPost: React.FC = () => {
     if (selectedPostId) {
       // 실제 삭제 로직을 여기에 추가
       removePost(selectedPostId);
-      console.log(`Post ${selectedPostId} deleted`);
+
     }
     setIsModalOpen(false);
     setSelectedPostId(null);
@@ -244,18 +244,18 @@ const GetPost: React.FC = () => {
     try {
       const nickname=sessionStorage.getItem('nickname');
       setNickname(nickname);
-      console.log(`
-        =========fetchPosts [게시글 관리]==========
+      // console.log(`
+      //   =========fetchPosts [게시글 관리]==========
         
-        nickname:${nickname}
-        page:${page}
-        cursor :${cursor}
-        isBefore:${isBefore}
-        categoryID:${categoryID}
-        query:${query}
+      //   nickname:${nickname}
+      //   page:${page}
+      //   cursor :${cursor}
+      //   isBefore:${isBefore}
+      //   categoryID:${categoryID}
+      //   query:${query}
         
 
-        `)
+      //   `)
       const fetchedPosts = await getPosts(nickname,page, cursor,isBefore,categoryID,query);
       setIsWriter(fetchedPosts.data.isWriter);
       
@@ -267,17 +267,8 @@ const GetPost: React.FC = () => {
       setTotalPages(fetchedPosts.data.total.totalPageCount || 1); // 수정된 부분
       const fetchedCategories: any = await getCategories(nickname);
       setCategories(fetchedCategories.hierarchicalCategory);
-      // if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
-      //   setCursor(fetchedPosts.data.data[fetchedPosts.data.data.length - 1].board_id);
-      // }
-      console.log(`
 
-
-        GetPost 
-        ----fetchedPosts---- 
-
-
-        `,fetchedPosts.data.data, posts);
+   
     } catch (err) {
       if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');

@@ -32,8 +32,7 @@
 
 .popularpost-section {
     padding: 20px;
-    position: relative; /* 부모 컨테이너를 기준으로 애니메이션 제한 */
-    overflow: hidden; /* 애니메이션이 부모 밖으로 나가지 않도록 */
+
   }
   
   .posts {
@@ -41,9 +40,6 @@
     gap: 20px;
     position: relative;
     transition: transform 0.5s ease-in-out;
-  }
-  .slide-in {
-    transform: translateX(100%);
   }
   
   .slide-out {

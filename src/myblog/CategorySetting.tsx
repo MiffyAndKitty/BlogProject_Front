@@ -37,20 +37,20 @@ const CategorySettings = () => {
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return; // 이동이 없으므로 종료
     }
-    console.log(`
+    // console.log(`
 
 
 
 
-      [result]
-    draggableId :${draggableId}
-    sourceParentId :${sourceParentId}
-    destinationParentId: ${destinationParentId}
+    //   [result]
+    // draggableId :${draggableId}
+    // sourceParentId :${sourceParentId}
+    // destinationParentId: ${destinationParentId}
 
 
 
 
-    `,destination, source, draggableId )
+    // `,destination, source, draggableId )
 
     try {
       if (sourceParentId === destinationParentId) {
@@ -188,7 +188,22 @@ const CategorySettings = () => {
       setLoading(false);
     }
   };
-
+   // 문자열의 바이트 길이 계산 함수
+   const getByteLength = (str: string) => {
+    let byteLength = 0;
+    for (let i = 0; i < str.length; i++) {
+        byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+    }
+    return byteLength;
+ };
+  const changeCategory = (value:string)=>{
+    if(getByteLength(value)>48){
+      alert('카테고리는 한글16자/영문48자 이하로 입력해주세요.')
+    }else{
+      setNewCategoryName(value);
+    }
+    
+  };
   const removeCategory = async (categoryId: string) => {
     try {
       await deleteCategory(categoryId);
@@ -219,7 +234,7 @@ const CategorySettings = () => {
          className='inputNewCategory'
          type="text"
          value={newCategoryName}
-         onChange={(e) => setNewCategoryName(e.target.value)}
+         onChange={(e) => changeCategory(e.target.value)}    
          placeholder="새 최상위 카테고리"
        />
        <button className='addCategoryBtn' onClick={addCategory}>새 카테고리 추가하기</button>

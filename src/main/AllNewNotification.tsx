@@ -11,6 +11,10 @@ import spinner from '../img/Spinner.png';
 import noPosts from '../img/noPosts.png';
 import SSEComponent from './SSEComponent';
 import { deleteNotification } from '../services/deleteService';
+import previous from '../img/previous.png';
+import next from '../img/next.png';
+import fastPrevious from '../img/fast_previous.png';
+import fastNext from '../img/fast_next.png';
 
 interface NotificationData {
   notification_id: string;
@@ -42,7 +46,7 @@ const AllNewNotification: React.FC = () => {
   const navigate = useNavigate();
   const [hasNotifications, setHasNotifications] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-
+  const [page, setPage] = useState(0);
 
   useEffect(() => {
     const localNickname = sessionStorage.getItem("nickname");
@@ -59,36 +63,13 @@ const AllNewNotification: React.FC = () => {
   const fetchNotifications = async (type: string | null = filterType, pageSize: number = 10) => {
     try {
       setLoading(true); 
-      console.log('Fetching notifications with isBefore:', isBefore); // 디버깅 로그
-      const fetchedNotification = await getNotificationsList(type, pageSize, cursor, isBefore);
+
+      const fetchedNotification = await getNotificationsList(type, pageSize, cursor, isBefore,page);
       if (fetchedNotification.result) {
         setNotifications(fetchedNotification.data||[]);
         if(fetchedNotification.total.totalPageCount ===0) setTotalPages(1);
         else setTotalPages(fetchedNotification.total.totalPageCount);
-        // if (currentPage === 1 || currentPage === totalPages) { // 수정된 부분
 
-        //   console.log(`
-            
-            
-            
-            
-            
-            
-            
-        //     fetchedNotification.data
-            
-            
-            
-            
-            
-            
-            
-        //     `,fetchedNotification.data)
-
-
-
-        //   setCursor(fetchedNotification.data[fetchedNotification.data.length - 1].notification_id||'');
-        // }
       }
     } catch (error) {
       console.error('Error fetching notifications:', error);
@@ -121,7 +102,8 @@ const AllNewNotification: React.FC = () => {
     setFilterType(type);
     setCurrentPage(1);
     setCursor('');
-   // fetchNotifications(type, 10);
+    setPage(0);
+
   };
   const truncateText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
@@ -246,22 +228,70 @@ const AllNewNotification: React.FC = () => {
       return `${year}.${month}.${day} ${ampm} ${strHours}:${minutes}:${seconds}`;
     }
   };
+  const goToFirstPage = () =>{
+    setPage(Math.abs(currentPage - 1));
+    setCursor(notifications[0].notification_id);
+    setIsBefore(true);
+    setCurrentPage(1);
+    //fetchPosts(undefined,null, search, sort);  // 게시글 가져오기 함수 호출
+  };
+  const goToLastPage = () =>{
+
+    setCursor(notifications[notifications.length - 1].notification_id);
+    setPage(totalPages-currentPage);
+    setCurrentPage(totalPages);
+    setIsBefore(false);
+    //fetchPosts(cursor,null,searchTerm,sortOption);
+  };
   const handlePreviousPage = () => {
     if (currentPage > 1) {
-
       setCursor(notifications[0].notification_id);
-      setCurrentPage(prevPage => prevPage - 1);
+      setPage(1);
       setIsBefore(true);
-  
+      setCurrentPage(currentPage - 1);
     }
   };
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prevPage => prevPage + 1);
-      setIsBefore(false);
       setCursor(notifications[notifications.length - 1].notification_id);
+      setPage(1);
+      setIsBefore(false);
+      setCurrentPage(currentPage + 1);
     }
+  };
+
+  const goToPage = (page:number)=>{
+    if(currentPage - page >0){
+      setCursor(notifications[0].notification_id);
+      setIsBefore(true);
+    }else{
+      setCursor(notifications[notifications.length - 1].notification_id);
+      setIsBefore(false);
+    }
+    setPage(Math.abs(currentPage - page));
+    setCurrentPage(page);
+  };
+   // renderPages 함수 수정: 현재 페이지를 중심으로 5개의 페이지를 반환
+   const renderPages = (currentPage: number, totalPages: number) => {
+    let pages = [];
+    const maxVisiblePages = 5; // 최대 표시할 페이지 수
+
+    // 현재 페이지를 중심으로 시작 페이지와 끝 페이지를 계산
+    let startPage = Math.max(currentPage - 2, 1);
+    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+  
+    // 끝 페이지가 전체 페이지보다 큰 경우 시작 페이지 조정
+    if (endPage === totalPages && endPage - startPage < maxVisiblePages - 1) {
+      startPage = Math.max(endPage - maxVisiblePages + 1, 1);
+    }
+  
+    // 페이지 목록 생성
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+
+    return pages;
   };
   const handleNotification = (isNotified: boolean) => {
     setHasNotifications(isNotified); // 알림이 발생하면 true로 설정
@@ -329,9 +359,34 @@ const AllNewNotification: React.FC = () => {
              
             </div>
             <div className="pagination">
-              <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>이전</button>
-              <span className="pagination-info">{currentPage} / {totalPages}</span>
-              <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>다음</button>
+
+              <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+                <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+              <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                <img src={previous} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+
+               {renderPages(currentPage, totalPages).map(page => (
+              <button
+                key={page}
+                className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+              ))}
+
+              <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <img src={next} style={{width:'20px', height:'20px'}}/>
+              </button>
+
+              <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+                <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+              </button>
+
             </div>
           </section>
 

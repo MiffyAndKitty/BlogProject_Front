@@ -37,7 +37,12 @@ const FixPost: React.FC = () => {
   const errorMessage ='제목과 내용을 모두 입력해주세요!';
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    if(getByteLength(e.target.value) >300){
+      alert('제목은 한글100자/영문300자 이하로 입력해주세요.')
+    }else{
+      setTitle(e.target.value);
+    }
+    
   };
 
   const handleContentChange = (value: string) => {
@@ -75,8 +80,20 @@ const FixPost: React.FC = () => {
       </>
     );
   };
+  const getByteLength = (str: string) => {
+    let byteLength = 0;
+    for (let i = 0; i < str.length; i++) {
+        byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+    }
+    return byteLength;
+ };
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagInput(e.target.value);
+    if(getByteLength(e.target.value)>45){
+      alert('태그는 한글15자/영문45자 이하로 입력해주세요.')
+    }else{
+      setTagInput(e.target.value);
+    }
+   
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -98,15 +115,15 @@ const FixPost: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // 여기에 글을 제출하는 로직을 추가하세요 (예: API 호출)
-    console.log('Title:', title);
-    console.log('Content:', content);
-    console.log('Category:', category);
-    console.log('Is Private:', status);
-    console.log('Tags:', tags);
-    if (images) {
-      console.log('Image:', images);
-    }
+   
+    // console.log('Title:', title);
+    // console.log('Content:', content);
+    // console.log('Category:', category);
+    // console.log('Is Private:', status);
+    // console.log('Tags:', tags);
+    // if (images) {
+    //   console.log('Image:', images);
+    // }
   };
   const dataURLToBlob = (dataURL: string) => {
     const arr = dataURL.split(',');
@@ -133,8 +150,8 @@ const FixPost: React.FC = () => {
           img.src = newSrc;
           newImages.push(file);
           setImages(newImages); // 상태를 새 배열로 업데이트
-          console.log('Images set in handleContentChange:', newImages);
-          console.log('newSrc, file, newImages', newSrc, file, newImages);
+          // console.log('Images set in handleContentChange:', newImages);
+          // console.log('newSrc, file, newImages', newSrc, file, newImages);
         }
         else{
           
@@ -172,7 +189,7 @@ const FixPost: React.FC = () => {
       return;
     }
     const imagesFromSaveImgs = await saveImgs();
-    console.log('Images in savePost before formData:', imagesFromSaveImgs);
+    // console.log('Images in savePost before formData:', imagesFromSaveImgs);
 
     /**
      * content 영역의 img 태그들을 모두 가져와서 src를 image_${index + 1}로 변경하는 작업 
@@ -193,7 +210,7 @@ const FixPost: React.FC = () => {
     
       // 변경된 content를 다시 업데이트
       newContent = clonedEditor.innerHTML;
-      console.log('변경된 content:', quillEditor.root.innerHTML);
+     // console.log('변경된 content:', quillEditor.root.innerHTML);
     }
 
 
@@ -221,21 +238,7 @@ const FixPost: React.FC = () => {
     }
     
     try {
-      console.log(`
-      
-      
-      
-      
-        fixpost
-        savePost 에서 newPostData
-        
-        
-        
-        
-        
-        
-        
-        `,newPostData)
+
       const response = await fixPost(formData);
       if (response.status === ENUMS.status.SUCCESS) {
         alert("글 저장에 성공했습니다!!");
@@ -265,13 +268,7 @@ const FixPost: React.FC = () => {
     const categoryId = post.category_id;
     //const categoryItem = categories.find(cat => cat.category_id === categoryId);
     const categoryItem = findCategoryById(categories, categoryId);
-    console.log(`
-      
-      
-      categoryItem categories
-      
-      
-      `,categoryItem,categories)
+
     if (categoryItem) {
       setCategory(categoryItem);
     }
@@ -295,12 +292,11 @@ const FixPost: React.FC = () => {
   useEffect(() => {
     const fetchCategoriesAndPost = async () => {
       try {
-        console.log(`sessionStorage.getItem("nickname"): `, sessionStorage.getItem("nickname"))
+      
         const fetchedCategories: any= await getCategories(sessionStorage.getItem("nickname"));
         setCategories(fetchedCategories.hierarchicalCategory);
-        console.log(`setCategories:`, fetchedCategories.hierarchicalCategory);
+      
         const fetchedPosts = await getPost(postID);
-        console.log(`fetchedPosts`, fetchedPosts.data);
         setPost(fetchedPosts.data, fetchedCategories.hierarchicalCategory); // 카테고리를 함께 전달
       } catch (err) {
         if(err.response){
@@ -317,11 +313,6 @@ const FixPost: React.FC = () => {
     fetchCategoriesAndPost();
   }, [navigate]);
 
-  useEffect(() => {
-    console.log(`
-      categories
-    `, categories);
-  }, [categories]);
   
   useEffect(() => {
     try {

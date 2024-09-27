@@ -28,7 +28,7 @@ export const fixPost = async (postData: FormData): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+ 
   return response;
 
 };
@@ -44,7 +44,7 @@ export const fixTempPost = async (postData: FormData): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+ 
   return response;
 
 };
@@ -60,7 +60,7 @@ export const updateCategory = async (postData: TYPES.changeCategory): Promise<an
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+  
   return response;
 
 };
@@ -76,7 +76,7 @@ export const updateCategoryLevel = async (postData: Object): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+  
   return response;
 
 };
@@ -92,7 +92,7 @@ export const updateProfile = async (postData:Object): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+ 
   return response;
 
 };
@@ -108,7 +108,7 @@ export const fixComment = async (postData: object): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+ 
   return response;
 
 };

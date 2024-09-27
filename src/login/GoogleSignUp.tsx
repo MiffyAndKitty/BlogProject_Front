@@ -67,8 +67,7 @@ const SignUp: React.FC = () => {
 
     try {
       const response = await setSignUp(newPost);
-      console.log(`setSignUpResult`,response.result.toString())
-      console.log(`signUpResult`,signUpResult)
+
       setSignUpResult(response.result.toString());
       return response.result;
     } catch (error) {
@@ -82,7 +81,10 @@ const SignUp: React.FC = () => {
       const newErrors = {
         email: validateEmail(email) ? '' : '유효한 이메일 주소를 입력하세요.',
         password: validatePassword(password) ? '' : '비밀번호는 8자 이상, 소문자, 숫자, 특수문자를 포함해야 합니다.',
-        nickname: validateNickname(nickname) ? '' : '닉네임을 입력하세요.',
+        nickname:
+         !validateNickname(nickname)
+          ? '닉네임을 입력하세요.'
+          :  '',
       };
       if (validateEmail(email)) {
         const isEmailDuplicate = await checkDuplication('user_email', email);
@@ -117,13 +119,26 @@ const SignUp: React.FC = () => {
 
     if(token !== sessionStorage.getItem('accessToken')) navigate(-1);
   },[]);
-
+   // 문자열의 바이트 길이 계산 함수
+   const getByteLength = (str: string) => {
+    let byteLength = 0;
+    for (let i = 0; i < str.length; i++) {
+        byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+    }
+    return byteLength;
+  };
+  const changeNickName = (value:string)=>{
+    
+    
+    if(getByteLength(value)>30){
+     alert('닉네임은 한글10자/영문30자 이하로 입력해주세요.');
+    }else{
+     setNickname(value);
+    }
+  
+  }
   useEffect(() => {
-    console.log(`
-    
-    signUpResult
-    
-    `,signUpResult)
+
     if (signUpResult === 'true') {
       alert("회원가입에 성공했습니다!!");
       sessionStorage.setItem('nickname', nickname);
@@ -147,10 +162,11 @@ const SignUp: React.FC = () => {
             <Form.Control 
               placeholder="닉네임" 
               value={nickname} 
-              onChange={(e) => setNickname(e.target.value)} 
+              onChange={(e) =>  changeNickName(e.target.value)} 
               onBlur={() => setTouched({ ...touched, nickname: true })}
               isInvalid={touched.nickname && !!errors.nickname}
               className="transparent-input"
+          
             />
             
           </Form.Group>

@@ -14,29 +14,43 @@ import closeEye from '../img/closeEye.png';
 const MyProfileSetting: React.FC = () => {
     // const { nickname } = useParams();
     const [newNick, setNewNick] = useState<string>('');
+    const [newNickField, setNewNickField] = useState<string>('');
+    const [saveNickname, setSaveNickname] = useState(false);
+
     const [image, setImage] = useState<string | null>(null);
+    const [tempImage, setTempImage] = useState<string | null>(null);
     const [saveImage, setSaveImage] = useState<File | null>(null);
+
     const [userData, setUserData] = useState<any>(null);
     const [editingField, setEditingField] = useState<string | null>(null);
+
+    const [newMessage, setNewMessage] = useState<string>('');
+    const [saveNewMessage,setSaveNewMessage] = useState<boolean>(false);
+
     const [currentPassword, setCurrentPassword] = useState<string>('');
     const [newPassword, setNewPassword] = useState<string>('');
-    const [sendPassword, setSendPassword] = useState<string>('');
     const [confirmPassword, setConfirmPassword] = useState<string>('');
+
     const [hasNotifications, setHasNotifications] = useState<boolean>(false);
+
     const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
     const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
     const [isNewConfirmPasswordVisible, setIsNewConfirmPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
+
+
     const [errors, setErrors] = useState({
         password: '',
         newPassword: '',
         newPassword2: '',
         newNick: '',
+        user_message:'',
     });
     const [isOk, setIsOk] = useState({
         password: false,
         newPassword: false,
         newPassword2: false,
-        newNick: false
+        newNick: false,
+        user_message:false
     });
     const [touched, setTouched] = useState({
         newNick: false,
@@ -67,9 +81,12 @@ const MyProfileSetting: React.FC = () => {
                 navigate('/');
             }
             const fetchedProfile = await getMyProfile(sessionStorageEmail);
+
+            setImage(fetchedProfile.data.user_image);
             setUserData(fetchedProfile.data);
+            setNewMessage(fetchedProfile.data.user_message);
             setNewNick(fetchedProfile.data.user_nickname);
-            
+            setNewNickField(fetchedProfile.data.user_nickname);
             sessionStorage.setItem('nickname', fetchedProfile.data.user_nickname);
             sessionStorage.setItem('image', fetchedProfile.data.user_image);
             sessionStorage.setItem('message', fetchedProfile.data.user_message);
@@ -83,24 +100,89 @@ const MyProfileSetting: React.FC = () => {
         }
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        if (name === 'user_nickname') {
-            setNewNick(value);
-        }
+    // handleChange 함수 수정
+const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
 
-        setUserData(prevState => ({
-            ...prevState,
-            [name]: value,
-        }));
+    // 문자열의 바이트 길이 계산 함수
+    const getByteLength = (str: string) => {
+       let byteLength = 0;
+       for (let i = 0; i < str.length; i++) {
+           byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+       }
+       return byteLength;
     };
+
+    const byteLength = getByteLength(value);
+    // 닉네임과 상태 메시지 글자 수 제한 검증
+    if (name === 'user_nickname') {
+
+       
+
+        setTouched({ newNick: true });
+        setNewNickField(value); // 닉네임 변경 시 상태 업데이트
+        setSaveNickname(true);
+        validateFields(value);
+
+        if (byteLength > 30) {
+            alert('닉네임은 한글10자/영문30자 이하로 입력해주세요.');
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                newNick: '닉네임은 10자 이하로 입력해주세요.',
+            }));
+            setIsOk(prevOk => ({ ...prevOk, newNick: false }));
+        } else {
+          
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                newNick: '',
+            }));
+            setIsOk(prevOk => ({ ...prevOk, newNick: true }));
+        }
+    } else if (name === 'user_message') {
+        setNewMessage(value);
+        setSaveNewMessage(true);
+        if (byteLength > 60) {
+            alert('상태 메시지는 한글 20자/영문 60자 이하로 입력해주세요.');
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                user_message: '상태 메시지는 20자 이하로 입력해주세요.',
+            }));
+            setIsOk(prevOk => ({ ...prevOk,  user_message: false }));
+        } else {
+            setErrors(prevErrors => ({
+                ...prevErrors,
+                user_message: '',
+            }));
+            setIsOk(prevOk => ({ ...prevOk,  user_message: true }));
+        }
+    }
+
+    // setUserData(prevState => ({
+    //     ...prevState,
+    //     [name]: value,
+    // }));
+};
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             const file = e.target.files[0];
             setSaveImage(file);
-            setImage(URL.createObjectURL(file));
+            setTempImage(URL.createObjectURL(file));
         }
+    };
+    const cancelChangePasswd=()=>{
+        setEditingField(null);
+        setCurrentPassword(null);
+        setNewPassword(null);
+        setConfirmPassword(null);
+
+    };
+
+    const cancelProfileImgChange =()=>{
+        setEditingField(null);
+        setSaveImage(null);
+        setTempImage(image);
     };
     const checkDuplication = async (column: string, data: string) => {
         const newPost: CheckDuplicatedData = {
@@ -120,9 +202,9 @@ const MyProfileSetting: React.FC = () => {
     const handleSubmit = async () => {
 
         const formData = new FormData();
-        if(newNick) formData.append('nickname', newNick);
-        if(newPassword) formData.append('password',newPassword);
-        if(userData.user_message) formData.append('statusMessage', userData.user_message);
+        if(saveNickname) formData.append('nickname', newNickField);
+        //if(newPassword) formData.append('password',newPassword);
+        if(saveNewMessage) formData.append('statusMessage',newMessage);
 
         if (saveImage) {
             formData.append('uploaded_files', saveImage);
@@ -131,7 +213,7 @@ const MyProfileSetting: React.FC = () => {
         try {
             await updateProfile(formData);
             alert('프로필이 성공적으로 업데이트되었습니다.');
-
+          
             setEditingField(null);
             fetchMyProfile();
             
@@ -271,30 +353,28 @@ const MyProfileSetting: React.FC = () => {
         fetchMyProfile();
     }, []);
 
-    useEffect(() => {
-        const validateFields = async () => {
-            if (touched.newNick && newNick.trim() !== '') {
-                const isNicknameDuplicate = await checkDuplication('user_nickname', newNick);
-                if (isNicknameDuplicate) {
-                    setErrors(prevErrors => ({
-                        ...prevErrors,
-                        newNick: '',
-                    }));
-                    setIsOk(prevOk => ({ ...prevOk, newNick: true }));
-                } else {
-                    setErrors(prevErrors => ({
-                        ...prevErrors,
-                        newNick: '이미 사용 중인 닉네임입니다.',
-                    }));
-                    setIsOk(prevOk => ({ ...prevOk, newNick: false }));
-                }
-            }else{
+
+    const validateFields = async (newNicks:string) => {
+        if (newNickField.trim() !== '') {
+            const isNicknameDuplicate = await checkDuplication('user_nickname', newNicks);
+            if (isNicknameDuplicate) {
+                setErrors(prevErrors => ({
+                    ...prevErrors,
+                    newNick: '',
+                }));
+                setIsOk(prevOk => ({ ...prevOk, newNick: true }));
+            } else {
+                setErrors(prevErrors => ({
+                    ...prevErrors,
+                    newNick: '이미 사용 중인 닉네임입니다.',
+                }));
                 setIsOk(prevOk => ({ ...prevOk, newNick: false }));
             }
-        };
-    
-        validateFields();
-    }, [newNick, touched.newNick]);
+        }else{
+            setIsOk(prevOk => ({ ...prevOk, newNick: false }));
+        }
+    };
+
     
 
     const renderPasswordFields = () => (
@@ -307,6 +387,7 @@ const MyProfileSetting: React.FC = () => {
                     name="currentPassword"
                     value={currentPassword}
                     onChange={handlePasswordChange}
+                    maxLength={255}  // 이메일 입력 길이 제한
                 />
                 <img
                     src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
@@ -327,6 +408,7 @@ const MyProfileSetting: React.FC = () => {
                         name="newPassword"
                         value={newPassword}
                         onChange={handlePasswordChange}
+                        maxLength={255}  // 이메일 입력 길이 제한
                     />
                     <img
                         src={isNewPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
@@ -346,6 +428,7 @@ const MyProfileSetting: React.FC = () => {
                         name="confirmPassword"
                         value={confirmPassword}
                         onChange={handlePasswordChange}
+                        maxLength={255}  // 이메일 입력 길이 제한
                     />
                     <img
                         src={isNewConfirmPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
@@ -365,10 +448,27 @@ const MyProfileSetting: React.FC = () => {
                 <button disabled={true} style={{backgroundColor:'gray',marginRight:'5px'}}>저장</button>
                 }
                 
-                <button onClick={() => setEditingField(null)}>취소</button>
+                <button onClick={cancelChangePasswd}>취소</button>
             </div>
         </div>
     );
+
+    const cancelChangeNickname = ()=>{
+        setEditingField(null); 
+        setNewNickField(userData.user_nickname);
+        setSaveNickname(false);
+       
+    }
+    const cancelChangeMessage = ()=>{
+        setEditingField(null); 
+        setNewMessage(userData.user_message);
+        setSaveNewMessage(false);
+    }
+
+    const onClickEdit = (field:string)=>{
+        setEditingField(field);
+
+    }
 
     const renderField = (label: string, field: string, type: string = "text", isEditable: boolean = true) => (
         <div className="field-container">
@@ -382,14 +482,9 @@ const MyProfileSetting: React.FC = () => {
                             style={{ background: 'transparent' }}
                             type={type}
                             name={field}
-                            value={field === 'user_nickname' ? newNick : (userData ? userData[field] : '')}
-                            onChange={(e) => {
-                                handleChange(e);
-                                if (field === 'user_nickname') {
-                                    setTouched({ newNick: true });
-                                    setNewNick(e.target.value); // 닉네임 변경 시 상태 업데이트
-                                }
-                            }}
+                            maxLength={10} // 닉네임 글자 수 제한
+                            value={newNickField }
+                            onChange={handleChange}
                         />
 
                         <div className="submit-cancel">
@@ -402,10 +497,32 @@ const MyProfileSetting: React.FC = () => {
                                 cursor: !isOk.newNick ? 'not-allowed' : 'pointer'
                             }}
                             >저장</button>
-                            <button onClick={() => setEditingField(null)}>취소</button>
+                            <button onClick={cancelChangeNickname}>취소</button>
                         </div>
                     </div>
-                ):(
+                ): field === 'user_message' ? ( // 상태 메시지일 때는 textarea로 렌더링
+                    <div>
+                        <textarea
+                            style={{ background: 'transparent', width: '60%', height: '60px' }}
+                            name={field}
+                            value={newMessage}
+                      
+                            onChange={handleChange}
+                        />
+                        <div className="submit-cancel">
+                            <button 
+                            onClick={handleSubmit}
+                            disabled={!isOk.user_message}
+                            style={{
+                                marginRight:'5px',
+                                backgroundColor: !isOk.user_message ? 'gray' : '', // 닉네임 중복 시 회색 버튼
+                                cursor: !isOk.user_message ? 'not-allowed' : 'pointer'
+                            }}
+                            >저장</button>
+                            <button onClick={cancelChangeMessage}>취소</button>
+                        </div>
+                    </div>
+                ) :(
                     <div>
                         <input
                             style={{ background: 'transparent' }}
@@ -435,7 +552,7 @@ const MyProfileSetting: React.FC = () => {
                     <span style={{ background: 'transparent' }}>
                         {field === 'user_password' ? '********' : userData ? userData[field] : ''}
                     </span>
-                    {isEditable && <button onClick={() => setEditingField(field)}>수정</button>}
+                    {isEditable && <button onClick={() => onClickEdit(field)}>수정</button>} 
                 </div>
             )}
         </div>
@@ -443,7 +560,7 @@ const MyProfileSetting: React.FC = () => {
     
 
     return (
-        <div className="App">
+        <div className="App" >
             <Header pageType="profileSetting" hasNotifications ={hasNotifications}/>
             <main className="blog-main-container">
                
@@ -466,12 +583,12 @@ const MyProfileSetting: React.FC = () => {
 
                                                     <div className='image-submit'>
                                                         <input type="file" onChange={handleImageChange} />
-                                                        {image && <img src={image} alt="프로필 이미지"/>}
+                                                        {tempImage && <img src={tempImage} alt="프로필 이미지"/>}
                                                     </div>
 
                                                     <div  className='submit-cancel'>
                                                         <button style={{marginRight:'5px'}} onClick={handleSubmit}>저장</button>
-                                                        <button style={{marginRight:'5px'}} onClick={() => setEditingField(null)}>취소</button>
+                                                        <button style={{marginRight:'5px'}} onClick={cancelProfileImgChange}>취소</button>
                                                     </div>
                                                 </div>
                                             ) : (
@@ -487,7 +604,10 @@ const MyProfileSetting: React.FC = () => {
                                         {errors.newNick && <p style={{color:'red', minHeight: '20px', fontSize:'12px'}}>{errors.newNick}</p>}
 
                                         { userData.user_provider !== 'google' && (renderField('비밀번호', 'user_password', 'password' ))} {/* Google 계정일 경우 수정 불가 */}
+
                                         {renderField('상태 메시지', 'user_message')}
+                                        {errors. user_message && <p style={{color:'red', minHeight: '20px', fontSize:'12px'}}>{errors. user_message}</p>}
+
                                         <div style={{marginTop:'50px'}}>
                                             <label className='toGray'>서비스 가입일:</label>
                                             <span className='toGray'>{formatDate(userData.created_at)}</span>

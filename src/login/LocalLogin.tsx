@@ -66,10 +66,9 @@ const LocalLogin: React.FC = () => {
       response = await setLogin(newPost);
       const loginSuccess = response.data.result;
       const message = response.data.message;
-      console.log(`checkSetLoginResult`,loginSuccess.toString())
-      console.log(`loginResult`,loginResult)
+
       setLoginResult(loginSuccess.toString());
-      console.log(response);
+ 
 
       if (loginSuccess.toString() === 'true' && response.headers['authorization']) {
         sessionStorage.setItem('accessToken', response.headers['authorization']);
@@ -91,7 +90,7 @@ const LocalLogin: React.FC = () => {
   const fetchMyProfile = async (email: string) => {
     try {
       const fetchedProfile = await getMyProfile(email);
-      console.log('fetchedProfile.data.user_nickname', fetchedProfile.data.user_nickname);
+
       setNickname(fetchedProfile.data.user_nickname);
       setMessage(fetchedProfile.data.user_message);
       setImage(fetchedProfile.data.user_image);
@@ -176,6 +175,7 @@ const LocalLogin: React.FC = () => {
                   onBlur={() => setTouched({ ...touched, email: true })}
                   isInvalid={touched.email && !!errors.email}
                   className="transparent-input"
+                  maxLength={255}  // 이메일 입력 길이 제한
                 />
                 </div>
               
@@ -194,6 +194,7 @@ const LocalLogin: React.FC = () => {
                     onBlur={() => setTouched({ ...touched, password: true })}
                     isInvalid={touched.password && !!errors.password}
                     className="transparent-input"
+                    maxLength={255}  // 이메일 입력 길이 제한
                   />
                    <img
                     src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
@@ -201,6 +202,7 @@ const LocalLogin: React.FC = () => {
                     className="toggle-password-visibility"
                     onClick={() => setIsPasswordVisible(!isPasswordVisible)} // 클릭 시 상태 변경
                     style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                    
                   />
                 </div>
                

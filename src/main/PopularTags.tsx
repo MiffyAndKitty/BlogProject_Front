@@ -14,11 +14,7 @@ const PopularTags: React.FC = () => {
   const fetchTags = async () => {
     try {
       const fetchedTags = await getPopTags();
-      console.log(`
-        
-        fetchedTags
-        
-        `,fetchedTags)
+
       setTags(fetchedTags.data);
     } catch (err) {
       if(err.response) alert(`태그들을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
@@ -31,8 +27,8 @@ const PopularTags: React.FC = () => {
   useEffect(() => {
     fetchTags();
     const now = new Date();
-    const hours = now.getHours().toString();
-    setNowHour(hours);
+    const hours = now.getHours()-1;
+    setNowHour(hours.toString());
   }, []);
 
   const goToTagPost=(tag:string) =>{

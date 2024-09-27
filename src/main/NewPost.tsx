@@ -39,15 +39,15 @@ const NewPost: React.FC = () => {
         setPosts(cachedPosts[currentPage]);
         return;
       }
-      console.log(`
-        ==================
-        fetchPosts Info 
-        cursor:${cursor}
-        isBefore:${isBefore}
-        categoryID:${categoryID}
-        query:${query}
-        +++++++++++++++++++
-        `)
+      // console.log(`
+      //   ==================
+      //   fetchPosts Info 
+      //   cursor:${cursor}
+      //   isBefore:${isBefore}
+      //   categoryID:${categoryID}
+      //   query:${query}
+      //   +++++++++++++++++++
+      //   `)
       const fetchedPosts = await getALLPosts(pageSize,undefined ,cursor,isBefore,categoryID,query);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -73,14 +73,6 @@ const NewPost: React.FC = () => {
       }
 
 
-      console.log(`
-
-
-        GetPost 
-        ----fetchedPosts---- 
-
-
-        `,fetchedPosts.data.data, posts);
     } catch (err) {
       if(err.response) alert(`최신 게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
@@ -105,11 +97,6 @@ const NewPost: React.FC = () => {
 
   useEffect(() => {
 
-    console.log(`
-      페이지가 변경되면서 글 다시 불러오기
-      ${cursor}
-    `);
-  
     if (!cachedPosts[currentPage]) {
       // 캐시에 없는 경우에만 fetchPosts 호출
       fetchPosts(cursor, undefined, undefined);

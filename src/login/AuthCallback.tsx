@@ -16,7 +16,7 @@ const AuthCallback: React.FC = () => {
   const fetchMyProfile = async (email: string) => {
     try {
       const fetchedProfile = await getMyProfile(email);
-      console.log('fetchedProfile.data.user_nickname', fetchedProfile.data.user_nickname);
+
       setNickname(fetchedProfile.data.user_nickname);
       setMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);

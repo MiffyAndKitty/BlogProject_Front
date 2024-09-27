@@ -8,17 +8,6 @@ const SearchBar = ({ onSearch }) => {
 
   const handleInputChange = (e) => {
     setSearchTerm(e.target.value);
-    console.log(`
-      
-      
-      
-      setSearchTerm
-      
-      
-      
-      
-      `,e.target.value)
-    // onSearch(e.target.value);
   };
 
   const handleClickBtn = () => {

@@ -276,16 +276,16 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
     for (let i = startPage; i <= endPage; i++) {
       pages.push(i);
     }
-    console.log(`
+    // console.log(`
 
-      [renderPages]
+    //   [renderPages]
       
-      totalPages:${totalPages}
-      currentPage:${currentPage}
-      startPage: ${startPage}
-      endPage: ${endPage}
+    //   totalPages:${totalPages}
+    //   currentPage:${currentPage}
+    //   startPage: ${startPage}
+    //   endPage: ${endPage}
       
-      `,pages)
+    //   `,pages)
     return pages;
   };
   return (
@@ -355,32 +355,32 @@ const TempPostList: React.FC<TempPostListProps> = ({ onClose, buttonRef ,onGetDr
           }
            <div className="pagination">
 
-            <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
-              <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
-            </button>
-
-            <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
-              <img src={previous} style={{width:'20px', height:'20px'}}/>
-            </button>
-
-
-             {renderPages(currentPage, totalPages).map(page => (
-            <button
-              key={page}
-              className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
-              onClick={() => goToPage(page)}
-            >
-              {page}
-            </button>
-            ))}
-
-            <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
-              <img src={next} style={{width:'20px', height:'20px'}}/>
-            </button>
-
-            <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
-              <img src={fastNext} style={{width:'20px', height:'20px'}}/>
-            </button>
+              <button className="pagination-btn" onClick={goToFirstPage} disabled={currentPage === 1}>
+                <img src={fastPrevious} style={{width:'20px', height:'20px'}}/>
+              </button>
+          
+              <button className="pagination-btn" onClick={handlePreviousPage} disabled={currentPage === 1}>
+                <img src={previous} style={{width:'20px', height:'20px'}}/>
+              </button>
+          
+          
+               {renderPages(currentPage, totalPages).map(page => (
+              <button
+                key={page}
+                className={`pagination-page-btn ${currentPage === page ? 'active' : ''}`}
+                onClick={() => goToPage(page)}
+              >
+                {page}
+              </button>
+              ))}
+  
+              <button className="pagination-btn" onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <img src={next} style={{width:'20px', height:'20px'}}/>
+              </button>
+            
+              <button className="pagination-btn" onClick={goToLastPage} disabled={currentPage === totalPages}>
+                <img src={fastNext} style={{width:'20px', height:'20px'}}/>
+              </button>
 
             </div>
         </div>

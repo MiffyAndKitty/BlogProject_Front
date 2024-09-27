@@ -17,7 +17,7 @@ export const getLogoutAuth = async (): Promise<any> => {
       'Authorization': `${token}`,
     },
   });
-  console.log(response);
+
   return response.data;
 };
 /**
@@ -30,7 +30,7 @@ export const getGoogleLogin = async (): Promise<any> => {
       'Content-Type': 'application/json',
     },
   });
-  console.log(response);
+
   return response.data;
 };
 
@@ -83,7 +83,7 @@ export const getPosts = async (nickname:string, page?:number, cursor?:string, is
     });
   }
 
-  console.log(response);
+  
   return response;
 
 };
@@ -135,7 +135,7 @@ export const getTempPostList = async (pageSize?:number, page?:number,cursor?:str
     });
   }
 
-  console.log(response);
+
   return response;
 
 };
@@ -194,7 +194,7 @@ export const getALLPosts = async (pageSize:number,page:number, cursor?:string, i
   }
 
 
-  console.log(response);
+
   return response;
 
 };
@@ -220,7 +220,7 @@ export const getPost = async (boardId:string): Promise<any> => {
       },
     });
   }
-  console.log(response.data);
+
   return response.data;
 
 };
@@ -246,7 +246,7 @@ export const getTempPost = async (draftId:string): Promise<any> => {
       },
     });
   }
-  console.log(response.data);
+
   return response.data;
 
 };
@@ -272,7 +272,7 @@ export const getCategory = async (nickname: string): Promise<TYPES.category[]> =
       }
     });
   }
-  console.log(response,nickname,url);
+ 
   return response.data.data;
 };
 
@@ -300,7 +300,7 @@ export const getCategories = async (nickname: string): Promise<TYPES.categories[
     });
   }
   
-  console.log(response.data.data,nickname,url);
+
   return response.data.data;
 };
 
@@ -314,7 +314,7 @@ export const getPopTags = async (): Promise<any> => {
       'Content-Type': 'application/json',
     },
   });
-  console.log(response);
+ 
   return response.data;
 };
 /**
@@ -328,7 +328,7 @@ export const getPopFollower = async (): Promise<any> => {
       'Content-Type': 'application/json',
     },
   });
-  console.log(response);
+
   return response.data;
 };
 
@@ -355,7 +355,6 @@ export const getMyProfile = async (email: string): Promise<any> => {
     });
   }
 
-  console.log(response);
   return response.data;
 };
 
@@ -383,7 +382,7 @@ export const getProfiles = async (nickname: string): Promise<any> => {
     });
   }
 
-  console.log(response);
+
   return response.data;
 };
 /**
@@ -410,7 +409,7 @@ export const getFollow = async (email: string,page: number): Promise<any> => {
   }
  
 
-  console.log(response);
+
   return response.data;
 };
 
@@ -429,7 +428,7 @@ export const getNotification = async (notificationId:string): Promise<any> => {
     }
   });
 
-  console.log(response);
+
   return response.data;
 };
 
@@ -437,7 +436,7 @@ export const getNotification = async (notificationId:string): Promise<any> => {
  * 유저의 모든 알림 정보 리스트 조회
  * @returns 
  */
-export const getNotificationsList = async (sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean): Promise<any> => {
+export const getNotificationsList = async (sort?:string, pageSize?:number, cursor?:string, isBefore?:boolean, page?:number): Promise<any> => {
   const token = getToken();
   let url = `/notifications/list`;
   const params: Record<string, any> = {};
@@ -449,6 +448,9 @@ export const getNotificationsList = async (sort?:string, pageSize?:number, curso
   }
   if(cursor){
     params.cursor = cursor;
+  }
+  if(page){
+    params.page = page;
   }
   if(isBefore){
     params['is-before'] = isBefore;
@@ -465,7 +467,7 @@ export const getNotificationsList = async (sort?:string, pageSize?:number, curso
     }
   });
 
-  console.log(response);
+
   return response.data;
 };
 
@@ -513,7 +515,6 @@ export const getComments = async (boardId:string, sort?:string, pageSize?:number
     });
   }
 
-  console.log(response);
   return response.data;
 };
 
@@ -560,7 +561,6 @@ export const getCommentReplies = async (parentCommentId:string, sort?:string, pa
     });
   }
 
-  console.log(response);
   return response.data;
 };
 
@@ -587,6 +587,6 @@ export const getIsTempPostDraftId = async (draftId: string): Promise<any> => {
       }
     });
   }
-  console.log(response);
+
   return response.data;
 }

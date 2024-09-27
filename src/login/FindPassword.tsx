@@ -33,7 +33,6 @@ const FindPassword: React.FC = () => {
       
       try{
 
-        console.log(`비밀번호 재설정 `,{email:email})
         const result = await setTempPasswd({email:email});
         
         if(result) {
@@ -87,6 +86,7 @@ const FindPassword: React.FC = () => {
                   onBlur={() => setTouched({ ...touched, email: true })}
                   isInvalid={touched.email && !!errors.email}
                   className="transparent-input"
+                  maxLength={255}  // 이메일 입력 길이 제한
                 />
               </Form.Group>
               <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>

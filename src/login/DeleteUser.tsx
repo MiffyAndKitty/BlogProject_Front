@@ -6,10 +6,12 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { setLogin } from '../services/postService';
 import { loginData } from '../types';
-import {deleteUser} from '../services/deleteService';
+import {deleteUser, deleteGoogleUser} from '../services/deleteService';
+import { getMyProfile } from '../services/getService';
 import openEye from '../img/openEye.png';
 import closeEye from '../img/closeEye.png';
 import mainCharacterImg from '../img/main_character.png';
+import GoogleLogo from '../img/Google.png';
 import './LocalSignup.css';
 
 const DeleteUser: React.FC = () => {
@@ -24,6 +26,7 @@ const DeleteUser: React.FC = () => {
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false); // 비밀번호 표시 상태 관리
   const [isPasswordVisibleConfirm, setIsPasswordVisibleConfirm] = useState(false); // 비밀번호 확인 표시 상태 관리
+  const [loginProvider,setLoginProvider]  = useState('');
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -44,11 +47,45 @@ const DeleteUser: React.FC = () => {
     const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     return passwordRegex.test(password);
   };
+  const fetchMyProfile = async () => {
+    try {
+        const sessionStorageEmail = sessionStorage.getItem('email');
+        if (sessionStorageEmail === null) {
+            alert(`잘못된 접근입니다!`);
+            navigate('/');
+        }
+        const fetchedProfile = await getMyProfile(sessionStorageEmail);
+        
 
+
+        setLoginProvider(fetchedProfile.data.user_provider || '');
+
+        if (fetchedProfile.data.isSelf === false) {
+            alert(`잘못된 접근입니다!`);
+            navigate('/');
+        }
+    } catch (err) {
+        console.log('개인정보를 불러오는 중에 오류가 발생했습니다.');
+        if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+    }
+  };
   const handleDeleteUser = ()=>{
     checkSetLoginResult();
   };
+  const handleDeleteGoogleUser = ()=>{
+    const userConfirmed = window.confirm(`
+     정말 탈퇴하시겠습니까? 
+     (동일한 구글 계정으로 재가입할 시 모든 정보가 복구됩니다.)
+      `);
 
+  if (userConfirmed) {
+      // 사용자가 확인을 눌렀을 때 실행할 코드
+     
+      fetchDeleteGoogleUser();
+  } 
+    
+
+  };
   const checkSetLoginResult = async () => {
     const newPost: loginData = { 
       email: email,
@@ -60,8 +97,7 @@ const DeleteUser: React.FC = () => {
       const loginSuccess = response.data.result;
       const message = response.data.message;
 
-      console.log(`token`,decodeJWT(token))
-      console.log(`authorization`, decodeJWT(response.headers['authorization']))
+   
       if(decodeJWT(token).id === decodeJWT(response.headers['authorization']).id){
         fetchDeleteUser();
       } else {
@@ -90,7 +126,19 @@ const DeleteUser: React.FC = () => {
       if(error.response) alert(`회원 탈퇴에 실패했습니다: ${error.response.data.message}`);
     }
   };
-
+  const fetchDeleteGoogleUser = async()=>{
+    try{
+        let deleteUserResponse = await deleteGoogleUser();
+        if(deleteUserResponse) {
+            alert('구글 회원 탈퇴에 성공했습니다!');
+            navigate('/');
+        }
+    }catch(error){
+         // 오류 발생 시 메시지 출력
+      console.log("회원 탈퇴에 오류 발생:", error); 
+      if(error.response) alert(`회원 탈퇴에 실패했습니다: ${error.response.data.message}`);
+    }
+  };
   const decodeJWT=(token)=>{
     // 'Bearer '가 있으면 이를 제거
     if (token.startsWith('Bearer ')) {
@@ -138,13 +186,15 @@ const DeleteUser: React.FC = () => {
     setIsFormValid(isEmailValid && isPasswordValid && isPassword2Valid  && !Object.values(errors).some(error => error !== ''));
   }, [email, password, password2, errors]);
   
-
+  useEffect(()=>{
+    fetchMyProfile();
+  },[])
   return (
     <div className="App">
       <Header pageType="otherblog"/>
       <main className="main">
-      
-        <div className='signup2'>
+        {loginProvider === '' &&(
+         <div className='signup2'>
           <h2 style={{color:"#A9A9A9"}}>회원 탈퇴 </h2>
           <Form className='form'>
           <Form.Group className="inputFieldCss mb-3">
@@ -156,60 +206,72 @@ const DeleteUser: React.FC = () => {
               onBlur={() => setTouched({ ...touched, email: true })}
               isInvalid={touched.email && !!errors.email}
               className="transparent-input"
+              maxLength={255}
             />
-            
+
           </Form.Group>
           <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.email}</Form.Control.Feedback>
 
           <Form.Group className="inputFieldCss mb-3">
              <div className="password-container">
-                  <Form.Control 
-                    type={isPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
-                    placeholder="비밀번호" 
-                    value={password} 
-                    onChange={(e) => setPassword(e.target.value)} 
-                    onBlur={() => setTouched({ ...touched, password: true })}
-                    isInvalid={touched.password && !!errors.password}
-                    className="transparent-input"
-                  />
-                   <img
-                    src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
-                    alt="Toggle visibility"
-                    className="toggle-password-visibility"
-                    onClick={() => setIsPasswordVisible(!isPasswordVisible)} // 클릭 시 상태 변경
-                    style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
-                  />
-                </div>
+                 <Form.Control 
+                   type={isPasswordVisible ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
+                   placeholder="비밀번호" 
+                   value={password} 
+                   onChange={(e) => setPassword(e.target.value)} 
+                   onBlur={() => setTouched({ ...touched, password: true })}
+                   isInvalid={touched.password && !!errors.password}
+                   className="transparent-input"
+                   maxLength={255}
+                 />
+                  <img
+                   src={isPasswordVisible ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                   alt="Toggle visibility"
+                   className="toggle-password-visibility"
+                   onClick={() => setIsPasswordVisible(!isPasswordVisible)} // 클릭 시 상태 변경
+                   style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                 />
+               </div>
           </Form.Group>
           <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password}</Form.Control.Feedback>
 
           <Form.Group className="inputFieldCss mb-3">
           <div className="password-container">
             <Form.Control 
-              type={isPasswordVisibleConfirm ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
-              placeholder="비밀번호 확인" 
-              value={password2} 
-              onChange={(e) => setPassword2(e.target.value)} 
-              onBlur={() => setTouched({ ...touched, password2: true })}
-              isInvalid={touched.password2 && !!errors.password2}
-              className="transparent-input"
+             type={isPasswordVisibleConfirm ? 'text' : 'password'} // 상태에 따라 비밀번호 보이기/숨기기
+             placeholder="비밀번호 확인" 
+             value={password2} 
+             onChange={(e) => setPassword2(e.target.value)} 
+             onBlur={() => setTouched({ ...touched, password2: true })}
+             isInvalid={touched.password2 && !!errors.password2}
+             className="transparent-input"
+             maxLength={255}
             />
-             <img
-                    src={isPasswordVisibleConfirm ? closeEye : openEye} // 상태에 따라 아이콘 전환
-                    alt="Toggle visibility"
-                    className="toggle-password-visibility"
-                    onClick={() => setIsPasswordVisibleConfirm(!isPasswordVisibleConfirm)} // 클릭 시 상태 변경
-                    style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
-                  />
+              <img
+                   src={isPasswordVisibleConfirm ? closeEye : openEye} // 상태에 따라 아이콘 전환
+                   alt="Toggle visibility"
+                   className="toggle-password-visibility"
+                   onClick={() => setIsPasswordVisibleConfirm(!isPasswordVisibleConfirm)} // 클릭 시 상태 변경
+                   style={{ cursor: 'pointer',  width:'15px', height:'15px' }}
+                 />
           </div>
           </Form.Group>
           <Form.Control.Feedback style={{color:'red', minHeight: '20px', fontSize:'12px'}} type="invalid">{errors.password2}</Form.Control.Feedback>
 
-            
+
 
           </Form>
           <Button variant="primary" type="button" onClick={handleDeleteUser} className={` ${!isFormValid ? 'authDisabledButton' : 'authButton'}`} disabled={!isFormValid}>회원 탈퇴하기</Button>
         </div>
+        )}
+       {loginProvider ==='google'&&(
+        <div className='signup2'>
+        <h2 style={{color:"#A9A9A9"}}>Google 회원 탈퇴 </h2>
+       
+          <Button variant="primary" type="button" onClick={handleDeleteGoogleUser} className='authButton' >
+          <img src={GoogleLogo} style={{width:'20px', height:'20px'}}/> 회원 탈퇴하기</Button>
+        </div>
+       )}
         <img src={mainCharacterImg} alt="Main Character" className="mainCharacter_localsignup" />
       </main>
       <Footer />

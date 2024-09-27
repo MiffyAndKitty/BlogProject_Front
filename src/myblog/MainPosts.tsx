@@ -51,7 +51,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     setSortOption(option);
     setDropdownOpen(false); // 드롭다운을 닫음
     setSortName(name);
-    console.log(option)
+
   };
   /**
    * 날짜 문자열을 원하는 형식으로 변환하는 함수
@@ -222,23 +222,23 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
     try {
       const nickname = sessionStorage.getItem('nickname');
       setNickname(nickname);
-      console.log(  `
+      // console.log(  `
         
         
         
-        =========fetchPosts==========
+      //   =========fetchPosts==========
         
-        nicknameParam:${nicknameParam}
-        page:${page}
-        cursor :${cursor}
-        isBefore:${isBefore}
-        categoryID:${categoryID}
-        query:${query}
-        sort:${sort}
+      //   nicknameParam:${nicknameParam}
+      //   page:${page}
+      //   cursor :${cursor}
+      //   isBefore:${isBefore}
+      //   categoryID:${categoryID}
+      //   query:${query}
+      //   sort:${sort}
         
 
         
-        `)
+      //   `)
       const fetchedPosts = await getPosts(nicknameParam,page, cursor, isBefore, categoryID, query,sort);
       if (fetchedPosts && fetchedPosts.data.data) {
         setIsWriter(fetchedPosts.data.isWriter);
@@ -262,17 +262,7 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
       }
      
     } catch (err) {
-      console.log(`
-        
-        
-        
-        
-        err
-        
-        
-        
-        
-        `,err)
+  
      if(err.response) alert(`게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
      
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
@@ -371,15 +361,6 @@ const MainPosts: React.FC<MainPostsProps>  = ({nicknameParam,categoryID,onPostCl
   useEffect(() => {
 
     setCurrentPage(1);
-    console.log(`
-      
-      
-      
-      카테고리가 변경되면서 글 다시 불러오기
-      
-      
-      
-      ${cursor} ${category.category_id}`)
       setCurrentPage(1);
       setSearchTerm('');
       setCursor('');

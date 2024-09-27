@@ -171,7 +171,7 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
       const storedMessage = sessionStorage.getItem('message');
       if (storedMessage && storedMessage !== 'null' && storedMessage !== '') {
         setMessage(storedMessage);
-        console.log(`typeof message`, typeof storedMessage, storedMessage);
+
       } else {
         setMessage('상태메시지가 없습니다.');
       }

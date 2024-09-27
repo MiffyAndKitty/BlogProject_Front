@@ -43,7 +43,7 @@ const MyBlogMainPage: React.FC = () => {
   };
 
   const onCategoryClick = (categoryId: string) => {
-    console.log('Clicked category ID:', categoryId);
+
     setCategoryID(categoryId);
     navigate(`/${nickname}`);
   };
@@ -118,7 +118,7 @@ const MyBlogMainPage: React.FC = () => {
           setLocalNickName(localNickname);
         }
       } catch (err) {
-        if(err.response) alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
+        //if(err.response) alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
         setError('카테고리를 불러오는 중에 오류가 발생했습니다.');
         setLocalNickName('');
       } finally {
@@ -193,13 +193,16 @@ const MyBlogMainPage: React.FC = () => {
                   {profileLoading && <div>프로필 로딩 중...</div>}
                 
                   {/* category */}
-                  <section className='detailPost-category-section'>
-                  <div className='categories'>
-                    <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-                    <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
-                    <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-                  </div>
-                  </section>
+                  {!isDeleteUser &&(
+                    <section className='detailPost-category-section'>
+                    <div className='categories'>
+                      <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                      <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
+                      <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                    </div>
+                    </section>
+                  )}
+                 
 
                   <section className='main-blog-detail-posts-section'>
                   <PostDetail isDeleteUser={isDeleteUser}/>
@@ -244,13 +247,16 @@ const MyBlogMainPage: React.FC = () => {
                   {profileLoading && <div>프로필 로딩 중...</div>}
                 
                   {/* category */}
-                  <section className='category-section'>
-                  <div className='categories'>
-                    <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
-                    <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
-                    <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
-                  </div>
-                  </section>
+                  {!isDeleteUser &&(
+                      <section className='category-section'>
+                      <div className='categories'>
+                        <div className='mouse_hover' onClick={fetchAllPost}>전체보기 {'  ('+ totalCategories+')'}</div> 
+                        <div className='mouse_hover' onClick={fetchNullPost} style={{fontSize:'15px', marginTop:'10px', marginBottom:'10px'}}>미분류{'  ('+ noCategories+')'}</div>
+                        <CategoryListForMain categories={categories} onCategoryClick={onCategoryClick}></CategoryListForMain>
+                      </div>
+                      </section>
+                  )}
+                 
 
                   <section className='main-blog-posts-section'>
                     <MainPosts nicknameParam={nickname} categoryID={categoryID} onPostClick={onPostClick} isDeleteUser={isDeleteUser}/>

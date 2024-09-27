@@ -62,9 +62,37 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
     setIsModalOpen(false);
     setCategoryToDelete(null);
   };
+  const getByteLength = (str: string) => {
+    let byteLength = 0;
+    for (let i = 0; i < str.length; i++) {
+        byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+    }
+    return byteLength;
+ };
+ const changeCategory = (value:string)=>{
+  if(getByteLength(value)>48){
+    alert('카테고리는 한글16자/영문48자 이하로 입력해주세요.')
+  }else{
+    setNewCategoryName(value);
+  }
+  
+};
+const changeSubCategory = (value:string)=>{
+  if(getByteLength(value)>48){
+    alert('카테고리는 한글16자/영문48자 이하로 입력해주세요.')
+  }else{
+    setNewSubcategoryName(value);
+  }
+  
+};
   const toEditCategory=(category_id:string,category_name:string) =>{
     setEditingCategoryId(category_id);
-    setNewCategoryName(category_name);
+    if(getByteLength(category_name)>48){
+      alert('카테고리는 한글16자/영문48자 이하로 입력해주세요.')
+    }else{
+      setNewCategoryName(category_name);
+    }
+   
 
   }
   return (
@@ -100,7 +128,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                       <input
                         type="text"
                         value={newCategoryName}
-                        onChange={(e) => setNewCategoryName(e.target.value)}
+                        onChange={(e) => changeCategory(e.target.value)}    
                       />
                       <button className='addChangeDeleteBtn' onClick={() => { onEditCategory(category.category_id, newCategoryName); setEditingCategoryId(null); }}>저장</button>
                       <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(null)}>취소</button>
@@ -132,7 +160,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                     <input
                       type="text"
                       value={newSubcategoryName}
-                      onChange={(e) => setNewSubcategoryName(e.target.value)}
+                      onChange={(e) => changeSubCategory(e.target.value)}
                       placeholder={`${category.category_name}의 하위 카테고리 이름`}
                     />
                     <button className='addOrCancelBtn' onClick={() => { onAddSubcategory(category.category_id, newSubcategoryName); setAddingSubcategoryId(null); setNewSubcategoryName('');}}>저장</button>
@@ -176,7 +204,7 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
                                   <input
                                     type="text"
                                     value={newCategoryName}
-                                    onChange={(e) => setNewCategoryName(e.target.value)}
+                                    onChange={(e) => changeCategory(e.target.value)}    
                                   />
                                   <button className='addChangeDeleteBtn' onClick={() => { onEditCategory(category.category_id, newCategoryName); setEditingCategoryId(null); }}>저장</button>
                                   <button className='addChangeDeleteBtn' onClick={() => setEditingCategoryId(null)}>취소</button>

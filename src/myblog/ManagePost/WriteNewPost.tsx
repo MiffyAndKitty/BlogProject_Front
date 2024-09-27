@@ -16,6 +16,9 @@ import SSEComponent from '../../main/SSEComponent';
 import divider from '../../img/divider.png';
 import TempSaveNoti from './TempSaveNoti';
 import TempPostList from './TempPostList';
+
+const MAX_IMAGE_SIZE = 50 * 1024 * 1024; // 20MB 제한 
+
 const WriteNewPost: React.FC = () => {
   const notificationButtonRef = useRef<HTMLDivElement>(null); // 임시저장 버튼 참조
   const [nickname, setNickname] = useState<string>();
@@ -47,20 +50,74 @@ const WriteNewPost: React.FC = () => {
   const navigate = useNavigate();
   const newImages: File[] = [];
   const errorMessage ='제목과 내용을 모두 입력해주세요!';
+  const [tagError,setTagError] =  useState('');
   const [errors, setErrors] = useState({
     title:'',
-    content:''
+    content:'',
+
   });
   const [touched, setTouched] = useState({
     title:'',
-    content:''
+    content:'',
+  
   });
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    if(getByteLength(e.target.value) >300){
+      alert('제목은 한글100자/영문300자 이하로 입력해주세요.')
+    }else{
+      setTitle(e.target.value);
+    }
+    
   };
-
+// 문자열의 바이트 길이 계산 함수
+    const getByteLength = (str: string) => {
+       let byteLength = 0;
+       for (let i = 0; i < str.length; i++) {
+           byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+       }
+       return byteLength;
+    };
   const handleContentChange = async (value: string) => {
-    setContent(value);
+    let validFiles: File[] = await checkImgs();
+   
+    let totalFileSize = 0;
+    for (let i = 0; i < validFiles.length; i++) {
+      const file = validFiles[i];
+      totalFileSize += file.size;
+     
+    }
+    console.log(`
+      
+      
+      
+      validFiles
+      totalFileSize:${totalFileSize}
+      content: ${content}
+      
+      
+      `,validFiles)
+    if (totalFileSize > MAX_IMAGE_SIZE) {
+      alert('이미지 파일은 20MB 이하로만 업로드할 수 있습니다.');
+  
+      // 이미지가 추가된 상태이므로 마지막으로 추가된 이미지를 제거합니다.
+      const quillEditor = quillRef.current?.getEditor();
+      if (quillEditor) {
+        const imgTags = quillEditor.root.querySelectorAll('img');
+        
+        // 가장 마지막으로 추가된 이미지를 제거합니다.
+        if (imgTags.length > 0) {
+          imgTags[imgTags.length - 1].remove(); // 마지막 이미지를 DOM에서 제거
+        }
+  
+        // 에디터의 수정된 내용을 다시 content로 설정합니다.
+        const updatedContent = quillEditor.root.innerHTML;
+        setContent(updatedContent);
+      }
+    } else {
+      // 이미지 파일 크기가 제한 이내인 경우에만 content를 업데이트합니다.
+      setContent(value);
+    }
+    
   };
   // 시간 포맷팅 함수
   const getCurrentTime = () => {
@@ -132,14 +189,7 @@ const WriteNewPost: React.FC = () => {
     const categoryId = post.categoryId;
     //const categoryItem = categories.find(cat => cat.category_id === categoryId);
     const categoryItem = findCategoryById(categories, categoryId);
-    console.log(`
-      
-      
-      categoryItem categories
-      categoryId:${categoryId}
-      
-      
-      `,categoryItem,categories)
+
     if (categoryItem) {
       setCategory(categoryItem);
     }
@@ -159,6 +209,9 @@ const WriteNewPost: React.FC = () => {
     }
     return undefined;
   };
+  /**
+   * 임시저장 게시글 상세 조회
+   */
   const getTempPostDetail = useCallback(async (draftId:string) => {
     try {
      
@@ -191,17 +244,7 @@ const WriteNewPost: React.FC = () => {
         if(fetchedTempPostList.data.data.list){
           setLastTempPostSaved(formatDate(fetchedTempPostList.data.data.list[0].updatedAt));
           setDraftId(fetchedTempPostList.data.data.list[0]._id);
-          console.log(`
-            
-            
-            
-            getTempPosts
-            
-            draftId :${draftId}
-            
-            
-            
-            `,fetchedTempPostList.data.data.list[0]._id)
+
         }else{
           setLastTempPostSaved('changed');
           setIsOnceChanged(true);
@@ -250,6 +293,26 @@ const WriteNewPost: React.FC = () => {
   const handlePrivacyChange = () => {
     setStatus(!status);
   };
+  const checkImgs = async () => {
+    const quillEditor = quillRef.current?.getEditor();
+    const checkedImgs = [];
+  
+    if (quillEditor) {
+      const imgTags = quillEditor.root.querySelectorAll('img');
+  
+      // 비동기 작업을 처리하기 위해 for...of 루프를 사용합니다.
+      for (const img of Array.from(imgTags)) {
+        if (img.src.startsWith('data:')) {
+          const blob = dataURLToBlob(img.src);
+          const file = new File([blob], `image_${checkedImgs.length}.png`, { type: 'image/png' });
+          checkedImgs.push(file);
+        }
+      }
+    }
+  
+    return checkedImgs;
+  };
+  
 
   const handleCategorySelect = (categoryItem: category) => {
     setCategory(categoryItem);
@@ -280,7 +343,15 @@ const WriteNewPost: React.FC = () => {
   };
 
   const handleTagInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTagInput(e.target.value);
+    if(getByteLength(e.target.value)>45){
+     alert('태그는 한글15자/영문45자 이하로 입력해주세요.')
+       // 입력된 태그가 길이 제한을 넘지 않도록 공백으로 설정
+      setTagInput('');
+    }else{
+      setTagError('');
+      setTagInput(e.target.value);
+    }
+   
   };
 
   const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -303,14 +374,14 @@ const WriteNewPost: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // 여기에 글을 제출하는 로직을 추가하세요 (예: API 호출)
-    console.log('handleSubmit Title:', title);
-    console.log('handleSubmit Content:', content);
-    console.log('handleSubmit Category:', category);
-    console.log('handleSubmit Is Private:', status);
-    console.log('handleSubmit Tags:', tags);
-    if (images) {
-      console.log('handleSubmit Images:', images);
-    }
+    // console.log('handleSubmit Title:', title);
+    // console.log('handleSubmit Content:', content);
+    // console.log('handleSubmit Category:', category);
+    // console.log('handleSubmit Is Private:', status);
+    // console.log('handleSubmit Tags:', tags);
+    // if (images) {
+    //   console.log('handleSubmit Images:', images);
+    // }
 
     
   };
@@ -325,6 +396,7 @@ const WriteNewPost: React.FC = () => {
         if (img.src.startsWith('data:')) {
           const blob = dataURLToBlob(img.src);
           const file = new File([blob], `image_${index}.png`, { type: 'image/png' });
+
           //수정 중 (지우면 안됌)
           const newSrc = URL.createObjectURL(file);
           //const newSrc = `image_${index + 1}`;
@@ -335,8 +407,8 @@ const WriteNewPost: React.FC = () => {
 
           // setContent(quillEditor.root.innerHTML); // content 상태를 수정된 HTML로 업데이트
 
-          console.log('Images saveImgs에서 :', newImages);
-          console.log('saveImgs 에서 newSrc, file, newImages', newSrc, file, newImages);
+          // console.log('Images saveImgs에서 :', newImages);
+          // console.log('saveImgs 에서 newSrc, file, newImages', newSrc, file, newImages);
         }
       });
 
@@ -346,14 +418,14 @@ const WriteNewPost: React.FC = () => {
   };
   const savePost = async () => {
     const tagArray = tags.length > 0 ? tags : [];
-    console.log(tagArray)
+
     if(!title || !content){
       alert(errorMessage);
       return;
     }
     const imagesFromSaveImgs = await saveImgs();
     
-    console.log('Images in savePost before formData:', imagesFromSaveImgs);
+   // console.log('Images in savePost before formData:', imagesFromSaveImgs);
 
 
     /**
@@ -375,7 +447,7 @@ const WriteNewPost: React.FC = () => {
   
       // 변경된 content를 다시 업데이트
       newContent = clonedEditor.innerHTML;
-      console.log('변경된 content:', quillEditor.root.innerHTML);
+     // console.log('변경된 content:', quillEditor.root.innerHTML);
     }
 
     const newPostData: newPost = { 
@@ -401,35 +473,11 @@ const WriteNewPost: React.FC = () => {
     }
     
     try {
-      console.log(formData); // FormData 내용을 로그로 출력하여 확인
-      console.log(`
-      
-      
-      
-      
-      
-        savePost 에서 newPostData
-        
-        
-        
-        
-        
-        
-        
-        `,newPostData)
+
+
       const response = await saveNewPost(formData);
       if (response.status === ENUMS.status.SUCCESS) {
-        console.log(`
-          
-          
-          
-          response
-          
-          
-          
-          
-          
-          `,response)
+
           deleteTempPosts(draftId);
         alert("글 저장에 성공했습니다!!");
         
@@ -474,48 +522,16 @@ useEffect(() => {
   // 비동기 함수를 내부에서 선언하고 호출합니다.
   const fetchDraftStatus = async () => {
     if (!draftId) {
-      console.log('draftId is not set, skipping check.');
+
       return;
     }
 
     try {
-      console.log(`
-        
-        
-        
-        
-        
-        
-         1
-        Draft status:
-        
-        
-        
-        
-        
-        
-        
-        `, draftId);
+
     
       const isDraft = await checkIsDraftId(draftId); // 비동기 함수의 결과를 기다림
       setIsDraftId(isDraft); // 상태 업데이트
-      console.log(`
-        
-        
-        
-        
-        
-        
-        2
-        Draft status:
-        
-        
-        
-        
-        
-        
-        
-        `, isDraft);
+
     } catch (error) {
       console.error('Error fetching draft status:', error);
     }
@@ -532,37 +548,9 @@ const checkIsDraftId = async (draftID:string) => {
       console.warn('Draft ID is not set, skipping check.');
       return false;
     }
-    console.log(`
-      
-      
-      
-      
-      
-      
-     draftID
-      
-      
-      
-      
-      
-      
-      `, draftID);
+
     const result = await getIsTempPostDraftId(draftID);
-    console.log(`
-      
-      
-      
-      
-      
-      
-      Result from getIsTempPostDraftId:
-      
-      
-      
-      
-      
-      
-      `, result);
+
     return result ? true : false;
   } catch (error) {
     console.error('Error checking draft ID:', error);
@@ -579,17 +567,11 @@ const checkIsDraftId = async (draftID:string) => {
    */
   const saveTempPost = async () => {
 
-    
-    const tagArray = tags.length > 0 ? tags : [];
-    console.log(tagArray)
     if(!title || !content){
       alert(errorMessage);
       return;
     }
     const imagesFromSaveImgs = await saveImgs();
-    
-    console.log('Images in savePost before formData:', imagesFromSaveImgs);
-
 
     /**
      * content 영역의 img 태그들을 모두 가져와서 src를 image_${index + 1}로 변경하는 작업 
@@ -611,29 +593,7 @@ const checkIsDraftId = async (draftID:string) => {
   
       // 변경된 content를 다시 업데이트
       newContent = clonedEditor.innerHTML;
-      console.log(`
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        변경된 content:
-        
 
-
-        
-        
-        
-        
-        
-        
-        
-        
-        `, quillEditor.root.innerHTML);
     }
 
     const newPostData: newPost = { 
@@ -659,35 +619,13 @@ const checkIsDraftId = async (draftID:string) => {
     }
     
     try {
-      console.log(formData); // FormData 내용을 로그로 출력하여 확인
+
       let response;
-      console.log(`
-        
-        
-        
-        isTempPostClicked:${isTempPostClicked}
-        
-        
-        isDraftId:${isDraftId}
-        
-        
-        
-        
-        `)
+   
       if(isTempPostClicked && isDraftId){
 
         formData.append('draftId', draftId);
-        console.log(`
-          
-          
-          
-          
-          draftId
-          
-          
-          
-          
-          `,draftId)
+
          response = await fixTempPost(formData);
       }else{
         
@@ -698,23 +636,16 @@ const checkIsDraftId = async (draftID:string) => {
       }
       
       if (response.status === ENUMS.status.SUCCESS) {
-
-        //alert("글 저장에 성공했습니다!!");
+        getTempPostDetail(draftId);
         setOpenModal(true);
         setAutoSaveTime(getCurrentTime());
-        //setTempPostsTotalCount(tempPostsTotalCount+1);
         
-        //navigate(`/getpost`);
-        
-      } else if (response === false) {
-        //alert("글 저장에 실패했습니다!!");
-      }
+      } 
       setNewPostResult(response.status === ENUMS.status.SUCCESS ? true : false);
       return response.data.result;
     } catch (error) {
        console.error("글 저장 오류:", error);     
-      // if(error.response) alert(`글 저장 중에 오류가 발생했습니다: ${error.response.data.message}`); 
-    
+
        return false;
     }
 
@@ -767,7 +698,7 @@ const checkIsDraftId = async (draftID:string) => {
       try {
         const fetchedCategories: any = await getCategories(sessionStorage.getItem('nickname'));
         setCategories(fetchedCategories.hierarchicalCategory);
-        console.log(`fetchedCategories`,fetchedCategories);
+
       } catch (err) {
         if(err.response){
           alert(`카테고리를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`); 
@@ -809,19 +740,7 @@ const checkIsDraftId = async (draftID:string) => {
   };
 
   const handleDraftId = (draftId:string) => {
-    console.log(`
-      
-      
-      
-      
-    [handleDraftId]
-      draftId : ${draftId}
-      
-      
-      
-      
-      
-      `)
+
       // 알림이 발생하면 true로 설정
     getTempPostDetail(draftId);
    
@@ -832,9 +751,6 @@ const checkIsDraftId = async (draftID:string) => {
     setTempPostsTotalCount(totalCount);
   };
 
-  useEffect(() => {
-    console.log('Updated images in useEffect:', images);
-  }, [images]);
 
   const validateTitle = (title: string) => {
     return title.trim() !== '';
@@ -848,6 +764,7 @@ const checkIsDraftId = async (draftID:string) => {
       const newErrors = {
         title: touched.title && !validateTitle(title) ? '제목을 입력해주세요.' : '',
         content: touched.content && !validateContent(content) ? '내용을 입력해주세요.' : '',
+      
       };
 
       setErrors(newErrors);
@@ -870,7 +787,7 @@ const checkIsDraftId = async (draftID:string) => {
             </div>
           )}
         </div>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={handleSubmit} onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}>
         <div className="title-and-privacy">
           <Form.Group controlId="formTitle" className="title-input-group">
             <Form.Control
@@ -942,6 +859,7 @@ const checkIsDraftId = async (draftID:string) => {
               onCompositionEnd={() => setIsComposing(false)}
               className="tagInput"
             />
+            <Form.Control.Feedback style={{color:'red'}} type="invalid">{tagError}</Form.Control.Feedback>
           </Form.Group>
   
           <div className="tags">

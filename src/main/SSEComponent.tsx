@@ -20,7 +20,6 @@ function SSEComponent({ onNotification }) {
     const data = JSON.parse(eventData);
     const { type, trigger, location = null } = data;
   
-    console.log(`data:`, data);
   
     let notificationMessage = '';
     let notificationType = '';
@@ -71,7 +70,7 @@ function SSEComponent({ onNotification }) {
   useEffect(() => {
     if (notification) {
       onNotification(true); // 알림이 발생하면 true로 설정
-      console.log('SSEComponent notified Dashboard.');
+
     }
   }, [notification]);
   useEffect(() => {
@@ -113,15 +112,7 @@ function SSEComponent({ onNotification }) {
   useEffect(() => {
     if (notification) {
       setImage(notification.image || mainCharacterImg)
-      console.log(`
-        
-        
-        notification.image 
-        
-        
-        
-        
-        `,notification.image )
+
       const timer = setTimeout(() => {
         setNotification(null);
       }, 5000); // 5초 후에 알림 자동 제거

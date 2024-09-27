@@ -23,7 +23,7 @@ const getToken = () => {
  */
 export const setSignUp = async (postData: TYPES.SignUpData): Promise<any> => {
     const response = await apiClient.post<TYPES.SignUpData>('/auth/sign', postData);
-        console.log(response.data);
+ 
         return response.data;
 };
 /**
@@ -33,7 +33,7 @@ export const setSignUp = async (postData: TYPES.SignUpData): Promise<any> => {
  */
 export const checkDuplicated = async (postData: TYPES.CheckDuplicatedData): Promise<any> => {
     const response = await apiClient.post<TYPES.CheckDuplicatedData>('/users/duplication', postData);
-        console.log(response.data);
+  
         return response.data;
 };
 /**
@@ -43,7 +43,7 @@ export const checkDuplicated = async (postData: TYPES.CheckDuplicatedData): Prom
  */
 export const setLogin = async (postData: TYPES.loginData): Promise<any> => {
     const response = await apiClient.post<TYPES.loginData>('/auth/login', postData);
-        console.log(response);
+      
         return response;
 };
 /**
@@ -58,8 +58,7 @@ export const setTempPasswd = async (email: Object): Promise<any> => {
     
           },
     });
-        console.log(email);
-        console.log(response);
+
         return response;
 };
 /**
@@ -74,8 +73,7 @@ export const verifyEmail = async (email: Object): Promise<any> => {
     
           },
     });
-        console.log(email);
-        console.log(response);
+
         return response;
 };
 /**
@@ -91,7 +89,7 @@ export const saveNewPost = async (postData: FormData): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+
         return response;
 };
 /**
@@ -107,7 +105,7 @@ export const saveNewTempPost = async (postData: FormData): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+
         return response;
 };
 /**
@@ -122,7 +120,7 @@ export const saveNewCategory = async (newCategory: TYPES.newCategory): Promise<a
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+
         return response;
 };
 
@@ -138,7 +136,7 @@ export const addLike = async (boardId: Object): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+
         return response;
 };
 
@@ -154,7 +152,7 @@ export const deleteLike = async (boardId: Object): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+       
         return response;
 };
 /**
@@ -169,7 +167,7 @@ export const checkPassword = async (password: Object): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response.data);
+     
         return response.data;
 };
 
@@ -185,7 +183,7 @@ export const followUser = async (email: Object): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+      
         return response;
 };
 
@@ -201,7 +199,7 @@ export const newComment = async (commentData: TYPES.commentData): Promise<any> =
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+    
         return response;
 };
 
@@ -217,7 +215,7 @@ export const addCommentLike = async (comment: Object): Promise<any> => {
             'Authorization': `${token}`,
           },
     });
-        console.log(response);
+       
         return response;
 };
 

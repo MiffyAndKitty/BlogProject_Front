@@ -146,17 +146,7 @@ const Follow: React.FC<FollowModalProps> = ({ onClose ,profileNickname,isOthers,
         setPage(1); // 페이지 초기화
 
         fetchFollowers();
-        console.log(`
-            
 
-            
-            useEmail
-            fetchFollowers
-            
-
-
-
-            `,useEmail)
     }, [useEmail]);
 
 

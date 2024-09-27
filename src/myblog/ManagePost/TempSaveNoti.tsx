@@ -7,20 +7,7 @@ function TempSaveNoti({openModal}) {
 
   useEffect(() => {
     setNotification(openModal);
-    console.log(`
-        
-        
-        
-        
-        TempSaveNoti
-        
-        
-        
-        
-        
-        
-        
-        `,openModal,notification)
+
   }, [openModal]);
 
   useEffect(() => {

@@ -115,7 +115,7 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
   const handleSortChange = (option) => {
     setSortOption(option);
 
-    console.log(option)
+
   };
   useEffect(() => {
     if (image) {
@@ -218,42 +218,11 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
 
   const fetchComments = async (sort?: string, pageSize: number = 10, cursor?: string) => {
     if (isLoading) return; // 로딩 중이면 추가 요청 방지
-    console.log('Fetching comments...', { cursor, sort, pageSize });
+
     setIsLoading(true);
     try {
-      console.log(`fetchedComments
-        
-        
-        sort: ${sort}
-        pageSize: ${pageSize}
-        cursor: ${cursor}
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        `)
+
       const fetchedComments = await getComments(postID, sort, pageSize, cursor);
-      if(pageSize===0) {
-        console.log(`fetchedComments
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-          `,fetchedComments)
-      }
      
       if (cursor) {
         // cursor가 있는 경우에는 기존 댓글에 추가
@@ -336,14 +305,22 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
   };
 
   const handleReplyInputChange = (commentId: string, value: string) => {
+      // 문자열의 바이트 길이 계산 함수
+     const getByteLength = (str: string) => {
+      let byteLength = 0;
+      for (let i = 0; i < str.length; i++) {
+          byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+      }
+      return byteLength;
+    };
 
-    if (value.length <= 500) {
+    if (getByteLength(value) <= 600) {
       setReplyInputs(prevState => ({
         ...prevState,
         [commentId]: value,
       }));
     } else {
-      alert('댓글은 최대 500자까지만 작성할 수 있습니다.');
+      alert('답글은 최대 한글200자/영문600자까지만 작성할 수 있습니다.');
     }
 
 
@@ -602,18 +579,25 @@ const PostDetail: React.FC<DetailPostsProps> = ({isDeleteUser}) => {
     if (selectedPostId) {
       // 실제 삭제 로직을 여기에 추가
       removePost(selectedPostId);
-      console.log(`Post ${selectedPostId} deleted`);
+
     }
     setIsModalOpen(false);
     setSelectedPostId(null);
   };
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputValue = e.target.value;
-    
-    if (inputValue.length <= 500) {
+    // 문자열의 바이트 길이 계산 함수
+    const getByteLength = (str: string) => {
+      let byteLength = 0;
+      for (let i = 0; i < str.length; i++) {
+          byteLength += str.charCodeAt(i) > 0x007f ? 3 : 1; // 한글 3바이트, 영문 1바이트
+      }
+      return byteLength;
+   };
+    if (getByteLength(inputValue) <= 600) {
       setComment(inputValue); // 댓글 입력 값 상태 업데이트
     } else {
-      alert('댓글은 최대 500자까지만 작성할 수 있습니다.');
+      alert('댓글은 최대 한글200자/영문600자까지만 작성할 수 있습니다.');
     }
   };
   const handleDeleteComment = (commentId: string) => {

@@ -21,7 +21,7 @@ export const deleteCategory = async (categoryId:string): Promise<any> => {
         categoryId
     }
   });
-  console.log(categoryId,response.data)
+
   return response.data;
 };
 
@@ -40,7 +40,7 @@ export const deletePost = async (boardId:string): Promise<any> => {
       boardId
     }
   });
-  console.log(boardId,response.data)
+
   return response.data;
 };
 /**
@@ -50,7 +50,7 @@ export const deletePost = async (boardId:string): Promise<any> => {
  */
 export const deleteFollow = async (email: string): Promise<any> => {
   try {
-    console.log("deleteFollow called with email:", email); // 함수 호출 확인
+  
     const token = getToken();
     
     // API 요청
@@ -63,7 +63,7 @@ export const deleteFollow = async (email: string): Promise<any> => {
       }
     });
 
-    console.log("API response:", response); // API 응답 확인
+
     return response;
   } catch (error) {
     console.error("Error in deleteFollow:", error); // 오류 로그
@@ -77,7 +77,7 @@ export const deleteFollow = async (email: string): Promise<any> => {
  */
 export const deleteNotification  = async (notificationId: string): Promise<any> => {
   try {
-    console.log("deleteNotification called with email:", notificationId); // 함수 호출 확인
+   
     const token = getToken();
     
     // API 요청
@@ -90,7 +90,7 @@ export const deleteNotification  = async (notificationId: string): Promise<any> 
       }
     });
 
-    console.log("API response:", response); // API 응답 확인
+
     return response;
   } catch (error) {
     console.error("Error in deleteNotification:", error); // 오류 로그
@@ -104,7 +104,7 @@ export const deleteNotification  = async (notificationId: string): Promise<any> 
  */
 export const deleteTempPost  = async (draftId: string): Promise<any> => {
   try {
-    console.log("deleteNotification called with email:", draftId); // 함수 호출 확인
+
     const token = getToken();
     
     // API 요청
@@ -117,7 +117,7 @@ export const deleteTempPost  = async (draftId: string): Promise<any> => {
       }
     });
 
-    console.log("API response:", response); // API 응답 확인
+  
     return response;
   } catch (error) {
     console.error("Error in deleteNotification:", error); // 오류 로그
@@ -131,7 +131,7 @@ export const deleteTempPost  = async (draftId: string): Promise<any> => {
  */
 export const deleteCommentLike  = async (commentId: string): Promise<any> => {
   try {
-    console.log("deleteCommentLike called with commentId:", commentId); // 함수 호출 확인
+
     const token = getToken();
     
     // API 요청
@@ -144,7 +144,7 @@ export const deleteCommentLike  = async (commentId: string): Promise<any> => {
       }
     });
 
-    console.log("API response:", response); // API 응답 확인
+ 
     return response;
   } catch (error) {
     console.error("Error in deleteCommentLike:", error); // 오류 로그
@@ -159,7 +159,7 @@ export const deleteCommentLike  = async (commentId: string): Promise<any> => {
  */
 export const deleteComment  = async (commentId: string): Promise<any> => {
   try {
-    console.log("deleteCommentLike called with commentId:", commentId); // 함수 호출 확인
+
     const token = getToken();
     
     // API 요청
@@ -172,7 +172,7 @@ export const deleteComment  = async (commentId: string): Promise<any> => {
       }
     });
 
-    console.log("API response:", response); // API 응답 확인
+ 
     return response;
   } catch (error) {
     console.error("Error in deleteComment:", error); // 오류 로그
@@ -181,7 +181,7 @@ export const deleteComment  = async (commentId: string): Promise<any> => {
 }; 
 
 /**
- * 데이터베이스에서 사용자의 계정을 삭제 상태로 변경합니다.
+ * 로컬 사용자 계정 탈퇴
  * @param email 
  * @returns 
  */
@@ -196,7 +196,29 @@ export const deleteUser  = async (): Promise<any> => {
       },
     });
 
-    console.log("API response:", response); // API 응답 확인
+    return response;
+  } catch (error) {
+    console.error("Error in deleteUser:", error); // 오류 로그
+    throw error; // 오류를 호출한 쪽에서 처리할 수 있도록 전달
+  }
+}; 
+
+/**
+ * 구글 사용자 계정 탈퇴
+ * @param email 
+ * @returns 
+ */
+export const deleteGoogleUser  = async (): Promise<any> => {
+  try {
+    const token = getToken();
+    
+    // API 요청
+    const response = await apiClient.delete<any>(`/account/google`, {
+      headers: {
+        'Authorization': `${token}`,
+      },
+    });
+
     return response;
   } catch (error) {
     console.error("Error in deleteUser:", error); // 오류 로그

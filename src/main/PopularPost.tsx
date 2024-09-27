@@ -25,7 +25,7 @@ const PopularPost: React.FC = () => {
   const extractFirstImage = (htmlContent: string): string | null => {
     const parser = new DOMParser();
     const doc = parser.parseFromString(htmlContent, 'text/html');
-    console.log(`doc`,doc)
+
     const firstImage = doc.querySelector('img'); // 첫 번째 이미지를 선택
   
     return firstImage ? firstImage.src : null; // 이미지가 있으면 src 반환, 없으면 null 반환
@@ -48,15 +48,15 @@ const PopularPost: React.FC = () => {
         setPosts(cachedPosts[currentPage]);
         return;
       }
-      console.log(`
-        ==================
-        fetchPosts Info 
-        cursor:${cursor}
-        isBefore:${isBefore}
-        categoryID:${categoryID}
-        query:${query}
-        +++++++++++++++++++
-        `)
+      // console.log(`
+      //   ==================
+      //   fetchPosts Info 
+      //   cursor:${cursor}
+      //   isBefore:${isBefore}
+      //   categoryID:${categoryID}
+      //   query:${query}
+      //   +++++++++++++++++++
+      //   `)
       const fetchedPosts = await getALLPosts(pageSize,undefined, cursor,isBefore,categoryID,query,sort);
       
       const postsWithCleanContent = fetchedPosts.data.data.map(post => ({
@@ -83,15 +83,6 @@ const PopularPost: React.FC = () => {
         setCursor(fetchedPosts.data.data[0].board_id);
       }
 
-
-      console.log(`
-
-
-        GetPost 
-        ----fetchedPosts---- 
-
-
-        `,fetchedPosts.data.data, posts);
     } catch (err) {
       if(err.response) alert(`인기 게시물을 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
       setError('게시물을 불러오는 중에 오류가 발생했습니다.');
@@ -106,11 +97,6 @@ const PopularPost: React.FC = () => {
   },[]);
   useEffect(() => {
 
-    console.log(`
-      페이지가 변경되면서 글 다시 불러오기
-      ${cursor}
-    `);
-  
     if (!cachedPosts[currentPage]) {
       // 캐시에 없는 경우에만 fetchPosts 호출
       fetchPosts(cursor, undefined, undefined, 'view');
