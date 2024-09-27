@@ -13,11 +13,7 @@ const LotsOfFollowerBloger: React.FC = () => {
   const fetchBlogger = async () => {
     try {
       const fetchedBlogger = await getPopFollower();
-      console.log(`
-        
-        fetchedBlogger
-        
-        `,fetchedBlogger)
+
         setBlogger(fetchedBlogger.data);
     } catch (err) {
       setError('블로거들을 불러오는 중에 오류가 발생했습니다.');

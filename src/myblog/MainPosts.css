@@ -93,6 +93,12 @@
     color: #FFE6FA;
     background-color: transparent;
     font-weight: bold;
+    overflow: hidden;
+    max-width: 100px;
+    max-height: 16px;
+    text-overflow: ellipsis;
+
+    white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
   }
 
   .post-main-likes,
@@ -261,6 +267,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
+
     }
     
   }
@@ -292,6 +299,19 @@
     .post-title {
       width: 200px;
      
+    }
+    .post-user-num {
+      font-size: 14px;
+      font-weight: bold;
+      color: #FFE6FA;
+      background-color: transparent;
+      font-weight: bold;
+      overflow: hidden;
+      max-width: 50px;
+      max-height: 16px;
+      text-overflow: ellipsis;
+  
+      white-space: nowrap; /* 한 줄로 표시하고 넘치는 부분은 생략 표시 (...) */
     }
     .pagination-btn {
       background-color: #ff88d700;

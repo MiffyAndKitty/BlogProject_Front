@@ -176,18 +176,18 @@ const AllPopularPost: React.FC = () => {
     try {
       const nickname=sessionStorage.getItem('nickname');
       setNickname(nickname);
-      console.log(`
-        ==================
-        [인기글 전체보기]
-        nickname:${nickname}
-        cursor:${cursor}
-        page:${page}
-        pageSize:${pageSize}
-        isBefore:${isBefore}
-        categoryID:${categoryID}
-        query:${query}
-        +++++++++++++++++++
-        `)
+      // console.log(`
+      //   ==================
+      //   [인기글 전체보기]
+      //   nickname:${nickname}
+      //   cursor:${cursor}
+      //   page:${page}
+      //   pageSize:${pageSize}
+      //   isBefore:${isBefore}
+      //   categoryID:${categoryID}
+      //   query:${query}
+      //   +++++++++++++++++++
+      //   `)
       const fetchedPosts = await getALLPosts(pageSize, page, cursor,isBefore,categoryID,query,sort,tag);
       setIsWriter(fetchedPosts.data.isWriter);
       

@@ -42,7 +42,7 @@ export function QuestionMark({ type, ...props }: QuestionMarkProps) {
         </g>
       </svg>
       {isHovered && (
-        <div className={type === 'tag' ? "tooltip":'tooltip-follow'}>
+        <div className={type === 'tag' ? "tooltip": type==='Profile' ?  'tooltip-Profile'    :'tooltip-follow'}>
           {tooltipMessage.split('\n').map((line, index) => (
             <div key={index}>{line}</div>
           ))}

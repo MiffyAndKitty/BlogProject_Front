@@ -421,14 +421,20 @@ const Profile: React.FC<ProfileProps> = ({ pageType,otherEmail,nicknameParam,use
             </div>
         </div>
 
-        <div style={{display:'flex', alignItems:'center'}}>
-          <QuestionMark type='Profile'></QuestionMark>
-          <div className="login-buttons-container">
-            <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
-              <img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
-            </div>
+
+        <div className="login-buttons-container">
+          <div style={{backgroundColor:'#FFE6FA', borderRadius:'30px', }}>
+            <img src={followImg} style={{width:'60px', height:'auto', cursor:'pointer'}} onClick={goToFollow} title="친구 맺기" ></img>
           </div>
+
+          <div style={{position:'relative'}}>
+          
+          <QuestionMark type='Profile'></QuestionMark>
         </div>
+        </div>
+
+
+        
         
         
         <div className="logins_profile">

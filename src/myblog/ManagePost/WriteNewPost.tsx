@@ -101,7 +101,21 @@ const WriteNewPost: React.FC = () => {
     }
     const beforeImgsSize =  checkBeforeImgsSize();
     totalFileSize+=beforeImgsSize;
-
+    // console.log(`
+      
+      
+      
+    //   [handleContentChange]
+    //   beforeImgsSize: ${beforeImgsSize}
+    //   totalFileSize: ${totalFileSize}
+    //   validFiles:
+      
+      
+      
+      
+      
+      
+    //   `,validFiles)
     if (totalFileSize > MAX_IMAGE_SIZE) {
       alert('이미지 파일은 20MB 이하로만 업로드할 수 있습니다.');
   
@@ -188,16 +202,7 @@ const WriteNewPost: React.FC = () => {
   const setPost = (post, categories: categories[]) => {
     setTitle(post.title);
     setContent(post.content);
-    console.log(`
-      
-      
-      setPost
-      
-      
-      
-      
-      
-      `,post.content)
+
     setStatus(post.public);
     setTags(Array.isArray(post.tagNames) ? post.tagNames : [post.tagNames]);
     setImgsSize(post.imageSizes.sizes);
@@ -421,14 +426,14 @@ const WriteNewPost: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('handleSubmit Title:', title);
-    console.log('handleSubmit Content:', content);
-    console.log('handleSubmit Category:', category);
-    console.log('handleSubmit Is Private:', status);
-    console.log('handleSubmit Tags:', tags);
-    if (images) {
-      console.log('handleSubmit Images:', images);
-    }
+    // console.log('handleSubmit Title:', title);
+    // console.log('handleSubmit Content:', content);
+    // console.log('handleSubmit Category:', category);
+    // console.log('handleSubmit Is Private:', status);
+    // console.log('handleSubmit Tags:', tags);
+    // if (images) {
+    //   console.log('handleSubmit Images:', images);
+    // }
 
     
   };
@@ -521,14 +526,14 @@ const WriteNewPost: React.FC = () => {
     
     try {
         
-    console.log('handleSubmit Title:', newPostData.title);
-    console.log('handleSubmit Content:', newContent);
-    console.log('handleSubmit Category:', newPostData.categoryId);
-    console.log('handleSubmit Is Private:', newPostData.public.toString());
-    console.log('handleSubmit Tags:', newPostData.tagNames);
-    if (images) {
-      console.log('handleSubmit Images:', newPostData.uploaded_files);
-    }
+    // console.log('handleSubmit Title:', newPostData.title);
+    // console.log('handleSubmit Content:', newContent);
+    // console.log('handleSubmit Category:', newPostData.categoryId);
+    // console.log('handleSubmit Is Private:', newPostData.public.toString());
+    // console.log('handleSubmit Tags:', newPostData.tagNames);
+    // if (images) {
+    //   console.log('handleSubmit Images:', newPostData.uploaded_files);
+    // }
 
 setLoading(true); 
       const response = await saveNewPost(formData);

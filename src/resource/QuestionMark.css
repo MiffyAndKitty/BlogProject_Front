@@ -20,6 +20,21 @@
     z-index: 100;
     
   }
+  .tooltip-Profile{
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: #FFE6FA;
+    color: gray;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+  }
   .tooltip-follow {
     position: absolute;
     bottom: 100%;
