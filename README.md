@@ -11,8 +11,8 @@
 - [🖥️ 서버 구조](#🖥️-서버-구조)
 - [💻 화면 설계](#💻-화면-설계)
 - [⚙️ 기술 스택](#⚙️-기술-스택)
-- [🛠️ 주요 화면 소개](#🛠️-주요-화면-소개)
-  > [화면 1: 로그인 및 회원가입](#기능-1-인증-구현)  
+- [🛠️ 주요 기능 소개](#🛠️-주요-기능-소개)
+  > [기능 1: 인증 구현](#기능-1-인증-구현)  
   > [기능 2: 게시판 및 카테고리 구현](#기능-2-게시판-및-카테고리-구현)  
   > [기능 3: 사용자 팔로우 및 프로필 관리](#기능-3-사용자-팔로우-및-프로필-관리)  
   > [기능 4: 임시 저장 기능](#기능-4-임시-저장-기능)
@@ -28,7 +28,7 @@
 
 ## 💻 화면 설계
 
-👉 ![Figma 디자인 미리보기](captures/figma.png)(https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&t=WHfwLbrHGKrM6WwB-1)
+ ![Figma 디자인 미리보기](captures/figma.png)(https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&t=WHfwLbrHGKrM6WwB-1)
 
 
 ---
@@ -47,13 +47,47 @@
 
 ### 기능 1: 인증 구현
 
-- **로컬 회원가입 및 로그인**: 사용자가 아이디와 비밀번호로 간편하게 로그인할 수 있는 기능을 제공합니다.
+- **회원가입**: 사용자가 조건에 맞는 아이디(실존하는 이메일), 인증번호, 비밀번호, 닉네임을 입력하여 회원가입하거나, 구글 아이디를 통해 회원가입합니다.
 
-  <details>
-    <summary>로컬 로그인 흐름 보기</summary>
+   <details>
+    <summary>회원가입 페이지</summary>
+     
+    ![회원가입](captures/signup.png)
 
+    > 회원가입 버튼을 누르면, 계정 또는 구글로 회원가입할 수 있는 버튼이 도출됩니다. 
  
   </details>
+
+  <details>
+    <summary>로컬 회원가입</summary>
+    
+    ![로컬 회원가입](captures/local_signup_auth.png)
+  
+    > 아아디로 사용할 이메일을 입력 후, 인증번호 전송을 클릭하면 해당 이메일로 인증번호가 전송됩니다.
+    
+    ![로컬 회원가입](captures/local_signup_auth_email.png)
+  
+    > 이메일로 받은 인증번호입니다.
+    
+     ![로컬 회원가입](captures/local_signup_2.png)
+  
+    > 이메일 인증, 사용할 비밀번호, 닉네임의 조건을 모두 만족하면 회원가입 버튼이 disable -> able 상태가 되어 클릭할 수 있습니다.
+ 
+  </details>
+
+   <details>
+    <summary>구글 회원가입</summary>
+     
+    ![구글 회원가입](captures/google_login.png)
+
+    > 구글 아이디를 클릭하여 해당 서비스에 회원가입할 수 있습니다.
+    
+    ![구글 회원가입](captures/google_signup_nickname.png)
+
+    > 닉네임 설정 페이지가 도출되며, 입력한 닉네임으로 활동하게 됩니다. 추후에 수정할 수 있습니다.
+  
+  </details>
+
 
 - **구글 로그인**: 구글 OAuth를 이용하여 간편하게 로그인할 수 있습니다.
 
