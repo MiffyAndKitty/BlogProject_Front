@@ -242,7 +242,7 @@ const changeSubCategory = (value:string)=>{
                                   </span>
                                   {category.category_name}
                                   <span className='addChangeDeleteBtn'>
-                                  <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
+                            
                                     <button className='addChangeDeleteBtn' onClick={() =>toEditCategory(category.category_id, category.category_name)}>수정</button>
                                     {( !category.subcategories) && (
                                       <>
