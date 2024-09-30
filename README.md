@@ -28,8 +28,8 @@
 
 ## 💻 화면 설계
 
-👉 ![Figma](https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&node-type=canvas&t=WHfwLbrHGKrM6WwB-0)
-<iframe style="border: 1px solid rgba(0, 0, 0, 0.1);" width="800" height="450" src="https://embed.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&embed-host=share" allowfullscreen></iframe>
+👉 ![Figma 디자인 미리보기](captures/figma.png)(https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&t=WHfwLbrHGKrM6WwB-1)
+
 
 ---
 
