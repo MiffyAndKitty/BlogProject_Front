@@ -71,7 +71,8 @@ const SignUp: React.FC = () => {
       setSignUpResult(response.result.toString());
       return response.result;
     } catch (error) {
-      console.error("회원가입 오류:", error);     
+      console.error("구글 회원가입 오류:", error);     
+      console.log(error);
       if(error.response) alert(`회원가입 중에 오류가 발생했습니다: ${error.response.data.message}`);
       return false;
     }
@@ -113,11 +114,11 @@ const SignUp: React.FC = () => {
   useEffect(()=>{
     const nickname=sessionStorage.getItem('nickname');
     
-    if(!nickname){navigate(-1)};
+    //if(!nickname){navigate(-1)};
     setPassword(null);
     setEmail(nickname);
 
-    if(token !== sessionStorage.getItem('accessToken')) navigate(-1);
+   //if(token !== sessionStorage.getItem('accessToken')) navigate(-1);
   },[]);
    // 문자열의 바이트 길이 계산 함수
    const getByteLength = (str: string) => {

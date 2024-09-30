@@ -18,6 +18,7 @@ const AuthCallback: React.FC = () => {
       const fetchedProfile = await getMyProfile(email);
 
       setNickname(fetchedProfile.data.user_nickname);
+      
       setMessage(fetchedProfile.data.user_message);
       setAreYouFollowing(fetchedProfile.data.areYouFollowing);
       setAreYouFollowed(fetchedProfile.data.areYouFollowed);
@@ -25,7 +26,7 @@ const AuthCallback: React.FC = () => {
       setIsProfileFetched(true);  // 프로필이 성공적으로 fetch되었음을 표시
     } catch (err) {
       console.log(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err}`);
-      if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
+      //if(err.response) alert(`개인정보를 불러오는 중에 오류가 발생했습니다: ${err.response.data.message}`);
 
     }
   };
@@ -56,7 +57,38 @@ const AuthCallback: React.FC = () => {
       const searchParams = new URLSearchParams(location.search);
       const token = searchParams.get('token');
       const email = searchParams.get('data');
-
+      console.log(`
+          
+          
+          
+          
+          
+          
+        token
+        
+        
+        
+        
+        
+        
+        
+        `,token)
+        console.log(`
+          
+          
+          
+          
+          
+          
+          email
+          
+          
+          
+          
+          
+          
+          
+          `,email)
       if (token && token !== 'undefined' && nickname) {
         sessionStorage.setItem('accessToken', token);
         sessionStorage.setItem('email', email);
@@ -69,7 +101,22 @@ const AuthCallback: React.FC = () => {
         navigate(`/dashboard`);
       } else if (token === 'undefined' && nickname) {
         sessionStorage.setItem('email', email);
-      
+        console.log(`
+          
+          
+          
+          
+          
+          
+          nickname
+          
+          
+          
+          
+          
+          
+          
+          `,nickname)
         sessionStorage.setItem('nickname', nickname);
         sessionStorage.setItem('image', image);
         sessionStorage.setItem('message', message);

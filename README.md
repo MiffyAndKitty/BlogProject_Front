@@ -2,7 +2,7 @@
 
 > 사람들이 댓글과 게시글을 통해 생각과 이야기를 나누고, 사용자 프로필 및 게시글을 손쉽게 관리할 수 있도록 설계된 **사용자 중심의 블로그 플랫폼**입니다.
 
-![블로그 메인 페이지 사진](misc/블로그메인페이지.png)
+![블로그 메인 페이지 사진](captures/dashboardPage.png)
 
 ---
 
@@ -28,7 +28,7 @@
 
 ## 💻 화면 설계
 
-👉 ![Figma](https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&node-type=canvas&t=WHfwLbrHGKrM6WwB-0)
+👉 ![Figma](https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&node-type=canvas&t=WHfwLbrHGKrM6WwB-0)
 
 ![ERD 구조](misc/ERD.png)
 
