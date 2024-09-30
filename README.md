@@ -9,9 +9,9 @@
 ## 📚 목차
 
 - [🖥️ 서버 구조](#🖥️-서버-구조)
-- [🗂️ ERD](#🗂️-erd)
+- [💻 화면 설계](#💻-화면-설계)
 - [⚙️ 기술 스택](#⚙️-기술-스택)
-- [🛠️ 주요 기능 소개](#🛠️-주요-기능-소개)
+- [🛠️ 주요 화면 소개](#🛠️-주요-기능-소개)
   > [기능 1: 인증 구현](#기능-1-인증-구현)  
   > [기능 2: 게시판 및 카테고리 구현](#기능-2-게시판-및-카테고리-구현)  
   > [기능 3: 사용자 팔로우 및 프로필 관리](#기능-3-사용자-팔로우-및-프로필-관리)  
@@ -22,7 +22,7 @@
 
 ## 🖥️ 서버 구조
 
-![서버 구조](misc/서버구조.png)
+![서버 구조](captures/server_structure.png)
 
 ---
 
@@ -30,7 +30,6 @@
 
 👉 ![Figma](https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&node-type=canvas&t=WHfwLbrHGKrM6WwB-0)
 
-![ERD 구조](misc/ERD.png)
 
 ---
 
@@ -53,7 +52,7 @@
   <details>
     <summary>로컬 로그인 흐름 보기</summary>
 
-  ![로컬인증사진](misc/로컬인증.jpeg)
+ 
   </details>
 
 - **구글 로그인**: 구글 OAuth를 이용하여 간편하게 로그인할 수 있습니다.
@@ -65,7 +64,7 @@
   2. 백엔드에서 구글 OAuth 처리 후, 사용자 정보가 로컬 DB에 있으면 로그인, 없으면 자동으로 회원가입 처리
   3. 로그인 성공 후 JWT 토큰을 발급하여 사용자에게 반환
 
-  ![구글인증사진](misc/구글인증.jpeg)
+
 
   </details>
 
@@ -74,7 +73,7 @@
   <details>
     <summary>로그인된 사용자 인증 흐름 보기</summary>
 
-  ![jwt인증](misc/jwt인증.jpeg)
+ 
 
   </details>
 
@@ -85,7 +84,7 @@
 - **이미지 업로드**: **AWS S3**를 이용하여 게시글에 이미지를 포함시킬 수 있습니다.
   <details>
     <summary>S3를 통한 이미지 업로드 흐름 보기</summary>
-    ![s3](./misc/s3.png)
+  
   </details>
 
 - **캐시 처리**: **Redis**를 활용하여 조회수 및 좋아요 데이터를 효율적으로 처리합니다.
@@ -100,7 +99,7 @@
   <details>
     <summary>SSE 연결 및 알림 수신 흐름 보기</summary>
 
-  ![SSE알림 수신](./misc/SSE알림수신.png)
+
 
   </details>
 
@@ -119,7 +118,7 @@
 
 |                   프론트엔드 개발                   |                    백엔드 개발                    |
 | :-------------------------------------------------: | :-----------------------------------------------: |
-| <img src="misc/프론트엔드소개사진.jpg" width="120"> | <img src="misc/백엔드소개사진.png" width="120" /> |
+| <img src="captures/heeyeon.jpg" width="120"> | <img src="captures/xezixx.png" width="120" /> |
 |    **[최희연](https://github.com/heeyeon9578)**     |      **[정예지](https://github.com/xEzIxX)**      |
 
 ---
