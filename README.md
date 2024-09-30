@@ -26,9 +26,9 @@
 
 ---
 
-## 🗂️ ERD
+## 💻 화면 설계
 
-👉 [ERD CLOUD 보기](https://www.erdcloud.com/d/uBwW7d2NLMPz684CC)
+👉 ![Figma](https://www.figma.com/design/oLBgJllzx29LyORdwuDxPy/%EB%B8%94%EB%A1%9C%EA%B7%B8?node-id=0-1&node-type=canvas&t=WHfwLbrHGKrM6WwB-0)
 
 ![ERD 구조](misc/ERD.png)
 
