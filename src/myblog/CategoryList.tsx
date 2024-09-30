@@ -51,6 +51,18 @@ const CategoryList: React.FC<CategoryListProps> = ({ categories, level = 0,paren
   
   };
   const handleDeleteCategory = (categoryId: string) => {
+    console.log(
+      `
+      
+      
+      
+      handleDeleteCategory
+      
+      
+      
+      
+      `,categoryId
+    )
     setCategoryToDelete(categoryId);
     setIsModalOpen(true);
   };
@@ -149,6 +161,17 @@ const changeSubCategory = (value:string)=>{
                           <button className='addChangeDeleteBtn' onClick={() => setAddingSubcategoryId(category.category_id)}>추가</button>
                         )}
                         <button className='addChangeDeleteBtn' onClick={() =>toEditCategory(category.category_id, category.category_name)}>수정</button>
+                        { !category.subcategories && (
+                          <>
+                          <button className='addChangeDeleteBtn' onClick={() => handleDeleteCategory(category.category_id)}>삭제</button>
+                          <ConfirmModal
+                            isOpen={isModalOpen}
+                            onClose={() => setIsModalOpen(false)}
+                            onConfirm={confirmDeleteCategory}
+                            message="이 카테고리를 삭제하시겠습니까?"
+                          />
+                          </>
+                        )}
                        
                       </span>
                     </div>
