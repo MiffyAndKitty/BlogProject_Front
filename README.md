@@ -8,13 +8,21 @@
 
 ## 📚 목차
 
-- [🖥️ 서버 구조](#🖥️-서버-구조)
-- [💻 화면 설계](#💻-화면-설계)
-- [⚙️ 기술 스택](#⚙️-기술-스택)
-- [🪄프로젝트 상세 과정](#🪄-프로젝트-상세-과정)
-- [🛠️ 주요 화면 소개](#🛠️-주요-화면-소개)
+- [🖥️ 서버 구조](#-서버-구조)
+- [💻 화면 설계](#-화면-설계)
+- [⚙️ 기술 스택](#-기술-스택)
+- [🪄프로젝트 상세 과정](#-프로젝트-상세-과정)
+- [🛠️ 주요 화면 소개](#-주요-화면-소개)
+  > [화면 0: 메인 화면](#화면-0-메인-화면)  
   > [화면 1: 회원가입/로그인/비밀번호 찾기/로그아웃/회원탈퇴](#화면-1-회원가입/로그인/비밀번호-찾기/로그아웃/회원탈퇴)  
-
+  > [화면 2: 개인 블로그](#화면-2-개인-블로그)
+  > [화면 3: 게시글 작성 / 임시저장 /수정](#화면-3-게시글-작성-/-임시저장-/수정)
+  > [화면 4: 게시글 상세](#화면-4-게시글-상세)
+  > [화면 5: 인기글 / 최신글 / 태그 별 게시글 전체보기](#화면-5-인기글-/-최신글-/-태그-별-게시글-전체보기)
+  > [화면 6: 팔로우/ 팔로워](#화면-6-팔로우/-팔로워)
+  > [화면 7: 실시간 알림 /  헤더에 알림 5개보기 / 알림 전체보기](#화면-7-실시간-알림-/-헤더에-알림-5개보기-/-알림-전체보기)
+  > [화면 8: 프로필 설정](#화면-8-프로필-설정)
+  
 - [👥 팀원 소개](#👥-팀원-소개)
 
 ---
@@ -32,23 +40,68 @@
 
 ---
 
-## ⚙️ 기술 스택
+## ⚙ 기술 스택
 
-| **분류**     | **스택**                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Frontend** | ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)                                                                                                                                                                                                                                                                                                                              |
-| **Backend**  | ![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) ![Express](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge&logo=express&logoColor=white)                                                                                                                                                                                                            |
-| **Database** | ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white) ![AWS S3](https://img.shields.io/badge/AWS%20S3-FF9900?style=for-the-badge&logo=amazon-s3&logoColor=white) |
+<table>
+        <tr>
+            <th>분류</th>
+            <th>스택</th>
+        </tr>
+        <tr>
+            <td><strong>Frontend</strong></td>
+            <td>
+            <img src="https://img.shields.io/badge/TypeScript-3178C6?style=plastic&logo=typescript&logoColor=white" alt="TypeScript">
+                <img src="https://img.shields.io/badge/React-61DAFB?style=plastic&logo=react&logoColor=white" alt="React">
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Backend</strong></td>
+            <td>
+            <img src="https://img.shields.io/badge/TypeScript-3178C6?style=plastic&logo=typescript&logoColor=white" alt="TypeScript">
+                <img src="https://img.shields.io/badge/Node.js-43853D?style=plastic&logo=node.js&logoColor=white" alt="Node.js">
+                <img src="https://img.shields.io/badge/Express.js-404D59?style=plastic&logo=express&logoColor=white" alt="Express">
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Database</strong></td>
+            <td>
+                <img src="https://img.shields.io/badge/MariaDB-003545?style=plastic&logo=mariadb&logoColor=white" alt="MariaDB">
+                <img src="https://img.shields.io/badge/Redis-DC382D?style=plastic&logo=redis&logoColor=white" alt="Redis">
+                <img src="https://img.shields.io/badge/MongoDB-47A248?style=plastic&logo=mongodb&logoColor=white" alt="MongoDB">
+                <img src="https://img.shields.io/badge/AWS%20S3-FF9900?style=plastic&logo=amazon-s3&logoColor=white" alt="AWS S3">
+            </td>
+        </tr>
+  </table>
+
 
 ---
 
 ## 🪄프로젝트 상세 과정
 
+[Notion 으로 이동하여 프로젝트 상세 과정 보기](https://heeyeon9578.notion.site/MK-Blog-24-03-17-24-09-30-e5d9f108063d42fc82e5a6a7d423a596)
 
 ---
 
 
 ## 🛠️ 주요 화면 소개
+
+### 화면 0: 메인 화면
+
+- **메인 페이지**: 
+  <details>
+    <summary>메인 페이지</summary>
+    
+    ![메인 페이지](captures/dashboardPage.png)
+
+     - 헤더, 메인, 푸터로 구성되어 있습니다.
+     - 메인에는 인기글, 최신글이 3개씩 자동으로 다음 데이터로 넘어가고 있습니다.
+     - 지금 시간대의 이전 시간대 인기 태그 10개가 도출됩니다. 이때, 10개가 채워지지 않는다면 대체 태그(랜덤 태그)가 회색으로 도출됩니다.
+     - 이번주 최다 팔로워 목록이 10명 도출됩니다. 이때, 10명이 채워지지 않는다면 대체 유저(랜덤 유저)가 회색으로 도출됩니다.
+       
+
+
+  </details>
+---
 
 ### 화면 1: 회원가입/로그인/비밀번호 찾기/로그아웃/회원탈퇴
 
@@ -179,8 +232,8 @@
     
     ![게시글 관리 페이지](captures/blog_manage_post.png)
 
-    > 내 게시글을 관리할 수 있는 페이지로, 각자 자신의 게시글만 수정 또는 삭제할 수 있습니다.
-    > 
+    - 내 게시글을 관리할 수 있는 페이지로, 각자 자신의 게시글만 수정 또는 삭제할 수 있습니다.
+     
    </details>
    
      <details>
@@ -189,10 +242,10 @@
     
     ![카테고리 관리 페이지](captures/blog_manage_category.png)
 
-    > 내 카테고리를 관리할 수 있는 페이지로, 각자 자신의 카테고리만 수정 또는 삭제할 수 있습니다.
-    > 카테고리는 2개의 레벨로, 하위 카테고리는 사용자의 **드래그엔 드롭**을 통해 다른 상위 카테고리로 옮길 수 있습니다.
-    > 최상위 카테고리에 하위 카테고리 존재 시 삭제할 수 없습니다.
-    > 하위 카테고리에는 하위 카테고리를 추가할 수 없습니다.
+    - 내 카테고리를 관리할 수 있는 페이지로, 각자 자신의 카테고리만 수정 또는 삭제할 수 있습니다.
+    - 카테고리는 2개의 레벨로, 하위 카테고리는 사용자의 **드래그엔 드롭**을 통해 다른 상위 카테고리로 옮길 수 있습니다.
+    - 최상위 카테고리에 하위 카테고리 존재 시 삭제할 수 없습니다.
+    - 하위 카테고리에는 하위 카테고리를 추가할 수 없습니다.
   
   </details>
 
@@ -204,57 +257,197 @@
   <details>
     <summary>게시글 작성 페이지</summary>
     
+     ![게시글 작성 페이지](captures/write_post.png)
+
+     - 게시글을 작성할 수 있는 페이지로, 카테고리 / 태그 / 공개여부 / 제목 / 내용을 설정 및 작성할 수 있습니다.
+     - 게시글은 30초마다 자동 임시저장 됩니다.
+     - 임시저장 목록에서 지금까지 임시 저장된 글들을 확인하고 이어서 작성할 수 있습니다.
+     - 처음 게시글 작성 페이지에 들어가면 마지막으로 임시저장된 글을 이어서 작성할 것인지 묻습니다.
+    
   </details>
 
-- **개인 블로그 관리 페이지(게시글 관리/카테고리 관리)**:
+  <details>
+    <summary>게시글 자동 임시저장 페이지</summary>
+    
+     ![게시글 자동 임시저장 페이지](captures/write_post_auto_save.png)
 
-- - **게시글 상세 페이지**:
-  
+    
+  </details>
+
+  <details>
+    <summary>게시글 임시저장 목록 페이지</summary>
+    
+     ![게시글 임시저장 목록 페이지](captures/temp_save_list.png)
+
+    
+    
+  </details>
+
 
 ---
 
-### 화면 4: 인기글 / 최신글 / 태그 별 게시글 전체보기
+### 화면 4: 게시글 상세 
+
+- **게시글 상세 페이지**:
+  
+  <details>
+    <summary>게시글 상세 페이지</summary>
+    
+     ![게시글 상세 페이지](captures/post_detail.png)
+
+     - 게시글 목록에서 특정 게시글을 클릭하면 상세 페이지로 이동합니다.
+     - 게시글의 제목, 내용, 카테고리, 작성자, 작성일자, 수정일자, 공감 수(당근 수), 조회수, 댓글 수 등이 조회됩니다.
+     - 게시글의 끝에는 해당 게시글의 태그들이 보여집니다.
+     - 자신의 게시글일 경우, 수정/삭제 버튼이 도출됩니다.
+     - 이때, 태그를 클릭하면 해당 태그를 사용한 게시글들을 보여주는 페이지로 이동합니다.
+     - 로그인한 사용자는 공감(당근)을 클릭하여 공감하거나 취소할 수 있습니다.
+     - 댓글은 등록순 또는 인기순으로 조회할 수 있습니다.
+     - 댓글을 작성하거나 답글을 작성할 수 있습니다.
+     - 댓글/답글은 로그인한 사용자만 작성할 수 있습니다.
+     - 자신의 댓글이나 답글일 경우 수정 또는 삭제할 수 있습니다.
+    
+  </details>
+
+
+
+---
+
+
+### 화면 5: 인기글 / 최신글 / 태그 별 게시글 전체보기
 
 - **인기글 / 최신글 전체보기 페이지**: 
   <details>
-    <summary>개인 블로그 메인 페이지</summary>
-  
+    <summary>인기글 / 최신글 전체보기 페이지</summary>
+    
+     ![인기글 / 최신글 전체보기 페이지](captures/all_post.png)
+
+     - 메인화면에서 인기글이나 최신글의 전체보기 버튼을 클릭하면, 해당 정렬에 맞게 전체 게시글이 조회되는 페이지로 이동합니다.
+     - 맨 아래에 페이지네이션을 두어 다른 패이지로 쉽게 이동할 수 있습니다.
+     - 각 게시글을 클릭하여, 게시글 상세 페이지로 이동할 수 있습니다.
+     - 검색 기능을 통해 검색을 할 수 있습니다.
+      
+
   </details>
 
+   
+
 - **검색 페이지**:
+  <details>
+    <summary>검색 페이지</summary>
+    
+     ![검색 페이지](captures/search.png)
+
+     - 검색창에 검색 후 해당 단어가 진한 핑크색으로 표기되며, 해당 단어가 들어간 게시글들을 조회한 페이지가 보여집니다.
+      
+
+  </details>
 
 - **태그 별 검색 페이지**:
+  <details>
+    <summary>태그 별 검색 페이지</summary>
+    
+     ![태그 별 검색 페이지](captures/Tag_click.png)
 
+     - 메인화면의 인기 태그 혹은 각 게시글의 상세 페이지에서 태그를 클릭하면, 해당 태그를 사용한 게시글 목록을 조회합니다.
+      
+
+  </details>
 ---
 
 
-### 화면 5: 팔로우/ 팔로워
+### 화면 6: 팔로우/ 팔로워
 
 - **팔로우 페이지**: 
 
   <details>
-    <summary>SSE 연결 및 알림 수신 흐름 보기</summary>
+    <summary>팔로우 페이지</summary>
+    
+    ![팔로우 페이지](captures/follow.png)
 
+     - 해당 프로필의 팔로우 목록이 조회됩니다.
+     - 팔로우 목록은 무한 스크롤로, 스크롤을 통해 데이터를 지속적으로 조회할 수 있습니다.
+     - 나의 팔로우 목록일 경우 '관리하기 버튼'이 도출되며, 클릭하면 각 팔로우를 삭제할 수 있는 버튼이 도출됩니다.
+     - 서로 팔로우된 관계라면, 각 팔로우 왼쪽 위에 서로 팔로우 표시가 뜹니다.
 
 
   </details>
 
 - **팔로워 페이지**: 
 
+  <details>
+    <summary>팔로워 페이지</summary>
+    
+    ![팔로워 페이지](captures/follower.png)
+
+     - 해당 프로필의 팔로워 목록이 조회됩니다.
+     - 팔로워 목록은 무한 스크롤로, 스크롤을 통해 데이터를 지속적으로 조회할 수 있습니다.
+     - 팔로워마다 아래 팔로우할 수 있는 버튼이 존재합니다. 해당 버튼을 클릭하여 즉각적인 팔로우 또는 팔로우 취소를 진행할 수 있습니다.
+     - 서로 팔로우된 관계라면, 각 팔로우 왼쪽 위에 서로 팔로우 표시가 뜹니다.
+
+
+  </details>
+  
+---
+
+### 화면 7: 실시간 알림 /  헤더에 알림 5개보기 / 알림 전체보기 
+
+- **알림 페이지**:
+  <details>
+    <summary>실시간 알림 페이지</summary>
+    
+    ![실시간 알림 페이지](captures/real_time_notification.png)
+
+     - 블로그 내의 모든 페이지에서 실시간 알림을 받을 수 있습니다.
+     - 알림은 새 팔로워, 내가 팔로워한 사용자가 작성한 새 게시글, 나의 게시글에 달린 댓글, 내가 쓴 댓글에 달린 답글, 내 게시글에 좋아요(당근) 일 경우 발생합니다.
+     - 실시간 알림은 최상단 우측에 뜹니다. 
+
+
+  </details>
+
+   <details>
+    <summary>헤더의 알림 페이지</summary>
+    
+    ![헤더의 알림 페이지](captures/notification2.png)
+
+     - 헤더에 벨모양 버튼을 클릭하면 최신 알림 5개를 확인할 수 있습니다.
+     - 실시간 알림을 통해 받은 알림을 확인하면 벨모양이 다시 원상복귀 합니다.
+     - 삭제 버튼을 통해 삭제하면 이전 알림이 보여집니다.
+
+
+  </details>
+
+   <details>
+    <summary>알림 전체보기 페이지</summary>
+    
+    ![알림 전체보기 페이지](captures/notification.png)
+
+     - 모든 알림을 확인할 수 있습니다.
+     - 알림의 종류별로 확인할 수 있습니다.
+     - 하단의 페이지네이션을 통해 원하는 페이지로 쉽게 이동할 수 있습니다.
+     - 알림을 삭제할 수 있습니다.
+     - 각 알림을 클릭하면, 해당 알림에 해당하는 내용으로 이동합니다. 팔로워 알림은 해당 유저의 블로그로, 새 게시글일 경우 해당 게시글로, 댓글일 경우 해당 댓글로 이동합니다.
+       
+
+
+  </details>
 
 ---
 
-### 화면 6: 알림 
+### 화면 8: 프로필 설정
 
-- **알림 페이지**: 
+- **프로필 설정 페이지**: 
+  <details>
+    <summary>프로필 설정 페이지</summary>
+    
+    ![프로필 설정 페이지](captures/profile_setting.png)
 
+     - 프로필 이미지, 닉네임, 비밀번호(로컬 로그인일 경우에만), 상태 메시지를 설정할 수 있습니다.
+       
+
+
+  </details>
 ---
 
-### 화면 7: 프로필 설정
-
-- **알림 페이지**: 
-
----
 
 ## 👥 팀원 소개
 
