@@ -11,11 +11,10 @@
 - [🖥️ 서버 구조](#🖥️-서버-구조)
 - [💻 화면 설계](#💻-화면-설계)
 - [⚙️ 기술 스택](#⚙️-기술-스택)
+- [🪄프로젝트 상세 과정](#🪄-프로젝트-상세-과정)
 - [🛠️ 주요 화면 소개](#🛠️-주요-화면-소개)
   > [화면 1: 회원가입/로그인/비밀번호 찾기/로그아웃/회원탈퇴](#화면-1-회원가입/로그인/비밀번호-찾기/로그아웃/회원탈퇴)  
-  > [기능 2: 게시판 및 카테고리 구현](#기능-2-게시판-및-카테고리-구현)  
-  > [기능 3: 사용자 팔로우 및 프로필 관리](#기능-3-사용자-팔로우-및-프로필-관리)  
-  > [기능 4: 임시 저장 기능](#기능-4-임시-저장-기능)
+
 - [👥 팀원 소개](#👥-팀원-소개)
 
 ---
@@ -42,6 +41,12 @@
 | **Database** | ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white) ![AWS S3](https://img.shields.io/badge/AWS%20S3-FF9900?style=for-the-badge&logo=amazon-s3&logoColor=white) |
 
 ---
+
+## 🪄프로젝트 상세 과정
+
+
+---
+
 
 ## 🛠️ 주요 화면 소개
 
@@ -147,7 +152,7 @@
     
      <summary>구글 회원 탈퇴 페이지</summary>
 
-    ![구글 회원 탈퇴](captures/user_delete_google.png)
+    ![구글 회원 탈퇴](captures/user_delete_goolge.png)
 
     > 로그인할 때 사용한 이메일과 비밀번호 및 비밀번호 확인란을 조건에 맞게 채우면 회원 탈퇴하기 버튼이 활성화됩니다.
 
@@ -160,20 +165,45 @@
 - **개인 블로그 메인 페이지**: 
   <details>
     <summary>개인 블로그 메인 페이지</summary>
-  
+    
+     ![개인 블로그 메인 페이지](captures/blog_main.png)
+
+    > 내 블로그 페이지로 좌측 프로필 부분은 화면을 스크롤 하더라도 같이 움직입니다.
+    
   </details>
 
 - **개인 블로그 관리 페이지(게시글 관리/카테고리 관리)**:
+
+  <details>
+    <summary>게시글 관리 페이지</summary>
+    
+    ![게시글 관리 페이지](captures/blog_manage_post.png)
+
+    > 내 게시글을 관리할 수 있는 페이지로, 각자 자신의 게시글만 수정 또는 삭제할 수 있습니다.
+    > 
+   </details>
+   
+     <details>
+       
+    <summary>카테고리 관리 페이지</summary>
+    
+    ![카테고리 관리 페이지](captures/blog_manage_category.png)
+
+    > 내 카테고리를 관리할 수 있는 페이지로, 각자 자신의 카테고리만 수정 또는 삭제할 수 있습니다.
+    > 카테고리는 2개의 레벨로, 하위 카테고리는 사용자의 **드래그엔 드롭**을 통해 다른 상위 카테고리로 옮길 수 있습니다.
+    > 최상위 카테고리에 하위 카테고리 존재 시 삭제할 수 없습니다.
+    > 하위 카테고리에는 하위 카테고리를 추가할 수 없습니다.
   
+  </details>
 
 ---
 
 ### 화면 3: 게시글 작성 / 임시저장 /수정 
 
-- **개인 블로그 메인 페이지**: 
+- **게시글 작성 페이지**: 
   <details>
-    <summary>개인 블로그 메인 페이지</summary>
-  
+    <summary>게시글 작성 페이지</summary>
+    
   </details>
 
 - **개인 블로그 관리 페이지(게시글 관리/카테고리 관리)**:

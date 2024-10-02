@@ -27,7 +27,9 @@ const PopularTags: React.FC = () => {
   useEffect(() => {
     fetchTags();
     const now = new Date();
-    const hours = now.getHours()-1;
+    let hours = now.getHours()-1;
+    if(hours === -1) hours = 11;
+   
     setNowHour(hours.toString());
   }, []);
 
